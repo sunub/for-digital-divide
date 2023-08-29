@@ -1,0 +1,24 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+* {
+	margin: 0px;
+	line-height: calc(1em + 0.8rem);
+	-webkit-font-smoothing: antialiased;
+}
+html {
+	display: block;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+#_next {
+	isolation: isolate;
+	height: 100%;
+}
