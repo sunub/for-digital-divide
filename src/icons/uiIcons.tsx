@@ -5,4 +5,12 @@ function SearchIcon() {
     </svg>
 }
 
-export { SearchIcon }
+function NavigateBefore() {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+            <path d="M561.435-209.695 290.13-480.435 561.435-751.74l85.87 85.87L461.87-480.435l185.435 184.87-85.87 85.87Z" />
+        </svg>
+    )
+}
+
+export { SearchIcon, NavigateBefore }

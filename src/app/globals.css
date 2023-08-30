@@ -22,3 +22,10 @@ body {
 	isolation: isolate;
 	height: 100%;
 }
+
+button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	touch-action: manipulation;
+}
