@@ -23,9 +23,26 @@ body {
 	height: 100%;
 }
 
+input,
+button {
+	border: none;
+	border-radius: 0;
+}
+
+input,
+button,
+textarea {
+	line-height: 16px;
+	letter-spacing: -0.4px;
+}
+
 button {
 	background: none;
-	border: none;
 	cursor: pointer;
 	touch-action: manipulation;
+	outline-offset: 4px;
+
+	:focus:not(:focus-visible) {
+		outline: none;
+	}
 }

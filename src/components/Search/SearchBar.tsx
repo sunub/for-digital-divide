@@ -5,19 +5,24 @@ import styled from "styled-components"
 import SearchIcon from "./SearchIcon"
 
 const Dialog = styled.dialog`
-    position: fixed;
+    position: absolute;
+    left: 50%;
     inset: 0;
 
-    display: grid;
     margin: auto;
-
+    width: 706px;
+    
+    border: none;
+    background-color: transparent;
     &[open] {
-        color: white;
-        background-color: black;
         border: none;
 
         opacity: 1;
         visibility: visible;
+    }
+
+    &::backdrop {
+        backdrop-filter: blur(8px);
     }
 
     &:not([open]) {
@@ -26,12 +31,28 @@ const Dialog = styled.dialog`
     }
 `
 
-const Form = styled.form`
-    
+const SearchInputField = styled.fieldset`
+    display: flex;
+    flex-direction: row;
+    border: none;
+    background-color: oklch(98.64% 0.027 251);
+    padding: 0;
+`
+
+const SearchBox = styled.div`
+    width: 480px;
 `
 
 const Input = styled.input`
-    
+    width: 100%;
+    height: 58px;
+
+    position: relative;
+    outline: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+
+    line-height: calc(1.7rem);
 `
 
 interface DialogProps {
@@ -46,22 +67,19 @@ const SearchBar = React.forwardRef((({ setOpen }: DialogProps, ref: ForwardedRef
 
     return (
         <Dialog id="search-bar__dialog" ref={ref} >
-            <Form method="dialog" >
-                <fieldset>
-                    <label
-                        htmlFor="search-bar__input"
-                    >
-                        검색창
-                    </label>
-                    <Input
-                        id="search-bar__input"
-                        name="search-bar__input"
-                        type="text"
-                        minLength={1}
-                        maxLength={100}
-                        placeholder="검색할 내용을 입력하세요"
-                        required
-                    />
+            <form method="dialog" >
+                <SearchInputField>
+                    <SearchBox>
+                        <Input
+                            id="search-bar__input"
+                            name="search-bar__input"
+                            type="search"
+                            maxLength={100}
+                            autoComplete="off"
+                            placeholder="검색어를 입력해 주세요"
+                            required
+                        />
+                    </SearchBox>
                     <button
                         onClick={() => {
                             setStatus(!isSend);
@@ -76,13 +94,14 @@ const SearchBar = React.forwardRef((({ setOpen }: DialogProps, ref: ForwardedRef
                                 status: isSend,
                                 setter: setStatus
                             }}
+                            size={{
+                                width: 30,
+                                height: 30,
+                            }}
                         />
                     </button>
-                </fieldset>
-            </Form>
-            <div>
-                HI!
-            </div>
+                </SearchInputField>
+            </form>
         </Dialog>
     )
 }))

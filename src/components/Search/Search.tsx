@@ -6,7 +6,8 @@ import { styled } from "styled-components";
 import SearchBar from "./SearchBar";
 
 const Container = styled.div`
-    `
+    position: relative;
+`
 
 export default function Search() {
     const [isOpen, setOpen] = useState(false);
@@ -31,7 +32,12 @@ export default function Search() {
                 click={{
                     status: isOpen,
                     setter: setOpen
-                }} />
+                }}
+                size={{
+                    width: 80,
+                    height: 80,
+                }}
+            />
             <SearchBar ref={searchBarRef} setOpen={setOpen} />
         </Container>
     )

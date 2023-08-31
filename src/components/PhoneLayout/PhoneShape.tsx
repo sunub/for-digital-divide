@@ -17,6 +17,12 @@ const OuterPhoneFrame = styled.div`
     border: none;
     
     padding: 16px;
+
+    @container phone-frame (height > 844px) {
+        & {
+            height: 844px;
+        }
+    }
 `
 
 const InnerPhoneFrame = styled.div`
@@ -24,10 +30,9 @@ const InnerPhoneFrame = styled.div`
     height: 100%;
     position: relative;
     
-    mix-blend-mode: lighten;
     background-color: oklch(75.52% 0.111 236.79);
     border-radius: 88px 88px 48px 48px;
-
+    
     display: flex;
     align-items: center;
     justify-content: center;

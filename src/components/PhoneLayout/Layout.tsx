@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react"
-import styled from "styled-components"
 import PhoneShape from "./PhoneShape"
 import Spacer from "@/constants/Spacer"
 
