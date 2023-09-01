@@ -2,56 +2,52 @@
 
 import React from "react"
 import styled from "styled-components"
-import NavigationBar from "./NavigationBar"
+import * as Icons from "@/icons/index"
 
 const OuterPhoneFrame = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 390px;
-    height: 100%;
+    width: 80px;
+    height: 15%;
 
     background-color: oklch(65.95% 0.145 244.91);
-    border-radius: 100px 100px 68px 68px;
+    border-radius: 25px 25px 25px 25px;
     border: none;
     
-    padding: 16px;
-
-    @container phone-frame (height > 844px) {
-        & {
-            height: 844px;
-        }
-    }
+    padding: 6px;
 `
 
 const InnerPhoneFrame = styled.div`
-    width: 360px;
+    width: 100%;
     height: 100%;
     position: relative;
     
     background-color: oklch(75.52% 0.111 236.79);
-    border-radius: 88px 88px 48px 48px;
+    border-radius: 25px 25px 25px 25px;
     
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+`
+const CameraCircle = styled.div`
+    width: 15px;
+    height: 15px;
+
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    background-color: black;
 `
 
-interface PhoneShapeProps {
-    children: React.ReactNode,
-    size: {
-        width: number,
-        height: number,
-    }
-}
 
-export default function PhoneShape({ children, size }: PhoneShapeProps) {
+export default function SmallPhone() {
     return (
         <OuterPhoneFrame>
             <InnerPhoneFrame>
-                {children}
-                <NavigationBar />
+                <CameraCircle />
+                <Icons.SearchIcon />
             </InnerPhoneFrame>
         </OuterPhoneFrame>
     )

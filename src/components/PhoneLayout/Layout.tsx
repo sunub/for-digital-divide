@@ -7,9 +7,7 @@ import Spacer from "@/constants/Spacer"
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (<>
         <Spacer axis="vertical" size={16} />
-        <PhoneShape>
-            {children}
-        </PhoneShape>
+        {children}
         <Spacer axis="vertical" size={16} />
     </>)
 }

@@ -10,13 +10,13 @@ const Dialog = styled.dialog`
     inset: 0;
 
     margin: auto;
-    width: 706px;
+    width: fit-content;
     
     border: none;
-    background-color: transparent;
+    border-radius: 50px;
+    padding: 1rem;
+    background-color: oklch(97.76% 0 76);
     &[open] {
-        border: none;
-
         opacity: 1;
         visibility: visible;
     }
@@ -31,27 +31,34 @@ const Dialog = styled.dialog`
     }
 `
 
+const Form = styled.form`
+    background: none;
+`
+
 const SearchInputField = styled.fieldset`
     display: flex;
     flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+
     border: none;
-    background-color: oklch(98.64% 0.027 251);
     padding: 0;
+    padding-left: 1rem;
 `
 
 const SearchBox = styled.div`
     width: 480px;
 `
-
 const Input = styled.input`
+    background: none;
     width: 100%;
     height: 58px;
 
     position: relative;
     outline: 0;
+
     font-size: 1.5rem;
     font-weight: bold;
-
     line-height: calc(1.7rem);
 `
 
@@ -67,8 +74,22 @@ const SearchBar = React.forwardRef((({ setOpen }: DialogProps, ref: ForwardedRef
 
     return (
         <Dialog id="search-bar__dialog" ref={ref} >
-            <form method="dialog" >
+            <Form method="dialog" >
                 <SearchInputField>
+                    <SearchIcon
+                        colors={{
+                            background: "transparent",
+                            fill: "black"
+                        }}
+                        click={{
+                            status: isSend,
+                            setter: setStatus
+                        }}
+                        size={{
+                            width: 30,
+                            height: 30,
+                        }}
+                    />
                     <SearchBox>
                         <Input
                             id="search-bar__input"
@@ -80,28 +101,8 @@ const SearchBar = React.forwardRef((({ setOpen }: DialogProps, ref: ForwardedRef
                             required
                         />
                     </SearchBox>
-                    <button
-                        onClick={() => {
-                            setStatus(!isSend);
-                        }}
-                    >
-                        <SearchIcon
-                            colors={{
-                                background: "white",
-                                fill: "black"
-                            }}
-                            click={{
-                                status: isSend,
-                                setter: setStatus
-                            }}
-                            size={{
-                                width: 30,
-                                height: 30,
-                            }}
-                        />
-                    </button>
                 </SearchInputField>
-            </form>
+            </Form>
         </Dialog>
     )
 }))

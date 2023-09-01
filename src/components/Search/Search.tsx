@@ -25,7 +25,7 @@ export default function Search() {
         fill: "white"
     }
 
-    return (
+    return (<>
         <Container>
             <SearchIcon
                 colors={colors}
@@ -38,7 +38,7 @@ export default function Search() {
                     height: 80,
                 }}
             />
-            <SearchBar ref={searchBarRef} setOpen={setOpen} />
         </Container>
-    )
+        <SearchBar ref={searchBarRef} setOpen={setOpen} />
+    </>)
 }

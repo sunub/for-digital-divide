@@ -36,6 +36,15 @@ textarea {
 	letter-spacing: -0.4px;
 }
 
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button,
+input::-webkit-search-results-button,
+input::-webkit-search-results-decoration {
+	opacity: 0;
+	position: absolute;
+	right: 0;
+}
+
 button {
 	background: none;
 	cursor: pointer;
