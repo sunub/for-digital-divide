@@ -8,9 +8,9 @@ export default function StudySection() {
     return (
         <div id={styles[`study_section`]}>
             <SmallPhone />
-            <PhoneLayout>
+            {/* <PhoneLayout>
                 <Search />
-            </PhoneLayout>
+            </PhoneLayout> */}
         </div>
     )
 }
