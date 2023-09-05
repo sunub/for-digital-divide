@@ -9,4 +9,10 @@
 
 	position: relative;
 	container: phone-frame / size;
+
+	background: radial-gradient(
+		farthest-corner at 50% 50%,
+		oklch(75.62% 0.01 188.98) 0%,
+		oklch(41.19% 0.084 247.36) 100%
+	);
 }
