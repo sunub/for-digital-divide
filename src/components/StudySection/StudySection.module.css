@@ -1,9 +1,4 @@
 #study_section {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-
 	width: 100%;
 	height: 100%;
 
@@ -11,8 +6,13 @@
 	container: phone-frame / size;
 
 	background: radial-gradient(
-		farthest-corner at 50% 50%,
+		farthest-corner at 50% 70%,
 		oklch(75.62% 0.01 188.98) 0%,
 		oklch(41.19% 0.084 247.36) 100%
 	);
+
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 32px;
+	padding-right: 32px;
 }
