@@ -1,8 +1,10 @@
-import StudySection from "@/compo/StudySection/index"
-import styles from "./page.module.css"
+import SmallPhone from "@/components/SmallPhone";
+import InitFrame from "@/components/InitFrame";
 
 export default function Home() {
   return (
-    <StudySection />
-  )
+    <InitFrame>
+      <SmallPhone />
+    </InitFrame>
+  );
 }

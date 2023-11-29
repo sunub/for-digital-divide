@@ -2,9 +2,8 @@
 
 import React from "react";
 import styled from "styled-components";
+import Boop from "../Boop";
 import { animated, useSpringValue } from "@react-spring/web";
-
-const Wrapper = styled.div``;
 
 const Phone = styled(animated.button)<{ $layerColors: string }>`
   background: transparent;
@@ -33,7 +32,7 @@ const Screen = styled.path<{ $open: boolean }>`
 
   @keyframes screen_brighter {
     0% {
-      fill: oklch(37.76% 0.012 264.08 / 0.5);
+      fill: oklch(37.76% 0.012 264.08 / 0.2);
     }
 
     85% {
@@ -41,7 +40,7 @@ const Screen = styled.path<{ $open: boolean }>`
     }
 
     100% {
-      fill: oklch(37.76% 0.012 264.08 / 0.5);
+      fill: oklch(37.76% 0.012 264.08 / 0.2);
     }
   }
 `;
@@ -69,51 +68,48 @@ function SmallPhone() {
   const transform = useSpringValue("rotateX(66deg) rotateZ(45deg) scale(0.15)");
 
   return (
-    <>
-      <Phone
-        $layerColors={
-          open ? "" : layered_shadow(9, 0.3, 0.3, `oklch(70.4% 0.037 264.08)`)
-        }
-        onClick={() => {
-          transform.start(
-            open
-              ? "rotateX(66deg) rotateZ(45deg) scale(0.15)"
-              : "rotateX(0deg) rotateZ(0deg) scale(0.15)"
-          );
-          setOpen((prev) => !prev);
-        }}
-        style={{
-          transform,
-        }}
-      >
-        <Icon>
-          <svg
-            width="376"
-            height="779"
-            viewBox="0 0 376 779"
-            fill={"none"}
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              id="OuterFrame"
-              d="M0 44C0 19.6995 19.6995 0 44 0H332C356.301 0 376 19.6995 376 44V735C376 759.301 356.301 779 332 779H44C19.6995 779 0 759.301 0 735V44Z"
-              fill={"oklch(40% 0.037 264.08)"}
-            />
-            <path
-              id="InnerShadow"
-              d="M9.15881 46.9407C9.19153 26.5294 25.7474 10 46.1588 10H330.689C351.146 10 367.721 26.6016 367.689 47.0593L366.589 733.025C366.557 753.437 350.001 769.966 329.589 769.966H45.0593C24.6016 769.966 8.02661 753.364 8.0594 732.907L9.15881 46.9407Z"
-              fill={"oklch(58.97% 0 0)"}
-            />
-            <Screen
-              d="M15 51C15 31.1177 31.1178 15 51 15H325.342C345.224 15 361.342 31.1178 361.342 51V732.672C361.342 749.793 347.463 763.672 330.342 763.672H46C28.8792 763.672 15 749.793 15 732.672V51Z"
-              fill={"white"}
-              $open={open}
-            />
-          </svg>
-        </Icon>
-      </Phone>
-      <div>{open ? "HI" : "Nope"}</div>
-    </>
+    <Phone
+      $layerColors={
+        open ? "" : layered_shadow(9, 0.3, 0.3, `oklch(70.4% 0.037 264.08)`)
+      }
+      onClick={() => {
+        transform.start(
+          open
+            ? "rotateX(66deg) rotateZ(45deg) scale(0.15)"
+            : "rotateX(0deg) rotateZ(0deg) scale(0.15)"
+        );
+        setOpen((prev) => !prev);
+      }}
+      style={{
+        transform,
+      }}
+    >
+      <Icon>
+        <svg
+          width="376"
+          height="779"
+          viewBox="0 0 376 779"
+          fill={"none"}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            id="OuterFrame"
+            d="M0 44C0 19.6995 19.6995 0 44 0H332C356.301 0 376 19.6995 376 44V735C376 759.301 356.301 779 332 779H44C19.6995 779 0 759.301 0 735V44Z"
+            fill={"oklch(40% 0.037 264.08)"}
+          />
+          <path
+            id="InnerShadow"
+            d="M9.15881 46.9407C9.19153 26.5294 25.7474 10 46.1588 10H330.689C351.146 10 367.721 26.6016 367.689 47.0593L366.589 733.025C366.557 753.437 350.001 769.966 329.589 769.966H45.0593C24.6016 769.966 8.02661 753.364 8.0594 732.907L9.15881 46.9407Z"
+            fill={"oklch(58.97% 0 0)"}
+          />
+          <Screen
+            d="M15 51C15 31.1177 31.1178 15 51 15H325.342C345.224 15 361.342 31.1178 361.342 51V732.672C361.342 749.793 347.463 763.672 330.342 763.672H46C28.8792 763.672 15 749.793 15 732.672V51Z"
+            fill={"white"}
+            $open={open}
+          />
+        </svg>
+      </Icon>
+    </Phone>
   );
 }
 
