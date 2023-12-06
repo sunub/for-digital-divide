@@ -1,0 +1,9 @@
+.search-area__label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.search-area__text-field {
+  padding: 4px;
+  border: 1px solid #000000;
+}

@@ -1,57 +1,69 @@
 *,
 *::before,
 *::after {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 * {
-	margin: 0px;
-	line-height: calc(1em + 0.8rem);
-	-webkit-font-smoothing: antialiased;
+  margin: 0px;
+  line-height: calc(1em + 0.8rem);
+  -webkit-font-smoothing: antialiased;
 }
 html {
-	display: block;
+  display: block;
 }
 
 html,
 body {
-	height: 100%;
+  height: 100%;
 }
 
 #_next {
-	isolation: isolate;
-	height: 100%;
+  isolation: isolate;
+  height: 100%;
 }
 
 input,
 button {
-	border: none;
-	border-radius: 0;
+  border: none;
+  border-radius: 0;
 }
 
 input,
 button,
 textarea {
-	line-height: 16px;
-	letter-spacing: -0.4px;
+  line-height: 16px;
+  letter-spacing: -0.4px;
 }
 
 input::-webkit-search-decoration,
 input::-webkit-search-cancel-button,
 input::-webkit-search-results-button,
 input::-webkit-search-results-decoration {
-	opacity: 0;
-	position: absolute;
-	right: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
 }
 
 button {
-	background: none;
-	cursor: pointer;
-	touch-action: manipulation;
-	outline-offset: 4px;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  outline-offset: 4px;
 
-	:focus:not(:focus-visible) {
-		outline: none;
-	}
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+.visually-hidden {
+  display: inline-block;
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
 }
