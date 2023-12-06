@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { getCursorBasePosition } from "../VKBox.helper";
+import { getCursorBasePosition } from "./VKBoxHeader.helper";
 
 const Wrapper = styled.div`
   display: flex;
