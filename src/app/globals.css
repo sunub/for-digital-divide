@@ -16,6 +16,7 @@ html {
 html,
 body {
   height: 100%;
+  font-family: "NanumSquareNeo", "Wotfard", sans-serif;
 }
 
 #_next {
