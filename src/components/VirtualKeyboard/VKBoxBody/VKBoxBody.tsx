@@ -7,8 +7,8 @@ import {
   ShiftKey,
   SpaceKey,
   CtrlAltKey,
-} from "../SpecialKeys";
-import KEYBOARD_LAYOUT from "../KeyboardKeys";
+} from "../KeyboardKeys/SpecialKeys";
+import KEYBOARD_LAYOUT from "../KeyboardKeys/KeyboardKeys";
 
 type RowConfig = {
   leftKeys: React.ReactNode | null;

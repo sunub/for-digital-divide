@@ -1,10 +1,10 @@
-import SmallPhone from "@/components/SmallPhone";
 import InitFrame from "@/components/InitFrame";
+import InitPage from "@/components/InitPage";
 
 export default function Home() {
   return (
     <InitFrame>
-      <SmallPhone />
+      <InitPage />
     </InitFrame>
   );
 }
