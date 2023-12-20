@@ -1,4 +1,5 @@
-import Form from "@/compo/Form";
+import React from "react";
+import Form from "@compo/Form";
 import * as styled from "./LoginForm.styled";
 import FormHeader from "../FormHeader";
 

@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "node -r dotenv/config ./scripts/seed.mjs",
-    "test:unit": "jest --config ./jest.config.ts",
+    "test:unit": "jest",
     "test:e2e": "pnpm exec playwright --config ./playwright.config.ts"
   },
   "dependencies": {

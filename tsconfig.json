@@ -6,7 +6,6 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "declaration": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -14,7 +13,7 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react",
+    "jsx": "preserve",
     "incremental": true,
     "plugins": [
       {
@@ -23,10 +22,10 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@/compo/*": ["./src/components/*"],
-      "@/icons/*": ["./src/icons/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/public/*": ["./public/*"]
+      "@compo/*": ["./src/components/*"],
+      "@icons/*": ["./src/icons/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@public/*": ["./public/*"]
     }
   },
   "include": [
