@@ -1,8 +1,9 @@
 "use client";
 
-import useToggle from "@/hooks/use-toggle";
+import useToggle from "@hooks/use-toggle";
 import * as Styled from "../Form.styled";
-import VisuallyHidden from "@/compo/VisuallyHidden";
+import VisuallyHidden from "@compo/VisuallyHidden";
+import InvalidMessage from "@/components/InvalidMessage";
 import React from "react";
 
 function Id({
@@ -14,33 +15,36 @@ function Id({
   const [isFocused, toggleIsFocused] = useToggle(false);
 
   return (
-    <Styled.InputWrapper key={"id-wrapper"} $isUpper={true} $isLower={false}>
-      <label htmlFor="id">
-        <VisuallyHidden>아이디</VisuallyHidden>
-      </label>
-      <GoogleIcon name="person" isFocused={isFocused} />
-      <Styled.Input
-        id="id"
-        type="text"
-        name="id"
-        autoComplete={"email"}
-        required
-        aria-labelledby="insert-user-id"
-        onFocus={toggleIsFocused}
-        onBlur={toggleIsFocused}
-        minLength={6}
-        maxLength={20}
-        value={value}
-        onChange={(e) => {
-          const currValue = e.target.value;
-          setValue(() => currValue);
-          setId(() => currValue);
-        }}
-      />
-      <Styled.Placeholder $isFocus={isFocused}>
-        <span>{value.length > 0 ? "" : "아이디를 입력해주세요"}</span>
-      </Styled.Placeholder>
-    </Styled.InputWrapper>
+    <>
+      <Styled.InputWrapper key={"id-wrapper"} $isUpper={true} $isLower={false}>
+        <label htmlFor="id">
+          <VisuallyHidden>아이디</VisuallyHidden>
+        </label>
+        <GoogleIcon name="person" isFocused={isFocused} />
+        <Styled.Input
+          id="id"
+          type="text"
+          name="id"
+          autoComplete={"email"}
+          required
+          aria-label="아이디 입력"
+          aria-labelledby="아이디 입력"
+          onFocus={toggleIsFocused}
+          onBlur={toggleIsFocused}
+          minLength={6}
+          maxLength={20}
+          value={value}
+          onChange={(e) => {
+            const currValue = e.target.value;
+            setValue(() => currValue);
+            setId(() => currValue);
+          }}
+        />
+        <Styled.Placeholder $isFocus={isFocused}>
+          <span>{value.length > 0 ? "" : "아이디를 입력해주세요"}</span>
+        </Styled.Placeholder>
+      </Styled.InputWrapper>
+    </>
   );
 }
 

@@ -2,10 +2,8 @@
 
 import React from "react";
 import * as Styled from "../Form.styled";
-import VisuallyHidden from "@/compo/VisuallyHidden";
-import useToggle from "@/hooks/use-toggle";
-
-type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
+import VisuallyHidden from "@compo/VisuallyHidden";
+import useToggle from "@hooks/use-toggle";
 
 function Password({
   setPassword,
@@ -15,7 +13,6 @@ function Password({
   const [value, setValue] = React.useState("");
   const [isFocused, toggleIsFocused] = useToggle(false);
   const [isShown, toggleIsShown] = useToggle(false);
-  const passwordRef = React.useRef<HTMLInputElement>(null);
 
   return (
     <Styled.InputWrapper
@@ -27,8 +24,15 @@ function Password({
         <VisuallyHidden>비밀번호</VisuallyHidden>
       </label>
       <GoogleIcon name="lock" isFocused={isFocused} />
-      <Input
-        ref={passwordRef}
+      <Styled.Input
+        id="password"
+        type={isShown ? "text" : "password"}
+        name="password"
+        required
+        autoComplete={"current-password"}
+        aria-label="비밀번호 입력"
+        aria-labelledby="비밀번호 입력"
+        minLength={8}
         value={value}
         onChange={(e) => {
           const currValue = e.target.value;
@@ -38,16 +42,7 @@ function Password({
         onFocus={toggleIsFocused}
         onBlur={toggleIsFocused}
       />
-      <Styled.VisbilityButton
-        type="button"
-        onClick={() => {
-          if (!passwordRef.current) return;
-
-          if (isShown) passwordRef.current.type = "password";
-          else passwordRef.current.type = "text";
-          toggleIsShown();
-        }}
-      >
+      <Styled.VisbilityButton type="button" onClick={toggleIsShown}>
         <VisbilityIcon isShown={isShown} />
       </Styled.VisbilityButton>
       <Styled.Placeholder $isFocus={isFocused}>
@@ -56,24 +51,6 @@ function Password({
     </Styled.InputWrapper>
   );
 }
-
-const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  return (
-    <Styled.Input
-      ref={ref}
-      id="password"
-      type="password"
-      name="password"
-      required
-      autoComplete={"current-password"}
-      aria-labelledby="insert-user-password"
-      minLength={8}
-      {...props}
-    />
-  );
-});
-
-Input.displayName = "PasswordInput";
 
 const VisbilityIcon = ({ isShown }: { isShown: boolean }) => {
   const color = isShown
