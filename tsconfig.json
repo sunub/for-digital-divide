@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -8,9 +7,8 @@
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "Node",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -27,6 +25,11 @@
       "@hooks/*": ["./src/hooks/*"],
       "@public/*": ["./public/*"]
     }
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "esm": false
   },
   "include": [
     "next-env.d.ts",
