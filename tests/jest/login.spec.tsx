@@ -2,15 +2,22 @@ import React from "react";
 import LoginForm from "@/components/LoginForm";
 import { getNodeText, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createUserInfo } from "@/lib/action";
 import { delay } from "../utils";
 
-describe("로그인 페이지 유닛 테스트", () => {
-  beforeAll(() => {});
+jest.mock("@/lib/action", () => ({
+  createUserInfo: jest.fn(),
+}));
 
+describe("로그인 페이지 유닛 테스트", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
+  (createUserInfo as jest.Mock).mockResolvedValue({
+    success: true,
+    message: "User created successfully",
+  });
   it("렌더링 테스트", () => {
     render(<LoginForm />);
 
@@ -67,6 +74,10 @@ describe("로그인 페이지 예외 테스트", () => {
     jest.clearAllMocks();
   });
 
+  (createUserInfo as jest.Mock).mockResolvedValue({
+    success: true,
+    message: "User created successfully",
+  });
   test("id 입력 예외 테스트", async () => {
     render(<LoginForm />);
 
