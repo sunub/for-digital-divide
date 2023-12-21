@@ -1,7 +1,7 @@
 import React from "react";
-import Form from "@compo/Form";
+import Form from "./Form";
 import * as styled from "./LoginForm.styled";
-import FormHeader from "../FormHeader";
+import FormHeader from "./FormHeader";
 
 function LoginForm() {
   return (
