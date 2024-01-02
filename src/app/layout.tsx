@@ -1,5 +1,6 @@
 import React from "react";
 import "./globals.css";
+import Header from "@compo/Header";
 
 export default function RootLayout({
   children,
@@ -40,7 +41,10 @@ export default function RootLayout({
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </head>
       <body>
-        <div id="_next">{children}</div>
+        <div id="_next">
+          <Header />
+          {children}
+        </div>
       </body>
     </html>
   );
