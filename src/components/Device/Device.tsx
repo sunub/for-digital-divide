@@ -5,46 +5,28 @@ import styled from "styled-components";
 
 const RootWrapper = styled.div`
   position: relative;
-  width: 376px;
-  height: 779px;
-  border: 3px solid oklch(69.45% 0 0);
-  outline: 3px solid oklch(88.53% 0 0);
-  border-radius: 45px;
+  width: 426px;
+  height: 829px;
+  border: 4px solid oklch(69.45% 0 0);
+  outline: 4px solid oklch(88.53% 0 0);
+  border-radius: 50px;
 `;
 
 const OuterShadow = styled.div`
   width: 100%;
   height: 100%;
-  border: 10px solid oklch(0% 0 0);
-  outline: 2px solid oklch(74.41% 0 0);
+  border: 13px solid oklch(0% 0 0);
+  outline: 4px solid oklch(74.41% 0 0);
   background: oklch(97.65% 0 0);
-  border-radius: 45px;
+  border-radius: 50px;
   padding: 3px;
 `;
-
-// const InnerFrame = styled.div`
-//   width: 100%;
-//   height: 100%;
-//   border-radius: 45px;
-//   background: oklch(74.41% 0 0);
-//   padding: 2px;
-// `;
-
-// const InnerShadow = styled.div`
-//   width: 100%;
-//   height: 100%;
-//   border-radius: 45px;
-//   background: oklch(0% 0 0);
-//   padding: 10px;
-// `;
 
 const InnerWindow = styled.div`
   width: 100%;
   height: 100%;
-  border-radius: 45px;
+  border-radius: 50px;
   background: oklch(97.65% 0 0);
-  padding-left: 16px;
-  padding-right: 16px;
 `;
 
 const AppWrapper = styled.div`
@@ -53,6 +35,7 @@ const AppWrapper = styled.div`
 
 const DeviceFrame = styled.div`
   display: grid;
+  height: 100%;
   grid-template-rows:
     [system-status] 3.5rem
     [primary-nav] 3rem
@@ -114,9 +97,9 @@ function Device({
   main,
   footer,
 }: {
-  header: React.ReactNode;
-  main: React.ReactNode;
-  footer: React.ReactNode;
+  header?: React.ReactNode;
+  main?: React.ReactNode;
+  footer?: React.ReactNode;
 }) {
   const [time, setTime] = React.useState(new Date());
   const options: Intl.DateTimeFormatOptions = {

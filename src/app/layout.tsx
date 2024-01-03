@@ -42,8 +42,10 @@ export default function RootLayout({
       </head>
       <body>
         <div id="_next">
-          <Header />
-          {children}
+          <section id="site-wrapper">
+            <Header />
+            {children}
+          </section>
         </div>
       </body>
     </html>

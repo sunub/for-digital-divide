@@ -1,6 +1,5 @@
 import React from "react";
 import * as Styled from "./Header.style";
-import SmallPhone from "../SmallPhone";
 
 function Header() {
   return (

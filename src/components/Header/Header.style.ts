@@ -14,6 +14,7 @@ export const RootWrapper = styled.div`
   padding-left: 64px;
   padding-right: 64px;
 
+  width: 100%;
   height: 88px;
 `;
 
