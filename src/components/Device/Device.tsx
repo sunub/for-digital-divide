@@ -1,96 +1,5 @@
-"use client";
-
 import React from "react";
-import styled from "styled-components";
-
-const RootWrapper = styled.div`
-  position: relative;
-  width: 426px;
-  height: 829px;
-  border: 4px solid oklch(69.45% 0 0);
-  outline: 4px solid oklch(88.53% 0 0);
-  border-radius: 50px;
-`;
-
-const OuterShadow = styled.div`
-  width: 100%;
-  height: 100%;
-  border: 13px solid oklch(0% 0 0);
-  outline: 4px solid oklch(74.41% 0 0);
-  background: oklch(97.65% 0 0);
-  border-radius: 50px;
-  padding: 3px;
-`;
-
-const InnerWindow = styled.div`
-  width: 100%;
-  height: 100%;
-  border-radius: 50px;
-  background: oklch(97.65% 0 0);
-`;
-
-const AppWrapper = styled.div`
-  grid-area: primary-nav / fullbleed-start / system-gesture / fullbleed-end;
-`;
-
-const DeviceFrame = styled.div`
-  display: grid;
-  height: 100%;
-  grid-template-rows:
-    [system-status] 3.5rem
-    [primary-nav] 3rem
-    [primary-header] 4rem
-    [main] auto
-    [footer] 4rem
-    [system-gesture] 2rem;
-
-  grid-template-columns:
-    [fullbleed-start] 1rem
-    [main-start] auto
-    [main-end] 1rem
-    [fullbleed-end];
-
-  & > *,
-  & > ${AppWrapper} {
-    display: grid;
-    grid: subgrid / subgrid;
-  }
-`;
-
-const SystemStatusBar = styled.div`
-  grid-area: system-status / fullbleed;
-  display: grid;
-  align-items: center;
-
-  & > time {
-    grid-area: system-status / main;
-    margin-inline: 2rem;
-  }
-
-  &::after {
-    content: "";
-    grid-area: system-status / main;
-    justify-self: center;
-    background: black;
-    block-size: 50%;
-    inline-size: 25%;
-    border-radius: 1e5px;
-  }
-`;
-
-const Header = styled.div`
-  grid-area: primary-header / fullbleed;
-  grid-template-rows: auto auto;
-`;
-
-const Footer = styled.div`
-  grid-area: footer / fullbleed;
-`;
-
-const Main = styled.div`
-  grid-area: main / fullbleed;
-  overflow: auto;
-`;
+import * as Styled from "./Device.style";
 
 function Device({
   header,
@@ -119,28 +28,112 @@ function Device({
 
   return (
     <PhoneFrame>
-      <DeviceFrame>
-        <SystemStatusBar>
+      <Styled.DeviceFrame>
+        <Styled.SystemStatusBar>
           <time>{timeWithoutPeriod}</time>
-        </SystemStatusBar>
+        </Styled.SystemStatusBar>
 
-        <AppWrapper>
-          <Header>{header}</Header>
-          <Main>{main}</Main>
-          <Footer>{footer}</Footer>
-        </AppWrapper>
-      </DeviceFrame>
+        <Styled.AppWrapper>
+          <Styled.Header>{header}</Styled.Header>
+          <Styled.Main>{main}</Styled.Main>
+          <Styled.Footer>{footer}</Styled.Footer>
+        </Styled.AppWrapper>
+
+        <Styled.SystemGestureArea>
+          <RecentlyAppBtn />
+          <HomeBtn />
+          <BackBtn />
+        </Styled.SystemGestureArea>
+      </Styled.DeviceFrame>
     </PhoneFrame>
   );
 }
 
 function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
-    <RootWrapper>
-      <OuterShadow>
-        <InnerWindow>{children}</InnerWindow>
-      </OuterShadow>
-    </RootWrapper>
+    <Styled.RootWrapper>
+      <Styled.OuterShadow>
+        <Styled.InnerWindow>{children}</Styled.InnerWindow>
+      </Styled.OuterShadow>
+    </Styled.RootWrapper>
+  );
+}
+
+function HomeBtn() {
+  return (
+    <Styled.GestureButton>
+      <Styled.GestureButtonIcon
+        width="48"
+        height="48"
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect
+          x="14.5"
+          y="14.5"
+          width="19"
+          height="19"
+          rx="3.5"
+          stroke="white"
+          strokeWidth={"2"}
+        />
+      </Styled.GestureButtonIcon>
+    </Styled.GestureButton>
+  );
+}
+
+function BackBtn() {
+  return (
+    <Styled.GestureButton>
+      <Styled.GestureButtonIcon
+        width="48"
+        height="48"
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M22 14L14.1213 21.8787C12.9497 23.0503 12.9497 24.9497 14.1213 26.1213L22 34"
+          stroke="white"
+          strokeWidth={"2"}
+          strokeLinecap="round"
+        />
+      </Styled.GestureButtonIcon>
+    </Styled.GestureButton>
+  );
+}
+
+function RecentlyAppBtn() {
+  return (
+    <Styled.GestureButton>
+      <Styled.GestureButtonIcon
+        width="48"
+        height="48"
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M24 14L24 33.6"
+          stroke="white"
+          strokeWidth={"2"}
+          strokeLinecap="round"
+        />
+        <path
+          d="M14 14L14 33.6"
+          stroke="white"
+          strokeWidth={"2"}
+          strokeLinecap="round"
+        />
+        <path
+          d="M34 14L34 33.6"
+          stroke="white"
+          strokeWidth={"2"}
+          strokeLinecap="round"
+        />
+      </Styled.GestureButtonIcon>
+    </Styled.GestureButton>
   );
 }
 
