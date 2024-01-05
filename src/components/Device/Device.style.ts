@@ -9,8 +9,6 @@ export const RootWrapper = styled.div`
   border: 4px solid oklch(69.45% 0 0);
   outline: 5px solid oklch(88.53% 0 0);
   border-radius: 50px;
-
-  container: device-frame / size;
 `;
 
 export const OuterShadow = styled.div`
@@ -28,6 +26,7 @@ export const InnerWindow = styled.div`
   height: 100%;
   border-radius: 50px;
   background: oklch(97.65% 0 0);
+  container: device-frame / size;
 `;
 
 export const AppWrapper = styled.div`

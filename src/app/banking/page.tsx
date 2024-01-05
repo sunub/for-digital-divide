@@ -16,7 +16,6 @@ async function BankingPage() {
   return (
     <div>
       <h1>Banking Page</h1>
-      <AccountCard accounts={[account]} />
     </div>
   );
 }
