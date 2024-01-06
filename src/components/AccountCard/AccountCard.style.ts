@@ -16,6 +16,7 @@ export const CardWrapper = styled.div`
   height: calc(28cqh + 3rem);
   padding: 1rem;
 
+  user-select: none;
   overflow-x: scroll;
   scrollbar-width: none;
   scroll-snap-type: x mandatory;

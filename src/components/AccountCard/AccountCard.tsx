@@ -3,22 +3,24 @@ import * as Styled from "./AccountCard.style";
 import useToggle from "@/hooks/use-toggle";
 
 function AccountCard() {
-  const ref = React.useRef<HTMLDivElement>(null);
   const [accountBuffer, setAccountBuffer] = React.useState<any[]>([
     {
       name: "1",
       accountNumber: "426402-02-133421",
       price: "216,9180원",
+      ref: React.useRef<HTMLDivElement>(null),
     },
     {
       name: "2",
       accountNumber: "426402-02-133421",
       price: "216,9180원",
+      ref: React.useRef<HTMLDivElement>(null),
     },
     {
       name: "3",
       accountNumber: "426402-02-133421",
       price: "216,9180원",
+      ref: React.useRef<HTMLDivElement>(null),
     },
   ]);
   const [scrollDirection, setScrollDirection] = React.useState<
@@ -26,45 +28,51 @@ function AccountCard() {
   >(null);
   const [startPosition, setStartPosition] = React.useState<number>(0);
   const [isMouseDown, toggleMouseDown] = useToggle(false);
+  const [currPosition, setCurrPosition] = React.useState<number>(1);
 
   React.useEffect(() => {
-    ref.current?.scrollIntoView({ behavior: "instant" });
-  }, []);
+    const middle = Math.floor(accountBuffer.length / 2);
+    if (accountBuffer[middle].ref) {
+      const ref = accountBuffer[middle].ref.current as HTMLDivElement;
 
-  React.useEffect(() => {
-    function handleMouseMove(e: MouseEvent) {
-      if (!isMouseDown) {
-        return; // Add this line
-      }
-
-      if (e.clientX > startPosition) {
-        setScrollDirection("right");
-      } else if (e.clientX < startPosition) {
-        setScrollDirection("left");
-      }
+      ref.scrollIntoView({ behavior: "instant" });
     }
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [isMouseDown, startPosition]);
+  }, [accountBuffer]);
 
   React.useEffect(() => {
-    function handleMouseUp() {
-      console.log("mouseup");
-      toggleMouseDown();
+    function handleMouseUp(e: MouseEvent) {
+      if (!isMouseDown) {
+        return;
+      }
+
+      if (e.clientX < startPosition) {
+        setScrollDirection("right");
+        setCurrPosition((prev) => {
+          const nextPosition = prev + 1;
+          return nextPosition % accountBuffer.length;
+        });
+        toggleMouseDown();
+      } else if (e.clientX > startPosition) {
+        setScrollDirection("left");
+        setCurrPosition((prev) => {
+          const nextPosition = accountBuffer.length + prev - 1;
+          return nextPosition % accountBuffer.length;
+        });
+        toggleMouseDown();
+      }
     }
 
     window.addEventListener("mouseup", handleMouseUp);
+    return () => window.removeEventListener("mouseup", handleMouseUp);
+  }, [isMouseDown, startPosition, accountBuffer, toggleMouseDown]);
 
-    return () => {
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [toggleMouseDown]);
-
-  console.log(scrollDirection);
+  React.useEffect(() => {
+    const nextPosition = Math.abs(currPosition);
+    if (accountBuffer[nextPosition].ref) {
+      const ref = accountBuffer[nextPosition].ref.current as HTMLDivElement;
+      ref.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [currPosition, accountBuffer]);
 
   return (
     <Styled.Wrapper>
@@ -74,30 +82,16 @@ function AccountCard() {
           setStartPosition(() => e.clientX);
         }}
       >
-        <Styled.Card>
-          <header>
-            <h3>{1}</h3>
-            {"426402-02-133421"}
-          </header>
-          <main>{"216,9180원"}</main>
-          <button>입금</button>
-        </Styled.Card>
-        <Styled.Card ref={ref}>
-          <header>
-            <h3>{2}</h3>
-            {"426402-02-133421"}
-          </header>
-          <main>{"216,9180원"}</main>
-          <button>입금</button>
-        </Styled.Card>
-        <Styled.Card>
-          <header>
-            <h3>{3}</h3>
-            {"426402-02-133421"}
-          </header>
-          <main>{"216,9180원"}</main>
-          <button>입금</button>
-        </Styled.Card>
+        {accountBuffer.map((account, i) => (
+          <Styled.Card key={`${i}th-account-card`} ref={account.ref}>
+            <header>
+              <h3>{account.name}</h3>
+              <span>{account.accountNumber}</span>
+            </header>
+            <main>{account.price}</main>
+            <button>입금</button>
+          </Styled.Card>
+        ))}
       </Styled.CardWrapper>
     </Styled.Wrapper>
   );
