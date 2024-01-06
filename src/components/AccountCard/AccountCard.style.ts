@@ -41,6 +41,11 @@ export const Card = styled.div`
   scroll-snap-align: center;
   overscroll-behavior: contain;
   transform: translate3d(0, 0, 0);
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
 `;
 
 export const AccountNumber = styled.span``;

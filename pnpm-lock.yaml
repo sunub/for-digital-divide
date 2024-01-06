@@ -44,6 +44,9 @@ dependencies:
   eslint-config-next:
     specifier: 13.4.19
     version: 13.4.19(eslint@8.48.0)(typescript@5.2.2)
+  gsap:
+    specifier: ^3.12.4
+    version: 3.12.4
   next:
     specifier: ^14.0.3
     version: 14.0.3(@babel/core@7.23.6)(react-dom@18.2.0)(react@18.2.0)
@@ -3395,6 +3398,10 @@ packages:
 
   /graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
+    dev: false
+
+  /gsap@3.12.4:
+    resolution: {integrity: sha512-1ByAq8dD0W4aBZ/JArgaQvc0gyUfkGkP8mgAQa0qZGdpOKlSOhOf+WNXjoLimKaKG3Z4Iu6DKZtnyszqQeyqWQ==}
     dev: false
 
   /has-bigints@1.0.2:
