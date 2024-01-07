@@ -8,17 +8,8 @@ import { Draggable } from "gsap/Draggable";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AccountCardHelper from "./AccountCard.helper";
 
-const POSITIONS = [];
-let iteration = 0;
-
-function AccountCard({
-  rootRef,
-  trigger,
-}: {
-  rootRef: React.RefObject<HTMLDivElement>;
-  trigger: boolean;
-}) {
-  const ref = React.useRef<HTMLDivElement>(null);
+function AccountCard({ trigger }: { trigger: boolean }) {
+  const draggableRef = React.useRef<HTMLDivElement>(null);
   const [isMoving, toggleIsMoving] = useToggle(false);
   const [startOffset, setStartOffset] = React.useState<number>(0);
   const [accountBuffer, setAccountBuffer] = React.useState<any[]>([
@@ -42,19 +33,36 @@ function AccountCard({
     },
   ]);
 
-  React.useEffect(() => {}, []);
-
   React.useEffect(() => {
-    if (rootRef.current) {
-      const root = rootRef.current;
-      const rootRect = root.getBoundingClientRect();
-      const rootCenter = Math.floor(rootRect.width / 2);
+    gsap.registerPlugin(Draggable, ScrollTrigger);
+    Draggable.create(draggableRef.current, {
+      type: "x",
+      trigger: ".card-items-wrapper",
+      bounds: ".root-items-wrapper",
+      onDragEnd() {
+        gsap.to(this.target, { x: 0, duration: 0 });
+      },
+    });
+
+    const trigger = ScrollTrigger.create({
+      start: 0,
+      onUpdate(self) {
+        console.log(self);
+      },
+    });
+
+    const snapTime = gsap.utils.snap(0.1);
+    // console.log(snapTime);
+    function scrollToOffset(offset) {
+      // 새로운 snap 값을 할당한다.
+      let snappedTime = snapTime(offset);
+      let progress = snappedTime;
     }
-  }, [rootRef]);
+  }, [trigger]);
 
   return (
     <Styled.Wrapper className="root-items-wrapper">
-      <Styled.CardWrapper ref={ref} className="card-items-wrapper">
+      <Styled.CardWrapper className="card-items-wrapper">
         {accountBuffer.map((account, i) => (
           <Styled.Card
             className="card-items"
@@ -71,16 +79,17 @@ function AccountCard({
         ))}
       </Styled.CardWrapper>
       <div
+        ref={draggableRef}
         className="drag-proxy"
         style={{
           backgroundColor: "red",
           width: "50px",
           height: "50px",
           borderRadius: "50%",
+          position: "absolute",
+          left: "calc(50cqw - 25px)",
         }}
-      >
-        a
-      </div>
+      />
     </Styled.Wrapper>
   );
 }
