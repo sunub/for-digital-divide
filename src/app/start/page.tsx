@@ -19,20 +19,14 @@ function StartPage() {
 
   return (
     <>
-      <RootWrapper>
-        <div
-          style={{
-            width: "376px",
-            height: "779px",
-            container: "demo-frame / size",
-          }}
-          ref={rootRef}
-        >
-          <AccountCard trigger={trigger} rootRef={rootRef} />
-        </div>
-        {/* <Device main={<LoginForm />} /> */}
-        {/* <Device header={<h1>Account Card</h1>} main={<AccountCard />} /> */}
-      </RootWrapper>
+      <div
+        style={{
+          display: "grid",
+          placeContent: "center",
+        }}
+      >
+        <AccountCard trigger={trigger} />
+      </div>
       <button
         style={{
           border: "1px solid black",

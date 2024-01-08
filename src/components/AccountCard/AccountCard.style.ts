@@ -2,6 +2,12 @@
 
 import styled from "styled-components";
 
+export const RootWrapper = styled.div`
+  width: 376px;
+  height: 779px;
+  container: demo-frame / size;
+`;
+
 export const Wrapper = styled.div`
   position: relative;
   background-image: linear-gradient(rgb(219, 166, 166), rgb(0, 0, 172));
@@ -16,11 +22,11 @@ export const CardWrapper = styled.div`
   height: calc(28cqh + 3rem);
   padding: 1rem;
 
-  user-select: none;
+  /* user-select: none;
   overflow-x: scroll;
   scrollbar-width: none;
   scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
+  scroll-behavior: smooth; */
 `;
 
 export const Card = styled.div`
@@ -31,21 +37,20 @@ export const Card = styled.div`
   background-color: color-mix(in oklch, oklch(100% 0 284.14), transparent 20%);
   backdrop-filter: blur(10px);
 
-  position: relative;
   border-radius: 5cqw;
   padding-left: 1rem;
   padding-right: 1rem;
   margin: 8px;
 
   flex: 83cqw 1 0;
-  scroll-snap-align: center;
-  overscroll-behavior: contain;
-  transform: translate3d(0, 0, 0);
-  cursor: grab;
+  /* scroll-snap-align: center;
+  overscroll-behavior: contain; */
+  /* transform: translate3d(0, 0, 0); */
+  /* cursor: grab;
 
   &:active {
     cursor: grabbing;
-  }
+  } */
 `;
 
 export const AccountNumber = styled.span``;
