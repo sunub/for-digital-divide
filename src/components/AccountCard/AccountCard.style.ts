@@ -22,14 +22,15 @@ export const CardWrapper = styled.div`
   height: calc(28cqh + 3rem);
   padding: 1rem;
 
-  /* user-select: none;
+  user-select: none;
   overflow-x: scroll;
   scrollbar-width: none;
   scroll-snap-type: x mandatory;
-  scroll-behavior: smooth; */
+  scroll-behavior: smooth;
 `;
 
 export const Card = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -43,8 +44,6 @@ export const Card = styled.div`
   margin: 8px;
 
   flex: 83cqw 1 0;
-  /* scroll-snap-align: center;
-  overscroll-behavior: contain; */
   /* transform: translate3d(0, 0, 0); */
   /* cursor: grab;
 
@@ -57,6 +56,15 @@ export const AccountNumber = styled.span``;
 
 export const Price = styled.span`
   font-size: 2rem;
+`;
+
+export const DragProxy = styled.div`
+  position: relative;
+  left: calc(50% - 25px);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rebeccapurple;
 `;
 
 // const ScrollWrapper = styled.ul`

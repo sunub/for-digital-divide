@@ -25,7 +25,7 @@ function StartPage() {
           placeContent: "center",
         }}
       >
-        <AccountCard trigger={trigger} />
+        <AccountCard pagetrigger={trigger} />
       </div>
       <button
         style={{
