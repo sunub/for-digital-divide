@@ -17,6 +17,7 @@ html,
 body {
   height: 100%;
   font-family: "NanumSquareNeo", "Wotfard", sans-serif;
+  font-size: var(--text-size);
 }
 
 #_next {
@@ -32,6 +33,7 @@ body {
 
   container: root / inline-size;
   height: 100%;
+  background: var(--color-background);
 }
 
 input,

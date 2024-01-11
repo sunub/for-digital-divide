@@ -31,6 +31,18 @@ export default function RootLayout({
         `,
           }}
         />
+        <style>
+          {`
+            html {
+              --color-background: oklch(96.88% 0.015 294.47);
+              --color-text: oklch(42.44% 0.011 17.58);
+              --color-primary:oklch(96.86% 0.009 288.17775174927874);
+              --color-button: oklch(65.57% 0.19552898037793698 288.17775174927874);
+              --color-highlight: oklch(73.96% 0.1586202546972356 25.278467161119735);
+              --text-size: 24px;
+            }
+          `}
+        </style>
         <link
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet preload"
