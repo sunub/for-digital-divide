@@ -5,9 +5,10 @@ import React from "react";
 import styled from "styled-components";
 
 const RangeWrapper = styled.div`
-  grid-area: resize-font-slider / main;
+  /* grid-area: resize-font-slider / main; */
   position: relative;
   display: grid;
+  width: 30cqw;
 `;
 
 const SliderOutput = styled.span<{ $position: number; $isHover: boolean }>`
@@ -54,12 +55,12 @@ const RangeSlider = styled.input<{ $trackFill: number; $hovering: number }>`
 
     &::-webkit-slider-runnable-track {
       appearance: none;
-      height: 3px;
+      height: 0.5cqh;
       border-radius: 5px;
       background: linear-gradient(
           to right,
           transparent ${({ $trackFill }) => $trackFill}%,
-          oklch(72.81% 0.051 302.57) 0%
+          oklch(82.08% 0.051 302.57) 0%
         ),
         var(--color-button) fixed;
     }
@@ -68,14 +69,14 @@ const RangeSlider = styled.input<{ $trackFill: number; $hovering: number }>`
       -webkit-appearance: none;
       appearance: none;
       cursor: grab;
-      width: 24px;
-      height: 24px;
+      width: 3cqh;
+      height: 3cqh;
       border: 3px solid var(--color-primary);
       background: var(--color-button) fixed;
       border-radius: 50%;
       aspect-ratio: 1 / 1;
       transition: box-shadow 200ms cubic-bezier(0.17, 0.67, 0.27, 0.86);
-      margin-top: -11px;
+      margin-top: calc(-3cqh / 2 + 0.5cqh / 2);
 
       &:active {
         cursor: grabbing;
@@ -139,38 +140,3 @@ function Slider(props: SliderProps) {
 }
 
 export default React.memo(Slider);
-
-// const
-// 	range = document.getElementById('range'),
-// 	rangeV = document.getElementById('rangeV'),
-// 	setValue = ()=>{
-// 		const
-// 			newValue = Number( (range.value - range.min) * 100 / (range.max - range.min) ),
-// 			newPosition = 10 - (newValue * 0.2);
-// 		rangeV.innerHTML = `<span>${range.value}</span>`;
-// 		rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
-// 	};
-// document.addEventListener("DOMContentLoaded", setValue);
-// range.addEventListener('input', setValue);
-
-// const allRanges = document.querySelectorAll(".range-wrap");
-// allRanges.forEach(wrap => {
-//   const range = wrap.querySelector(".range");
-//   const bubble = wrap.querySelector(".bubble");
-
-//   range.addEventListener("input", () => {
-//     setBubble(range, bubble);
-//   });
-//   setBubble(range, bubble);
-// });
-
-// function setBubble(range, bubble) {
-//   const val = range.value;
-//   const min = range.min ? range.min : 0;
-//   const max = range.max ? range.max : 100;
-//   const newVal = Number(((val - min) * 100) / (max - min));
-//   bubble.innerHTML = val;
-
-//   // Sorta magic numbers based on size of the native UI thumb
-//   bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
-// }

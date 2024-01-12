@@ -7,6 +7,7 @@ import LoginForm from "@/components/LoginForm";
 import AccountCard from "@/components/AccountCard";
 import useToggle from "@/hooks/use-toggle";
 import Slider from "@/components/Slider";
+import Button from "@/components/Button";
 
 const RootWrapper = styled.div`
   display: grid;
@@ -41,6 +42,16 @@ const ResizeWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  height: 100%;
+
+  width: 100%;
+  height: fit-content;
+  text-align: end;
+  border-bottom: 3px solid var(--color-transparent);
+  /* padding-top: 24px;
+  padding-bottom: 24px; */
 `;
 
 function StartPage() {
@@ -55,13 +66,21 @@ function StartPage() {
     <>
       <RootWrapper>
         <Title>
-          <h1>시작하기 전</h1>
-          <h1>글씨 크기를</h1>
-          <h1>조절 해주세요</h1>
+          <h1>시작하기 전 글씨 크기를 조절 해주세요</h1>
         </Title>
-        <ResizeWrapper>잘 보이시나요?</ResizeWrapper>
-        <Slider fontSize={fonstSize} setFontSize={setFontSize} />
+        <ResizeWrapper>
+          이 글씨가 잘 보이게끔 크기를 조절 해주세요.
+        </ResizeWrapper>
+        <div></div>
+        <div
+          style={{
+            gridArea: "resize-font-slider / main",
+          }}
+        >
+          <Slider fontSize={fonstSize} setFontSize={setFontSize} />
+        </div>
       </RootWrapper>
+      <Button />
     </>
   );
 }
