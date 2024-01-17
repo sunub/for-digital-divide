@@ -1,6 +1,7 @@
 import React from "react";
 import { Account, getBankAccount } from "@/utils/account";
 import AccountCard from "@/components/AccountCard";
+import Device from "@/components/Device";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,7 @@ interface AccountData {
   createDate: Date;
 }
 
-async function BankingPage() {
+async function DashBoardPage() {
   const account: Account = await getBankAccount();
   console.log(account);
   return (
@@ -20,4 +21,4 @@ async function BankingPage() {
   );
 }
 
-export default BankingPage;
+export default DashBoardPage;

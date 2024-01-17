@@ -2,10 +2,6 @@
 
 import React from "react";
 import styled from "styled-components";
-import Device from "@/components/Device";
-import LoginForm from "@/components/LoginForm";
-import AccountCard from "@/components/AccountCard";
-import useToggle from "@/hooks/use-toggle";
 import Slider from "@/components/Slider";
 import Button from "@/components/Button";
 
