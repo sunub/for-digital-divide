@@ -3,7 +3,7 @@
 import styled from "styled-components";
 import Link from "next/link";
 
-const Button = styled.button`
+export const Button = styled.button`
   width: 100%;
   cursor: pointer;
   padding: 16px 24px 16px 24px;
@@ -13,14 +13,17 @@ const Button = styled.button`
   color: white;
 `;
 
-const InputGroup = styled.div`
+export const InputGroup = styled.div`
   box-shadow: 0px 0.6px 5.2px rgba(0, 0, 0, 0.011),
     0px 1.5px 12.6px rgba(0, 0, 0, 0.016), 0px 2.9px 23.7px rgba(0, 0, 0, 0.02),
     0px 5.1px 42.2px rgba(0, 0, 0, 0.024), 0px 9.6px 79px rgba(0, 0, 0, 0.029),
     0px 23px 189px rgba(0, 0, 0, 0.04);
 `;
 
-const InputWrapper = styled.div<{ $isUpper: boolean; $isLower: boolean }>`
+export const InputWrapper = styled.div<{
+  $isUpper: boolean;
+  $isLower: boolean;
+}>`
   position: relative;
 
   display: flex;
@@ -47,7 +50,7 @@ const InputWrapper = styled.div<{ $isUpper: boolean; $isLower: boolean }>`
   gap: 8px;
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   border: none;
   padding: 16px 0 16px 0;
   font-size: 16px;
@@ -67,18 +70,18 @@ const Input = styled.input`
   }
 `;
 
-const VisbilityButton = styled.button`
+export const VisbilityButton = styled.button`
   display: grid;
   place-items: center;
 `;
 
-const HelpWrapper = styled.ul`
+export const HelpWrapper = styled.ul`
   display: flex;
   justify-content: space-between;
   padding: 16px;
 `;
 
-const HelperList = styled.li<{ $left: number }>`
+export const HelperList = styled.li<{ $left: number }>`
   position: relative;
   list-style: none;
 
@@ -95,16 +98,17 @@ const HelperList = styled.li<{ $left: number }>`
   }
 `;
 
-const Helper = styled(Link)`
+export const Helper = styled(Link)`
   text-decoration: none;
   font-size: 14px;
   line-height: 17px;
   color: #8f8f8f;
 `;
 
-const Placeholder = styled.div<{ $isFocus: boolean }>`
+export const Placeholder = styled.div<{ $isFocus: boolean }>`
   position: absolute;
-  top: 17px;
+  font-size: 0.75rem;
+  top: 13px;
   left: 65px;
   pointer-events: none;
   user-select: none;
@@ -121,36 +125,18 @@ const Placeholder = styled.div<{ $isFocus: boolean }>`
   transition: transform 200ms ease-in-out, background 200ms ease-in-out,
     color 200ms ease-in-out; // Specify transitions for each property
 `;
-export {
-  Helper,
-  InputGroup,
-  Button,
-  InputWrapper,
-  HelpWrapper,
-  HelperList,
-  Input,
-  VisbilityButton,
-  Placeholder,
-};
 
-// -webkit-appearance: none;
-//     font-family: inherit;
-//     font-size: 16px;
-//     font-size: var(--lg-font-size);
-//     height: 52px;
-//     height: var(--input-height);
-//     line-height: 1.1;
-//     line-height: var(--base-line-height);
-//     outline: none;
-//     padding: 0 16px;
-//     padding: var(--input-padding);
-//     width: 100%;
-//     color: #2d333a;
-//     color: var(--input-text-color);
-//     background-color: #fff;
-//     background-color: var(--input-background-color);
-//     transition: box-shadow .2s ease-in-out,border-color .2s ease-in-out;
-//     border-radius: 3px;
-//     border-radius: var(--input-border-radius);
-//     border: 1px solid #c2c8d0;
-//     border: var(--input-border-width) solid var(--input-border-color);
+export const HeaderWrapper = styled.div`
+  grid-area: primary-header / fullbleed;
+  grid-template-rows: auto auto;
+`;
+
+export const MainWrapper = styled.div`
+  grid-area: main / fullbleed;
+  grid-template-rows: auto auto;
+`;
+
+export const FooterWrapper = styled.div`
+  grid-area: footer / fullbleed;
+  grid-template-rows: auto auto;
+`;

@@ -1,15 +1,9 @@
+"use client";
+
 import React from "react";
 import * as Styled from "./Device.style";
 
-function Device({
-  header,
-  main,
-  footer,
-}: {
-  header?: React.ReactNode;
-  main?: React.ReactNode;
-  footer?: React.ReactNode;
-}) {
+function Device({ children }: { children: React.ReactNode }) {
   const [time, setTime] = React.useState(new Date());
   const options: Intl.DateTimeFormatOptions = {
     hour: "2-digit",
@@ -33,11 +27,7 @@ function Device({
           <time>{timeWithoutPeriod}</time>
         </Styled.SystemStatusBar>
 
-        <Styled.AppWrapper>
-          <Styled.Header>{header}</Styled.Header>
-          <Styled.Main>{main}</Styled.Main>
-          <Styled.Footer>{footer}</Styled.Footer>
-        </Styled.AppWrapper>
+        {children}
 
         <Styled.SystemGestureArea>
           <RecentlyAppBtn />
