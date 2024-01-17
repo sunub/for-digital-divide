@@ -4,10 +4,12 @@ import VisuallyHidden from "@compo/VisuallyHidden";
 
 function FormHeader() {
   return (
-    <Styled.Header>
-      <VisuallyHidden>사이트 로그인 페이지</VisuallyHidden>
-      <Styled.Title>로그인</Styled.Title>
-    </Styled.Header>
+    <Styled.Wrapper>
+      <Styled.Header>
+        <VisuallyHidden>사이트 로그인 페이지</VisuallyHidden>
+        <Styled.Title>로그인</Styled.Title>
+      </Styled.Header>
+    </Styled.Wrapper>
   );
 }
 

@@ -6,27 +6,9 @@ import FormHeader from "./FormHeader";
 import { createUserInfo } from "@/lib/action";
 import LoginInput from "./Form/LoginInput";
 import LoginButton from "./Form/LoginButton";
+import Form from "./Form/Form";
 
 function LoginForm() {
-  const [id, setId] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [isIdValid, setIsIdValid] = React.useState({
-    id: true,
-    password: true,
-  });
-
-  const InputProps = {
-    setId,
-    setPassword,
-    isIdValid,
-  };
-
-  const ButtonProps = {
-    id,
-    password,
-    setIsIdValid,
-  };
-
   return (
     <Styled.Form
       method="post"
@@ -37,15 +19,8 @@ function LoginForm() {
         createUserInfo(formData);
       }}
     >
-      <Styled.HeaderWrapper>
-        <FormHeader />
-      </Styled.HeaderWrapper>
-      <Styled.MainWrapper>
-        <LoginInput props={InputProps} />
-      </Styled.MainWrapper>
-      <Styled.FooterWrapper>
-        <LoginButton props={ButtonProps} />
-      </Styled.FooterWrapper>
+      <FormHeader />
+      <Form />
     </Styled.Form>
   );
 }

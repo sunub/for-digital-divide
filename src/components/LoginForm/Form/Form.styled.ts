@@ -132,11 +132,11 @@ export const HeaderWrapper = styled.div`
 `;
 
 export const MainWrapper = styled.div`
-  grid-area: main / fullbleed;
+  grid-area: main / main-start / footer / main-end;
   grid-template-rows: auto auto;
 `;
 
 export const FooterWrapper = styled.div`
-  grid-area: footer / fullbleed;
+  grid-area: footer / main-start / system-gesture / main-end;
   grid-template-rows: auto auto;
 `;
