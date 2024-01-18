@@ -6,7 +6,7 @@ import Button from "@/components/Button";
 import * as Styled from "./ResizeFont.style";
 
 function ResizeFont() {
-  const [fonstSize, setFontSize] = React.useState(24);
+  const [fonstSize, setFontSize] = React.useState(16);
 
   React.useEffect(() => {
     const root = document.documentElement;

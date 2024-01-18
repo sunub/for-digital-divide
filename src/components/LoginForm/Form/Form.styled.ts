@@ -126,17 +126,14 @@ export const Placeholder = styled.div<{ $isFocus: boolean }>`
     color 200ms ease-in-out; // Specify transitions for each property
 `;
 
-export const HeaderWrapper = styled.div`
-  grid-area: primary-header / fullbleed;
-  grid-template-rows: auto auto;
-`;
-
 export const MainWrapper = styled.div`
   grid-area: main / main-start / footer / main-end;
-  grid-template-rows: auto auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 export const FooterWrapper = styled.div`
   grid-area: footer / main-start / system-gesture / main-end;
-  grid-template-rows: auto auto;
 `;
