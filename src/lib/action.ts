@@ -21,12 +21,16 @@ const LoginSchema = object({
   ]),
 });
 
-export async function createUserInfo(formData: FormData) {
+interface CreateResult {
+  success: boolean;
+  message: string;
+}
+
+function validateFormDataField(formData: FormData) {
   const validateDataField = safeParse(LoginSchema, {
     username: formData.get("username"),
     password: formData.get("password"),
   });
-  const client = await pool.connect();
 
   if (!validateDataField.success) {
     return {
@@ -35,9 +39,37 @@ export async function createUserInfo(formData: FormData) {
     };
   }
 
-  const { username } = validateDataField.output;
+  return {
+    username: validateDataField.output.username,
+    password: validateDataField.output.password,
+  };
+}
+
+export async function authenticate(formData: FormData) {
+  let { username, password } = validateFormDataField(formData);
+  const client = await pool.connect();
+
+  try {
+    const queryUserNames = await pool.query(`
+      SELECT * FROM users WHERE username = '${username}';
+    `);
+    console.log(`sql query result:\n`);
+    console.log(queryUserNames.rows);
+
+    await client.release();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function createUserInfo(
+  formData: FormData
+): Promise<CreateResult> {
+  let { username, password } = validateFormDataField(formData);
+  const client = await pool.connect();
+
   const date = new Date().toISOString().split("T")[0];
-  const password = await bcrypt.hash(validateDataField.output.password, 10);
+  password = await bcrypt.hash(password!, 10);
 
   try {
     const result = await client.query(
@@ -56,70 +88,13 @@ export async function createUserInfo(formData: FormData) {
     }
 
     client.release();
-
-    revalidatePath("/user/info");
-    return {
-      success: true,
-      message: "로그인이 완료되었습니다.",
-    };
   } catch (err) {
     console.error(err);
+    return {
+      success: false,
+      message: "데이터베이스 오류",
+    };
   }
+  revalidatePath("/dashboard/transfer");
+  redirect("/dashboard/transfer");
 }
-// <div className="hidden sm:ml-6 sm:flex sm:items-center">
-// <Menu as="div" className="relative ml-3">
-//   <div>
-//     <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2">
-//       <span className="sr-only">Open user menu</span>
-//       <Image
-//         className="h-8 w-8 rounded-full"
-//         src={user?.image || 'https://avatar.vercel.sh/leerob'}
-//         height={32}
-//         width={32}
-//         alt={`${user?.name || 'placeholder'} avatar`}
-//       />
-//     </Menu.Button>
-//   </div>
-//   <Transition
-//     as={Fragment}
-//     enter="transition ease-out duration-200"
-//     enterFrom="transform opacity-0 scale-95"
-//     enterTo="transform opacity-100 scale-100"
-//     leave="transition ease-in duration-75"
-//     leaveFrom="transform opacity-100 scale-100"
-//     leaveTo="transform opacity-0 scale-95"
-//   >
-//     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-//       {user ? (
-//         <Menu.Item>
-//           {({ active }) => (
-//             <button
-//               className={classNames(
-//                 active ? 'bg-gray-100' : '',
-//                 'flex w-full px-4 py-2 text-sm text-gray-700'
-//               )}
-//               onClick={() => signOut()}
-//             >
-//               Sign out
-//             </button>
-//           )}
-//         </Menu.Item>
-//       ) : (
-//         <Menu.Item>
-//           {({ active }) => (
-//             <button
-//               className={classNames(
-//                 active ? 'bg-gray-100' : '',
-//                 'flex w-full px-4 py-2 text-sm text-gray-700'
-//               )}
-//               onClick={() => signIn('github')}
-//             >
-//               Sign in
-//             </button>
-//           )}
-//         </Menu.Item>
-//       )}
-//     </Menu.Items>
-//   </Transition>
-// </Menu>
-// </div>
