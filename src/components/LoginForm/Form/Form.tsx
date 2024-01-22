@@ -8,7 +8,7 @@ import LoginButton from "./LoginButton";
 function Form() {
   const [id, setId] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [isIdValid, setIsIdValid] = React.useState({
+  const [isValid, setIsValid] = React.useState({
     id: true,
     password: true,
   });
@@ -16,13 +16,13 @@ function Form() {
   const InputProps = {
     setId,
     setPassword,
-    isIdValid,
+    isValid,
   };
 
   const ButtonProps = {
     id,
     password,
-    setIsIdValid,
+    setIsValid,
   };
 
   return (
