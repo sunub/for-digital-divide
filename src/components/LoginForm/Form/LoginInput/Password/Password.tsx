@@ -5,11 +5,7 @@ import * as Styled from "../../Form.styled";
 import VisuallyHidden from "@compo/VisuallyHidden";
 import useToggle from "@hooks/use-toggle";
 
-function Password({
-  setPassword,
-}: {
-  setPassword: React.Dispatch<React.SetStateAction<string>>;
-}) {
+function Password() {
   const [value, setValue] = React.useState("");
   const [isFocused, toggleIsFocused] = useToggle(false);
   const [isShown, toggleIsShown] = useToggle(false);
@@ -37,7 +33,6 @@ function Password({
         onChange={(e) => {
           const currValue = e.target.value;
           setValue(() => currValue);
-          setPassword(() => currValue);
         }}
         onFocus={toggleIsFocused}
         onBlur={toggleIsFocused}

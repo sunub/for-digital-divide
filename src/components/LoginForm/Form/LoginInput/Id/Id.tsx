@@ -6,11 +6,7 @@ import VisuallyHidden from "@compo/VisuallyHidden";
 import InvalidMessage from "@/components/InvalidMessage";
 import React from "react";
 
-function Id({
-  setId,
-}: {
-  setId: React.Dispatch<React.SetStateAction<string>>;
-}) {
+function Id() {
   const [value, setValue] = React.useState("");
   const [isFocused, toggleIsFocused] = useToggle(false);
 
@@ -37,7 +33,6 @@ function Id({
           onChange={(e) => {
             const currValue = e.target.value;
             setValue(() => currValue);
-            setId(() => currValue);
           }}
         />
         <Styled.Placeholder $isFocus={isFocused}>

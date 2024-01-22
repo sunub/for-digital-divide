@@ -1,30 +1,15 @@
-"use client";
-
-import { createPortal } from "react-dom";
-import InvalidMessage from "@/components/InvalidMessage";
 import Helper from "../Helper";
 import Id from "./Id";
 import Password from "./Password";
 import * as Styled from "../Form.styled";
 import React from "react";
 
-interface LoginInputProps {
-  setId: React.Dispatch<React.SetStateAction<string>>;
-  setPassword: React.Dispatch<React.SetStateAction<string>>;
-  isValid: {
-    id: boolean;
-    password: boolean;
-  };
-}
-
-function LoginInput({ props }: { props: LoginInputProps }) {
-  const { setId, setPassword } = props;
-
+function LoginInput() {
   return (
     <>
       <Styled.InputGroup>
-        <Id setId={setId} />
-        <Password setPassword={setPassword} />
+        <Id />
+        <Password />
       </Styled.InputGroup>
       <Helper />
     </>

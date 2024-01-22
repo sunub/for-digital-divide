@@ -46,16 +46,20 @@ function validateFormDataField(formData: FormData) {
 }
 
 export async function authenticate(formData: FormData) {
+  const startTime = performance.now();
+
   let { username, password } = validateFormDataField(formData);
-  const client = await pool.connect();
 
   let isAuthenticationSuccess = {
     password: false,
   };
   try {
-    const queryUserInfo = await pool.query(`
-      SELECT * FROM users WHERE username = '${username}';
-    `);
+    // Use parameterized query to prevent SQL Injection
+    const queryUserInfo = await pool.query(
+      `SELECT * FROM users WHERE username = $1;`,
+      [username]
+    );
+
     if (queryUserInfo.rows.length === 0) {
       return {
         success: false,
@@ -64,14 +68,17 @@ export async function authenticate(formData: FormData) {
     }
 
     const transferredPassword = queryUserInfo.rows[0].password;
+    // Run password comparison in the background
     isAuthenticationSuccess.password = await bcrypt.compare(
       password!,
       transferredPassword
     );
-
-    await client.release();
   } catch (error) {
     console.error(error);
+    return {
+      success: false,
+      type: "error",
+    };
   }
 
   if (!isAuthenticationSuccess.password) {
@@ -80,11 +87,16 @@ export async function authenticate(formData: FormData) {
       type: "wrongPassword",
     };
   }
+  // End time
+  const endTime = performance.now();
 
+  // Calculate elapsed time
+  const elapsedTime = endTime - startTime;
+
+  console.log("로그인 시 소요된 시간: " + elapsedTime / 1000 + "s");
   revalidatePath("/dashboard/transfer");
   redirect("/dashboard/transfer");
 }
-
 export async function createUserInfo(
   formData: FormData
 ): Promise<CreateResult> {

@@ -11,27 +11,9 @@ interface LoginButtonProps {
   >;
 }
 
-function LoginButton({ props }: { props: LoginButtonProps }) {
-  const { id, password, setIsValid } = props;
+function LoginButton() {
   return (
-    <Styled.Button
-      id={"submit-id-pwd-btn"}
-      type="submit"
-      onClick={() => {
-        if (id.length >= 6 && id.length <= 20) {
-          setIsValid((prev) => ({ ...prev, id: true }));
-        }
-        if (password.length >= 8) {
-          setIsValid((prev) => ({ ...prev, password: true }));
-        }
-
-        if (id.length < 6 || id.length > 20) {
-          setIsValid((prev) => ({ ...prev, id: false }));
-        } else if (password.length < 8) {
-          setIsValid((prev) => ({ ...prev, password: false }));
-        }
-      }}
-    >
+    <Styled.Button id={"submit-id-pwd-btn"} type="submit">
       로그인
     </Styled.Button>
   );
