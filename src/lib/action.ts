@@ -1,7 +1,7 @@
 "use server";
 
 import pg from "pg";
-import { date, maxLength, minLength, object, safeParse, string } from "valibot";
+import { maxLength, minLength, object, safeParse, string } from "valibot";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
@@ -49,17 +49,40 @@ export async function authenticate(formData: FormData) {
   let { username, password } = validateFormDataField(formData);
   const client = await pool.connect();
 
+  let isAuthenticationSuccess = {
+    password: false,
+  };
   try {
-    const queryUserNames = await pool.query(`
+    const queryUserInfo = await pool.query(`
       SELECT * FROM users WHERE username = '${username}';
     `);
-    console.log(`sql query result:\n`);
-    console.log(queryUserNames.rows);
+    if (queryUserInfo.rows.length === 0) {
+      return {
+        success: false,
+        type: "wrongId",
+      };
+    }
+
+    const transferredPassword = queryUserInfo.rows[0].password;
+    isAuthenticationSuccess.password = await bcrypt.compare(
+      password!,
+      transferredPassword
+    );
 
     await client.release();
   } catch (error) {
     console.error(error);
   }
+
+  if (!isAuthenticationSuccess.password) {
+    return {
+      success: false,
+      type: "wrongPassword",
+    };
+  }
+
+  revalidatePath("/dashboard/transfer");
+  redirect("/dashboard/transfer");
 }
 
 export async function createUserInfo(
