@@ -1,5 +1,5 @@
 import React from "react";
-import * as Styled from "../Form.styled";
+import * as Styled from "../Form/Form.styled";
 
 const HELPERS = [
   {

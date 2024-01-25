@@ -2,39 +2,39 @@
 
 import React from "react";
 import * as Styled from "./Form.styled";
-import LoginInput from "./LoginInput";
-import LoginButton from "./LoginButton";
+import LoginInput from "../LoginInput";
+import LoginButton from "../LoginButton";
+import InvalidMessage from "@/components/InvalidMessage";
 
-function Form() {
-  const [id, setId] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [isValid, setIsValid] = React.useState({
-    id: true,
-    password: true,
-  });
-
-  const InputProps = {
-    setId,
-    setPassword,
-    isValid,
-  };
-
-  const ButtonProps = {
-    id,
-    password,
-    setIsValid,
-  };
-
+function Form({
+  dispatch,
+  children,
+}: {
+  dispatch: React.Dispatch<LoginAction>;
+  children: React.ReactNode;
+}) {
   return (
     <React.Fragment>
       <Styled.MainWrapper>
-        <LoginInput props={InputProps} />
+        <LoginInput />
+        {children}
+        {/* {portalRef.current &&
+            createPortal(
+              <InvalidMessage message={errorMessage.message} />,
+              portalRef.current as HTMLDivElement
+            )} */}
       </Styled.MainWrapper>
       <Styled.FooterWrapper>
-        <LoginButton props={ButtonProps} />
+        <LoginButton />
       </Styled.FooterWrapper>
     </React.Fragment>
   );
 }
 
 export default Form;
+
+{
+  /* <div id="login-form__warning-portal" ref={portalRef} />
+<InvalidMessage message={errorMessage.message} />
+{isPending ? <div>loading...</div> : null} */
+}

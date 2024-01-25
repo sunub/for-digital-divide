@@ -33,30 +33,6 @@ export const AppWrapper = styled.div`
   grid-area: primary-nav / fullbleed-start / system-gesture / fullbleed-end;
 `;
 
-export const DeviceFrame = styled.div`
-  display: grid;
-  height: 100%;
-  grid-template-rows:
-    [system-status] 3.5rem
-    [primary-nav] 3rem
-    [primary-header] 4rem
-    [main] auto
-    [footer] 4rem
-    [system-gesture] 3rem;
-
-  grid-template-columns:
-    [fullbleed-start] 1rem
-    [main-start] auto
-    [main-end] 1rem
-    [fullbleed-end];
-
-  & > *,
-  & > ${AppWrapper} {
-    display: grid;
-    grid: subgrid / subgrid;
-  }
-`;
-
 export const SystemStatusBar = styled.div`
   grid-area: system-status / fullbleed;
   display: grid;
@@ -94,6 +70,7 @@ export const Main = styled.div`
 `;
 
 export const SystemGestureArea = styled.div`
+  display: grid;
   grid-area: system-gesture / fullbleed;
   grid-template-columns: repeat(3, 1fr);
 `;
@@ -108,5 +85,28 @@ export const GestureButtonIcon = styled.svg`
 
   & > * {
     stroke: color-mix(in oklch, oklch(42.44% 0.011 17.58), transparent);
+  }
+`;
+
+export const DeviceFrame = styled.div`
+  display: grid;
+  height: 100%;
+  grid-template-rows:
+    [system-status] 3.5rem
+    [primary-nav] 3rem
+    [primary-header] 4rem
+    [main] auto
+    [footer] 4rem
+    [system-gesture] 3rem;
+
+  grid-template-columns:
+    [fullbleed-start] 1rem
+    [main-start] auto
+    [main-end] 1rem
+    [fullbleed-end];
+
+  & > ${SystemStatusBar} {
+    display: grid;
+    grid: subgrid / subgrid;
   }
 `;

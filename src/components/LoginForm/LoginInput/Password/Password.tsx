@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import * as Styled from "../../Form.styled";
+import * as Styled from "../../Form/Form.styled";
 import VisuallyHidden from "@compo/VisuallyHidden";
 import useToggle from "@hooks/use-toggle";
 

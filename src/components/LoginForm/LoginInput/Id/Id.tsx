@@ -1,9 +1,8 @@
 "use client";
 
 import useToggle from "@hooks/use-toggle";
-import * as Styled from "../../Form.styled";
+import * as Styled from "../../Form/Form.styled";
 import VisuallyHidden from "@compo/VisuallyHidden";
-import InvalidMessage from "@/components/InvalidMessage";
 import React from "react";
 
 function Id() {

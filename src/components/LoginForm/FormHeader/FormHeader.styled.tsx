@@ -10,7 +10,6 @@ export const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 9cqh;
 `;
 
 export const Title = styled.h1`

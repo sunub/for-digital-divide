@@ -6,6 +6,15 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
 
+type LoginAction = {
+  type:
+    | "wrongId"
+    | "wrongPassword"
+    | "wrongLengthID"
+    | "wrongLengthPassword"
+    | "error";
+};
+
 const { Pool } = pg;
 const pool = new Pool({
   connectionString: process.env.SUNUB_POSTGRES_URL + "?sslmode=require",
@@ -45,7 +54,10 @@ function validateFormDataField(formData: FormData) {
   };
 }
 
-export async function authenticate(formData: FormData) {
+export async function authenticate(formData: FormData): Promise<{
+  type: LoginAction["type"];
+  success: boolean;
+}> {
   const startTime = performance.now();
 
   let { username, password } = validateFormDataField(formData);
@@ -94,8 +106,12 @@ export async function authenticate(formData: FormData) {
   const elapsedTime = endTime - startTime;
 
   console.log("로그인 시 소요된 시간: " + elapsedTime / 1000 + "s");
-  revalidatePath("/dashboard/transfer");
-  redirect("/dashboard/transfer");
+  return {
+    success: true,
+    type: "success",
+  };
+  // revalidatePath("/dashboard/transfer");
+  // redirect("/dashboard/transfer");
 }
 export async function createUserInfo(
   formData: FormData

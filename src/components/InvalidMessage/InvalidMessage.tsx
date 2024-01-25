@@ -1,11 +1,16 @@
+import React from "react";
 import * as Styled from "./InvalidMessage.styled";
 
 function InvalidMessage({ message }: { message: string }) {
   return (
-    <Styled.Wrapper>
-      <ErrorIcon />
-      <span>{message}</span>
-    </Styled.Wrapper>
+    <React.Fragment>
+      {message.length > 0 ? (
+        <Styled.Wrapper>
+          <ErrorIcon />
+          <span>{message}</span>
+        </Styled.Wrapper>
+      ) : null}
+    </React.Fragment>
   );
 }
 

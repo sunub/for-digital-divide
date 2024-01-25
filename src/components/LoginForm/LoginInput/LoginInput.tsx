@@ -1,18 +1,18 @@
 import Helper from "../Helper";
 import Id from "./Id";
 import Password from "./Password";
-import * as Styled from "../Form.styled";
+import * as Styled from "../Form/Form.styled";
 import React from "react";
 
 function LoginInput() {
   return (
-    <>
+    <React.Fragment>
       <Styled.InputGroup>
         <Id />
         <Password />
       </Styled.InputGroup>
       <Helper />
-    </>
+    </React.Fragment>
   );
 }
 

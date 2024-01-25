@@ -2,8 +2,18 @@
 
 import styled from "styled-components";
 
-export const Form = styled.form`
+export const RootWrapper = styled.div`
+  display: grid;
   grid-area: primary-nav / fullbleed-start / system-gesture / fullbleed-end;
+`;
+
+export const Form = styled.form`
+  display: grid;
+  justify-items: center;
+  grid-template-rows: [system-status] 3.5rem [primary-nav] 3rem [primary-header] 4rem [main] auto [footer] 4rem [system-gesture] 3rem;
+
+  padding-left: 1rem;
+  padding-right: 1rem;
 `;
 
 export const Wrapper = styled.div`
@@ -24,5 +34,7 @@ export const MainWrapper = styled.div`
 `;
 
 export const FooterWrapper = styled.div`
+  display: grid;
+  width: 75cqw;
   grid-area: footer / fullbleed;
 `;
