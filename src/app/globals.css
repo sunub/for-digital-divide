@@ -18,6 +18,11 @@ body {
   height: 100%;
   font-family: "NanumSquareNeo", "Wotfard", sans-serif;
   font-size: var(--text-size);
+  background-color: var(--color-background);
+}
+
+body {
+  cursor: url("/images/cursor_brown.png") 0 0, auto;
 }
 
 #_next {
@@ -59,7 +64,7 @@ input::-webkit-search-results-decoration {
 
 button {
   background: none;
-  cursor: pointer;
+  cursor: url("/images/cursor_pointer.png") 16 6, pointer;
   touch-action: manipulation;
   outline-offset: 4px;
 

@@ -1,6 +1,7 @@
 import React from "react";
 import "./globals.css";
 import Header from "@compo/Header";
+import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
 
 export default function RootLayout({
   children,
@@ -55,12 +56,14 @@ export default function RootLayout({
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </head>
       <body>
-        <div id="_next">
-          <section id="site-wrapper">
-            <Header />
-            {children}
-          </section>
-        </div>
+        <StyledComponentsRegistry>
+          <div id="_next">
+            <section id="site-wrapper">
+              <Header />
+              {children}
+            </section>
+          </div>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
