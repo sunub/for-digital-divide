@@ -3,11 +3,100 @@
 import React from "react";
 import * as Styled from "./LoginForm.styled";
 import FormHeader from "./FormHeader";
-import { authenticate, createUserInfo } from "@/lib/action";
+import { authenticate } from "@/lib/action";
 import LoginInput from "./LoginInput";
 import LoginButton from "./LoginButton";
-import { createPortal } from "react-dom";
 import InvalidMessage from "../InvalidMessage";
+import {
+  AnimationScope,
+  motion,
+  easeIn,
+  stagger,
+  animate,
+} from "framer-motion";
+import styled from "styled-components";
+import { useAnimate } from "framer-motion";
+import Button from "../Button";
+import useToggle from "@/hooks/use-toggle";
+import { is } from "valibot";
+
+const MotionSvg = styled(motion.svg)``;
+
+const MotionCircle = styled(motion.circle)`
+  transform-origin: center center;
+  transform-box: view-box;
+  transform: rotate(45deg);
+`;
+
+const draw = {
+  hidden: { pathLength: 0, opacity: 0 },
+};
+
+function Loading({ isPending }: { isPending: boolean }) {
+  const circles = [
+    {
+      cx: "10",
+      cy: "15",
+      r: 5,
+      fill: "#8F76FF",
+    },
+    {
+      cx: "32",
+      cy: "15",
+      r: 5,
+      fill: "#FF7E76",
+    },
+    { cx: "53", cy: "15", r: 5, fill: "#8F76FF" },
+    {
+      cx: "72",
+      cy: "15",
+      r: 5,
+      fill: "#98DF9F",
+    },
+    {
+      cx: "96",
+      cy: "15",
+      r: 5,
+      fill: "#8F76FF",
+    },
+  ];
+
+  return (
+    <motion.svg
+      width="106"
+      height="70"
+      viewBox="0 0 106 70"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {circles.map((circle, index) => {
+        const startY = 10 - 7.5;
+        const endY = 7.5 + 13;
+
+        return (
+          <motion.circle
+            key={index}
+            cx={circle.cx}
+            cy={circle.cy}
+            r={circle.r}
+            fill={circle.fill}
+            initial={{ transform: `translateY(${startY}px)` }}
+            animate={{ transform: `translateY(${endY}px)` }}
+            transition={{
+              delay: index * 0.115,
+              duration: 0.1 + index * 0.1,
+              type: "spring",
+              damping: 10,
+              repeat: Infinity,
+              repeatType: "mirror",
+              repeatDelay: 0.01,
+            }}
+          />
+        );
+      })}
+    </motion.svg>
+  );
+}
 
 function reducer(errorMessage: ErrorMessage, action: LoginAction) {
   switch (action.type) {
@@ -35,16 +124,16 @@ function reducer(errorMessage: ErrorMessage, action: LoginAction) {
 }
 
 function LoginForm() {
-  const [isPending, setIsPending] = React.useState(false);
+  const [isPending, togglePending] = useToggle(false);
   const portalRef = React.useRef<HTMLDivElement>(null);
   const [errorMessage, dispatch] = React.useReducer(reducer, {
     message: "",
   });
-  console.log("LoginForm Rendered");
   return (
-    <React.Suspense fallback={<div>loading...</div>}>
+    <React.Fragment>
+      {/* <Loading />
       <Styled.Form
-        onSubmit={() => setIsPending(() => true)}
+        onSubmit={() => togglePending}
         action={async (formData: FormData) => {
           const username = formData.get("username") as string;
           const password = formData.get("password") as string;
@@ -62,7 +151,7 @@ function LoginForm() {
           }
 
           const loginResult = await authenticate(formData).then((res) => {
-            setIsPending(() => false);
+            togglePending();
             return res;
           });
 
@@ -83,8 +172,19 @@ function LoginForm() {
         <Styled.FooterWrapper>
           <LoginButton />
         </Styled.FooterWrapper>
-      </Styled.Form>
-    </React.Suspense>
+      </Styled.Form> */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gridArea:
+            "primary-nav / fullbleed-start / system-gesture / fullbleed-end",
+        }}
+      >
+        <Button text="확인" onClick={togglePending} />
+        {isPending ? <Loading isPending={isPending} /> : null}
+      </div>
+    </React.Fragment>
   );
 }
 

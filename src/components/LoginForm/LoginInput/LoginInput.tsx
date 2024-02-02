@@ -1,3 +1,5 @@
+"use client";
+
 import Helper from "../Helper";
 import Id from "./Id";
 import Password from "./Password";

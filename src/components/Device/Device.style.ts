@@ -37,6 +37,7 @@ export const SystemStatusBar = styled.div`
   grid-area: system-status / fullbleed;
   display: grid;
   align-items: center;
+  user-select: none;
 
   & > time {
     grid-area: system-status / main;

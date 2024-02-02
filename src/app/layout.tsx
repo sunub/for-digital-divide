@@ -44,6 +44,10 @@ export default function RootLayout({
               --color-confirm: oklch(84.02% 0.114 146.9);
               --text-size: 16px;
             }
+
+            body {
+              container: root / inline-size;
+            }
           `}
         </style>
         <link
@@ -58,10 +62,8 @@ export default function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <div id="_next">
-            <section id="site-wrapper">
-              <Header />
-              {children}
-            </section>
+            <Header />
+            {children}
           </div>
         </StyledComponentsRegistry>
       </body>

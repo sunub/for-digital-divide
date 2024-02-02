@@ -12,7 +12,6 @@ export const RootWrapper = styled.div`
 
   width: 100%;
   height: 88px;
-  background: oklch(96.88% 0.015 294.47);
 `;
 
 export const IconWrapper = styled.div`

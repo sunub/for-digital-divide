@@ -2,12 +2,19 @@ import useToggle from "@/hooks/use-toggle";
 import * as Styled from "./Button.style";
 import React from "react";
 
-function Button() {
+function Button({ text, onClick }: { text: string; onClick?: () => void }) {
   const [isClick, toggleClick] = useToggle(false);
 
   return (
     <Styled.RootContainer>
-      <Styled.Btn aria-pressed={true} onClick={toggleClick} $isClick={isClick}>
+      <Styled.Btn
+        aria-pressed={true}
+        onClick={() => {
+          toggleClick();
+          onClick && onClick();
+        }}
+        $isClick={isClick}
+      >
         <Styled.Shadow />
         <Styled.Edge $isClick={isClick} />
         <Styled.Front $isClick={isClick}>
@@ -22,7 +29,7 @@ function Button() {
               <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
             </svg>
           ) : (
-            "확인"
+            `${text}`
           )}
         </Styled.Front>
       </Styled.Btn>

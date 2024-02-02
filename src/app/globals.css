@@ -22,7 +22,7 @@ body {
 }
 
 body {
-  cursor: url("/images/cursor_brown.png") 0 0, auto;
+  cursor: url("/images/cursor_default.png") 0 0, auto;
 }
 
 #_next {
@@ -102,4 +102,11 @@ button {
   text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "liga";
+}
+
+#device-page__root-wrapper {
+  display: grid;
+  place-items: center;
+  width: 100cqw;
+  height: 100%;
 }
