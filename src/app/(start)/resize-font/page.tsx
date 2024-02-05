@@ -4,6 +4,50 @@ import React from "react";
 import styled from "styled-components";
 import Slider from "@/components/Slider";
 import Button from "@/components/Button";
+import { moveToLoginPage } from "@/lib/revalidate";
+
+function StartPage() {
+  const [fonstSize, setFontSize] = React.useState(16);
+
+  React.useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty("--text-size", `${fonstSize}px`);
+  }, [fonstSize]);
+
+  return (
+    <section>
+      <RootWrapper>
+        <Title>
+          <h1>시작하기 전 글씨 크기를 조절 해주세요</h1>
+        </Title>
+        <ResizeFontDisplay>{`${fonstSize}px`}</ResizeFontDisplay>
+        <ResizeWrapper>
+          이 글씨가 잘 보이게끔 크기를 조절 해주세요.
+        </ResizeWrapper>
+        <div
+          style={{
+            gridArea: "resize-font-slider / main",
+          }}
+        >
+          <Slider fontSize={fonstSize} setFontSize={setFontSize} />
+        </div>
+      </RootWrapper>
+      <ConfirmWrapper>
+        <span>글씨 크기 조절이 끝날 경우 아래의 확인을 눌러주세요!</span>
+        <svg
+          width={56}
+          height={56}
+          role="img"
+          aria-label="arrow icon"
+          style={{ transform: "rotate(-90deg)" }}
+        >
+          <use href="/sprite.svg#arrow" />
+        </svg>
+        <Button text="확인" onClick={moveToLoginPage} />
+      </ConfirmWrapper>
+    </section>
+  );
+}
 
 const RootWrapper = styled.div`
   display: grid;
@@ -50,35 +94,29 @@ const ResizeWrapper = styled.div`
   padding-bottom: 24px; */
 `;
 
-function StartPage() {
-  const [fonstSize, setFontSize] = React.useState(24);
+const ResizeFontDisplay = styled.span`
+  display: inline-block;
+  width: 100cqw;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 48px;
+`;
 
-  React.useEffect(() => {
-    const root = document.documentElement;
-    root.style.setProperty("--text-size", `${fonstSize}px`);
-  }, [fonstSize]);
+const ConfirmWrapper = styled.div`
+  width: 100cqw;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 
-  return (
-    <>
-      <RootWrapper>
-        <Title>
-          <h1>시작하기 전 글씨 크기를 조절 해주세요</h1>
-        </Title>
-        <ResizeWrapper>
-          이 글씨가 잘 보이게끔 크기를 조절 해주세요.
-        </ResizeWrapper>
-        <div></div>
-        <div
-          style={{
-            gridArea: "resize-font-slider / main",
-          }}
-        >
-          <Slider fontSize={fonstSize} setFontSize={setFontSize} />
-        </div>
-      </RootWrapper>
-      <Button />
-    </>
-  );
-}
+  & > span {
+    font-size: 32px;
+    line-height: 24px;
+  }
+`;
 
 export default StartPage;

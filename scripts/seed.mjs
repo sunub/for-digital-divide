@@ -50,39 +50,6 @@ async function seedAccount(client) {
   }
 }
 
-/**
- *
- * @param {pg.PoolClient} client
- */
-async function seedTransaction(client) {
-  try {
-    const createTable = `
-      CREATE TABLE IF NOT EXISTS bank_transaction (
-        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-        from_account VARCHAR(14) NOT NULL CHECK(LENGTH(from_account) BETWEEN 11 AND 14 AND from_account ~ '^[0-9]+$'),
-        to_account VARCHAR(14) NOT NULL CHECK(LENGTH(to_account) BETWEEN 11 AND 14 AND to_account ~ '^[0-9]+$'),
-        amount INT NOT NULL,
-        type VARCHAR(10) NOT NULL
-      );
-    `;
-
-    await client.query(createTable);
-
-    // 테이블 내의 type row에 데이터를 넣을 경우 타입 체크가 가능하게끔 제약조건을 넣는 쿼리
-    // await client.query(`
-    //     ALTER TABLE bank_transaction
-    //     ADD CONSTRAINT type_check CHECK (type IN ('송금', '입금'));
-    // `);
-
-    console.log("가상 은행 계좌에 대한 거래 내역 테이블 추가");
-  } catch (err) {
-    console.error(
-      "가상 은행 계좌에 대한 거래 내역 테이블 추가 중 에러 발생",
-      err
-    );
-  }
-}
-
 async function main() {
   const { Pool } = pg;
   const pool = new Pool({
@@ -92,7 +59,6 @@ async function main() {
 
   await seedUser(client);
   await seedAccount(client);
-  await seedTransaction(client);
 
   client.release();
 }

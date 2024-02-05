@@ -41,7 +41,7 @@ export default function RootLayout({
               --color-primary:oklch(96.86% 0.009 288.17775174927874);
               --color-button: oklch(65.57% 0.19552898037793698 288.17775174927874);
               --color-highlight: oklch(73.96% 0.1586202546972356 25.278467161119735);
-              --color-confirm: oklch(84.02% 0.114 146.9);
+              --color-confirm: oklch(84.51% 0.162 147.29);
               --text-size: 16px;
             }
 

@@ -11,8 +11,8 @@ interface SliderProps {
 
 function Slider(props: SliderProps) {
   const { fontSize, setFontSize } = props;
-  const min = 8;
-  const max = 24;
+  const min = 16;
+  const max = 48;
   const [hovering, toggleHovering] = useToggle(false);
   const ref = React.useRef<HTMLDivElement>(null);
 
