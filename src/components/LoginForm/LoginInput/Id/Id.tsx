@@ -21,7 +21,6 @@ function Id() {
           type="text"
           name="username"
           autoComplete={"email"}
-          required
           aria-label="아이디 입력"
           aria-labelledby="아이디 입력"
           onFocus={toggleIsFocused}

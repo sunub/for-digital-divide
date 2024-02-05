@@ -7,32 +7,72 @@ import { authenticate } from "@/lib/action";
 import LoginInput from "./LoginInput";
 import LoginButton from "./LoginButton";
 import InvalidMessage from "../InvalidMessage";
-import {
-  AnimationScope,
-  motion,
-  easeIn,
-  stagger,
-  animate,
-} from "framer-motion";
-import styled from "styled-components";
-import { useAnimate } from "framer-motion";
-import Button from "../Button";
 import useToggle from "@/hooks/use-toggle";
-import { is } from "valibot";
+import { motion } from "framer-motion";
 
-const MotionSvg = styled(motion.svg)``;
+function generateErrorMsg(type: string): string {
+  switch (type) {
+    case "wrongId":
+      return "아이디가 존재하지 않습니다.";
+    case "wrongPassword":
+      return "비밀번호가 틀렸습니다.";
+    case "wrongLengthID":
+      return "아이디는 4자 이상 20자 이하로 입력해주세요.";
+    case "wrongLengthPassword":
+      return "비밀번호는 8자 이상 20자 이하로 입력해주세요.";
+    default:
+      return "";
+  }
+}
 
-const MotionCircle = styled(motion.circle)`
-  transform-origin: center center;
-  transform-box: view-box;
-  transform: rotate(45deg);
-`;
+function LoginForm() {
+  const [isPending, togglePending] = useToggle(false);
+  const portalRef = React.useRef<HTMLDivElement>(null);
+  const [errorMessage, setErrorMessage] = React.useState("");
 
-const draw = {
-  hidden: { pathLength: 0, opacity: 0 },
-};
+  return (
+    <React.Fragment>
+      <Styled.Form
+        action={async (formData: FormData) => {
+          const username = formData.get("username") as string;
+          const password = formData.get("password") as string;
 
-function Loading({ isPending }: { isPending: boolean }) {
+          if (username.length < 4 || username.length > 20) {
+            setErrorMessage(() => generateErrorMsg("wrongLengthID"));
+            togglePending();
+            return;
+          } else if (password.length < 8 || password.length > 20) {
+            setErrorMessage(() => generateErrorMsg("wrongLengthPassword"));
+            togglePending();
+            return;
+          }
+
+          const loginResult = await authenticate(formData);
+
+          if (!loginResult.type) return;
+
+          setErrorMessage(() => generateErrorMsg(loginResult.type));
+          togglePending();
+        }}
+      >
+        <FormHeader />
+        <Styled.MainWrapper>
+          <LoginInput />
+          <div id="login-form__warning-portal" ref={portalRef} />
+          <Styled.MessageWrapper>
+            {isPending ? <Loading /> : null}
+            {isPending ? null : <InvalidMessage message={errorMessage} />}
+          </Styled.MessageWrapper>
+        </Styled.MainWrapper>
+        <Styled.FooterWrapper>
+          <LoginButton togglePending={togglePending} />
+        </Styled.FooterWrapper>
+      </Styled.Form>
+    </React.Fragment>
+  );
+}
+
+function Loading() {
   const circles = [
     {
       cx: "10",
@@ -83,108 +123,19 @@ function Loading({ isPending }: { isPending: boolean }) {
             initial={{ transform: `translateY(${startY}px)` }}
             animate={{ transform: `translateY(${endY}px)` }}
             transition={{
-              delay: index * 0.115,
-              duration: 0.1 + index * 0.1,
+              delay: 200 * Math.sin(0.001 * index),
+              duration: 10,
               type: "spring",
-              damping: 10,
+              damping: 9,
+              stiffness: 120,
               repeat: Infinity,
-              repeatType: "mirror",
-              repeatDelay: 0.01,
+              repeatType: "reverse",
+              repeatDelay: 0.001,
             }}
           />
         );
       })}
     </motion.svg>
-  );
-}
-
-function reducer(errorMessage: ErrorMessage, action: LoginAction) {
-  switch (action.type) {
-    case "wrongId":
-      return {
-        message: "아이디가 존재하지 않습니다.",
-      };
-    case "wrongPassword":
-      return {
-        message: "비밀번호 존재하지 않습니다.",
-      };
-    case "wrongLengthID":
-      return {
-        message: "아이디는 4자 이상 20자 이하로 입력해주세요.",
-      };
-    case "wrongLengthPassword":
-      return {
-        message: "비밀번호는 8자 이상 20자 이하로 입력해주세요.",
-      };
-    default:
-      return {
-        message: "",
-      };
-  }
-}
-
-function LoginForm() {
-  const [isPending, togglePending] = useToggle(false);
-  const portalRef = React.useRef<HTMLDivElement>(null);
-  const [errorMessage, dispatch] = React.useReducer(reducer, {
-    message: "",
-  });
-  return (
-    <React.Fragment>
-      {/* <Loading />
-      <Styled.Form
-        onSubmit={() => togglePending}
-        action={async (formData: FormData) => {
-          const username = formData.get("username") as string;
-          const password = formData.get("password") as string;
-
-          if (username.length < 4 || username.length > 20) {
-            dispatch({
-              type: "wrongLengthID",
-            });
-            return;
-          } else if (password.length < 8 || password.length > 20) {
-            dispatch({
-              type: "wrongLengthPassword",
-            });
-            return;
-          }
-
-          const loginResult = await authenticate(formData).then((res) => {
-            togglePending();
-            return res;
-          });
-
-          if (loginResult) {
-            dispatch({
-              type: loginResult.type,
-            });
-          }
-        }}
-      >
-        <FormHeader />
-        <Styled.MainWrapper>
-          <LoginInput />
-          <div id="login-form__warning-portal" ref={portalRef} />
-          <InvalidMessage message={errorMessage.message} />
-          {isPending ? <div>loading...</div> : null}
-        </Styled.MainWrapper>
-        <Styled.FooterWrapper>
-          <LoginButton />
-        </Styled.FooterWrapper>
-      </Styled.Form> */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gridArea:
-            "primary-nav / fullbleed-start / system-gesture / fullbleed-end",
-        }}
-      >
-        <Button text="확인" onClick={togglePending} />
-        {isPending ? <Loading isPending={isPending} /> : null}
-      </div>
-    </React.Fragment>
   );
 }
 

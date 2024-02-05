@@ -1,18 +1,17 @@
 import * as Styled from "../Form/Form.styled";
 interface LoginButtonProps {
-  id: string;
-  password: string;
-  setIsValid: React.Dispatch<
-    React.SetStateAction<{
-      id: boolean;
-      password: boolean;
-    }>
-  >;
+  togglePending: () => void;
 }
 
-function LoginButton() {
+function LoginButton(props: LoginButtonProps) {
+  const { togglePending } = props;
+
   return (
-    <Styled.Button id={"submit-id-pwd-btn"} type="submit">
+    <Styled.Button
+      id={"submit-id-pwd-btn"}
+      type="submit"
+      onClick={togglePending}
+    >
       로그인
     </Styled.Button>
   );

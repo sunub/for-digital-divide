@@ -33,6 +33,16 @@ export const MainWrapper = styled.div`
   justify-content: center;
 `;
 
+export const MessageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: red;
+  font-size: 16px;
+  padding: 12px 0 24px 0;
+`;
+
 export const FooterWrapper = styled.div`
   display: grid;
   width: 75cqw;
