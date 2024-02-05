@@ -12,7 +12,8 @@ type LoginAction = {
     | "wrongPassword"
     | "wrongLengthID"
     | "wrongLengthPassword"
-    | "error";
+    | "error"
+    | "success";
 };
 
 const { Pool } = pg;
@@ -56,7 +57,6 @@ function validateFormDataField(formData: FormData) {
 
 export async function authenticate(formData: FormData): Promise<{
   type: LoginAction["type"];
-  success: boolean;
 }> {
   const startTime = performance.now();
 
@@ -74,7 +74,6 @@ export async function authenticate(formData: FormData): Promise<{
 
     if (queryUserInfo.rows.length === 0) {
       return {
-        success: false,
         type: "wrongId",
       };
     }
@@ -88,14 +87,12 @@ export async function authenticate(formData: FormData): Promise<{
   } catch (error) {
     console.error(error);
     return {
-      success: false,
       type: "error",
     };
   }
 
   if (!isAuthenticationSuccess.password) {
     return {
-      success: false,
       type: "wrongPassword",
     };
   }
@@ -106,13 +103,11 @@ export async function authenticate(formData: FormData): Promise<{
   const elapsedTime = endTime - startTime;
 
   console.log("로그인 시 소요된 시간: " + elapsedTime / 1000 + "s");
-  return {
-    success: true,
-    type: "success",
-  };
-  // revalidatePath("/dashboard/transfer");
-  // redirect("/dashboard/transfer");
+
+  revalidatePath("/dashboard");
+  redirect("/dashboard");
 }
+
 export async function createUserInfo(
   formData: FormData
 ): Promise<CreateResult> {
@@ -146,6 +141,7 @@ export async function createUserInfo(
       message: "데이터베이스 오류",
     };
   }
+
   revalidatePath("/dashboard/transfer");
   redirect("/dashboard/transfer");
 }
