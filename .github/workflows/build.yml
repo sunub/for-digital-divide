@@ -1,4 +1,4 @@
-name: Build nextjs projects
+name: Build nextjs with bun projects
 on:
   push:
     branches: ["dev"]
