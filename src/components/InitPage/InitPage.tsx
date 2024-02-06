@@ -3,24 +3,24 @@
 import React from "react";
 import styled from "styled-components";
 import Spacer from "../Spacer";
-import { animated } from "@react-spring/web";
+import { motion } from "framer-motion";
 
-const TitleWrapper = styled(animated.div)`
+const TitleWrapper = styled(motion.div)`
   display: flex;
   gap: 6rem;
 `;
 
-const Digital = styled(animated.span)`
+const Digital = styled(motion.span)`
   font-weight: 900;
   font-size: 24px;
 `;
 
-const Distance = styled(animated.span)`
+const Distance = styled(motion.span)`
   font-weight: 900;
   font-size: 24px;
 `;
 
-const NarrowingDown = styled(animated.span)`
+const NarrowingDown = styled(motion.span)`
   font-weight: 900;
   font-size: 24px;
 `;

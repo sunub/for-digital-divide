@@ -3,8 +3,6 @@
 import React from "react";
 import * as Styled from "./Form.styled";
 import LoginInput from "../LoginInput";
-import LoginButton from "../LoginButton";
-import InvalidMessage from "@/components/InvalidMessage";
 
 function Form({
   dispatch,
@@ -24,9 +22,7 @@ function Form({
               portalRef.current as HTMLDivElement
             )} */}
       </Styled.MainWrapper>
-      <Styled.FooterWrapper>
-        <LoginButton />
-      </Styled.FooterWrapper>
+      <Styled.FooterWrapper></Styled.FooterWrapper>
     </React.Fragment>
   );
 }

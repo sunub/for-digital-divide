@@ -31,7 +31,6 @@ function ResizeFont() {
           <Slider fontSize={fonstSize} setFontSize={setFontSize} />
         </div>
       </Styled.RootWrapper>
-      <Button />
     </>
   );
 }

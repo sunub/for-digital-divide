@@ -3,7 +3,7 @@
 import React from "react";
 import * as Styled from "./LoginForm.styled";
 import FormHeader from "./FormHeader";
-import { authenticate } from "@/lib/action";
+import { authenticate } from "@/lib/login_action";
 import LoginInput from "./LoginInput";
 import LoginButton from "./LoginButton";
 import InvalidMessage from "../InvalidMessage";

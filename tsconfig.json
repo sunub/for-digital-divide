@@ -15,21 +15,21 @@
     "incremental": true,
     "plugins": [
       {
-        "name": "next"
-      }
+        "name": "next",
+      },
     ],
     "paths": {
       "@/*": ["./src/*"],
       "@compo/*": ["./src/components/*"],
       "@icons/*": ["./src/icons/*"],
       "@hooks/*": ["./src/hooks/*"],
-      "@public/*": ["./public/*"]
-    }
+      "@public/*": ["./public/*"],
+    },
   },
   "ts-node": {
     "transpileOnly": true,
     "files": true,
-    "esm": false
+    "esm": false,
   },
   "include": [
     "next-env.d.ts",
@@ -39,7 +39,7 @@
     "**/*.jsx",
     ".next/types/**/*.ts",
     "scripts/seed.mjs",
-    "./type.d.ts"
+    "./type.d.ts",
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["./node_modules"],
 }

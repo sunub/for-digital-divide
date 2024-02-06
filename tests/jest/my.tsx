@@ -1,5 +1,5 @@
 import React from "react";
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 const SVG_HTMLS = [
   '<svg width="20" height="28" viewBox="0 0 20 28" data-testid="1"><g>\n    <rect></rect>\n    <polygon fill-rule="nonzero" points="10.4541016 25 10.4541016 6.6601562 10.3955078 6.6601562 4.7998047 10.5566406 4.7998047 7.9052734 10.4248047 3.8623047 13.0029297 3.8623047 13.0029297 25"></polygon>\n</g></svg>',

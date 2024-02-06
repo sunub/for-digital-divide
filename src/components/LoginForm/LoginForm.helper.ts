@@ -1,6 +1,6 @@
 "use server";
 
-import { authenticate } from "@/lib/action";
+import { authenticate } from "@/lib/login_action";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
