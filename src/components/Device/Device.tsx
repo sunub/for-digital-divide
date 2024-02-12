@@ -41,7 +41,7 @@ function Device({ children }: { children: React.ReactNode }) {
 
 function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
-    <Styled.RootWrapper>
+    <Styled.RootWrapper suppressHydrationWarning={false}>
       <Styled.OuterShadow>
         <Styled.InnerWindow>{children}</Styled.InnerWindow>
       </Styled.OuterShadow>

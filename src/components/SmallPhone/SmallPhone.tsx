@@ -1,116 +1,117 @@
-// "use client";
+"use client";
 
-// import React from "react";
-// import styled from "styled-components";
-// import Boop from "../Boop";
-// import { animated, useSpringValue } from "framer-motion";
+import React from "react";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+import useToggle from "@/hooks/use-toggle";
+import { moveToLoginPage } from "@/lib/revalidate";
 
-// const Phone = styled(animated.button)<{ $layerColors: string }>`
-//   background: transparent;
-//   border-radius: 3.5rem;
-//   box-shadow: inset -0.3rem -0.3rem 0.1rem 0.2rem oklch(70.4% 0.037 264.08),
-//     inset -0.7rem -0.7rem 0.1rem 0.2rem oklch(50% 0.037 264.08),
-//     inset -1rem -1rem 0 0.4rem oklch(37.76% 0.012 264.08 / 0.3),
-//     ${(props) => props.$layerColors},
-//     3rem 3rem 1rem 2px oklch(32.3% 0.002 247.36);
+const Phone = styled(motion.button)<{ $layerColors: string }>`
+  background: transparent;
+  border-radius: 3.5rem;
+  /* box-shadow:
+    inset -0.3rem -0.3rem 0.1rem 0.2rem oklch(70.4% 0.037 264.08),
+    inset -0.7rem -0.7rem 0.1rem 0.2rem oklch(50% 0.037 264.08),
+    inset -1rem -1rem 0 0.4rem oklch(37.76% 0.012 264.08 / 0.3),
+    ${(props) => props.$layerColors},
+    3rem 3rem 1rem 2px oklch(32.3% 0.002 247.36); */
+  transition: box-shadow 200ms ease-in-out;
 
-//   cursor: pointer;
-//   outline-offset: 4px;
-//   :focus:not(:focus-visible) {
-//     outline: none;
-//   }
-// `;
+  cursor: pointer;
+  outline-offset: 4px;
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+`;
 
-// const Icon = styled.span`
-//   transform: translateX(-5px) translateY(-5px) scaleY(1.015);
-// `;
+const Icon = styled.span`
+  transform: translateX(-5px) translateY(-5px) scaleY(1.015);
+`;
 
-// const Screen = styled.path<{ $open: boolean }>`
-//   filter: blur(15px);
-//   animation: ${(props) => (props.$open ? "" : "screen_brighter")} 2s infinite
-//     ease;
+const Screen = styled.path<{ $open: boolean }>`
+  filter: ${(props) => (props.$open ? "none" : "brightness(0.8)")};
+  animation: ${(props) => (props.$open ? "" : "screen_brighter")} 2s infinite
+    ease;
 
-//   @keyframes screen_brighter {
-//     0% {
-//       fill: oklch(37.76% 0.012 264.08 / 0.2);
-//     }
+  @keyframes screen_brighter {
+    0% {
+      fill: oklch(37.76% 0.012 264.08 / 0.2);
+    }
 
-//     85% {
-//       fill: oklch(95% 0 188);
-//     }
+    85% {
+      fill: oklch(95% 0 188);
+    }
 
-//     100% {
-//       fill: oklch(37.76% 0.012 264.08 / 0.2);
-//     }
-//   }
-// `;
+    100% {
+      fill: oklch(37.76% 0.012 264.08 / 0.2);
+    }
+  }
+`;
 
-// function layered_shadow(
-//   layer: number,
-//   gapX: number,
-//   gapY: number,
-//   color: string
-// ): string {
-//   let values = "";
+function layered_shadow(
+  layer: number,
+  gapX: number,
+  gapY: number,
+  color: string,
+): string {
+  let values = "";
 
-//   for (let i = 0; i < layer; i++) {
-//     let value = `${(i * gapX).toFixed(1)}rem ${(i * gapY).toFixed(
-//       1
-//     )}rem ${color}`;
-//     values += `${value} ,`;
-//   }
+  for (let i = 0; i < layer; i++) {
+    let value = `${(i * gapX).toFixed(1)}rem ${(i * gapY).toFixed(
+      1,
+    )}rem ${color}`;
+    values += `${value} ,`;
+  }
 
-//   return values.slice(0, values.length - 1);
-// }
+  return values.slice(0, values.length - 1);
+}
 
 function SmallPhone() {
-  // const [open, setOpen] = React.useState(false);
-  // const transform = useSpringValue("rotateX(66deg) rotateZ(45deg) scale(0.15)");
+  const [isOpen, toggleOpen] = useToggle(false);
 
   return (
-    <></>
-    // <Phone
-    //   $layerColors={
-    //     open ? "" : layered_shadow(9, 0.3, 0.3, `oklch(70.4% 0.037 264.08)`)
-    //   }
-    //   onClick={() => {
-    //     transform.start(
-    //       open
-    //         ? "rotateX(66deg) rotateZ(45deg) scale(0.15)"
-    //         : "rotateX(0deg) rotateZ(0deg) scale(0.15)"
-    //     );
-    //     setOpen((prev) => !prev);
-    //   }}
-    //   style={{
-    //     transform,
-    //   }}
-    // >
-    //   <Icon>
-    //     <svg
-    //       width="376"
-    //       height="779"
-    //       viewBox="0 0 376 779"
-    //       fill={"none"}
-    //       xmlns="http://www.w3.org/2000/svg"
-    //     >
-    //       <path
-    //         id="OuterFrame"
-    //         d="M0 44C0 19.6995 19.6995 0 44 0H332C356.301 0 376 19.6995 376 44V735C376 759.301 356.301 779 332 779H44C19.6995 779 0 759.301 0 735V44Z"
-    //         fill={"oklch(40% 0.037 264.08)"}
-    //       />
-    //       <path
-    //         id="InnerShadow"
-    //         d="M9.15881 46.9407C9.19153 26.5294 25.7474 10 46.1588 10H330.689C351.146 10 367.721 26.6016 367.689 47.0593L366.589 733.025C366.557 753.437 350.001 769.966 329.589 769.966H45.0593C24.6016 769.966 8.02661 753.364 8.0594 732.907L9.15881 46.9407Z"
-    //         fill={"oklch(58.97% 0 0)"}
-    //       />
-    //       <Screen
-    //         d="M15 51C15 31.1177 31.1178 15 51 15H325.342C345.224 15 361.342 31.1178 361.342 51V732.672C361.342 749.793 347.463 763.672 330.342 763.672H46C28.8792 763.672 15 749.793 15 732.672V51Z"
-    //         fill={"white"}
-    //         $open={open}
-    //       />
-    //     </svg>
-    //   </Icon>
-    // </Phone>
+    <Phone
+      $layerColors={
+        isOpen ? "" : layered_shadow(9, 0.3, 0.3, `oklch(70.4% 0.037 264.08)`)
+      }
+      onClick={toggleOpen}
+      initial={false}
+      animate={isOpen ? "open" : "closed"}
+      variants={{
+        closed: { rotateX: 66, rotateZ: 45, scale: 0.15 },
+        open: { rotateX: 0, rotateZ: 0, scale: 1 },
+      }}
+    >
+      <Icon>
+        <svg
+          width="643"
+          height="1264"
+          viewBox="0 0 643 1264"
+          fill={"none"}
+          xmlns="http://www.w3.org/2000/svg"
+          transform="scale(0.5)"
+        >
+          <path
+            d="M0 75C0 33.5787 33.5786 0 75 0H568C609.421 0 643 33.5786 643 75V1189C643 1230.42 609.421 1264 568 1264H75C33.5786 1264 0 1230.42 0 1189V75Z"
+            fill="#D9D9D9"
+          />
+          <path
+            d="M4 81C4 39.5786 37.5786 6 79 6H564C605.421 6 639 39.5786 639 81V1179C639 1220.42 605.421 1254 564 1254H79C37.5786 1254 4 1220.42 4 1179V81Z"
+            fill="#ACACAC"
+          />
+          <path
+            d="M8 89C8 47.5786 41.5786 14 83 14H560C601.421 14 635 47.5786 635 89V1171C635 1212.42 601.421 1246 560 1246H83C41.5786 1246 8 1212.42 8 1171V89Z"
+            fill="black"
+          />
+          <Screen
+            d="M27 88C27 57.6244 51.6243 33 82 33H561C591.376 33 616 57.6243 616 88V1172C616 1202.38 591.376 1227 561 1227H82C51.6243 1227 27 1202.38 27 1172V88Z"
+            fill="#F7F7F7"
+            $open={isOpen}
+          />
+          <rect x="255" y="59" width="133" height="42" rx="21" fill="black" />
+        </svg>
+      </Icon>
+    </Phone>
   );
 }
 

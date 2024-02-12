@@ -5,9 +5,11 @@ import Device from "@/components/Device";
 
 function LoginPage() {
   return (
-    <Device>
-      <LoginForm />
-    </Device>
+    <div style={{ display: "grid", placeContent: "center" }}>
+      <Device>
+        <LoginForm />
+      </Device>
+    </div>
   );
 }
 
