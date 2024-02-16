@@ -1,7 +1,16 @@
+import LoadingAnimation from "@/components/LoadingAnimation";
+
 function Loading() {
   return (
-    <div>
-      <p>Loading...</p>
+    <div
+      style={{
+        display: "grid",
+        width: "100cqw",
+        height: "87cqh",
+        placeContent: "center",
+      }}
+    >
+      <LoadingAnimation />
     </div>
   );
 }

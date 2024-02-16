@@ -23,6 +23,7 @@
       "@compo/*": ["./src/components/*"],
       "@icons/*": ["./src/icons/*"],
       "@hooks/*": ["./src/hooks/*"],
+      "@lib/*": ["./src/lib/*"],
       "@public/*": ["./public/*"],
     },
   },

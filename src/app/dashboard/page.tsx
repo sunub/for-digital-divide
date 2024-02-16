@@ -1,9 +1,7 @@
 import React from "react";
-import { Account, getBankAccount } from "@/utils/account";
-import AccountCard from "@/components/AccountCard";
-import Device from "@/components/Device";
-
-export const dynamic = "force-dynamic";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 interface AccountData {
   userId: string;
@@ -11,9 +9,7 @@ interface AccountData {
   createDate: Date;
 }
 
-async function DashBoardPage() {
-  const account: Account = await getBankAccount();
-  console.log(account);
+function DashBoardPage() {
   return (
     <div>
       <h1>Banking Page</h1>
