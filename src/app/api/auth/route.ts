@@ -5,21 +5,6 @@ import { decode, encode } from "js-base64";
 import { generateAuthenticationOptions } from "@simplewebauthn/server";
 import { cookies } from "next/headers";
 
-export const csrfCheck = (req: NextRequest) => {
-  if (req.headers.get("X-Requested-With") !== "XMLHttpRequest") {
-    return NextResponse.json({ error: "Invalid access" }, { status: 400 });
-  }
-  return NextResponse.next();
-};
-
-export const sessionCheck = (decodedSession: string) => {
-  const session = JSON.parse(decodedSession);
-  if (!session || !session.includes("signed-in")) {
-    return { message: "not signed in", status: 401 };
-  }
-  return NextResponse.json({ message: "success", status: 200 });
-};
-
 export async function POST(req: NextRequest) {
   // sessionCheck
   if (req.headers.get("X-Requested-With") !== "XMLHttpRequest") {

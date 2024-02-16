@@ -9,10 +9,7 @@ import React from "react";
 function LoginInput() {
   return (
     <React.Fragment>
-      <Styled.InputGroup>
-        <Id />
-        <Password />
-      </Styled.InputGroup>
+      <Styled.InputGroup></Styled.InputGroup>
       <Helper />
     </React.Fragment>
   );
