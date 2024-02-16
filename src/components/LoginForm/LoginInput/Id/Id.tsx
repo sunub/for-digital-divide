@@ -3,9 +3,15 @@
 import useToggle from "@hooks/use-toggle";
 import * as Styled from "../../Form/Form.styled";
 import VisuallyHidden from "@compo/VisuallyHidden";
-import React from "react";
+import React, { HTMLAttributes } from "react";
 
-function Id() {
+function Id({
+  minLength,
+  maxLength,
+}: {
+  minLength: number;
+  maxLength: number;
+}) {
   const [value, setValue] = React.useState("");
   const [isFocused, toggleIsFocused] = useToggle(false);
 
@@ -25,8 +31,8 @@ function Id() {
           aria-labelledby="아이디 입력"
           onFocus={toggleIsFocused}
           onBlur={toggleIsFocused}
-          minLength={6}
-          maxLength={20}
+          minLength={minLength}
+          maxLength={maxLength}
           value={value}
           onChange={(e) => {
             const currValue = e.target.value;

@@ -14,9 +14,12 @@ export const Button = styled.button`
 `;
 
 export const InputGroup = styled.div`
-  box-shadow: 0px 0.6px 5.2px rgba(0, 0, 0, 0.011),
-    0px 1.5px 12.6px rgba(0, 0, 0, 0.016), 0px 2.9px 23.7px rgba(0, 0, 0, 0.02),
-    0px 5.1px 42.2px rgba(0, 0, 0, 0.024), 0px 9.6px 79px rgba(0, 0, 0, 0.029),
+  box-shadow:
+    0px 0.6px 5.2px rgba(0, 0, 0, 0.011),
+    0px 1.5px 12.6px rgba(0, 0, 0, 0.016),
+    0px 2.9px 23.7px rgba(0, 0, 0, 0.02),
+    0px 5.1px 42.2px rgba(0, 0, 0, 0.024),
+    0px 9.6px 79px rgba(0, 0, 0, 0.029),
     0px 23px 189px rgba(0, 0, 0, 0.04);
 `;
 
@@ -108,7 +111,7 @@ export const Helper = styled(Link)`
 export const Placeholder = styled.div<{ $isFocus: boolean }>`
   position: absolute;
   font-size: 0.75rem;
-  top: 13px;
+  top: 17.5px;
   left: 65px;
   pointer-events: none;
   user-select: none;
@@ -118,11 +121,13 @@ export const Placeholder = styled.div<{ $isFocus: boolean }>`
   color: ${(props) =>
     props.$isFocus
       ? "oklch(65.57% 0.19552898037793698 288.17775174927874)"
-      : "oklch(16.73% 0.005 83 / 20%)"};
+      : "oklch(16.73% 0.005 83 / 80%)"};
 
   transform: ${(props) =>
     props.$isFocus ? "translateY(-110%) scale(0.8)" : ""};
-  transition: transform 200ms ease-in-out, background 200ms ease-in-out,
+  transition:
+    transform 200ms ease-in-out,
+    background 200ms ease-in-out,
     color 200ms ease-in-out; // Specify transitions for each property
 `;
 

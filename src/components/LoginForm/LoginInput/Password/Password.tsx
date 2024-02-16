@@ -27,7 +27,6 @@ function Password() {
         autoComplete={"current-password"}
         aria-label="비밀번호 입력"
         aria-labelledby="비밀번호 입력"
-        minLength={8}
         value={value}
         onChange={(e) => {
           const currValue = e.target.value;

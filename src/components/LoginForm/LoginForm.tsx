@@ -55,7 +55,7 @@ function LoginForm() {
           togglePending();
         }}
       >
-        <FormHeader />
+        <FormHeader title="로그인" />
         <Styled.MainWrapper>
           <LoginInput />
           <div id="login-form__warning-portal" ref={portalRef} />
