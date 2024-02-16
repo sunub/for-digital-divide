@@ -1,5 +1,10 @@
 "use server";
 
+/**
+ * @description
+ * ID와 비밀번호를 검증하여 로그인하는 함수
+ */
+
 import pg from "pg";
 import { maxLength, minLength, object, safeParse, string } from "valibot";
 import { revalidatePath } from "next/cache";
@@ -44,8 +49,8 @@ function validateFormDataField(formData: FormData) {
 
   if (!validateDataField.success) {
     return {
-      success: false,
-      message: validateDataField.issues[0].message,
+      username: null,
+      password: null,
     };
   }
 
@@ -62,14 +67,17 @@ export async function authenticate(formData: FormData): Promise<{
 
   let { username, password } = validateFormDataField(formData);
 
+  if (!username || !password) return { type: "error" };
+
   let isAuthenticationSuccess = {
     password: false,
   };
+
   try {
     // Use parameterized query to prevent SQL Injection
     const queryUserInfo = await pool.query(
       `SELECT * FROM users WHERE username = $1;`,
-      [username]
+      [username],
     );
 
     if (queryUserInfo.rows.length === 0) {
@@ -82,7 +90,7 @@ export async function authenticate(formData: FormData): Promise<{
     // Run password comparison in the background
     isAuthenticationSuccess.password = await bcrypt.compare(
       password!,
-      transferredPassword
+      transferredPassword,
     );
   } catch (error) {
     console.error(error);
@@ -109,7 +117,7 @@ export async function authenticate(formData: FormData): Promise<{
 }
 
 export async function createUserInfo(
-  formData: FormData
+  formData: FormData,
 ): Promise<CreateResult> {
   let { username, password } = validateFormDataField(formData);
   const client = await pool.connect();
@@ -124,7 +132,7 @@ export async function createUserInfo(
       VALUES ($1, $2, $3)
       ON CONFLICT (username) DO NOTHING;
     `,
-      [username, password, date]
+      [username, password, date],
     );
 
     if (result.rowCount && result.rowCount > 0) {

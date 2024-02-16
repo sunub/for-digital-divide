@@ -7,3 +7,8 @@ export const moveToLoginPage = () => {
   revalidatePath("/login");
   redirect("/login");
 };
+
+export const moveToPasswordPage = () => {
+  revalidatePath("/login/password");
+  redirect("/login/password");
+};
