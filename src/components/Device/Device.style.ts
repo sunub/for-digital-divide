@@ -4,29 +4,32 @@ import styled from "styled-components";
 
 export const RootWrapper = styled.div`
   position: relative;
-  width: clamp(376px, 100vw, 426px);
-  height: clamp(779px, 100vh, 829px);
-  border: 4px solid oklch(69.45% 0 0);
-  outline: 5px solid oklch(88.53% 0 0);
-  border-radius: 50px;
+  width: 100cqw;
+
+  max-width: 643px;
+  max-height: 1264px;
+
+  border: 6px solid oklch(69.45% 0 0);
+  outline: 8px solid oklch(88.53% 0 0);
+  border-radius: 4cqh;
 `;
 
 export const OuterShadow = styled.div`
   width: 100%;
   height: 100%;
-  border: 13px solid oklch(0% 0 0);
+  border: 20px solid oklch(0% 0 0);
   outline: 4px solid oklch(74.41% 0 0);
   background: oklch(97.65% 0 0);
-  border-radius: 50px;
-  padding: 3px;
+  border-radius: 4cqh;
 `;
 
 export const InnerWindow = styled.div`
   width: 100%;
   height: 100%;
-  border-radius: 50px;
+  border-radius: 4cqh;
   background: oklch(97.65% 0 0);
   container: device-frame / size;
+  padding: 18px;
 `;
 
 export const AppWrapper = styled.div`
@@ -49,7 +52,7 @@ export const SystemStatusBar = styled.div`
     grid-area: system-status / main;
     justify-self: center;
     background: black;
-    block-size: 50%;
+    block-size: 60%;
     inline-size: 25%;
     border-radius: 1e5px;
   }

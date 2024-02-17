@@ -42,7 +42,7 @@ export default function RootLayout({
               --color-button: oklch(65.57% 0.19552898037793698 288.17775174927874);
               --color-highlight: oklch(73.96% 0.1586202546972356 25.278467161119735);
               --color-confirm: oklch(84.51% 0.162 147.29);
-              --text-size: 16px;
+              --text-size: 24px;
             }
 
             body {
@@ -62,8 +62,12 @@ export default function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <div id="_next">
-            <Header />
-            {children}
+            <section id="devsite-wrapper">
+              <div id="devsite-header">
+                <Header />
+              </div>
+              <div id="devsite-content">{children}</div>
+            </section>
           </div>
         </StyledComponentsRegistry>
       </body>

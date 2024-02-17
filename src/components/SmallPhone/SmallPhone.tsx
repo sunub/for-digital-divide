@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 
 const Phone = styled(motion.button)`
   background: transparent;
+  width: fit-content;
+  height: fit-content;
 
   cursor: pointer;
   outline-offset: 4px;
@@ -17,9 +19,9 @@ const Phone = styled(motion.button)`
 `;
 
 const Icon = styled.svg<{ $layerColors: string }>`
-  border-radius: 4.75rem;
+  border-radius: 75px;
   box-shadow:
-    inset -0.3rem -0.3rem 0.1rem 0.2rem oklch(81.43% 0 0),
+    inset -0.5rem -0.3rem 0.1rem 0.2rem oklch(81.43% 0 0),
     inset -0.7rem -0.7rem 0.1rem 0.2rem oklch(81.43% 0 0),
     inset -1rem -1rem 0 0.4rem oklch(81.43% 0 0),
     ${(props) => props.$layerColors},

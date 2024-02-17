@@ -1,41 +1,42 @@
 "use client";
 
 import { motion } from "framer-motion";
+import styled from "styled-components";
 
 function LoginAnimation() {
   const circles = [
     {
-      cx: "10",
-      cy: "15",
-      r: 5,
+      cx: 70,
+      cy: "50%",
+      r: "2cqh",
       fill: "#8F76FF",
     },
     {
-      cx: "32",
-      cy: "15",
-      r: 5,
+      cx: 170,
+      cy: "50%",
+      r: "2cqh",
       fill: "#FF7E76",
     },
-    { cx: "53", cy: "15", r: 5, fill: "#8F76FF" },
+    { cx: 270, cy: "50%", r: "2cqh", fill: "#8F76FF" },
     {
-      cx: "72",
-      cy: "15",
-      r: 5,
+      cx: 370,
+      cy: "50%",
+      r: "2cqh",
       fill: "#98DF9F",
     },
     {
-      cx: "96",
-      cy: "15",
-      r: 5,
+      cx: 470,
+      cy: "50%",
+      r: "2cqh",
       fill: "#8F76FF",
     },
   ];
 
   return (
     <motion.svg
-      width="106"
-      height="70"
-      viewBox="0 0 106 70"
+      width="556"
+      height="120"
+      viewBox="0 0 556 120"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -46,7 +47,7 @@ function LoginAnimation() {
         return (
           <motion.circle
             key={index}
-            cx={circle.cx}
+            cx={`calc(${circle.cx}px + (${circle.r} / 2))`}
             cy={circle.cy}
             r={circle.r}
             fill={circle.fill}

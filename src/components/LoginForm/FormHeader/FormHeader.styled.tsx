@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   grid-area: primary-header / main-start / primary-nav / main-end;
+  width: 75cqw;
 `;
 
 export const Header = styled.header`
@@ -13,5 +14,5 @@ export const Header = styled.header`
 `;
 
 export const Title = styled.h1`
-  font-size: 2rem;
+  font-size: 6.5cqh;
 `;

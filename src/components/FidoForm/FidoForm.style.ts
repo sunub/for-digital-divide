@@ -2,19 +2,15 @@
 
 import styled from "styled-components";
 
-export const RootWrapper = styled.div`
-  display: grid;
-  grid-area: primary-nav / fullbleed-start / system-gesture / fullbleed-end;
-`;
-
 export const Form = styled.form`
+  grid-area: primary-nav / fullbleed-start / system-gesture / fullbleed-end;
+
   display: flex;
   flex-direction: column;
   width: 100cqw;
-  height: 80cqh;
   justify-content: center;
   align-items: center;
-  gap: 24px;
+  gap: 10cqh;
 
   padding-left: 1rem;
   padding-right: 1rem;
@@ -32,6 +28,8 @@ export const HeaderWrapper = styled.div`
 
 export const MainWrapper = styled.div`
   grid-area: main / main-start / footer / main-end;
+  width: 75cqw;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -43,23 +41,24 @@ export const MessageWrapper = styled.div`
   align-items: center;
   gap: 8px;
   color: red;
-  font-size: 16px;
   padding: 12px 0 24px 0;
 `;
 
 export const FooterWrapper = styled.div`
-  display: grid;
-  width: 75cqw;
   grid-area: footer / fullbleed;
+  display: grid;
+  justify-items: center;
+  width: 75cqw;
 `;
 
 export const Button = styled.button`
   width: 100%;
   cursor: pointer;
-  padding: 16px 24px 16px 24px;
+  padding: 28px 24px 28px 24px;
   background-color: oklch(65.57% 0.19552898037793698 288.17775174927874);
-  border-radius: 24px;
+  border-radius: 1.5cqh;
   font-weight: 700;
+  font-size: var(--text-size);
   color: white;
 `;
 
@@ -106,15 +105,14 @@ export const InputWrapper = styled.div<{
 export const Input = styled.input`
   border: none;
   padding: 16px 0 16px 0;
-  font-size: 16px;
   font-weight: 700;
   background: none;
+  font-size: var(--text-size);
 
   -webkit-appearance: none;
   appearance: none;
   font-family: inherit;
-  font-size: 16px;
-  height: 52px;
+  height: 70px;
   padding: 0 16px;
 
   &:focus {
@@ -153,8 +151,7 @@ export const HelperList = styled.li<{ $left: number }>`
 
 export const Placeholder = styled.div<{ $isFocus: boolean }>`
   position: absolute;
-  font-size: 0.75rem;
-  top: 13px;
+  top: 16.5px;
   left: 65px;
   pointer-events: none;
   user-select: none;

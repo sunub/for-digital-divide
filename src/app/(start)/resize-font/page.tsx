@@ -15,7 +15,7 @@ function StartPage() {
   }, [fonstSize]);
 
   return (
-    <section>
+    <section id="devsite-content__site-main">
       <RootWrapper>
         <Title>
           <h1>시작하기 전 글씨 크기를 조절 해주세요</h1>
@@ -48,6 +48,8 @@ function StartPage() {
     </section>
   );
 }
+
+const Section = styled.section``;
 
 const RootWrapper = styled.div`
   display: grid;

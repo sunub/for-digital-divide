@@ -1,4 +1,4 @@
-import * as Styled from "../Form/Form.styled";
+import * as Styled from "@/components/FidoForm/FidoForm.style";
 interface LoginButtonProps {
   togglePending: () => void;
 }

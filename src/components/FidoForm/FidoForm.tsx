@@ -95,11 +95,10 @@ function FidoForm({
           {isPending ? <LoadingAnimation /> : null}
           {isPending ? null : <InvalidMessage message={errorMessage} />}
         </S.MessageWrapper>
+        <S.FooterWrapper>
+          <LoginButton togglePending={togglePending} />
+        </S.FooterWrapper>
       </S.MainWrapper>
-
-      <S.FooterWrapper>
-        <LoginButton togglePending={togglePending} />
-      </S.FooterWrapper>
     </S.Form>
   );
 }

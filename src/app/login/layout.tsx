@@ -3,7 +3,7 @@ import React from "react";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: "grid", placeContent: "center" }}>
+    <div id="devsite-content__site-main">
       <Device>{children}</Device>
     </div>
   );

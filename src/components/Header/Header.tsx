@@ -1,19 +1,19 @@
+"use client";
+
 import React from "react";
-import * as Styled from "./Header.style";
+import styled from "styled-components";
 
 function Header() {
   return (
-    <Styled.RootWrapper>
-      <Styled.IconWrapper>
-        <Arrow />
-        <Help />
-      </Styled.IconWrapper>
-    </Styled.RootWrapper>
+    <IconWrapper>
+      <Arrow />
+      <Help />
+    </IconWrapper>
   );
 }
 
 function Arrow() {
-  return <Styled.Button>뒤로가기</Styled.Button>;
+  return <Button>뒤로가기</Button>;
 }
 
 function Help() {
@@ -33,5 +33,20 @@ function Help() {
     </svg>
   );
 }
+
+const RootWrapper = styled.div`
+  width: 100%;
+`;
+
+const IconWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Button = styled.button`
+  padding: 0;
+`;
 
 export default Header;

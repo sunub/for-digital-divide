@@ -111,7 +111,7 @@ export const Helper = styled(Link)`
 export const Placeholder = styled.div<{ $isFocus: boolean }>`
   position: absolute;
   font-size: 0.75rem;
-  top: 17.5px;
+  top: 11.5px;
   left: 65px;
   pointer-events: none;
   user-select: none;

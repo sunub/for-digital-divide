@@ -7,6 +7,8 @@ import { motion } from "framer-motion";
 
 const TitleWrapper = styled(motion.div)`
   display: flex;
+  height: 100%;
+  align-items: center;
   gap: 6rem;
 `;
 
@@ -31,8 +33,8 @@ function InitPage() {
       <TitleWrapper>
         <Digital>디지털</Digital>
         <Distance>격차</Distance>
+        <NarrowingDown>좁히기</NarrowingDown>
       </TitleWrapper>
-      <NarrowingDown>좁히기</NarrowingDown>
     </>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import useToggle from "@hooks/use-toggle";
-import * as Styled from "../../Form/Form.styled";
+import * as Styled from "@/components/FidoForm/FidoForm.style";
 import VisuallyHidden from "@compo/VisuallyHidden";
 import React, { HTMLAttributes } from "react";
 

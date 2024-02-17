@@ -11,7 +11,7 @@ function Page() {
     <FidoForm
       key={"fido-login_username"}
       action={(formData) => fidoUsernameActon(formData)}
-      // redirect={() => redirect("/login/password")}
+      redirect={() => redirect("/login/password")}
     >
       <Id minLength={1} maxLength={20} />
     </FidoForm>
