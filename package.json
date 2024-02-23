@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev:https": "next dev --experimental-https",
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next build && next start -p 4004",

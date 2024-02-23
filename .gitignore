@@ -41,3 +41,5 @@ firebase.json
 firestore.indexes.json
 firestore.rules
 .firebaserc
+
+certificates
