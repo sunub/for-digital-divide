@@ -10,7 +10,7 @@ function Page() {
     <FidoForm
       key={"fido-login__password"}
       action={(formData) => fidoPasswordAction(formData)}
-      redirect={() => redirect("/dashboard")}
+      // redirect={() => redirect("/dashboard")}
     >
       <Password />
     </FidoForm>

@@ -7,7 +7,6 @@ import FormHeader from "../LoginForm/FormHeader";
 import InvalidMessage from "../InvalidMessage";
 import useToggle from "@/hooks/use-toggle";
 import LoadingAnimation from "../LoadingAnimation";
-import { decode } from "js-base64";
 
 function generateErrorMsg(type: string): string {
   switch (type) {
@@ -68,19 +67,6 @@ function FidoForm({
           setErrorMessage("");
           action && (await action(formData));
         }
-
-        const res = await fetch("/api/auth", {
-          method: "POST",
-          headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            "Content-Type": "application/json",
-          },
-          credentials: "same-origin",
-        }).then((res) => res.json());
-
-        const options = res.options;
-        options.challenge = base64url.decode(options.challenge);
-        console.log(options);
 
         togglePending();
         redirect && redirect();

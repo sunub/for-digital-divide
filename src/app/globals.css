@@ -139,8 +139,8 @@ button {
 }
 
 #devsite-content {
-  width: 100%;
   grid-area: devsite-content-row / devsite-content-column;
+  width: 100%;
 
   display: grid;
   grid-template-rows: [site-progression] 10cqh [site-content-row] 1fr;
