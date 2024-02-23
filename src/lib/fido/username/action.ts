@@ -8,31 +8,29 @@ import crypto from "crypto";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { decode, encode } from "js-base64";
+import { registerCredential } from "@/lib/client";
 
 export async function fidoUsernameActon(formData: FormData) {
-  const pool = new Pool({
-    connectionString: process.env.SUNUB_POSTGRES_URL + "?sslmode=require",
-  });
-  const client = await pool.connect();
   const username = validateFormDataField(formData)?.username as string;
-  let user = await User.findByUsername(username, client);
+  let user = await User.findByUsername(username);
 
   if (!user) {
     console.log("사용자가 존재하지 않습니다.");
-    user = {
+    const newUserInfo = {
       username,
       id: isoBase64URL.fromBuffer(crypto.randomBytes(32)),
       credentials: [],
     };
 
-    await User.update(user, client);
+    await User.update(newUserInfo);
   }
 
   const encodedSignature = Buffer.from(user.id).toString("base64");
   const sessionValue = {
-    username: encodedSignature,
+    id: encodedSignature,
     signedIn: true,
   };
+
   cookies().set(
     "session",
     JSON.stringify(encode(JSON.stringify(sessionValue))),
@@ -42,8 +40,4 @@ export async function fidoUsernameActon(formData: FormData) {
       sameSite: "none",
     },
   );
-
-  client.release();
-
-  revalidatePath("/login/password");
 }

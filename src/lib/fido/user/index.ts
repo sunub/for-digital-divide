@@ -1,59 +1,82 @@
 "use server";
 
-import { PoolClient } from "pg";
+import { Pool, PoolClient, QueryResult } from "pg";
 import { cookies } from "next/headers";
 import { decode } from "js-base64";
 import crypto from "crypto";
+import usePgPool from "@/hooks/use-pgpool.hook";
+
+interface Credential {
+  credId: string;
+  type: string;
+  transports: string[];
+}
 
 interface User {
   username: string;
   id: string;
-  credentials: string[];
+  credentials: Credential[];
 }
 
 class User {
-  static async findByUsername(username: string, client: PoolClient) {
-    const query = `
+  static async findByUsername(username: string) {
+    const findResult = await usePgPool(async (client) => {
+      const query = `
         SELECT * FROM fido_users
         WHERE username = $1;
       `;
-    const findResult = await client.query(query, [username]);
+      return await client.query(query, [username]);
+    });
+
     return findResult.rows[0];
   }
 
-  static async update(user: User, client: PoolClient) {
-    const query = `
-      INSERT INTO fido_users (username, id, credentials)
-      VALUES ($1, $2, $3);
-    `;
+  static async findByUserId(id: string): Promise<QueryResult<User>> {
+    const findResult = await usePgPool(async (client) => {
+      const query = `
+        SELECT * FROM fido_users
+        WHERE id = $1;
+      `;
 
-    const result = await client.query(query, [
-      user.username,
-      user.id,
-      user.credentials,
-    ]);
-    return result;
+      return await client.query(query, [id]);
+    });
+
+    return findResult;
   }
 
-  static async findByPassword(password: string, client: PoolClient) {
+  static async update(user: User) {
+    const findResult = await usePgPool(async (client) => {
+      const query = `
+        INSERT INTO fido_users (username, id, credentials)
+        VALUES ($1, $2, $3);
+      `;
+
+      return await client.query(query, [user]);
+    });
+    return findResult;
+  }
+
+  static async findByPassword(password: string) {
     const session = cookies().get("session")?.value as string;
     const decodedSession = JSON.parse(decode(session));
 
-    const query = `
-      SELECT * FROM fido_passwords
-      WHERE password = $1;
-    `;
-    const findResult = (await client.query(query, [password])).rows[0];
+    const findResult = await usePgPool(async (client) => {
+      const query = `
+        SELECT * FROM fido_passwords
+        WHERE password = $1;
+      `;
 
-    const hashUsername = crypto
-      .createHash("sha256")
-      .update(findResult.username)
-      .digest();
+      return await client.query(query, [password]);
+    });
+
+    const username = findResult.rows[0].username;
+    const hashUsername = crypto.createHash("sha256").update(username!).digest();
     const encodedHashUsername = Buffer.from(hashUsername).toString("base64");
 
     if (encodedHashUsername === decodedSession.username) {
       return findResult;
     }
+
     return null;
   }
 }
