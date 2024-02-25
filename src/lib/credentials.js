@@ -1,4 +1,4 @@
-import { decode } from "js-base64";
+import { encode, decode } from "js-base64";
 
 const base64url = {
   encode: function (buffer) {
@@ -38,14 +38,14 @@ export async function createCredentials() {
   const json = await res.json();
   const options = json.options;
 
-  if (options.excludeCredentials.length) {
-    for (let cred of options.excludeCredentials) {
-      cred.id = decode(cred.id);
-    }
-  }
-
   options.user.id = base64url.decode(options.user.id);
   options.challenge = base64url.decode(options.challenge);
+
+  if (options.excludeCredentials.length) {
+    for (let cred of options.excludeCredentials) {
+      cred.id = base64url.decode(cred.id);
+    }
+  }
 
   const cred = await navigator.credentials.create({
     publicKey: options,
@@ -53,7 +53,7 @@ export async function createCredentials() {
 
   const credential = {};
   credential.id = cred?.id;
-  credential.rawId = cred?.rawId;
+  credential.rawId = base64url.encode(cred.rawId);
   credential.type = cred?.type;
 
   if (cred.response) {

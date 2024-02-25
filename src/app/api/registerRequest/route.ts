@@ -11,11 +11,11 @@ const TIMEOUT = 30 * 1000 * 60;
 
 export async function POST(req: NextRequest) {
   const session = req.cookies.get("session")?.value;
-  // console.log(session);
   const decodedSession = decode(session as string);
   const parsedSession = JSON.parse(decodedSession);
-  const userId = decode(parsedSession.id);
-  const user = (await User.findByUserId(userId)).rows[0];
+  const userId = parsedSession.id;
+
+  const user = (await User.findUserSession(userId)).rows[0];
   if (!user) {
     return NextResponse.json(
       { error: "사용자를 찾을 수 없습니다." },
@@ -24,8 +24,8 @@ export async function POST(req: NextRequest) {
   }
 
   const excludeCredentials: any[] = [];
-  if (user.credentials.length === 0) {
-    for (let cred of user.credentials) {
+  if (user.credential.length > 0) {
+    for (let cred of user.credential) {
       excludeCredentials.push({
         id: isoBase64URL.toBuffer(cred.credId),
         type: "public-key",
@@ -87,16 +87,7 @@ export async function POST(req: NextRequest) {
     authenticatorSelection,
   });
 
-  const challengeSession = {
-    ...parsedSession,
-    challenge: options.challenge,
-  };
-
-  cookies().set("session", encode(JSON.stringify(challengeSession)), {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-  });
+  await User.updateChallenge(options.challenge, userId);
 
   return NextResponse.json({ options });
 }

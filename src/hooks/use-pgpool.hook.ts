@@ -1,6 +1,5 @@
 "use server";
 
-import { assert } from "console";
 import { Pool, PoolClient, QueryResult } from "pg";
 
 interface Credential {
@@ -18,7 +17,7 @@ interface User {
 }
 
 async function usePgPool(
-  asyncCallbackFn: (client: PoolClient) => Promise<QueryResult<User>>,
+  asyncCallbackFn: (client: PoolClient) => Promise<QueryResult<User> | any>,
 ) {
   const pool = new Pool({
     host: process.env.SUNUB_POSTGRES_HOST,

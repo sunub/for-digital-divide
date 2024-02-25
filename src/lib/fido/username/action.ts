@@ -1,16 +1,16 @@
 "use server";
 
-import { Pool } from "pg";
 import User from "@lib/fido/user";
 import validateFormDataField from "../validator";
 import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import crypto from "crypto";
 import { cookies } from "next/headers";
-import { revalidatePath } from "next/cache";
-import { decode, encode } from "js-base64";
-import { registerCredential } from "@/lib/client";
+import { encode } from "js-base64";
 
 export async function fidoUsernameActon(formData: FormData) {
+  const isAlreadySignedIn = cookies().has("session");
+  if (isAlreadySignedIn) return;
+
   const username = validateFormDataField(formData)?.username as string;
   let user = await User.findByUsername(username);
 
@@ -24,20 +24,19 @@ export async function fidoUsernameActon(formData: FormData) {
 
     await User.update(newUserInfo);
   }
-
-  const encodedSignature = Buffer.from(user.id).toString("base64");
+  const encodedSignatureId = Buffer.from(user.id).toString("base64");
   const sessionValue = {
-    id: encodedSignature,
+    id: encodedSignatureId,
     signedIn: true,
   };
 
-  cookies().set(
-    "session",
-    JSON.stringify(encode(JSON.stringify(sessionValue))),
-    {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    },
-  );
+  await User.insertSession(encodedSignatureId, username);
+
+  cookies().set("session", encode(JSON.stringify(sessionValue)), {
+    secure: true,
+    httpOnly: true,
+    sameSite: "none",
+  });
 }
+
+// I8WweMrEwt71aXkO1miWC1hiIXa8cyQBhNxhDPNH99I

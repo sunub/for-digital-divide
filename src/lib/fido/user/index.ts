@@ -47,11 +47,12 @@ class User {
   static async update(user: User) {
     const findResult = await usePgPool(async (client) => {
       const query = `
-        INSERT INTO fido_users (username, id, credentials)
-        VALUES ($1, $2, $3);
+        UPDATE fido_users
+        SET credentials = $1
+        WHERE id = $3;        
       `;
 
-      return await client.query(query, [user]);
+      return await client.query(query, [user.credentials, user.id]);
     });
     return findResult;
   }
@@ -78,6 +79,73 @@ class User {
     }
 
     return null;
+  }
+
+  static async insertSession(id: string, username: string) {
+    const findResult = await usePgPool(async (client) => {
+      const query = `
+        INSERT INTO fido_session (id, username, signed_in)
+        VALUES ($1, $2, $3)
+        ON CONFLICT (id)
+        DO UPDATE SET signed_in = EXCLUDED.signed_in;
+      `;
+
+      return await client.query(query, [id, username, true]);
+    });
+
+    return findResult;
+  }
+
+  static async updateChallenge(challenge: string, id: string) {
+    const findResult = await usePgPool(async (client) => {
+      const query = `
+        UPDATE fido_session
+        SET challenge = $1
+        WHERE id = $2;
+      `;
+
+      return await client.query(query, [challenge, id]);
+    });
+    return findResult;
+  }
+
+  static async findUserSession(id: string) {
+    const findResult = await usePgPool(async (client) => {
+      const query = `
+        SELECT * FROM fido_session
+        WHERE id = $1;
+      `;
+
+      return await client.query(query, [id]);
+    });
+    return findResult;
+  }
+
+  static async updateCredential(credential: string, id: string) {
+    const result = await usePgPool(async (client) => {
+      const query = `
+        UPDATE fido_session
+        SET credential = $1
+        WHERE id = $2;
+      `;
+
+      return await client.query(query, [JSON.stringify(credential), id]);
+    });
+
+    return result;
+  }
+
+  static async deleteChallenge(id: string) {
+    const result = await usePgPool(async (client) => {
+      const query = `
+        UPDATE fido_session
+        SET challenge = NULL
+        WHERE id = $1;
+      `;
+
+      return await client.query(query, [id]);
+    });
+    return result;
   }
 }
 
