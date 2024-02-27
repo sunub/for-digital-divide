@@ -5,21 +5,23 @@ import Id from "@/components/LoginForm/LoginInput/Id";
 import { fidoUsernameActon } from "@lib/fido/username/action";
 import FidoForm from "@/components/FidoForm";
 import { redirect } from "next/navigation";
-import { registerCredential } from "@/lib/client";
 import { decode } from "js-base64";
 import { createCredentials } from "@/lib/credentials";
+import Username from "@/components/LoginForm/LoginInput/Username";
 
 function Page() {
   return (
     <FidoForm
       key={"fido-login_username"}
+      type="username"
+      redirect={() => redirect("/login/password")}
       action={async (formData) => {
         await fidoUsernameActon(formData);
-        await createCredentials();
       }}
-      // redirect={() => redirect("/login/password")}
+      // await createCredentials();
     >
-      <Id minLength={1} maxLength={20} />
+      <Username />
+      {/* <Id minLength={1} maxLength={20} /> */}
     </FidoForm>
   );
 }

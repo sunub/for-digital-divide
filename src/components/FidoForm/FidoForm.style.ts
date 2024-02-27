@@ -99,7 +99,7 @@ export const InputWrapper = styled.div<{
     "border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;"}
 
   padding: 4px 16px 4px 16px;
-  gap: 8px;
+  gap: 4px;
 `;
 
 export const Input = styled.input`

@@ -7,6 +7,7 @@ import FormHeader from "../LoginForm/FormHeader";
 import InvalidMessage from "../InvalidMessage";
 import useToggle from "@/hooks/use-toggle";
 import LoadingAnimation from "../LoadingAnimation";
+import { authenticate } from "@/lib/credentials";
 
 function generateErrorMsg(type: string): string {
   switch (type) {
@@ -15,7 +16,7 @@ function generateErrorMsg(type: string): string {
     case "wrongPassword":
       return "비밀번호가 틀렸습니다.";
     case "wrongLengthID":
-      return "아이디는 4자 이상 20자 이하로 입력해주세요.";
+      return "아이디는 1자 이상으로 입력해주세요.";
     case "wrongLengthPassword":
       return "비밀번호는 3자 이상으로 입력해주세요.";
     default:
@@ -41,10 +42,12 @@ export const base64url = {
 
 function FidoForm({
   children,
+  type,
   action,
   redirect,
 }: {
   children: React.ReactNode;
+  type: "username" | "password";
   action?: (formData: FormData) => Promise<void>;
   redirect?: () => void;
 }) {
@@ -55,9 +58,16 @@ function FidoForm({
   return (
     <S.Form
       action={async (formData: FormData) => {
-        if (formData.get("username") === "") {
+        const username = "username webauthn";
+        let loginResult;
+
+        if (formData.get(username) === null && type === "username") {
+          setErrorMessage(generateErrorMsg("wrongLengthID"));
+        } else if (formData.get("password") === null && type === "password") {
+          setErrorMessage(generateErrorMsg("wrongLengthPassword"));
+        } else if (formData.get(username) === "") {
           setErrorMessage(generateErrorMsg("wrongId"));
-        } else if (formData.get("username")?.toString().length! < 4) {
+        } else if (formData.get(username)?.toString().length! < 4) {
           setErrorMessage(generateErrorMsg("wrongLengthID"));
         } else if (formData.get("password") === "") {
           setErrorMessage(generateErrorMsg("wrongPassword"));
@@ -65,11 +75,13 @@ function FidoForm({
           setErrorMessage(generateErrorMsg("wrongLengthPassword"));
         } else {
           setErrorMessage("");
-          action && (await action(formData));
+          loginResult = action && (await action(formData));
         }
 
+        if (loginResult !== null) {
+          redirect && redirect();
+        }
         togglePending();
-        redirect && redirect();
       }}
     >
       <FormHeader title="FIDO Login" />

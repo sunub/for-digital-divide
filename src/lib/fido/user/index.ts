@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { decode } from "js-base64";
 import crypto from "crypto";
 import usePgPool from "@/hooks/use-pgpool.hook";
+import { NextRequest } from "next/server";
 
 interface Credential {
   credId: string;
@@ -19,6 +20,14 @@ interface User {
 }
 
 class User {
+  static async signedInStatus() {
+    const session = cookies().get("session")?.value;
+    if (!session) return false;
+
+    const decodedSession = JSON.parse(decode(session as string));
+    return decodedSession.signedIn;
+  }
+
   static async findByUsername(username: string) {
     const findResult = await usePgPool(async (client) => {
       const query = `
@@ -60,21 +69,20 @@ class User {
   static async findByPassword(password: string) {
     const session = cookies().get("session")?.value as string;
     const decodedSession = JSON.parse(decode(session));
+    const userId = decode(decodedSession.id);
 
     const findResult = await usePgPool(async (client) => {
       const query = `
         SELECT * FROM fido_passwords
-        WHERE password = $1;
+        WHERE id = $1;
       `;
 
-      return await client.query(query, [password]);
+      return await client.query(query, [userId]);
     });
 
-    const username = findResult.rows[0].username;
-    const hashUsername = crypto.createHash("sha256").update(username!).digest();
-    const encodedHashUsername = Buffer.from(hashUsername).toString("base64");
+    const datebasePassword = findResult.rows[0].password;
 
-    if (encodedHashUsername === decodedSession.username) {
+    if (datebasePassword === password) {
       return findResult;
     }
 
@@ -146,6 +154,24 @@ class User {
       return await client.query(query, [id]);
     });
     return result;
+  }
+
+  static async getSession(req: NextRequest) {
+    const session = req.cookies.get("session")?.value;
+    const decodedSession = decode(session as string);
+    const parsedSession = JSON.parse(decodedSession);
+    const id = parsedSession.id;
+
+    const findResult = await usePgPool(async (client) => {
+      const query = `
+        SELECT * FROM fido_session
+        WHERE id = $1;
+      `;
+
+      return await client.query(query, [id]);
+    });
+
+    return findResult.rows[0];
   }
 }
 

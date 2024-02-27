@@ -15,7 +15,7 @@ export async function fidoPasswordAction(formData: FormData) {
   if (!user) {
     console.log("비밀번호가 일치하지 않습니다.");
     return;
+  } else {
+    revalidatePath("/dashboard");
   }
-
-  revalidatePath("/dashboard");
 }

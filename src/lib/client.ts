@@ -1,5 +1,6 @@
 "use server";
 
+import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import { decode, encode } from "js-base64";
 
 export const _fetch = async (path: string, payload: any = "") => {
@@ -28,58 +29,63 @@ export const _fetch = async (path: string, payload: any = "") => {
   // }
 };
 
-export const registerCredential = async () => {
-  const opts = {
-    attestation: "none",
-    authenticatorSelection: {
-      authenticatorAttachment: "platform",
-      userVerification: "required",
-      requireResidentKey: false,
-    },
-  };
+export const getOrigin = (userAgent: string): any => {
+  let origin = process.env.ORIGIN;
 
-  await fetch("http://localhost:3000/api/registerRequest", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Requested-With": "XMLHttpRequest",
-    },
-    credentials: "same-origin",
-    body: JSON.stringify(opts),
-  });
+  const appRe = /^[a-zA-z0-9_.]+/;
+  const match = userAgent.match(appRe);
+  if (match) {
+    // Check if UserAgent comes from a supported Android app.
+    if (process.env.ANDROID_PACKAGENAME && process.env.ANDROID_SHA256HASH) {
+      const package_names = process.env.ANDROID_PACKAGENAME.split(",").map(
+        (name) => name.trim(),
+      );
+      const hashes = process.env.ANDROID_SHA256HASH.split(",").map((hash) =>
+        hash.trim(),
+      );
+      const appName = match[0];
+      for (let i = 0; i < package_names.length; i++) {
+        if (appName === package_names[i]) {
+          // We recognize this app, so use the corresponding hash.
+          const octArray = hashes[i].split(":").map((h) => parseInt(h, 16));
+          const androidHash = isoBase64URL.fromBuffer(
+            octArray as unknown as Uint8Array,
+          );
+          origin = `android:apk-key-hash:${androidHash}`;
+          break;
+        }
+      }
+    }
+  }
 
-  // options.user.id = decode(options.user.id);
-  // options.challenge = decode(options.challenge);
-
-  // if (options.excludeCredentials.length > 0) {
-  //   for (let cred of options.excludeCredentials) {
-  //     cred.id = decode(cred.id);
-  //   }
-  // }
-
-  // const cred = await navigator.credentials.create({
-  //   publicKey: options as PublicKeyCredentialCreationOptions,
-  // });
-  // console.log(cred);
-  // const credential = {};
-  // credential.id = cred.id;
-  // credential.type = cred.type;
-  // credential.rawId = base64url.encode(cred.rawId);
-
-  // if (cred.response) {
-  //   const clientDataJSON =
-  //     base64url.encode(cred.response.clientDataJSON);
-  //   const authenticatorData =
-  //     base64url.encode(cred.response.authenticatorData);
-  //   const signature =
-  //     base64url.encode(cred.response.signature);
-  //   const userHandle =
-  //     base64url.encode(cred.response.userHandle);
-  //   credential.response = {
-  //     clientDataJSON,
-  //     authenticatorData,
-  //     signature,
-  //     userHandle,
-  //   };
-  // }
+  return origin;
 };
+
+class Loading {
+  progress: HTMLInputElement;
+  constructor() {
+    this.progress = document.querySelector("#username") as HTMLInputElement;
+  }
+
+  start() {
+    this.progress.indeterminate = true;
+    const inputs = document.querySelectorAll("input");
+    if (inputs) {
+      inputs.forEach((input) => {
+        input.disabled = true;
+      });
+    }
+  }
+
+  stop() {
+    this.progress.indeterminate = false;
+    const inputs = document.querySelectorAll("input");
+    if (inputs) {
+      inputs.forEach((input) => {
+        input.disabled = false;
+      });
+    }
+  }
+}
+
+export const loading = new Loading();

@@ -26,10 +26,6 @@ async function usePgPool(
     connectionTimeoutMillis: 2000,
     idleTimeoutMillis: 30000,
   });
-  pool.on("error", (error, client) => {
-    console.error("Unexpected error on idle client", error);
-    process.exit(-1);
-  });
   const client = await pool.connect();
 
   const result = await asyncCallbackFn(client);

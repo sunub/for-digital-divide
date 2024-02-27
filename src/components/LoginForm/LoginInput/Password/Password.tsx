@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import * as Styled from "../../Form/Form.styled";
+import * as Styled from "@/components/FidoForm/FidoForm.style";
 import VisuallyHidden from "@compo/VisuallyHidden";
 import useToggle from "@hooks/use-toggle";
 
@@ -13,7 +13,7 @@ function Password() {
   return (
     <Styled.InputWrapper
       key={"password-wrapper"}
-      $isUpper={false}
+      $isUpper={true}
       $isLower={true}
     >
       <label htmlFor="password">

@@ -15,9 +15,9 @@ const FidoPasswordSchema = v.object({
 });
 
 function validateFormDataField(formData: FormData) {
-  if (formData.get("username") && !formData.get("password")) {
+  if (formData.get("username webauthn") && !formData.get("password")) {
     const result = v.safeParse(FidoIdSchema, {
-      username: formData.get("username"),
+      username: formData.get("username webauthn"),
     });
 
     if (!result.success) {

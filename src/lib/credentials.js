@@ -1,4 +1,4 @@
-import { encode, decode } from "js-base64";
+import { baseurl } from "@/constants/constants";
 
 const base64url = {
   encode: function (buffer) {
@@ -76,4 +76,55 @@ export async function createCredentials() {
     body: JSON.stringify({ credential }),
     credentials: "same-origin",
   });
+}
+
+export async function authenticate(conditional = false) {
+  const res = await fetch(`${baseurl}/api/auth/signinRequest`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+    credentials: "same-origin",
+  });
+  const options = (await res.json()).options;
+
+  options.challenge = base64url.decode(options.challenge);
+  options.allowCredentials = [];
+
+  const cred = await navigator.credentials.get({
+    publicKey: options,
+    // 사용자가 이전에 저장한 인증 정보가 있는 경우에만 인증 정보를 선택할 수 있는 선택지를 주는 것 = 'conditional'
+    // 사용자가 이전에 저장한 인증 정보가 없어도 인증을 진행할 수 있게 하는 것 = 'optional'
+    mediation: conditional ? "conditional" : "optional",
+  });
+  console.log(cred);
+
+  const credential = {};
+  credential.id = cred.id;
+  credential.type = cred.type;
+  credential.rawId = base64url.encode(cred.rawId);
+
+  const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
+  const authenticatorData = base64url.encode(cred.response.authenticatorData);
+  const signature = base64url.encode(cred.response.signature);
+  const userHandle = base64url.encode(cred.response.userHandle);
+
+  credential.response = {
+    clientDataJSON,
+    authenticatorData,
+    signature,
+    userHandle,
+  };
+
+  return "user";
+  // return await fetch(`${baseurl}auth/signinResponse`, {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "X-Requested-With": "XMLHttpRequest",
+  //   },
+  //   body: JSON.stringify({ credential }),
+  //   method: "POST",
+  //   credentials: "same-origin",
+  // });
 }
