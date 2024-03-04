@@ -1,10 +1,7 @@
 import styled from "styled-components";
 
 export const RootContainer = styled.div`
-  display: flex;
   position: relative;
-  justify-content: center;
-  margin-bottom: 64px;
 
   --default-shadow: linear-gradient(
     to left,
@@ -24,7 +21,7 @@ export const RootContainer = styled.div`
 
 export const Front = styled.span<{ $isClick: boolean }>`
   display: flex;
-  width: 105px;
+  width: fit-content;
   height: 70px;
   align-items: center;
   justify-content: center;
@@ -42,10 +39,11 @@ export const Front = styled.span<{ $isClick: boolean }>`
   user-select: none;
   will-change: transform;
   transform: translateY(-6px);
-  transition: transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  transition: all 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
   line-height: calc(16px + 24px);
 
   & > svg {
+    filter: brightness(110%);
     transform: scale(2);
   }
 `;
@@ -104,7 +102,7 @@ export const Btn = styled.button.attrs((props: any) => ({
 
   &:hover ${Front} {
     filter: brightness(110%);
-    transform: translateY(-12px);
+    transform: translateY(-18px);
     transition: transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
   }
 

@@ -11,7 +11,9 @@ function Button({ text, onClick }: { text: string; onClick?: () => void }) {
         aria-pressed={true}
         onClick={() => {
           toggleClick();
-          onClick && onClick();
+          setTimeout(() => {
+            onClick && onClick();
+          }, 0.3 * 1000);
         }}
         $isClick={isClick}
       >

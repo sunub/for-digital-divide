@@ -41,9 +41,14 @@ function Device({ children }: { children: React.ReactNode }) {
 
 function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
-    <Styled.RootWrapper suppressHydrationWarning={false}>
-      <Styled.OuterShadow>
-        <Styled.InnerWindow>{children}</Styled.InnerWindow>
+    <Styled.RootWrapper
+      id="device-root-wrapper"
+      suppressHydrationWarning={false}
+    >
+      <Styled.OuterShadow id="device-outter-shadow">
+        <Styled.InnerWindow id="device-inner-window">
+          {children}
+        </Styled.InnerWindow>
       </Styled.OuterShadow>
     </Styled.RootWrapper>
   );

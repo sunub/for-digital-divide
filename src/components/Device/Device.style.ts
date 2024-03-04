@@ -2,11 +2,13 @@
 
 import styled from "styled-components";
 
-export const RootWrapper = styled.div`
+export const RootWrapper = styled.div.attrs({
+  id: "device-root-wrapper",
+})`
   position: relative;
   width: 100cqw;
 
-  max-width: 643px;
+  max-width: 800px;
   max-height: 1264px;
 
   border: 6px solid oklch(69.45% 0 0);
@@ -14,16 +16,20 @@ export const RootWrapper = styled.div`
   border-radius: 4cqh;
 `;
 
-export const OuterShadow = styled.div`
+export const OuterShadow = styled.div.attrs({
+  id: "device-outter-shadow",
+})`
   width: 100%;
   height: 100%;
-  border: 20px solid oklch(0% 0 0);
+  border: 18px solid oklch(0% 0 0);
   outline: 4px solid oklch(74.41% 0 0);
   background: oklch(97.65% 0 0);
   border-radius: 4cqh;
 `;
 
-export const InnerWindow = styled.div`
+export const InnerWindow = styled.div.attrs({
+  id: "device-inner-window",
+})`
   width: 100%;
   height: 100%;
   border-radius: 4cqh;
@@ -37,13 +43,12 @@ export const AppWrapper = styled.div`
 `;
 
 export const SystemStatusBar = styled.div`
-  grid-area: system-status / fullbleed;
+  grid-area: system-status / fullbleed-start / system-status / fullbleed-end;
   display: grid;
   align-items: center;
   user-select: none;
 
   & > time {
-    grid-area: system-status / main;
     margin-inline: 2rem;
   }
 
@@ -53,7 +58,7 @@ export const SystemStatusBar = styled.div`
     justify-self: center;
     background: black;
     block-size: 60%;
-    inline-size: 25%;
+    inline-size: 150px;
     border-radius: 1e5px;
   }
 `;

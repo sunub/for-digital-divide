@@ -77,8 +77,8 @@ function SmallPhone() {
       onClick={toggleOpen}
       onAnimationComplete={(definition) => {
         if (definition === "open") {
-          router.prefetch("/login");
-          router.push("/login");
+          router.prefetch("/start/agree-to-terms");
+          router.push("/start/agree-to-terms");
         }
       }}
       initial={false}
