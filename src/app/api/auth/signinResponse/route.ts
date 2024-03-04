@@ -4,16 +4,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { getOrigin } from "@lib/client";
 import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import { verifyAuthenticationResponse } from "@simplewebauthn/server";
-import { AuthenticatorDevice } from "@simplewebauthn/server/script/deps";
 
-export async function POST(req) {
+export async function POST(req: NextRequest) {
   const res = await req.json();
   const credential = res.credential;
 
   const session = await User.getSession(req);
 
   const expectedChallenge = session.challenge;
-  const expectedOrigin = getOrigin(req.headers.get("user-agent"));
+  const expectedOrigin = getOrigin(req.headers.get("user-agent")!);
   const expectedRPID =
     process.env.NODE_ENV === "production" ? process.env.HOSTNAME : "localhost";
 
@@ -50,6 +49,8 @@ export async function POST(req) {
     await User.updateCredential(session.credential, session.id);
 
     await User.deleteChallenge(session.id);
+
+    return NextResponse.json({ message: "인증에 성공했습니다" });
   } catch (error) {
     await User.deleteChallenge(session.id);
 
