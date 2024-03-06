@@ -1,46 +1,37 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const RootContainer = styled.div`
   position: relative;
-
-  --default-shadow: linear-gradient(
-    to left,
-    oklch(21.25% 0.005 17.53) 0%,
-    oklch(50.2% 0.013 17.59) 9%,
-    oklch(50.2% 0.013 17.59) 91%,
-    oklch(21.25% 0.005 17.53) 100%
-  );
-  --confirm-shadow: linear-gradient(
-    to left,
-    oklch(60.96% 0.114 146.9) 0%,
-    oklch(73.59% 0.114 146.9) 9%,
-    oklch(73.59% 0.114 146.9) 91%,
-    oklch(60.96% 0.114 146.9) 100%
-  );
 `;
 
-export const Front = styled.span<{ $isClick: boolean }>`
-  display: flex;
-  width: fit-content;
+export const Front = styled.div<{ $isClick: boolean }>`
+  display: inline-flex;
   height: 70px;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
+
   text-align: center;
   font-size: 24px;
   font-weight: 700;
-  padding: 10px 25px;
+
   border-radius: 25px;
   background-color: ${(props) =>
-    props.$isClick ? "var(--color-confirm)" : "var(--color-background)"};
+    props.$isClick ? 'var(--color-confirm)' : 'var(--color-background)'};
   border: 5px solid
     ${(props) =>
-      props.$isClick ? "var(--color-confirm)" : "var(--color-text)"};
+      props.$isClick ? 'var(--color-confirm)' : 'var(--color-text)'};
 
   user-select: none;
   will-change: transform;
   transform: translateY(-6px);
   transition: all 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
   line-height: calc(16px + 24px);
+
+  & > a {
+    padding: 10px 25px;
+    text-decoration: none;
+  }
 
   & > svg {
     filter: brightness(110%);
@@ -55,6 +46,8 @@ export const ConfirmFont = styled.span`
 `;
 
 export const Shadow = styled.span`
+  pointer-events: none;
+  user-select: none;
   display: block;
   width: 100%;
   height: 100%;
@@ -70,6 +63,8 @@ export const Shadow = styled.span`
   transform: translateY(6px);
 `;
 export const Edge = styled.span<{ $isClick: boolean }>`
+  pointer-events: none;
+  user-select: none;
   display: block;
   position: absolute;
   left: 0;
@@ -82,14 +77,28 @@ export const Edge = styled.span<{ $isClick: boolean }>`
   border-bottom-right-radius: 25px;
   border-bottom-left-radius: 25px;
   background-image: ${(props) =>
-    props.$isClick ? "var(--confirm-shadow)" : "var(--default-shadow)"};
+    props.$isClick ? 'var(--confirm-shadow)' : 'var(--default-shadow)'};
 `;
 
 export const Btn = styled.button.attrs((props: any) => ({
-  "aria-pressed": props.$isClick ?? false,
+  'aria-pressed': props.$isClick ?? false,
 }))<{ $isClick: boolean }>`
+  --default-shadow: linear-gradient(
+    to left,
+    oklch(21.25% 0.005 17.53) 0%,
+    oklch(50.2% 0.013 17.59) 9%,
+    oklch(50.2% 0.013 17.59) 91%,
+    oklch(21.25% 0.005 17.53) 100%
+  );
+  --confirm-shadow: linear-gradient(
+    to left,
+    oklch(60.96% 0.114 146.9) 0%,
+    oklch(73.59% 0.114 146.9) 9%,
+    oklch(73.59% 0.114 146.9) 91%,
+    oklch(60.96% 0.114 146.9) 100%
+  );
+
   background-color: transparent;
-  padding: 0;
   border-radius: 20px;
   border: none;
   outline-offset: 4px;
@@ -106,13 +115,13 @@ export const Btn = styled.button.attrs((props: any) => ({
     transition: transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
   }
 
-  &[aria-pressed="true"] ${Front} {
-    transform: translateY(${(props) => (props.$isClick ? "-2px" : "-8px")});
+  &[aria-pressed='true'] ${Front} {
+    transform: translateY(${(props) => (props.$isClick ? '-2px' : '-8px')});
     animation: backwards;
     transition: transform 100ms;
   }
 
-  &[aria-pressed="true"] ${Shadow} {
+  &[aria-pressed='true'] ${Shadow} {
     transform: translateY(2px);
     transition: transform 340ms;
   }

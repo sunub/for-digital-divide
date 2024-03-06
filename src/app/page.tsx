@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import Button from "@/components/Button";
-import Spacer from "@/constants/Spacer";
-import Link from "next/link";
-import React from "react";
-import styled from "styled-components";
+import Button from '@/components/Button/Default';
+import { TypeButton } from '@/components/TypeButton';
+import Spacer from '@/constants/Spacer';
+import Link from 'next/link';
+import React from 'react';
+import styled from 'styled-components';
 
 function InitPage() {
   return (
@@ -26,9 +27,9 @@ function InitPage() {
             시작하시려면 아래의 <b>시작하기</b>를 눌러주세요!
           </p>
           <Spacer size={32} axis="vertical" />
-          <Link href={"/start"}>
-            <Button text="시작하기" />
-          </Link>
+          <Button>
+            <Link href={'/start'}>시작하기</Link>
+          </Button>
         </ContentWrapper>
       </DevsiteContentSiteContent>
       <BackDrop />
@@ -63,10 +64,10 @@ const BackDrop = styled.div`
   background: oklch(3.53% 0 73 / 50%);
   backdrop-filter: blur(20px);
   z-index: -1;
-  top: 0px;
+  top: -64px;
   left: 0px;
   width: 100cqw;
-  height: 100cqh;
+  height: calc(100cqh + 64px);
 `;
 
 export default InitPage;

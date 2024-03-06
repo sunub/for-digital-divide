@@ -1,48 +1,152 @@
-import useToggle from "@/hooks/use-toggle";
-import * as Styled from "./Button.style";
-import React from "react";
+import useToggle from '@/hooks/use-toggle';
+import styled from 'styled-components';
+import { Slot } from '@radix-ui/react-slot';
+import React from 'react';
 
-function Button({ text, onClick }: { text: string; onClick?: () => void }) {
-  const [isClick, toggleClick] = useToggle(false);
-
-  return (
-    <Styled.RootContainer>
-      <Styled.Btn
-        aria-pressed={true}
-        onClick={() => {
-          toggleClick();
-          setTimeout(() => {
-            onClick && onClick();
-          }, 0.3 * 1000);
-        }}
-        $isClick={isClick}
-      >
-        <Styled.Shadow />
-        <Styled.Edge $isClick={isClick} />
-        <Styled.Front $isClick={isClick}>
-          {isClick ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24"
-              viewBox="0 -960 960 960"
-              width="24"
-              fill="oklch(100% 0 146.94)"
-            >
-              <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-            </svg>
-          ) : (
-            `${text}`
-          )}
-        </Styled.Front>
-      </Styled.Btn>
-    </Styled.RootContainer>
-  );
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  asChild?: boolean;
 }
 
-function ConfirmText() {
-  return (
-    <Styled.ConfirmFont className="material-icons">done</Styled.ConfirmFont>
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ asChild = false, children, ...props }, ref) => {
+    const [isClick, toggleClick] = useToggle(false);
+    const Compo = asChild ? Slot : Btn;
+
+    return (
+      <Compo $isClick={isClick} ref={ref} onClick={toggleClick} {...props}>
+        <Edge $isClick={isClick} />
+        <Shadow />
+        <Front $isClick={isClick}>{children}</Front>
+      </Compo>
+    );
+  },
+);
+
+export const Front = styled.div<{ $isClick: boolean }>`
+  display: inline-flex;
+  height: 70px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 25px;
+
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+
+  border-radius: 25px;
+  background-color: ${(props) =>
+    props.$isClick ? 'var(--color-confirm)' : 'var(--color-background)'};
+  border: 5px solid
+    ${(props) =>
+      props.$isClick ? 'var(--color-confirm)' : 'var(--color-text)'};
+  color: ${(props) =>
+    props.$isClick ? 'oklch(45.88% 0.184 142.89)' : 'var(--color-text)'};
+
+  user-select: none;
+  will-change: transform;
+  transform: translateY(-6px);
+  transition: all 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  line-height: calc(16px + 24px);
+
+  & > a {
+    padding: 10px 25px;
+    text-decoration: none;
+  }
+
+  & > svg {
+    filter: brightness(110%);
+    transform: scale(2);
+  }
+`;
+
+export const Shadow = styled.span`
+  pointer-events: none;
+  user-select: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 3px;
+  border: none;
+  border-radius: 20px;
+  background-color: oklch(0% 0 14.09 / 35%);
+  transition: transform 400ms cubic-bezier(0.3, 0.7, 0.4, 1);
+
+  filter: blur(2px);
+  transform: translateY(6px);
+`;
+export const Edge = styled.span<{ $isClick: boolean }>`
+  pointer-events: none;
+  user-select: none;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  background-image: ${(props) =>
+    props.$isClick ? 'var(--confirm-shadow)' : 'var(--default-shadow)'};
+`;
+
+export const Btn = styled.button.attrs((props: any) => ({
+  'aria-pressed': props.$isClick ?? false,
+}))<{ $isClick: boolean }>`
+  --default-shadow: linear-gradient(
+    to left,
+    oklch(21.25% 0.005 17.53) 0%,
+    oklch(50.2% 0.013 17.59) 9%,
+    oklch(50.2% 0.013 17.59) 91%,
+    oklch(21.25% 0.005 17.53) 100%
   );
-}
+  --confirm-shadow: linear-gradient(
+    to left,
+    oklch(60.96% 0.114 146.9) 0%,
+    oklch(73.59% 0.114 146.9) 9%,
+    oklch(73.59% 0.114 146.9) 91%,
+    oklch(60.96% 0.114 146.9) 100%
+  );
+
+  background-color: transparent;
+  padding: 0;
+  border-radius: 20px;
+  border: none;
+  outline-offset: 4px;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:hover ${Front} {
+    filter: brightness(110%);
+    transform: translateY(-18px);
+    transition: transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  }
+
+  &[aria-pressed='true'] ${Front} {
+    transform: translateY(
+      ${(props: any) => (props.$isClick ? '-2px' : '-8px')}
+    );
+    animation: backwards;
+    transition: transform 100ms;
+  }
+
+  &[aria-pressed='true'] ${Shadow} {
+    transform: translateY(2px);
+    transition: transform 340ms;
+  }
+
+  :hover:not(:focus) ${Shadow} {
+    transform: translateY(6px);
+    transition: transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  }
+`;
 
 export default Button;

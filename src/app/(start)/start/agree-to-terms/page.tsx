@@ -1,12 +1,14 @@
-"use client";
+'use client';
 
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 import {
   IdcardIcon,
   BankaccountIcon,
   SmartphoneIcon,
-} from "@/components/icons";
+} from '@/components/icons';
+import { TypeButton } from '@/components/TypeButton';
+import Button from '@/components/Button/Default';
 
 function Page() {
   return (
@@ -40,7 +42,9 @@ function Page() {
           </Card>
         </CardWrapper>
       </Main>
-      <Footer>Footer</Footer>
+      <Footer>
+        <Button>다음</Button>
+      </Footer>
     </React.Fragment>
   );
 }

@@ -16,14 +16,14 @@ html {
 html,
 body {
   height: 100%;
-  font-family: "NanumSquareNeo", "Wotfard", sans-serif;
+  font-family: 'NanumSquareNeo', 'Wotfard', sans-serif;
   font-size: var(--text-size);
   background-color: var(--color-background);
 }
 
 body {
   cursor:
-    url("/images/cursor_default.png") 0 0,
+    url('/images/cursor_default.png') 0 0,
     auto;
 }
 
@@ -67,7 +67,7 @@ input::-webkit-search-results-decoration {
 button {
   background: none;
   cursor:
-    url("/images/cursor_pointer.png") 16 6,
+    url('/images/cursor_pointer.png') 16 6,
     pointer;
   touch-action: manipulation;
   outline-offset: 4px;
@@ -90,7 +90,7 @@ button {
 }
 
 .material-icons {
-  font-family: "Material Icons";
+  font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -105,7 +105,7 @@ button {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "liga";
+  font-feature-settings: 'liga';
 }
 
 #device-page__root-wrapper {
@@ -146,9 +146,6 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  padding-top: 2rem;
-  padding-bottom: 2rem;
 }
 
 #devsite-content__site-progression {

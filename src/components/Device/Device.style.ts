@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const RootWrapper = styled.div.attrs({
-  id: "device-root-wrapper",
+  id: 'device-root-wrapper',
 })`
   position: relative;
   width: 100cqw;
@@ -17,7 +17,7 @@ export const RootWrapper = styled.div.attrs({
 `;
 
 export const OuterShadow = styled.div.attrs({
-  id: "device-outter-shadow",
+  id: 'device-outter-shadow',
 })`
   width: 100%;
   height: 100%;
@@ -28,7 +28,7 @@ export const OuterShadow = styled.div.attrs({
 `;
 
 export const InnerWindow = styled.div.attrs({
-  id: "device-inner-window",
+  id: 'device-inner-window',
 })`
   width: 100%;
   height: 100%;
@@ -53,7 +53,7 @@ export const SystemStatusBar = styled.div`
   }
 
   &::after {
-    content: "";
+    content: '';
     grid-area: system-status / main;
     justify-self: center;
     background: black;
@@ -78,22 +78,33 @@ export const Main = styled.div`
   overflow: auto;
 `;
 
-export const SystemGestureArea = styled.div`
+export const SystemGestureArea = styled.form`
   display: grid;
   grid-area: system-gesture / fullbleed;
   grid-template-columns: repeat(3, 1fr);
 `;
 
-export const GestureButton = styled.button`
+export const Center = styled.div`
   display: grid;
   place-items: center;
 `;
 
-export const GestureButtonIcon = styled.svg`
-  mix-blend-mode: darken;
+export const GestureCircle = styled.circle`
+  fill: none;
+  stroke: none;
+  transition: all 500ms ease;
 
-  & > * {
-    stroke: color-mix(in oklch, oklch(42.44% 0.011 17.58), transparent);
+  &:hover {
+  }
+`;
+
+export const GestureButton = styled.button`
+  display: grid;
+  place-items: center;
+  width: fit-content;
+
+  &:hover ${GestureCircle} {
+    fill: color-mix(in oklch, oklch(71.22% 0 0 / 0.3), transparent);
   }
 `;
 

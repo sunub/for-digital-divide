@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import React from "react";
-import * as Styled from "./Device.style";
+import React from 'react';
+import * as Styled from './Device.style';
+import VisuallyHidden from '../VisuallyHidden';
 
 function Device({ children }: { children: React.ReactNode }) {
   const [time, setTime] = React.useState(new Date());
   const options: Intl.DateTimeFormatOptions = {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Asia/Seoul",
-    hourCycle: "h12",
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Asia/Seoul',
+    hourCycle: 'h12',
   };
 
   React.useEffect(() => {
@@ -17,8 +18,8 @@ function Device({ children }: { children: React.ReactNode }) {
     return () => window.clearInterval(interval);
   }, []);
 
-  const formattedTime = Intl.DateTimeFormat("ko-KR", options).format(time);
-  const timeWithoutPeriod = formattedTime.replace("오후 ", "");
+  const formattedTime = Intl.DateTimeFormat('ko-KR', options).format(time);
+  const timeWithoutPeriod = formattedTime.replace('오후 ', '');
 
   return (
     <PhoneFrame>
@@ -30,9 +31,15 @@ function Device({ children }: { children: React.ReactNode }) {
         {children}
 
         <Styled.SystemGestureArea>
-          <RecentlyAppBtn />
-          <HomeBtn />
-          <BackBtn />
+          <Styled.Center>
+            <RecentlyAppBtn />
+          </Styled.Center>
+          <Styled.Center>
+            <HomeBtn />
+          </Styled.Center>
+          <Styled.Center>
+            <BackBtn />
+          </Styled.Center>
         </Styled.SystemGestureArea>
       </Styled.DeviceFrame>
     </PhoneFrame>
@@ -57,23 +64,31 @@ function PhoneFrame({ children }: { children: React.ReactNode }) {
 function HomeBtn() {
   return (
     <Styled.GestureButton>
-      <Styled.GestureButtonIcon
-        width="48"
-        height="48"
-        viewBox="0 0 48 48"
+      <svg
+        width="68"
+        height="68"
+        viewBox="0 0 68 68"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <Styled.GestureCircle
+          cx="34"
+          cy="34"
+          r="30"
+          fill="none"
+          stroke="none"
+        />
         <rect
-          x="14.5"
-          y="14.5"
+          x="24.5"
+          y="24.5"
           width="19"
           height="19"
           rx="3.5"
-          stroke="white"
-          strokeWidth={"2"}
+          stroke="color-mix(in oklch, oklch(42.44% 0.011 17.58), transparent)"
+          strokeWidth={'2'}
         />
-      </Styled.GestureButtonIcon>
+      </svg>
+      <VisuallyHidden>홈 버튼</VisuallyHidden>
     </Styled.GestureButton>
   );
 }
@@ -81,54 +96,37 @@ function HomeBtn() {
 function BackBtn() {
   return (
     <Styled.GestureButton>
-      <Styled.GestureButtonIcon
-        width="48"
-        height="48"
-        viewBox="0 0 48 48"
+      <svg
+        width="68"
+        height="68"
+        viewBox="0 0 68 68"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <Styled.GestureCircle
+          cx="34"
+          cy="34"
+          r="30"
+          fill="none"
+          stroke="none"
+        />
         <path
-          d="M22 14L14.1213 21.8787C12.9497 23.0503 12.9497 24.9497 14.1213 26.1213L22 34"
-          stroke="white"
-          strokeWidth={"2"}
+          d="M34 24L26.1213 31.8787C24.9497 33.0503 24.9497 34.9497 26.1213 36.1213L34 44"
+          stroke="color-mix(in oklch, oklch(42.44% 0.011 17.58), transparent)"
+          strokeWidth={'2'}
           strokeLinecap="round"
         />
-      </Styled.GestureButtonIcon>
+      </svg>
+      <VisuallyHidden>뒤로가기 버튼</VisuallyHidden>
     </Styled.GestureButton>
   );
 }
 
 function RecentlyAppBtn() {
   return (
-    <Styled.GestureButton>
-      <Styled.GestureButtonIcon
-        width="48"
-        height="48"
-        viewBox="0 0 48 48"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M24 14L24 33.6"
-          stroke="white"
-          strokeWidth={"2"}
-          strokeLinecap="round"
-        />
-        <path
-          d="M14 14L14 33.6"
-          stroke="white"
-          strokeWidth={"2"}
-          strokeLinecap="round"
-        />
-        <path
-          d="M34 14L34 33.6"
-          stroke="white"
-          strokeWidth={"2"}
-          strokeLinecap="round"
-        />
-      </Styled.GestureButtonIcon>
-    </Styled.GestureButton>
+    <div>
+      <VisuallyHidden>빈 버튼</VisuallyHidden>
+    </div>
   );
 }
 
