@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React from "react";
-import styled from "styled-components";
-import Spacer from "../Spacer";
-import { motion } from "framer-motion";
+import React from 'react';
+import styled from 'styled-components';
+import Spacer from '../Spacer';
+import { motion } from 'framer-motion';
 
 const TitleWrapper = styled(motion.div)`
   display: flex;
@@ -29,13 +29,11 @@ const NarrowingDown = styled(motion.span)`
 
 function InitPage() {
   return (
-    <>
-      <TitleWrapper>
-        <Digital>디지털</Digital>
-        <Distance>격차</Distance>
-        <NarrowingDown>좁히기</NarrowingDown>
-      </TitleWrapper>
-    </>
+    <TitleWrapper id="devsite__init-page-title">
+      <Digital>디지털</Digital>
+      <Distance>격차</Distance>
+      <NarrowingDown>좁히기</NarrowingDown>
+    </TitleWrapper>
   );
 }
 

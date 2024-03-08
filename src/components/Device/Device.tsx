@@ -28,7 +28,7 @@ function Device({ children }: { children: React.ReactNode }) {
           <time>{timeWithoutPeriod}</time>
         </Styled.SystemStatusBar>
 
-        {children}
+        <Styled.DeviceMainWrapper>{children}</Styled.DeviceMainWrapper>
 
         <Styled.SystemGestureArea>
           <Styled.Center>

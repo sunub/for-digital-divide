@@ -7,9 +7,10 @@ export const RootWrapper = styled.div.attrs({
 })`
   position: relative;
   width: 100cqw;
+  height: 100%;
 
-  max-width: 800px;
-  max-height: 1264px;
+  max-width: 900px;
+  max-height: 1564px;
 
   border: 6px solid oklch(69.45% 0 0);
   outline: 8px solid oklch(88.53% 0 0);
@@ -49,6 +50,7 @@ export const SystemStatusBar = styled.div`
   user-select: none;
 
   & > time {
+    grid-area: main;
     margin-inline: 2rem;
   }
 
@@ -57,8 +59,8 @@ export const SystemStatusBar = styled.div`
     grid-area: system-status / main;
     justify-self: center;
     background: black;
-    block-size: 60%;
-    inline-size: 150px;
+    block-size: 40%;
+    inline-size: 100px;
     border-radius: 1e5px;
   }
 `;
@@ -110,7 +112,7 @@ export const GestureButton = styled.button`
 
 export const DeviceFrame = styled.div`
   display: grid;
-  height: 100%;
+  height: 100cqh;
   grid-template-rows:
     [system-status] 3.5rem
     [primary-nav] 3rem
@@ -129,4 +131,12 @@ export const DeviceFrame = styled.div`
     display: grid;
     grid: subgrid / subgrid;
   }
+`;
+
+export const DeviceMainWrapper = styled.div`
+  width: 100cqw;
+  height: calc(100cqh - 156px);
+  overflow-y: scroll;
+  scrollbar-width: none;
+  padding-bottom: 1rem;
 `;

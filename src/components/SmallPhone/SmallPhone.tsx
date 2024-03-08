@@ -1,15 +1,14 @@
-"use client";
+'use client';
 
-import React from "react";
-import styled from "styled-components";
-import { motion } from "framer-motion";
-import useToggle from "@/hooks/use-toggle";
-import { useRouter } from "next/navigation";
+import React from 'react';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import useToggle from '@/hooks/use-toggle';
+import { useRouter } from 'next/navigation';
 
 const Phone = styled(motion.button)`
   background: transparent;
-  width: fit-content;
-  height: fit-content;
+  display: grid;
 
   cursor: pointer;
   outline-offset: 4px;
@@ -18,21 +17,29 @@ const Phone = styled(motion.button)`
   }
 `;
 
-const Icon = styled.svg<{ $layerColors: string }>`
-  border-radius: 75px;
+const Icon = styled.svg<{ $layerColors: string; $isOpen: boolean }>`
+  width: 100cqw;
+  height: fit-content;
+
+  max-width: 532px;
+  max-height: 1264px;
+
+  aspect-ratio: 1 / 2;
+
+  border-radius: ${(props) => (props.$isOpen ? '0px' : '57px')};
   box-shadow:
     inset -0.5rem -0.3rem 0.1rem 0.2rem oklch(81.43% 0 0),
     inset -0.7rem -0.7rem 0.1rem 0.2rem oklch(81.43% 0 0),
     inset -1rem -1rem 0 0.4rem oklch(81.43% 0 0),
     ${(props) => props.$layerColors},
-    9rem 9rem 3rem 10px oklch(32.3% 0.002 247.36),
+    6rem 7rem 6rem 10px oklch(32.3% 0.002 247.36),
     10rem 10rem 5rem 20px oklch(32.3% 0.002 247.36 / 0.2);
   transition: box-shadow 200ms ease-in-out;
 `;
 
 const Screen = styled.path<{ $open: boolean }>`
-  filter: ${(props) => (props.$open ? "none" : "brightness(0.8)")};
-  animation: ${(props) => (props.$open ? "" : "screen_brighter")} 2s infinite
+  filter: ${(props) => (props.$open ? 'none' : 'brightness(0.8)')};
+  animation: ${(props) => (props.$open ? '' : 'screen_brighter')} 2s infinite
     ease;
 
   @keyframes screen_brighter {
@@ -54,7 +61,7 @@ const Screen = styled.path<{ $open: boolean }>`
 `;
 
 function layered_shadow(layer: number, gapX: number, gapY: number): string {
-  let values = "";
+  let values = '';
 
   for (let i = 0; i < layer; i++) {
     let colorIndex = 91 - i * 1.45;
@@ -76,13 +83,13 @@ function SmallPhone() {
     <Phone
       onClick={toggleOpen}
       onAnimationComplete={(definition) => {
-        if (definition === "open") {
-          router.prefetch("/start/agree-to-terms");
-          router.push("/start/agree-to-terms");
+        if (definition === 'open') {
+          router.prefetch('/start/agree-to-terms');
+          router.push('/start/agree-to-terms');
         }
       }}
       initial={false}
-      animate={isOpen ? "open" : "closed"}
+      animate={isOpen ? 'open' : 'closed'}
       variants={{
         closed: { rotateX: 66, rotateZ: 45, scale: 0.15 },
         open: { rotateX: 0, rotateZ: 0, scale: 1 },
@@ -92,9 +99,10 @@ function SmallPhone() {
         width="643"
         height="1264"
         viewBox="0 0 643 1264"
-        fill={"none"}
+        fill={'none'}
         xmlns="http://www.w3.org/2000/svg"
-        $layerColors={isOpen ? "" : layered_shadow(20, 0.3, 0.3)}
+        $isOpen={isOpen}
+        $layerColors={isOpen ? '' : layered_shadow(13, 0.3, 0.3)}
       >
         <path
           d="M0 75C0 33.5787 33.5786 0 75 0H568C609.421 0 643 33.5786 643 75V1189C643 1230.42 609.421 1264 568 1264H75C33.5786 1264 0 1230.42 0 1189V75Z"

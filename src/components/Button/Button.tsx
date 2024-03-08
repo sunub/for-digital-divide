@@ -13,27 +13,29 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Compo = asChild ? Slot : Btn;
 
     return (
-      <Compo $isClick={isClick} ref={ref} onClick={toggleClick} {...props}>
-        <Edge $isClick={isClick} />
-        <Shadow />
-        <Front $isClick={isClick}>{children}</Front>
-      </Compo>
+      <Btn $isClick={isClick} ref={ref} onClick={toggleClick} {...props}>
+        <div>
+          <Edge $isClick={isClick} />
+          <Shadow />
+          <Front $isClick={isClick}>{children}</Front>
+        </div>
+      </Btn>
     );
   },
 );
 
 export const Front = styled.div<{ $isClick: boolean }>`
   display: inline-flex;
-  height: 70px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 4rem;
   align-items: center;
   justify-content: center;
-  padding: 10px 25px;
 
   text-align: center;
-  font-size: 24px;
   font-weight: 700;
 
-  border-radius: 25px;
+  border-radius: 1rem;
   background-color: ${(props) =>
     props.$isClick ? 'var(--color-confirm)' : 'var(--color-background)'};
   border: 5px solid
@@ -49,7 +51,6 @@ export const Front = styled.div<{ $isClick: boolean }>`
   line-height: calc(16px + 24px);
 
   & > a {
-    padding: 10px 25px;
     text-decoration: none;
   }
 
@@ -69,7 +70,7 @@ export const Shadow = styled.span`
   left: 0;
   top: 3px;
   border: none;
-  border-radius: 20px;
+  border-radius: 1rem;
   background-color: oklch(0% 0 14.09 / 35%);
   transition: transform 400ms cubic-bezier(0.3, 0.7, 0.4, 1);
 
@@ -88,8 +89,8 @@ export const Edge = styled.span<{ $isClick: boolean }>`
   border: none;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
-  border-bottom-right-radius: 25px;
-  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 16px;
+  border-bottom-left-radius: 16px;
   background-image: ${(props) =>
     props.$isClick ? 'var(--confirm-shadow)' : 'var(--default-shadow)'};
 `;
@@ -113,12 +114,15 @@ export const Btn = styled.button.attrs((props: any) => ({
   );
 
   background-color: transparent;
-  padding: 0;
-  border-radius: 20px;
+  border-radius: 0.75rem;
   border: none;
-  outline-offset: 4px;
   position: relative;
   -webkit-tap-highlight-color: transparent;
+
+  outline-offset: 4px;
+  width: fit-content;
+  height: fit-content;
+  font-size: 2rem;
 
   :focus:not(:focus-visible) {
     outline: none;
