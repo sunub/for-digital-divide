@@ -1,7 +1,10 @@
-import React from "react";
-import "./globals.css";
-import Header from "@compo/Header";
-import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
+import React from 'react';
+import './globals.css';
+import Header from '@compo/Header';
+import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
+import { PreloadResources } from './preload';
+import NotificationContextProvider from '@/context/NotificationContext';
+import Notifications from '@/components/Notifications/Notifiactions';
 
 export default function RootLayout({
   children,
@@ -29,7 +32,7 @@ export default function RootLayout({
             font-display: fallback;
             uniconde-range: U+0020-007E;
           }
-        `,
+      `,
           }}
         />
         <style>
@@ -42,11 +45,11 @@ export default function RootLayout({
               --color-button: oklch(65.57% 0.19552898037793698 288.17775174927874);
               --color-highlight: oklch(73.96% 0.1963 25.278467161119735);
               --color-confirm: oklch(84.51% 0.162 147.29);
-              --text-size: 24px;
             }
 
             body {
               container: root / inline-size;
+              font-size: var(--text-size);
             }
           `}
         </style>
@@ -59,16 +62,20 @@ export default function RootLayout({
         <meta httpEquiv="u-ea-compatible" content="IE=edge" />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </head>
-      <body>
+      <body id="root">
         <StyledComponentsRegistry>
-          <div id="_next">
-            <section id="devsite-wrapper">
-              <div id="devsite-header">
-                <Header />
-              </div>
-              <div id="devsite-content">{children}</div>
-            </section>
-          </div>
+          <NotificationContextProvider>
+            <div id="_next">
+              <section id="devsite-wrapper">
+                <div id="devsite-header">
+                  <Header />
+                </div>
+                <div id="devsite-content">{children}</div>
+              </section>
+            </div>
+            <Notifications />
+            <PreloadResources />
+          </NotificationContextProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
