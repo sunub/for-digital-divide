@@ -1,10 +1,21 @@
 'use client';
 
 import React from 'react';
-import PatterPoints from './PatterPoints';
 import PatternPath from './PatternPath';
+import PatterPoints from './PatternPoint';
+import { _decodeClientDataJSONInternals } from '@simplewebauthn/server/esm/helpers/decodeClientDataJSON';
 
-interface State {
+const JUMPING_COMBS = [
+  [0, 1, 2],
+  [0, 4, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 4, 6],
+  [2, 5, 8],
+  [3, 4, 5],
+  [6, 7, 8],
+];
+interface PatternState {
   animate: number;
   path: number[];
   width: number;
@@ -18,56 +29,63 @@ interface State {
 }
 
 function PatternLock({ correctPattern }: { correctPattern: number[] }) {
-  let mouseDown = false;
-  const ref = React.useRef<HTMLDivElement>(null);
-  const [state, setState] = React.useState<State>({
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [isMouseDown, setMouseDown] = React.useState(false);
+  const [rectInfo, setRectInfo] = React.useState<DOMRect | null>(null);
+  const [state, setState] = React.useState<PatternState>({
     animate: 0,
-    // 사용자가 마우스로 지나친 점에 대한 정보를 저장한다.
     path: [],
     width: 0,
     mouseX: 0,
     mouseY: 0,
-    timeout: null,
-    timeout2: null,
+    timeout: 0,
+    timeout2: 0,
     error: false,
     errorText: false,
-    errorMessage: 'Wrong pattern, try again!',
+    errorMessage: 'Wrong pattern',
   });
 
-  /**
-   * @description State path에는 웹 상의 점을 마우스가 지나친 점에 대한 인덱스에 대한 정보가 담겨 있고 CorrectPattern에는 초기에 설정한 정답에 대한 패턴이 담겨 있다. 이 두 가지를 비교하여 사용자가 그린 패턴이 맞는지 여부를 판단하는 함수이다.
-   * @returns
-   */
-  const compare = () => {
-    if (!correctPattern) return false;
-    let path = state.path;
-    let l =
-      path.length > correctPattern.length ? path.length : correctPattern.length;
-    for (let i = 0; i < l; i++) {
-      if (path[i] !== correctPattern[1]) return false;
-    }
-    return true;
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const curr = e.currentTarget as HTMLDivElement;
+    setMouseDown(true);
+
+    const currId = parseInt(curr.parentElement?.id as string, 10);
+    setState((prev) => ({
+      ...prev,
+      path: [currId],
+    }));
   };
 
   const handleMouseOver = (i: number) => {
-    if (state.path.indexOf(i) > -1 || !mouseDown) return;
+    if (state.path.indexOf(i) > -1 || !isMouseDown) return;
+
     let newPath = [...state.path];
+    console.log(i);
+    const jump = checkJumping(i);
+    if (jump) newPath.push(jump);
     newPath.push(i);
+
     setState((prev) => ({
       ...prev,
-      animate: i,
       path: newPath,
     }));
   };
 
-  const pathStart = (i: number) => {
-    setState((prev) => ({
-      ...prev,
-      path: [i],
-    }));
+  const checkJumping = (nextPoint: number) => {
+    let lastPoint = state.path[state.path.length - 1];
+    for (const [x, jumpy, y] of JUMPING_COMBS) {
+      if (
+        (x === nextPoint && y === lastPoint) ||
+        (x === lastPoint && y === nextPoint)
+      ) {
+        return jumpy;
+      }
+    }
+    return false;
   };
 
   React.useEffect(() => {
+    if (!isMouseDown) return;
     function handleMouseMove(e: MouseEvent) {
       const { clientX, clientY } = e;
       setState((prev) => ({
@@ -76,109 +94,57 @@ function PatternLock({ correctPattern }: { correctPattern: number[] }) {
         mouseY: clientY,
       }));
     }
-
-    function handleTouchmove(e: TouchEvent) {
-      const { touches } = e;
-      setState((prev) => ({
-        ...prev,
-        mouseX: touches[0].pageX,
-        mouseY: touches[0].pageY,
-      }));
+    function handleMouseUp() {
+      setMouseDown(false);
+      console.log('mouse up');
     }
 
     document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('touchmove', handleTouchmove);
-
-    if (state.errorText) {
-      setState((prev) => ({
-        ...prev,
-        error: false,
-        errorText: false,
-        path: [],
-      }));
-    }
+    document.addEventListener('mouseup', handleMouseUp);
 
     return () => {
-      mouseDown = false;
       document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('touchmove', handleTouchmove);
-
-      let withoutCompare = !Array.isArray(correctPattern);
-      let isLengthCorrect = withoutCompare ? state.path.length > 3 : true;
-
-      if (state.path.length > 0) {
-        if (isLengthCorrect && (withoutCompare || compare())) {
-          if (withoutCompare) return;
-
-          setState((prev) => ({
-            ...prev,
-            done: true,
-            path: [],
-          }));
-        }
-      } else {
-        setState((prev) => ({
-          ...prev,
-          error: true,
-          errorText: true,
-          errorMessage: isLengthCorrect
-            ? '잘못된 패턴입니다! 다시 입력해주세요'
-            : '4개의 점을 선택해주세요!',
-          timeout: setTimeout(
-            () =>
-              setState((prev) => ({
-                ...prev,
-                error: false,
-                path: [],
-              })),
-            3000,
-          ),
-          timeout2: setTimeout(
-            () =>
-              setState((prev) => ({
-                ...prev,
-                errorText: false,
-              })),
-            6000,
-          ),
-        }));
-      }
+      document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, []);
+  }, [isMouseDown]);
 
   React.useEffect(() => {
-    if (!ref.current) return;
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    setRectInfo(rect);
 
     setState((prev) => ({
       ...prev,
-      width: ref.current?.offsetWidth ? ref.current.offsetWidth : 0,
+      width: rect.width,
     }));
   }, []);
 
-  const patterPointsProps = {
-    onMouseDown: pathStart,
-    onMouseOver: handleMouseOver,
-    animate: state.animate,
-    error: state.error,
-    path: state.path,
-    id: 0,
-    pageX: state.mouseX,
-    pageY: state.mouseY,
-    animated: state.animate,
-  };
-
-  const pos = ref.current && ref.current.getBoundingClientRect();
+  const points = Array.from({ length: 9 }, (_, i) => (
+    <PatterPoints
+      key={i}
+      id={i}
+      onMouseDown={handleMouseDown}
+      onMouseOver={handleMouseOver}
+    />
+  ));
 
   return (
-    <div ref={ref} style={{ width: '100cqw' }}>
-      <div className="flex w-full max-w-400px max-h-400px flex-wrap justify-between relative">
-        <PatterPoints {...patterPointsProps} />
+    <div className="flex flex-col items-center w-full h-full">
+      <div
+        ref={containerRef}
+        style={{ height: '400px' }}
+        className="relative max-w-400px max-h-400px w-full flex flex-wrap justify-around"
+      >
+        {points.map((point) => point)}
         <PatternPath
           path={state.path}
-          elemPos={{ x: pos?.x ? pos.x : 0, y: pos?.y ? pos.y : 0 }}
+          width={state.width}
           mouseX={state.mouseX}
           mouseY={state.mouseY}
-          width={state.width}
+          elemPos={{
+            x: rectInfo ? rectInfo.x : 0,
+            y: rectInfo ? rectInfo.y : 0,
+          }}
           error={state.error}
         />
       </div>
