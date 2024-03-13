@@ -6,7 +6,7 @@ export const RootWrapper = styled.div.attrs({
   id: 'device-root-wrapper',
 })`
   position: relative;
-  width: 100cqw;
+  width: 50cqw;
   height: 100%;
 
   max-width: 900px;
@@ -139,4 +139,39 @@ export const DeviceMainWrapper = styled.div`
   overflow-y: scroll;
   scrollbar-width: none;
   padding-bottom: 1rem;
+`;
+
+export const ContentWrapper = styled.div`
+  display: grid;
+  grid-template-rows: [main-header] 300px [main-content] 1fr [main-footer] 170px;
+  grid-template-columns: [main-column] 1fr;
+
+  padding-left: 32px;
+  padding-right: 32px;
+  height: 100%;
+`;
+
+export const HeaderContent = styled.div`
+  grid-area: main-header / main-column;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+
+export const MainContent = styled.div`
+  grid-area: main-content / main-column;
+`;
+
+export const FooterContent = styled.div`
+  grid-area: main-footer / main-column;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+
+  gap: 24px;
+  margin-right: 2rem;
 `;

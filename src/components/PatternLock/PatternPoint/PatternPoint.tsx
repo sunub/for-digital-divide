@@ -23,6 +23,7 @@ function PatternPoint(props: PatternPointProps) {
     width: 0,
     height: 0,
   });
+
   const {
     onMouseDown,
     onMouseOver,
@@ -34,6 +35,20 @@ function PatternPoint(props: PatternPointProps) {
     pageY,
     animated,
   } = props;
+
+  const mouseMove = React.useMemo(() => {
+    const { left, top, width, height } = state;
+    return () => {
+      if (
+        pageX > left &&
+        pageY > top &&
+        pageX < left + width &&
+        pageY < top + height
+      ) {
+        onMouseOver(id);
+      }
+    };
+  }, [state]);
 
   React.useEffect(() => {
     if (!ref.current) return;
@@ -51,23 +66,19 @@ function PatternPoint(props: PatternPointProps) {
         height: ref.current?.offsetHeight ? ref.current.offsetHeight : 0,
       }));
     }
-
-    window.addEventListener('resize', handleResize);
-
-    return () => window.addEventListener('resize', handleResize);
   }, []);
 
-  function mouseMove() {
-    const { left, top, width, height } = state;
-    if (
-      pageX > left &&
-      pageY > top &&
-      pageX < left + width &&
-      pageY < top + height
-    ) {
-      onMouseOver(id);
-    }
-  }
+  // function mouseMove() {
+  //   const { left, top, width, height } = state;
+  //   if (
+  //     pageX > left &&
+  //     pageY > top &&
+  //     pageX < left + width &&
+  //     pageY < top + height
+  //   ) {
+  //     onMouseOver(id);
+  //   }
+  // }
 
   mouseMove();
 
@@ -76,8 +87,6 @@ function PatternPoint(props: PatternPointProps) {
       ref={ref}
       className="flex items-center justify-center w-33% min-h-33% flex-1-33 flex-wrap"
       id={`${id}`}
-      // onMouseOver={() => onMouseOver(id)}
-      // onTouchStart={() => onMouseDown(id)}
     >
       <div
         className="p-3"

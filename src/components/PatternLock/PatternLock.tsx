@@ -60,7 +60,6 @@ function PatternLock({ correctPattern }: { correctPattern: number[] }) {
     if (state.path.indexOf(i) > -1 || !isMouseDown) return;
 
     let newPath = [...state.path];
-    console.log(i);
     const jump = checkJumping(i);
     if (jump) newPath.push(jump);
     newPath.push(i);
@@ -84,6 +83,34 @@ function PatternLock({ correctPattern }: { correctPattern: number[] }) {
     return false;
   };
 
+  const mouseUpEvent = () => {
+    let isLengthCorrect = state.path.length > 3;
+
+    if (state.path.length > 0) {
+      if (isLengthCorrect) {
+      } else {
+        setState((prev) => ({
+          ...prev,
+          path: [],
+          error: true,
+          errorMessage: isLengthCorrect ? 'Wrong pattern' : 'Pattern too short',
+          timeout: setTimeout(() => {
+            setState((prev) => ({
+              ...prev,
+              error: false,
+            }));
+          }, 1000),
+          timeout2: setTimeout(() => {
+            setState((prev) => ({
+              ...prev,
+              errorText: false,
+            }));
+          }, 2000),
+        }));
+      }
+    }
+  };
+
   React.useEffect(() => {
     if (!isMouseDown) return;
     function handleMouseMove(e: MouseEvent) {
@@ -94,9 +121,37 @@ function PatternLock({ correctPattern }: { correctPattern: number[] }) {
         mouseY: clientY,
       }));
     }
+
     function handleMouseUp() {
       setMouseDown(false);
-      console.log('mouse up');
+
+      let isLengthCorrect = state.path.length > 3;
+
+      if (state.path.length > 0) {
+        if (isLengthCorrect) {
+        } else {
+          setState((prev) => ({
+            ...prev,
+            error: true,
+            errorMessage: isLengthCorrect
+              ? 'Wrong pattern'
+              : 'Pattern too short',
+            timeout: setTimeout(() => {
+              setState((prev) => ({
+                ...prev,
+                error: false,
+                path: [],
+              }));
+            }, 1000),
+            timeout2: setTimeout(() => {
+              setState((prev) => ({
+                ...prev,
+                errorText: false,
+              }));
+            }, 2000),
+          }));
+        }
+      }
     }
 
     document.addEventListener('mousemove', handleMouseMove);
@@ -146,6 +201,7 @@ function PatternLock({ correctPattern }: { correctPattern: number[] }) {
             y: rectInfo ? rectInfo.y : 0,
           }}
           error={state.error}
+          mouseUpEvent={mouseUpEvent}
         />
       </div>
     </div>

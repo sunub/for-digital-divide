@@ -4,7 +4,13 @@ import React from 'react';
 import * as Styled from './Device.style';
 import VisuallyHidden from '../VisuallyHidden';
 
-function Device({ children }: { children: React.ReactNode }) {
+interface DeviceProps {
+  headerContent?: React.ReactNode;
+  mainContent: React.ReactNode;
+  footerContent?: React.ReactNode;
+}
+
+function Device({ headerContent, mainContent, footerContent }: DeviceProps) {
   const [time, setTime] = React.useState(new Date());
   const options: Intl.DateTimeFormatOptions = {
     hour: '2-digit',
@@ -28,7 +34,17 @@ function Device({ children }: { children: React.ReactNode }) {
           <time>{timeWithoutPeriod}</time>
         </Styled.SystemStatusBar>
 
-        <Styled.DeviceMainWrapper>{children}</Styled.DeviceMainWrapper>
+        <Styled.DeviceMainWrapper>
+          <Styled.ContentWrapper>
+            <Styled.HeaderContent>
+              {headerContent && <React.Fragment />}
+            </Styled.HeaderContent>
+            <Styled.MainContent>{mainContent}</Styled.MainContent>
+            <Styled.FooterContent>
+              {footerContent && <React.Fragment />}
+            </Styled.FooterContent>
+          </Styled.ContentWrapper>
+        </Styled.DeviceMainWrapper>
 
         <Styled.SystemGestureArea>
           <Styled.Center>

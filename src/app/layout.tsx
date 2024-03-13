@@ -74,7 +74,6 @@ export default function RootLayout({
               </section>
             </div>
             <Notifications />
-            <PreloadResources />
           </NotificationContextProvider>
         </StyledComponentsRegistry>
       </body>

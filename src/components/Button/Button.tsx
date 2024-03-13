@@ -8,12 +8,21 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ asChild = false, children, ...props }, ref) => {
+  ({ asChild = false, children, onClick, ...props }, ref) => {
     const [isClick, toggleClick] = useToggle(false);
     const Compo = asChild ? Slot : Btn;
 
     return (
-      <Btn $isClick={isClick} ref={ref} onClick={toggleClick} {...props}>
+      <Btn
+        $isClick={isClick}
+        ref={ref}
+        onClick={(e) => {
+          toggleClick();
+          if (isClick) return;
+          onClick && onClick(e);
+        }}
+        {...props}
+      >
         <div>
           <Edge $isClick={isClick} />
           <Shadow />
@@ -49,6 +58,9 @@ export const Front = styled.div<{ $isClick: boolean }>`
   transform: translateY(-6px);
   transition: all 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
   line-height: calc(16px + 24px);
+
+  &:active {
+  }
 
   & > a {
     text-decoration: none;

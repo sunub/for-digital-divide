@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
 
 interface PatternPathProps {
   path: number[];
@@ -13,6 +12,7 @@ interface PatternPathProps {
     y: number;
   };
   error: boolean;
+  mouseUpEvent: () => void;
 }
 
 interface PathData {
@@ -28,30 +28,30 @@ const getDistance = (x1: number, x2: number, y1: number, y2: number) =>
 const getAngle = (x1: number, x2: number, y1: number, y2: number) =>
   (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI;
 
-const getLineData = (
-  start: number,
-  end: number | { x: number; y: number },
-  width: number,
-) => {
-  let x1 = (start % 3) * (width / 3) + width / 6;
-  let y1 = Math.floor(start / 3) * (width / 3) + width / 6;
-  // let x1 = ((((start - 1) % 3) * 33.3333 + 16.66666) * width) / 100;
-  // let y1 = ((Math.floor((start - 1) / 3) * 33.3333 + 16.6666) * width) / 100;
-  let x2, y2;
-  if (typeof end === 'number') {
-    x2 = (end % 3) * (width / 3) + width / 6;
-    y2 = Math.floor(end / 3) * (width / 3) + width / 6;
-  } else {
-    x2 = end.x;
-    y2 = end.y;
-  }
-  return {
-    x: x1,
-    y: y1,
-    distance: getDistance(x1, x2, y1, y2),
-    angle: getAngle(x1, x2, y1, y2),
-  };
-};
+// const getLineData = (
+//   start: number,
+//   end: number | { x: number; y: number },
+//   width: number,
+// ) => {
+//   let x1 = (start % 3) * (width / 3) + width / 6;
+//   let y1 = Math.floor(start / 3) * (width / 3) + width / 6;
+//   // let x1 = ((((start - 1) % 3) * 33.3333 + 16.66666) * width) / 100;
+//   // let y1 = ((Math.floor((start - 1) / 3) * 33.3333 + 16.6666) * width) / 100;
+//   let x2, y2;
+//   if (typeof end === 'number') {
+//     x2 = (end % 3) * (width / 3) + width / 6;
+//     y2 = Math.floor(end / 3) * (width / 3) + width / 6;
+//   } else {
+//     x2 = end.x;
+//     y2 = end.y;
+//   }
+//   return {
+//     x: x1,
+//     y: y1,
+//     distance: getDistance(x1, x2, y1, y2),
+//     angle: getAngle(x1, x2, y1, y2),
+//   };
+// };
 
 const Line = ({ x, y, distance, angle }: PathData) => {
   return (
@@ -69,12 +69,47 @@ const Line = ({ x, y, distance, angle }: PathData) => {
 };
 
 function PatternPath(props: PatternPathProps) {
-  const { path, width, mouseX, mouseY, elemPos, error } = props;
+  const { path, width, mouseX, mouseY, elemPos, error, mouseUpEvent } = props;
   const [lines, setLines] = React.useState<React.ReactNode[]>([]);
+
+  const getLineData = React.useCallback(
+    (start: number, end: number | { x: number; y: number }, width: number) => {
+      let x1 = (start % 3) * (width / 3) + width / 6;
+      let y1 = Math.floor(start / 3) * (width / 3) + width / 6;
+      let x2, y2;
+      if (typeof end === 'number') {
+        x2 = (end % 3) * (width / 3) + width / 6;
+        y2 = Math.floor(end / 3) * (width / 3) + width / 6;
+      } else {
+        x2 = end.x;
+        y2 = end.y;
+      }
+      return {
+        x: x1,
+        y: y1,
+        distance: getDistance(x1, x2, y1, y2),
+        angle: getAngle(x1, x2, y1, y2),
+      };
+    },
+    [width],
+  );
+
+  React.useEffect(() => {
+    if (!path.length) {
+      setLines([]);
+      mouseUpEvent();
+    }
+  }, [path]);
 
   React.useEffect(() => {
     if (!path.length) return;
     const newLines = [];
+
+    if (path.length === 0) {
+      console.log('path is empty');
+      setLines([]);
+      return;
+    }
 
     if (path.length >= 2) {
       let l = path.length - 1;
@@ -98,7 +133,6 @@ function PatternPath(props: PatternPathProps) {
 
     setLines(newLines);
   }, [mouseX]);
-  console.log(lines);
 
   return (
     <div
