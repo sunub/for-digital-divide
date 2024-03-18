@@ -1,48 +1,48 @@
-"use client";
+'use client';
 
-import React from "react";
-import * as Styled from "./LoginForm.styled";
-import FormHeader from "./FormHeader";
-import { authenticate } from "@/lib/login_action";
-import LoginInput from "./LoginInput";
-import LoginButton from "./LoginButton";
-import InvalidMessage from "../InvalidMessage";
-import useToggle from "@/hooks/use-toggle";
-import { motion } from "framer-motion";
+import React from 'react';
+import * as Styled from './LoginForm.styled';
+import FormHeader from './FormHeader';
+import { authenticate } from '@/lib/login_action';
+import LoginInput from './LoginInput';
+import LoginButton from './LoginButton';
+import InvalidMessage from '../InvalidMessage';
+import useToggle from '@/hooks/use-toggle';
+import { motion } from 'framer-motion';
 
 function generateErrorMsg(type: string): string {
   switch (type) {
-    case "wrongId":
-      return "아이디가 존재하지 않습니다.";
-    case "wrongPassword":
-      return "비밀번호가 틀렸습니다.";
-    case "wrongLengthID":
-      return "아이디는 4자 이상 20자 이하로 입력해주세요.";
-    case "wrongLengthPassword":
-      return "비밀번호는 8자 이상 20자 이하로 입력해주세요.";
+    case 'wrongId':
+      return '아이디가 존재하지 않습니다.';
+    case 'wrongPassword':
+      return '비밀번호가 틀렸습니다.';
+    case 'wrongLengthID':
+      return '아이디는 4자 이상 20자 이하로 입력해주세요.';
+    case 'wrongLengthPassword':
+      return '비밀번호는 8자 이상 20자 이하로 입력해주세요.';
     default:
-      return "";
+      return '';
   }
 }
 
 function LoginForm() {
   const [isPending, togglePending] = useToggle(false);
   const portalRef = React.useRef<HTMLDivElement>(null);
-  const [errorMessage, setErrorMessage] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   return (
     <React.Fragment>
       <Styled.Form
         action={async (formData: FormData) => {
-          const username = formData.get("username") as string;
-          const password = formData.get("password") as string;
+          const username = formData.get('username') as string;
+          const password = formData.get('password') as string;
 
           if (username.length < 4 || username.length > 20) {
-            setErrorMessage(() => generateErrorMsg("wrongLengthID"));
+            setErrorMessage(() => generateErrorMsg('wrongLengthID'));
             togglePending();
             return;
           } else if (password.length < 8 || password.length > 20) {
-            setErrorMessage(() => generateErrorMsg("wrongLengthPassword"));
+            setErrorMessage(() => generateErrorMsg('wrongLengthPassword'));
             togglePending();
             return;
           }
@@ -65,7 +65,7 @@ function LoginForm() {
           </Styled.MessageWrapper>
         </Styled.MainWrapper>
         <Styled.FooterWrapper>
-          <LoginButton togglePending={togglePending} />
+          <LoginButton content="로그인" togglePending={togglePending} />
         </Styled.FooterWrapper>
       </Styled.Form>
     </React.Fragment>
@@ -75,29 +75,29 @@ function LoginForm() {
 function Loading() {
   const circles = [
     {
-      cx: "10",
-      cy: "15",
+      cx: '10',
+      cy: '15',
       r: 5,
-      fill: "#8F76FF",
+      fill: '#8F76FF',
     },
     {
-      cx: "32",
-      cy: "15",
+      cx: '32',
+      cy: '15',
       r: 5,
-      fill: "#FF7E76",
+      fill: '#FF7E76',
     },
-    { cx: "53", cy: "15", r: 5, fill: "#8F76FF" },
+    { cx: '53', cy: '15', r: 5, fill: '#8F76FF' },
     {
-      cx: "72",
-      cy: "15",
+      cx: '72',
+      cy: '15',
       r: 5,
-      fill: "#98DF9F",
+      fill: '#98DF9F',
     },
     {
-      cx: "96",
-      cy: "15",
+      cx: '96',
+      cy: '15',
       r: 5,
-      fill: "#8F76FF",
+      fill: '#8F76FF',
     },
   ];
 
@@ -125,11 +125,11 @@ function Loading() {
             transition={{
               delay: 200 * Math.sin(0.001 * index),
               duration: 10,
-              type: "spring",
+              type: 'spring',
               damping: 9,
               stiffness: 120,
               repeat: Infinity,
-              repeatType: "reverse",
+              repeatType: 'reverse',
               repeatDelay: 0.001,
             }}
           />

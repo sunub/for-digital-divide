@@ -1,18 +1,23 @@
-import * as Styled from "@/components/FidoForm/FidoForm.style";
-interface LoginButtonProps {
+import * as Styled from '@/components/FidoForm/FidoForm.style';
+interface LoginButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  content: string;
   togglePending: () => void;
 }
 
-function LoginButton(props: LoginButtonProps) {
-  const { togglePending } = props;
-
+function LoginButton({
+  content,
+  togglePending,
+  ...delegated
+}: LoginButtonProps) {
   return (
     <Styled.Button
-      id={"submit-id-pwd-btn"}
+      id={'submit-id-pwd-btn'}
       type="submit"
       onClick={togglePending}
+      {...delegated}
     >
-      로그인
+      {content}
     </Styled.Button>
   );
 }

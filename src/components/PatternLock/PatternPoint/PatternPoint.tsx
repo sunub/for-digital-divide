@@ -5,13 +5,7 @@ import React from 'react';
 interface PatternPointProps {
   onMouseDown: (e: React.MouseEvent) => void;
   onMouseOver: (i: number) => void;
-  animate: number;
-  error: boolean;
-  path: number[];
   id: number;
-  pageX: number;
-  pageY: number;
-  animated: number;
 }
 
 function PatternPoint(props: PatternPointProps) {
@@ -27,28 +21,9 @@ function PatternPoint(props: PatternPointProps) {
   const {
     onMouseDown,
     onMouseOver,
-    animate,
-    error,
-    path,
-    id,
-    pageX,
-    pageY,
-    animated,
-  } = props;
 
-  const mouseMove = React.useMemo(() => {
-    const { left, top, width, height } = state;
-    return () => {
-      if (
-        pageX > left &&
-        pageY > top &&
-        pageX < left + width &&
-        pageY < top + height
-      ) {
-        onMouseOver(id);
-      }
-    };
-  }, [state]);
+    id,
+  } = props;
 
   React.useEffect(() => {
     if (!ref.current) return;
@@ -79,9 +54,6 @@ function PatternPoint(props: PatternPointProps) {
   //     onMouseOver(id);
   //   }
   // }
-
-  mouseMove();
-
   return (
     <div
       ref={ref}
@@ -100,3 +72,17 @@ function PatternPoint(props: PatternPointProps) {
 }
 
 export default PatternPoint;
+
+// const mouseMove = React.useMemo(() => {
+//   const { left, top, width, height } = state;
+//   return () => {
+//     if (
+//       pageX > left &&
+//       pageY > top &&
+//       pageX < left + width &&
+//       pageY < top + height
+//     ) {
+//       onMouseOver(id);
+//     }
+//   };
+// }, [state]);

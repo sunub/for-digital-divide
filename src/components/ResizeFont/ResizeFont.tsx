@@ -1,16 +1,15 @@
-"use client";
+'use client';
 
-import React from "react";
-import Slider from "@/components/Slider";
-import Button from "@/components/Button";
-import * as Styled from "./ResizeFont.style";
+import React from 'react';
+import Slider from '@/components/Slider';
+import * as Styled from './ResizeFont.style';
 
 function ResizeFont() {
   const [fonstSize, setFontSize] = React.useState(16);
 
   React.useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty("--text-size", `${fonstSize}px`);
+    root.style.setProperty('--text-size', `${fonstSize}px`);
   }, [fonstSize]);
 
   return (
@@ -24,7 +23,7 @@ function ResizeFont() {
       <div></div>
       <div
         style={{
-          gridArea: "resize-font-slider / main",
+          gridArea: 'resize-font-slider / main',
         }}
       >
         <Slider fontSize={fonstSize} setFontSize={setFontSize} />
