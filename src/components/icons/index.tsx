@@ -1,3 +1,11 @@
+export default function Icon({ name }: { name: string }) {
+  return (
+    <svg>
+      <use href={`/sprite.svg#${name}`} />
+    </svg>
+  );
+}
+
 export const SmartphoneIcon = () => {
   return (
     <svg
