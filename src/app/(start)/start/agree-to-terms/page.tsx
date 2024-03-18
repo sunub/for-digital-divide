@@ -9,89 +9,77 @@ import {
 } from '@/components/icons';
 import Button from '@/components/Button/Default';
 import Device from '@/components/Device';
+import useToggle from '@/hooks/use-toggle';
+import AgreeForm from '@/components/AgreeForm';
+
+function Explanation() {
+  return (
+    <CardWrapper>
+      <Card $order={'1'}>
+        <CardTitle>
+          <IdcardIcon />
+          <h3>신분증</h3>
+        </CardTitle>
+        <p>사용자 본인의 신분증을 필요로 합니다.</p>
+      </Card>
+      <Card $order={'2'}>
+        <CardTitle>
+          <BankaccountIcon />
+          <h3>계좌</h3>
+        </CardTitle>
+        <p>본인 확인을 위해서 사용자의 명의의 계좌가 필요로 합니다.</p>
+      </Card>
+      <Card $order={'3'}>
+        <CardTitle>
+          <SmartphoneIcon />
+          <h3>스마트폰</h3>
+        </CardTitle>
+        <p>본인 확인을 위해서 사용자의 명의의 핸드폰을 필요로 합니다.</p>
+      </Card>
+    </CardWrapper>
+  );
+}
 
 function Page() {
+  const [nextPage, toggleNextPage] = useToggle(false);
+
   return (
     <Device
       headerContent={
         <React.Fragment>
-          <h1>금융 인증서 발급</h1>
+          <h1 className="text-4xl">
+            {nextPage ? '약관 동의' : '금융 인증서 발급'}
+          </h1>
           <div>
             <p>
-              금융 인증서를 발급하기 위해서는 아래의 3 가지를 필요로 합니다.
+              {nextPage
+                ? '인정서 발급을 위한 약관 동의가 필요합니다.'
+                : '금융 인증서를 발급하기 위해서는 아래의 3 가지를 필요로 합니다.'}
             </p>
           </div>
         </React.Fragment>
       }
-      mainContent={
-        <CardWrapper>
-          <Card $order={'1'}>
-            <CardTitle>
-              <IdcardIcon />
-              <h3>신분증</h3>
-            </CardTitle>
-            <p>사용자 본인의 신분증을 필요로 합니다.</p>
-          </Card>
-          <Card $order={'2'}>
-            <CardTitle>
-              <BankaccountIcon />
-              <h3>계좌</h3>
-            </CardTitle>
-            <p>본인 확인을 위해서 사용자의 명의의 계좌가 필요로 합니다.</p>
-          </Card>
-          <Card $order={'3'}>
-            <CardTitle>
-              <SmartphoneIcon />
-              <h3>스마트폰</h3>
-            </CardTitle>
-            <p>본인 확인을 위해서 사용자의 명의의 핸드폰을 필요로 합니다.</p>
-          </Card>
-        </CardWrapper>
-      }
+      mainContent={nextPage ? <AgreeForm /> : <Explanation />}
       footerContent={
-        <React.Fragment>
-          <Button>추가</Button>
-          <Button>다음</Button>
-        </React.Fragment>
+        !nextPage && (
+          <Button
+            onClick={() => {
+              document
+                .getElementById('device-content__header')
+                ?.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start',
+                });
+              toggleNextPage();
+            }}
+          >
+            다음
+          </Button>
+        )
       }
     />
   );
 }
-
-const Wrapper = styled.div`
-  display: grid;
-  grid-template-rows: [main-header] 300px [main-content] 1fr [main-footer] 170px;
-  grid-template-columns: [main-column] 1fr;
-
-  padding-left: 32px;
-  padding-right: 32px;
-  height: 100%;
-`;
-
-const Header = styled.div`
-  grid-area: main-header / main-column;
-
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: center;
-`;
-
-const Main = styled.div`
-  grid-area: main-content / main-column;
-`;
-
-const Footer = styled.div`
-  grid-area: main-footer / main-column;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-
-  gap: 24px;
-  margin-right: 2rem;
-`;
 
 const CardWrapper = styled.div`
   display: flex;
@@ -114,7 +102,6 @@ const Card = styled.div<{ $order: string }>`
   text-align: center;
   flex: 300px 1;
 
-  max-height: 200px;
   padding: 48px 24px;
   border-radius: 24px;
 

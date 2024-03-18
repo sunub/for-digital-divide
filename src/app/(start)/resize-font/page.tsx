@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import React from "react";
-import styled from "styled-components";
-import Slider from "@/components/Slider";
-import Button from "@/components/Button";
-import { moveToLoginPage } from "@/lib/revalidate";
+import React from 'react';
+import styled from 'styled-components';
+import Slider from '@/components/Slider';
+import Button from '@/components/Button/Button';
+import { moveToLoginPage } from '@/lib/revalidate';
 
 function StartPage() {
   const [fonstSize, setFontSize] = React.useState(16);
 
   React.useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty("--text-size", `${fonstSize}px`);
+    root.style.setProperty('--text-size', `${fonstSize}px`);
   }, [fonstSize]);
 
   return (
@@ -26,7 +26,7 @@ function StartPage() {
         </ResizeWrapper>
         <div
           style={{
-            gridArea: "resize-font-slider / main",
+            gridArea: 'resize-font-slider / main',
           }}
         >
           <Slider fontSize={fonstSize} setFontSize={setFontSize} />
@@ -39,11 +39,11 @@ function StartPage() {
           height={56}
           role="img"
           aria-label="arrow icon"
-          style={{ transform: "rotate(-90deg)" }}
+          style={{ transform: 'rotate(-90deg)' }}
         >
           <use href="/sprite.svg#arrow" />
         </svg>
-        <Button text="확인" onClick={moveToLoginPage} />
+        <Button onClick={moveToLoginPage}>확인</Button>
       </ConfirmWrapper>
     </section>
   );
