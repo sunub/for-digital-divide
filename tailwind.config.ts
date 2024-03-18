@@ -23,12 +23,14 @@ const config: Config = {
         '1-33': '1 0 33.3%',
       },
       width: {
+        '1': '1rem',
         '33%': '33%',
       },
       minHeight: {
         '33%': '33%',
       },
       height: {
+        '1': '1rem',
         '2px': '2px',
       },
       backgroundImage: {
@@ -38,6 +40,9 @@ const config: Config = {
       },
       borderRadius: {
         50: '50%',
+      },
+      backgroundColor: {
+        confirm: 'var(--color-confirm)',
       },
     },
   },

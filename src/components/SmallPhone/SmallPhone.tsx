@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import useToggle from '@/hooks/use-toggle';
 import { useRouter } from 'next/navigation';
+import { NotificationContext } from '@/context/NotificationContext';
 
 const Phone = styled(motion.button)`
   background: transparent;
@@ -78,10 +79,14 @@ function layered_shadow(layer: number, gapX: number, gapY: number): string {
 function SmallPhone() {
   const [isOpen, toggleOpen] = useToggle(false);
   const router = useRouter();
+  const { action } = React.useContext(NotificationContext);
 
   return (
     <Phone
-      onClick={toggleOpen}
+      onClick={() => {
+        toggleOpen();
+        action.remove('');
+      }}
       onAnimationComplete={(definition) => {
         if (definition === 'open') {
           router.prefetch('/start/agree-to-terms');

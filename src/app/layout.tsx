@@ -2,7 +2,6 @@ import React from 'react';
 import './globals.css';
 import Header from '@compo/Header';
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
-import { PreloadResources } from './preload';
 import NotificationContextProvider from '@/context/NotificationContext';
 import Notifications from '@/components/Notifications/Notifiactions';
 
@@ -70,7 +69,9 @@ export default function RootLayout({
                 <div id="devsite-header">
                   <Header />
                 </div>
-                <div id="devsite-content">{children}</div>
+                <div id="devsite-content">
+                  <div id="devsite-content__site-main">{children}</div>
+                </div>
               </section>
             </div>
             <Notifications />

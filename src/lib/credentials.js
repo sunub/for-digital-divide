@@ -16,6 +16,20 @@ const base64url = {
   },
 };
 
+export async function getCredentials() {
+  navigator.credentials.get({
+    publicKey: {
+      challenge: new Uint8Array(32),
+      allowCredentials: [
+        {
+          id: new Uint8Array(32),
+          type: "public-key",
+        },
+      ],
+    },
+  });
+}
+
 export async function createCredentials() {
   const opts = {
     attestation: "none",

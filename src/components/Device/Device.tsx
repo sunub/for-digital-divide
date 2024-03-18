@@ -36,12 +36,14 @@ function Device({ headerContent, mainContent, footerContent }: DeviceProps) {
 
         <Styled.DeviceMainWrapper>
           <Styled.ContentWrapper>
-            <Styled.HeaderContent>
-              {headerContent && <React.Fragment />}
+            <Styled.HeaderContent id="device-content__header">
+              {headerContent}
             </Styled.HeaderContent>
-            <Styled.MainContent>{mainContent}</Styled.MainContent>
-            <Styled.FooterContent>
-              {footerContent && <React.Fragment />}
+            <Styled.MainContent id="device-content__main">
+              {mainContent}
+            </Styled.MainContent>
+            <Styled.FooterContent id="device-content__footer">
+              {footerContent}
             </Styled.FooterContent>
           </Styled.ContentWrapper>
         </Styled.DeviceMainWrapper>

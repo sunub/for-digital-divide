@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Form = styled.form`
   grid-area: primary-nav / fullbleed-start / system-gesture / fullbleed-end;
@@ -8,6 +8,7 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   width: 100cqw;
+  height: 100%;
   justify-content: center;
   align-items: center;
   gap: 10cqh;
@@ -46,7 +47,9 @@ export const MessageWrapper = styled.div`
 
 export const FooterWrapper = styled.div`
   grid-area: footer / fullbleed;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   justify-items: center;
   width: 75cqw;
 `;
@@ -83,20 +86,20 @@ export const InputWrapper = styled.div<{
   align-items: center;
   ${(props) =>
     props.$isUpper &&
-    "border-bottom: 1px solid oklch(16.73% 0.005 83 / 20%); border-bottom: 1px solid oklch(16.73% 0.005 83 / 20%);"}
+    'border-bottom: 1px solid oklch(16.73% 0.005 83 / 20%); border-bottom: 1px solid oklch(16.73% 0.005 83 / 20%);'}
   ${(props) =>
     props.$isLower
-      ? "border-bottom: 1px solid oklch(16.73% 0.005 83 / 20%);"
-      : "border-top: 1px solid oklch(16.73% 0.005 83 / 20%);"}
+      ? 'border-bottom: 1px solid oklch(16.73% 0.005 83 / 20%);'
+      : 'border-top: 1px solid oklch(16.73% 0.005 83 / 20%);'}
   border-left: 1px solid oklch(16.73% 0.005 83 / 20%);
   border-right: 1px solid oklch(16.73% 0.005 83 / 20%);
 
   ${(props) =>
     props.$isUpper &&
-    "border-top-left-radius: 8px;border-top-right-radius: 8px;"}
+    'border-top-left-radius: 8px;border-top-right-radius: 8px;'}
   ${(props) =>
     props.$isLower &&
-    "border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;"}
+    'border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;'}
 
   padding: 4px 16px 4px 16px;
   gap: 4px;
@@ -137,7 +140,7 @@ export const HelperList = styled.li<{ $left: number }>`
   list-style: none;
 
   &::before {
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     top: 10px;
@@ -157,14 +160,14 @@ export const Placeholder = styled.div<{ $isFocus: boolean }>`
   user-select: none;
   will-change: transform, background, color; // Inform the browser that these properties are likely to change
   background: ${(props) =>
-    props.$isFocus ? "oklch(96.33% 0.017 294.49)" : "transparent"};
+    props.$isFocus ? 'oklch(96.33% 0.017 294.49)' : 'transparent'};
   color: ${(props) =>
     props.$isFocus
-      ? "oklch(65.57% 0.19552898037793698 288.17775174927874)"
-      : "oklch(16.73% 0.005 83 / 20%)"};
+      ? 'oklch(65.57% 0.19552898037793698 288.17775174927874)'
+      : 'oklch(16.73% 0.005 83 / 20%)'};
 
   transform: ${(props) =>
-    props.$isFocus ? "translateY(-110%) scale(0.8)" : ""};
+    props.$isFocus ? 'translateY(-110%) scale(0.8)' : ''};
   transition:
     transform 200ms ease-in-out,
     background 200ms ease-in-out,

@@ -51,7 +51,7 @@ export const SystemStatusBar = styled.div`
 
   & > time {
     grid-area: main;
-    margin-inline: 2rem;
+    margin-inline: 1rem;
   }
 
   &::after {
