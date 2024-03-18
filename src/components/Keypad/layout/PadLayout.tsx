@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import FunctionKeypad from './FunctionKey/FunctionKey';
 import styled from 'styled-components';
 import ForTestCode from './NumKey/ForTestCode';
-import { createKeypad } from '@/utils/keypad';
+// import { createKeypad } from '@/utils/keypad';
 import { FocusContext } from '@/context/FocusContext';
 
 interface KeypadProps {
@@ -50,17 +50,16 @@ export default function PadLayout({
     uses === 'insert' ? 'keypad__insert--keypad' : 'keypad__confirm--keypad';
 
   useEffect(() => {
-    (async () => {
-      const responseKeypad = await createKeypad();
-
-      setUid(responseKeypad['uid']);
-      setPadButtons(responseKeypad);
-    })();
+    // (async () => {
+    //   const responseKeypad = await createKeypad();
+    //   setUid(responseKeypad['uid']);
+    //   setPadButtons(responseKeypad);
+    // })();
   }, [triggerState.trigger]);
 
   useEffect(() => {
     if (coords.length > 0) {
-      keypad.setter((v) => {
+      keypad.setter((v: any) => {
         v.inputResult[uses].uid = uid;
         v.inputResult[uses].coords = coords;
         return v;
@@ -78,7 +77,7 @@ export default function PadLayout({
               keypad={padButtons.keypad}
               triggerState={triggerState}
               coords={{ data: coords, setter: setCoords }}
-              inputRef={inputRef}
+              inputRef={inputRef as React.MutableRefObject<HTMLInputElement>}
             />
             <FunctionKeypad
               uid={padButtons.uid}

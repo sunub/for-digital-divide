@@ -30,6 +30,8 @@ export default function FunctionKeypad({
     <div>
       <button
         onClick={() => {
+          if (!inputRef.current) return;
+
           if (keypad.data.length < 6) {
             inputRef.current.value = '';
           }
@@ -72,6 +74,7 @@ export default function FunctionKeypad({
       </button>
       <button
         onClick={() => {
+          if (!inputRef.current) return;
           inputRef.current.value = '';
           keypad.setter((value: any) => {
             value.length = 0;
