@@ -1,10 +1,18 @@
 'use client';
 
 import styled from 'styled-components';
-import { animate, motion, stagger, useAnimate } from 'framer-motion';
+import {
+  ForwardRefComponent,
+  HTMLMotionProps,
+  animate,
+  motion,
+  stagger,
+  useAnimate,
+} from 'framer-motion';
 import React from 'react';
 import useToggle from '@/hooks/use-toggle';
 import { NotificationContext } from '@/context/NotificationContext';
+import Icon from '../icons';
 
 interface NotificationProps extends React.HTMLAttributes<HTMLLIElement> {
   id: string;
@@ -20,6 +28,7 @@ function NotificationItem({
 }: NotificationProps) {
   const bellRef = React.useRef(null);
   const closeRef = React.useRef(null);
+  const listRef = React.useRef<HTMLLIElement>(null);
   const contentRef = React.useRef(null);
   const [scope, animate] = useAnimate();
   const { action } = React.useContext(NotificationContext);
@@ -47,15 +56,41 @@ function NotificationItem({
     );
   }, []);
 
+  React.useEffect(() => {
+    console.log('load');
+  }, [action]);
+
   return (
-    <List ref={scope} {...delegated}>
-      <Wrapper id={id}>
-        <Svg initial={{ x: '100%', opacity: 0 }} ref={bellRef}>
-          <use href="sprite.svg#bell-icon" />
+    <List id={id} ref={scope} {...delegated}>
+      <Wrapper>
+        <Svg
+          initial={{ x: '100%', opacity: 0 }}
+          style={{ stroke: 'var(--color-background)' }}
+          ref={bellRef}
+        >
+          <use href="/sprite.svg#bell" />
         </Svg>
-        <CloseBtn onClick={() => action.remove(id)}>
-          <Svg ref={closeRef}>
-            <use href="sprite.svg#x-circle" />
+        <CloseBtn
+          layout="position"
+          transition={{
+            type: 'spring',
+            stiffness: 400,
+            damping: 60,
+          }}
+          onClick={() => {
+            animate(scope.current, {
+              y: ['0%', '100%'],
+              opacity: [1, 0],
+            }).then(() => {
+              action.remove(id);
+            });
+          }}
+        >
+          <Svg
+            ref={closeRef}
+            style={{ stroke: 'var(--color-text)', strokeWidth: '2px' }}
+          >
+            <use href="/sprite.svg#xCircle" />
           </Svg>
         </CloseBtn>
       </Wrapper>
@@ -99,7 +134,7 @@ const Wrapper = styled.div`
   padding-right: 0.5rem;
 `;
 
-const CloseBtn = styled.button`
+const CloseBtn = styled(motion.button)`
   display: inline-flex;
   justify-content: flex-end;
   width: fit-content;
@@ -110,7 +145,7 @@ const Svg = styled(motion.svg)`
   width: 24px;
   height: 24px;
   transform: scale(1.5);
-  fill: oklch(90.61% 0.17467881453440234 147.30473712852722);
+  fill: var(--color-background);
 `;
 
 const Content = styled(motion.div)``;
