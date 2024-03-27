@@ -1,40 +1,33 @@
 'use client';
 
 import VisuallyHidden from '@/components/VisuallyHidden';
-import React from 'react';
+import React, { InputHTMLAttributes } from 'react';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputTextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   pinNumber: string;
-  setPinNumber: React.Dispatch<React.SetStateAction<string>>;
 }
 
 function Input({ id, children }: { id: string; children: React.ReactNode }) {
   return (
     <React.Fragment>
       <label htmlFor={id}>
-        <VisuallyHidden>
-          {id === 'pin-pattern-input' ? '보안 키 입력' : '보안 키 확인'}
-        </VisuallyHidden>
+        <h1>
+          {id === 'pin-pattern-input' ? '보안 PIN 입력' : '보안 PIN 확인'}
+        </h1>
       </label>
       {children}
     </React.Fragment>
   );
 }
 
-Input.TextField = React.forwardRef(
-  (props: InputProps, ref: React.Ref<HTMLInputElement>) => {
-    return (
-      <input
-        ref={ref}
-        {...props}
-        type="password"
-        required
-        aria-label="pin-pattern-input"
-        value={props.pinNumber}
-        onChange={(e) => props.setPinNumber(e.target.value)}
-      />
-    );
+Input.TextField = React.forwardRef<HTMLInputElement, InputTextFieldProps>(
+  (props, ref) => {
+    const { pinNumber, ...rest } = props;
+
+    return <input ref={ref} {...rest} type="password" />;
   },
 );
+
+Input.TextField.displayName = 'Input TextField';
 
 export default Input;

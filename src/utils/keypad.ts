@@ -1,107 +1,51 @@
-import { SVG_HTMLS } from '@/constants/constants';
-import { v4 as uuidv4 } from 'uuid';
+export function shuffleArray(array: string[]): string[] {
+  const copyedArray = Array.from(array);
+  const shuffledArray = [];
 
-/** 키패드 데이터 생성 API
- * 요청과 응답 타입은 함수의 입출력 타입을 확인해주세요. */
-// export function createKeypad() {
-//   return http.post('/api/keypad');
-// }
-
-type KeypadInputResult = {
-  uid: string;
-  coords: Array<{ x: number; y: number }>;
-};
-
-/** 비밀번호 제출 API
- * 요청과 응답 타입은 함수의 입출력 타입을 확인해주세요. */
-// export function submitPassword(
-//   password: KeypadInputResult,
-//   confirmPassword: KeypadInputResult,
-// ) {
-//   return http.post('/api/password', { password, confirmPassword });
-// }
-
-export interface CreateKeypad {
-  uid: string;
-  keypad: {
-    functionKeys: Array<{
-      symbol: string;
-      rowIndex: number;
-      columnIndex: number;
-    }>;
-    size: {
-      rows: number;
-      columns: number;
-    };
-    svgGrid: string[][];
-  };
-}
-
-interface Keypad {
-  functionKeys: FunctionKey[];
-  size: {
-    rows: number;
-    columns: number;
-  };
-  svgGrid: string[][];
-}
-
-interface CreateKeypadResponse {
-  uid: string;
-  keypad: Keypad;
-}
-
-export function shuffle(array: string[]) {
-  let currIndex = array.length;
-  let randomIndex: number;
-  const newArray = Array.from(array);
-
-  while (currIndex !== 0) {
-    randomIndex = Math.floor(currIndex * Math.random());
-    currIndex -= 1;
-
-    [newArray[currIndex], newArray[randomIndex]] = [
-      newArray[randomIndex],
-      newArray[currIndex],
-    ];
+  const createdIndex = new Set();
+  while (shuffledArray.length < copyedArray.length) {
+    const randomIndex = Math.floor(Math.random() * copyedArray.length);
+    if (!createdIndex.has(randomIndex)) {
+      createdIndex.add(randomIndex);
+      shuffledArray.push(copyedArray[randomIndex]);
+    }
   }
-
-  return newArray;
+  ``;
+  return shuffledArray;
 }
 
-export function createKeypadResponse(): CreateKeypadResponse {
-  const shuffledSvgHtmls = shuffle(SVG_HTMLS);
-  const blankIndex = shuffledSvgHtmls.findIndex((svgHtml) =>
-    svgHtml.includes('data-testid="blank"'),
+export function getSVGGrid(shuffledArray: string[]) {
+  const shuffledKey = shuffledArray.findIndex((str) =>
+    str.includes('data-testid="shuffle"'),
   );
-  const shuffleIndex = shuffledSvgHtmls.findIndex((svgHtml) =>
-    svgHtml.includes('data-testid="shuffle"'),
+  const blankKey = shuffledArray.findIndex((str) =>
+    str.includes('data-testid="blank"'),
   );
 
   return {
-    uid: uuidv4(),
+    uid: crypto.randomUUID(),
     keypad: {
       functionKeys: [
         {
           symbol: 'BLANK',
-          rowIndex: Math.floor(blankIndex / 4),
-          columnIndex: blankIndex % 4,
+          rowIndex: Math.floor(blankKey / 4),
+          columnIndex: blankKey % 4,
         },
         {
           symbol: 'SHUFFLE',
-          rowIndex: Math.floor(shuffleIndex / 4),
-          columnIndex: shuffleIndex % 4,
+          rowIndex: Math.floor(shuffledKey / 4),
+          columnIndex: shuffledKey % 4,
         },
       ],
       size: {
-        rows: 4,
+        row: 4,
         columns: 3,
       },
       svgGrid: [
-        shuffledSvgHtmls.slice(0, 3),
-        shuffledSvgHtmls.slice(3, 6),
-        shuffledSvgHtmls.slice(6, 9),
-        shuffledSvgHtmls.slice(9, 12),
+        shuffledArray.slice(0, 3),
+        shuffledArray.slice(3, 6),
+        shuffledArray.slice(6, 9),
+        shuffledArray.slice(9, 12),
       ],
     },
   };
