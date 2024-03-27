@@ -25,6 +25,7 @@
       "@hooks/*": ["./src/hooks/*"],
       "@lib/*": ["./src/lib/*"],
       "@public/*": ["./public/*"],
+      "@tests/*": ["./tests/*"],
     },
   },
   "ts-node": {
