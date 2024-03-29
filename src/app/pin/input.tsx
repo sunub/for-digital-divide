@@ -7,12 +7,18 @@ interface InputTextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   pinNumber: string;
 }
 
-function Input({ id, children }: { id: string; children: React.ReactNode }) {
+function Input({
+  htmlFor,
+  children,
+}: {
+  htmlFor: string;
+  children: React.ReactNode;
+}) {
   return (
     <React.Fragment>
-      <label htmlFor={id}>
+      <label htmlFor={htmlFor}>
         <h1>
-          {id === 'pin-pattern-input' ? '보안 PIN 입력' : '보안 PIN 확인'}
+          {htmlFor === 'pin-pattern-input' ? '보안 PIN 입력' : '보안 PIN 확인'}
         </h1>
       </label>
       {children}

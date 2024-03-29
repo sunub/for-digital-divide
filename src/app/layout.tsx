@@ -4,6 +4,10 @@ import Header from '@compo/Header';
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import NotificationContextProvider from '@/context/NotificationContext';
 import Notifications from '@/components/Notifications/Notifiactions';
+import { server } from '@tests/server/node';
+import { MSWComponent } from '@/mocks/MSWComponent';
+
+server.listen();
 
 export default function RootLayout({
   children,
@@ -70,7 +74,9 @@ export default function RootLayout({
                   <Header />
                 </div>
                 <div id="devsite-content">
-                  <div id="devsite-content__site-main">{children}</div>
+                  <div id="devsite-content__site-main">
+                    <MSWComponent>{children}</MSWComponent>
+                  </div>
                 </div>
               </section>
             </div>

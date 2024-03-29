@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev:https": "next dev --experimental-https",
-    "dev": "next dev --turbo",
+    "dev": "next dev",
     "build": "next build",
     "start": "next build && next start -p 4004",
     "lint": "next lint",
@@ -114,5 +114,11 @@
     "web-push": "^3.6.7"
   },
   "module": "index.ts",
-  "type": "module"
+  "type": "module",
+  "msw": {
+    "workerDirectory": [
+      "",
+      "public"
+    ]
+  }
 }

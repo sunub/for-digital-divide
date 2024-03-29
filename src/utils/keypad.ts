@@ -23,7 +23,7 @@ export function getSVGGrid(shuffledArray: string[]) {
   );
 
   return {
-    uid: crypto.randomUUID(),
+    uid: Math.random().toString(36).substr(2, 9),
     keypad: {
       functionKeys: [
         {
