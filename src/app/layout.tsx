@@ -4,10 +4,24 @@ import Header from '@compo/Header';
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import NotificationContextProvider from '@/context/NotificationContext';
 import Notifications from '@/components/Notifications/Notifiactions';
-import { server } from '@tests/server/node';
-import { MSWComponent } from '@/mocks/MSWComponent';
+import localFont from 'next/font/local';
+// import { MSWComponent } from '@/mocks/MSWComponent';
 
-server.listen();
+const nanumFont = localFont({
+  src: '../../public/fonts/NanumSquareNeo-Variable.woff2',
+  display: 'swap',
+  variable: '--nanum-square-neo',
+  preload: true,
+});
+
+const wotfard = localFont({
+  src: '../../public/fonts/wotfard-regular-webfont.woff2',
+  display: 'swap',
+  variable: '--wotfard',
+  preload: true,
+});
+
+const cx = (...classes: string[]) => classes.filter(Boolean).join(' ');
 
 export default function RootLayout({
   children,
@@ -15,29 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="kor">
+    <html lang="kor" className={cx(nanumFont.variable, wotfard.variable)}>
       <head>
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-          @font-face {
-            font-family: 'NanumSquareNeo';
-            src: url('/fonts/NanumSquareNeo-Variable.woff2') format('woff2'),
-            font-style: normal;
-            font-display: fallback;
-            unicode-range: U+AC00-D7AF;
-          }
-          @font-face {
-            font-family: 'Wotfard';
-            src: url('/fonts/wotfard-regular-webfont.woff2') format('woff2'),
-            font-weight: 900;
-            font-style: normal;
-            font-display: fallback;
-            uniconde-range: U+0020-007E;
-          }
-      `,
-          }}
-        />
         <style>
           {`
             html {
@@ -74,9 +67,7 @@ export default function RootLayout({
                   <Header />
                 </div>
                 <div id="devsite-content">
-                  <div id="devsite-content__site-main">
-                    <MSWComponent>{children}</MSWComponent>
-                  </div>
+                  <div id="devsite-content__site-main">{children}</div>
                 </div>
               </section>
             </div>

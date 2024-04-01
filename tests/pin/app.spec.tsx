@@ -7,11 +7,12 @@ import { HttpResponse, http } from 'msw';
 import { baseurl } from '@/constants/constants';
 
 describe('Pin 페이지 내부의 유닛 테스트', () => {
-  // test('pin 번호 입력에 대한 label 테스트', async () => {
-  //   render(<Pin />);
+  test('pin 번호 입력에 대한 label 테스트', async () => {
+    const pinPage = await Pin();
+    render(pinPage);
 
-  //   expect(await screen.findByLabelText('보안 PIN 입력')).toBeInTheDocument();
-  // });
+    expect(await screen.findByLabelText('보안 PIN 입력')).toBeInTheDocument();
+  });
 
   test('input 클릭 시 pin pad가 열리는지 테스트', async () => {
     const pinPage = await Pin();

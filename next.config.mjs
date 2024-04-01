@@ -3,6 +3,9 @@
 const nextConfig = {
   basePath: '',
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  experimental: {
+    instrumentationHook: true,
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
   },

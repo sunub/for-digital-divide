@@ -21,7 +21,7 @@ html,
 body {
   --text-size: 24px;
   height: 100%;
-  font-family: 'NanumSquareNeo', 'Wotfard', sans-serif;
+  font-family: var(--nanum-square-neo), var(--wotfard), sans-serif;
   font-size: var(--text-size);
   background-color: var(--color-background);
 }

@@ -22,17 +22,23 @@ export default {
         '1-33': '1 0 33.3%',
       },
       width: {
-        '1': '1rem',
+        1: '1rem',
+        2: '2rem',
+        numpad: '40px',
         '33%': '33%',
       },
       minHeight: {
         '33%': '33%',
       },
       height: {
-        '1': '1rem',
+        1: '1rem',
+        2: '2rem',
+        4: '4rem',
+        numpad: '50px',
         '2px': '2px',
       },
       backgroundImage: {
+        numpad: 'url(/images/numpad.png)',
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
@@ -46,4 +52,4 @@ export default {
     },
   },
   plugins: [],
-}
+};

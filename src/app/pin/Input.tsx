@@ -16,7 +16,7 @@ function Input({
 }) {
   return (
     <React.Fragment>
-      <label htmlFor={htmlFor}>
+      <label htmlFor={htmlFor} className="flex h-fit w-fit">
         <h1>
           {htmlFor === 'pin-pattern-input' ? '보안 PIN 입력' : '보안 PIN 확인'}
         </h1>
