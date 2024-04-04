@@ -1,12 +1,15 @@
+import crypto from 'crypto';
+
 export interface KeypadInfo {
   uid: string;
+  hash: Map<Buffer, { value: number }>;
   keypad: KeypadDetail;
 }
 
 export interface SvgGrid {
   x: number;
   y: number;
-  num: number;
+  num: (string | number)[];
 }
 
 export interface KeypadDetail {
@@ -22,20 +25,7 @@ export interface KeypadDetail {
   svgGrid: SvgGrid[][];
 }
 
-const NUMPAD_AXIS = [
-  [0, 0, 2],
-  [-40, 0, 0],
-  [-80, 0, 1],
-  [0, -50, 9],
-  [-40, -50, 3],
-  [-80, -50, 8],
-  [0, -100, 5],
-  [-40, -100, 6],
-  [-80, -100, 4],
-  [-40, -150, 7],
-];
-
-function shuffleArray(array: number[][]): number[][] {
+export function shuffleArray(array: number[][]): number[][] {
   const copyedArray = Array.from(array);
   const shuffledArray = [];
 
@@ -50,25 +40,62 @@ function shuffleArray(array: number[][]): number[][] {
   return shuffledArray;
 }
 
-export function getSVGGrid(): KeypadInfo {
-  const shuffledNumpadAxis = shuffleArray(NUMPAD_AXIS);
+export function getSVGGrid(array: number[][]): KeypadInfo {
+  const hashes = new Map();
+  const shuffledNumpadAxis = shuffleArray(array);
+
+  const hashKeys = shuffledNumpadAxis.map(([, , num]) => {
+    const hash = crypto.createHash('sha256').update(num.toString()).digest();
+    const encodedSignature = Buffer.from(hash).toString('base64');
+
+    return [encodedSignature, num];
+  });
+
   const shuffledGrid: SvgGrid[][] = [
-    shuffledNumpadAxis.slice(0, 3).map(([x, y, num]) => {
-      return { y, x, num };
+    shuffledNumpadAxis.slice(0, 3).map(([x, y, num], i) => {
+      return {
+        y,
+        x,
+        num: hashKeys[i],
+      };
     }),
-    shuffledNumpadAxis.slice(3, 6).map(([x, y, num]) => {
-      return { y, x, num };
+    shuffledNumpadAxis.slice(3, 6).map(([x, y, num], i) => {
+      return {
+        y,
+        x,
+        num: hashKeys[i + 3],
+      };
     }),
-    shuffledNumpadAxis.slice(6, 9).map(([x, y, num]) => {
-      return { y, x, num };
+    shuffledNumpadAxis.slice(6, 9).map(([x, y, num], i) => {
+      return {
+        y,
+        x,
+        num: hashKeys[i + 6],
+      };
     }),
-    shuffledNumpadAxis.slice(9, 10).map(([x, y, num]) => {
-      return { y, x, num };
+    shuffledNumpadAxis.slice(9, 10).map(([x, y, num], i) => {
+      return {
+        y,
+        x,
+        num: hashKeys[i + 9],
+      };
     }),
   ];
 
+  shuffledGrid[3].unshift({
+    x: 0,
+    y: -150,
+    num: [100],
+  });
+  shuffledGrid[3].push({
+    x: -80,
+    y: -150,
+    num: [101],
+  });
+
   return {
     uid: Math.random().toString(36).substr(2, 9),
+    hash: hashes,
     keypad: {
       functionKeys: [
         {

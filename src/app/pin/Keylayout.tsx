@@ -3,29 +3,17 @@
 import React from 'react';
 import Input from './Input';
 import Keypad from './Keypad';
-import { create } from 'zustand';
-import { number } from 'valibot';
 import { KeypadInfo } from '@/utils/keypad';
+import submitHandler from './submit';
+import { baseurl } from '@/constants/constants';
 
 function KeyLayout({ padInfo }: { padInfo: KeypadInfo }) {
-  const [pinNumber, setPinNumber] = React.useState('');
   const [isOpen, setOpen] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const containerRef = React.useRef<HTMLFormElement>(null);
 
-  const pinInputProps = {
-    pinNumber,
-    onFocus: () => {
-      setOpen(true);
-    },
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPinNumber(e.target.value);
-    },
-  };
-
   const keypadProps = {
     keypad: padInfo.keypad,
-    setPinNumber,
   };
 
   React.useEffect(() => {
@@ -46,14 +34,20 @@ function KeyLayout({ padInfo }: { padInfo: KeypadInfo }) {
   }, [isOpen]);
 
   return (
-    <form ref={containerRef}>
+    <form
+      ref={containerRef}
+      id="pin-pattern-form"
+      action={async (formData: FormData) => {
+        submitHandler();
+      }}
+    >
       <div>
-        <Input htmlFor="pin-pattern-input">
+        <Input htmlFor="pin-pattern-input" onClick={() => setOpen(true)}>
           <Input.TextField
             ref={inputRef}
             id="pin-pattern-input"
             autoComplete={'new-password'}
-            {...pinInputProps}
+            setter={setOpen}
           />
         </Input>
         <div>{isOpen && <Keypad props={keypadProps} />}</div>
