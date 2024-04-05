@@ -108,6 +108,7 @@ function NotificationItem({
 const List = styled.li`
   background-color: oklch(31.57% 0.024 288.17775174927874);
   color: var(--color-background);
+  font-size: 0.75rem;
 
   border-radius: 8px;
   padding: 1rem;

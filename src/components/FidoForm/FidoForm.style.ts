@@ -78,6 +78,7 @@ export const InputGroup = styled.div`
 export const InputWrapper = styled.div<{
   $isUpper: boolean;
   $isLower: boolean;
+  $borderRadius?: number;
 }>`
   position: relative;
 
@@ -100,6 +101,8 @@ export const InputWrapper = styled.div<{
   ${(props) =>
     props.$isLower &&
     'border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;'}
+  ${(props) =>
+    props.$borderRadius && `border-radius: ${props.$borderRadius}px;`}
 
   padding: 4px 16px 4px 16px;
   gap: 4px;
@@ -111,6 +114,7 @@ export const Input = styled.input`
   font-weight: 700;
   background: none;
   font-size: var(--text-size);
+  text-align: center;
 
   -webkit-appearance: none;
   appearance: none;
@@ -154,8 +158,8 @@ export const HelperList = styled.li<{ $left: number }>`
 
 export const Placeholder = styled.div<{ $isFocus: boolean }>`
   position: absolute;
-  top: 16.5px;
-  left: 65px;
+  top: 17.5px;
+  left: 57.5px;
   pointer-events: none;
   user-select: none;
   will-change: transform, background, color; // Inform the browser that these properties are likely to change
@@ -164,7 +168,7 @@ export const Placeholder = styled.div<{ $isFocus: boolean }>`
   color: ${(props) =>
     props.$isFocus
       ? 'oklch(65.57% 0.19552898037793698 288.17775174927874)'
-      : 'oklch(16.73% 0.005 83 / 20%)'};
+      : 'var(--color-text)'};
 
   transform: ${(props) =>
     props.$isFocus ? 'translateY(-110%) scale(0.8)' : ''};

@@ -37,7 +37,7 @@ export const Front = styled.div<{ $isClick: boolean }>`
   display: inline-flex;
   padding-left: 1rem;
   padding-right: 1rem;
-  height: 4rem;
+  height: 3rem;
   align-items: center;
   justify-content: center;
 
@@ -134,7 +134,7 @@ export const Btn = styled.button.attrs((props: any) => ({
   outline-offset: 4px;
   width: fit-content;
   height: fit-content;
-  font-size: 2rem;
+  font-size: 1.5rem;
 
   :focus:not(:focus-visible) {
     outline: none;
