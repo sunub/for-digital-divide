@@ -3,8 +3,7 @@
 import React, { HTMLAttributes } from 'react';
 import styled from 'styled-components';
 import Button from '@/components/Button';
-import Username from '../LoginForm/LoginInput/Username';
-import useToggle from '@/hooks/use-toggle';
+import formAction from '@/utils/username';
 
 interface ModalProps extends HTMLAttributes<HTMLDialogElement> {
   children: React.ReactNode;
@@ -12,14 +11,13 @@ interface ModalProps extends HTMLAttributes<HTMLDialogElement> {
 }
 
 const Modal = React.forwardRef<HTMLDialogElement, ModalProps>((props, ref) => {
-  const [isFocus, toggleFocus] = useToggle(false);
   const { isOpen, children, ...rest } = props;
 
   return (
     <Dialog ref={ref} open {...rest}>
-      <Form method="dialog">
+      <Form action={async (formData: FormData) => formAction(formData)}>
         {children}
-        <Button>확인</Button>
+        <Button type="submit">확인</Button>
       </Form>
     </Dialog>
   );

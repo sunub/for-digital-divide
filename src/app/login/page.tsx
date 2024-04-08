@@ -22,7 +22,18 @@ function Page() {
         await createCredentials();
       }}
     >
-      <Username />
+      <Username
+        id="username"
+        type="text"
+        name="username webauthn"
+        autoComplete={'email'}
+        aria-label="아이디 입력"
+        aria-labelledby="아이디 입력"
+        minLength={1}
+        maxLength={40}
+        labelContent="아이디"
+        inputContent="아이디를 입력해주세요"
+      />
     </FidoForm>
   );
 }

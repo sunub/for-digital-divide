@@ -73,7 +73,7 @@ function PhoneFrame() {
   );
 }
 
-function ArrowIcon() {
+function ArrowIcon({ rotate }: { rotate?: CSSProperties['transform'] }) {
   return (
     <svg
       width="27"
@@ -81,6 +81,7 @@ function ArrowIcon() {
       viewBox="0 0 27 25"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      style={{ transform: rotate }}
     >
       <path
         fillRule="evenodd"

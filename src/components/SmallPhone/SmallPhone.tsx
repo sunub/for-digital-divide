@@ -7,6 +7,11 @@ import useToggle from '@/hooks/use-toggle';
 import { useRouter } from 'next/navigation';
 import { NotificationContext } from '@/context/NotificationContext';
 
+interface SmallPhoneProps {
+  isOpen: boolean;
+  toggleOpen: () => void;
+}
+
 const Phone = styled(motion.button)`
   background: transparent;
   display: grid;
@@ -76,8 +81,8 @@ function layered_shadow(layer: number, gapX: number, gapY: number): string {
   return values.slice(0, values.length - 1);
 }
 
-function SmallPhone() {
-  const [isOpen, toggleOpen] = useToggle(false);
+function SmallPhone(props: SmallPhoneProps) {
+  const { isOpen, toggleOpen } = props;
   const router = useRouter();
   const { action } = React.useContext(NotificationContext);
 

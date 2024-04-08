@@ -1,15 +1,16 @@
 import crypto from 'crypto';
+import { Base64 } from 'js-base64';
 
 export interface KeypadInfo {
   uid: string;
-  hash: Map<Buffer, { value: number }>;
+  hashes: [string, number][];
   keypad: KeypadDetail;
 }
 
 export interface SvgGrid {
   x: number;
   y: number;
-  num: (string | number)[];
+  num: string;
 }
 
 export interface KeypadDetail {
@@ -41,14 +42,14 @@ export function shuffleArray(array: number[][]): number[][] {
 }
 
 export function getSVGGrid(array: number[][]): KeypadInfo {
-  const hashes = new Map();
   const shuffledNumpadAxis = shuffleArray(array);
 
+  const hashes = new Map();
   const hashKeys = shuffledNumpadAxis.map(([, , num]) => {
     const hash = crypto.createHash('sha256').update(num.toString()).digest();
-    const encodedSignature = Buffer.from(hash).toString('base64');
-
-    return [encodedSignature, num];
+    const encodedSignature = Base64.encode(hash.toString('binary'));
+    hashes.set(encodedSignature, num);
+    return encodedSignature;
   });
 
   const shuffledGrid: SvgGrid[][] = [
@@ -85,17 +86,17 @@ export function getSVGGrid(array: number[][]): KeypadInfo {
   shuffledGrid[3].unshift({
     x: 0,
     y: -150,
-    num: [100],
+    num: '100',
   });
   shuffledGrid[3].push({
     x: -80,
     y: -150,
-    num: [101],
+    num: '101',
   });
 
   return {
     uid: Math.random().toString(36).substr(2, 9),
-    hash: hashes,
+    hashes: Array.from(hashes),
     keypad: {
       functionKeys: [
         {

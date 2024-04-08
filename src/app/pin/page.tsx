@@ -17,11 +17,23 @@ async function getPadInfo() {
 
 async function Page() {
   const padInfo = await getPadInfo();
-  console.log(padInfo.hash);
 
   return (
     <NumpadProvider>
-      <KeyLayout padInfo={padInfo} />
+      <div>
+        <KeyLayout
+          key={'register-pin-number'}
+          uses={'register'}
+          padInfo={padInfo}
+        />
+      </div>
+      <div>
+        <KeyLayout
+          key={'confirm-pin-number'}
+          uses={'confirm'}
+          padInfo={padInfo}
+        />
+      </div>
     </NumpadProvider>
   );
 }

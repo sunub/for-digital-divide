@@ -1,6 +1,6 @@
-"use server";
+'use server';
 
-import { Pool, PoolClient, QueryResult } from "pg";
+import { PoolClient, QueryResult, Pool } from 'pg';
 
 interface Credential {
   credId: string;
@@ -22,7 +22,7 @@ async function usePgPool(
   const pool = new Pool({
     host: process.env.SUNUB_POSTGRES_HOST,
     user: process.env.SUNUB_POSTGRES_USER,
-    connectionString: process.env.SUNUB_POSTGRES_URL + "?sslmode=require",
+    connectionString: process.env.SUNUB_POSTGRES_URL + '?sslmode=require',
     connectionTimeoutMillis: 2000,
     idleTimeoutMillis: 30000,
   });
@@ -32,9 +32,9 @@ async function usePgPool(
   console.assert(pool.idleCount === 0);
   console.assert(pool.totalCount === 1);
 
-  console.log("calling end");
+  console.log('calling end');
   await client.release(true);
-  console.log("연결되어 있는 풀이 종료되었는지 확인");
+  console.log('연결되어 있는 풀이 종료되었는지 확인');
   console.assert(pool.idleCount === 0);
   console.assert(pool.totalCount === 0);
 

@@ -6,6 +6,7 @@ import Spacer from '../Spacer';
 import PadLayout from './layout/PadLayout';
 
 interface KeypadProps {
+  children?: React.ReactNode;
   uses: string;
   label: string;
   text: string;
@@ -15,12 +16,8 @@ interface KeypadProps {
   };
 }
 
-export default function Keypad({
-  uses,
-  label,
-  text,
-  triggerState,
-}: KeypadProps) {
+export default function Keypad(props: KeypadProps) {
+  const { children, uses, label, text, triggerState } = props;
   const inputRef = React.useRef<HTMLInputElement>(null);
   const contextValue = React.useContext(FocusContext);
   const keypad = contextValue.data;
@@ -29,7 +26,7 @@ export default function Keypad({
     uses === 'insert' ? 'keypad__insert--input' : 'keypad__confirm--input';
 
   return (
-    <>
+    <React.Fragment>
       <KeypadInput
         label={label}
         id={id}
@@ -50,6 +47,6 @@ export default function Keypad({
           triggerState={triggerState}
         />
       ) : null}
-    </>
+    </React.Fragment>
   );
 }

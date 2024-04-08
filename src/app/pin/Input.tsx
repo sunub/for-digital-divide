@@ -14,7 +14,6 @@ interface InputLabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
 }
 
 interface Numpads {
-  number: string;
   isUsed: boolean;
 }
 
@@ -35,12 +34,9 @@ function Input(props: InputLabelProps) {
 
 Input.TextField = React.forwardRef<HTMLInputElement, InputTextFieldProps>(
   (props, ref) => {
-    const tmpPinValue = [];
     const { numpad } = useNumpadStore((state) => state);
-    const [pinnums, updatePinnums] = React.useState<string[]>([]);
     const [numpads, updateNumpads] = React.useState<Numpads[]>(
       Array.from({ length: 4 }, () => ({
-        number: '',
         isUsed: false,
       })),
     );
@@ -49,17 +45,16 @@ Input.TextField = React.forwardRef<HTMLInputElement, InputTextFieldProps>(
     const { setter, ...rest } = props;
 
     React.useEffect(() => {
-      updateNumpads((prevNumpads) => {
-        if (numpad.length <= 0 || numpad.length > validNumpadLength)
-          return prevNumpads;
-        const newNumpads = [...prevNumpads];
-        const index = numpad.length - 1;
-        newNumpads[index] = {
-          number: numpad[index],
-          isUsed: true,
-        };
-        return newNumpads;
-      });
+      if (numpad.length <= validNumpadLength) {
+        updateNumpads((prev) => {
+          const newNumpads = [...prev];
+          newNumpads[numpad.length - 1] = {
+            isUsed: true,
+          };
+
+          return newNumpads;
+        });
+      }
     }, [numpad]);
 
     return (
@@ -73,12 +68,14 @@ Input.TextField = React.forwardRef<HTMLInputElement, InputTextFieldProps>(
           ))}
         </div>
         <input
+          id="pin-pattern-input"
+          name="pinNumbers"
           ref={ref}
           readOnly
           {...rest}
           type="password"
           className="visually-hidden"
-          value={pinnums}
+          value={numpad}
         />
       </React.Fragment>
     );
@@ -89,13 +86,15 @@ Input.TextField.displayName = 'Input TextField';
 
 const Dot = styled.div<{ $isUsed: boolean }>`
   content: '';
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.75rem;
+  height: 0.75rem;
   display: block;
-  background-color: ${({ $isUsed }) => ($isUsed ? 'black' : 'white')};
+  background-color: ${({ $isUsed }) =>
+    $isUsed
+      ? 'var(--color-button)'
+      : 'color-mix(in oklch, var(--color-text), transparent)'};
   border-radius: 50%;
   aspect-ratio: 1 / 1;
-  border: 1px solid black;
 `;
 
 export default Input;

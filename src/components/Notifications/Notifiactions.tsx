@@ -6,7 +6,6 @@ import {
   type Notification,
 } from '@/context/NotificationContext';
 import NotificationItem from '../NotificationItem';
-import { PreloadResources } from '@/app/preload';
 
 function Notifications() {
   const { notificationList } = React.useContext(NotificationContext);

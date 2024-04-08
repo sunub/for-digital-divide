@@ -1,7 +1,7 @@
 import { createStore } from 'zustand';
 
 export type NumpadState = {
-  numpad: string;
+  numpad: string[];
 };
 
 export type NumpadActions = {
@@ -11,7 +11,7 @@ export type NumpadActions = {
 export type NumpadStore = NumpadState & NumpadActions;
 
 export const defaultInitState: NumpadState = {
-  numpad: '',
+  numpad: [],
 };
 
 export const createNumpadStore = (
@@ -19,7 +19,11 @@ export const createNumpadStore = (
 ) => {
   return createStore<NumpadStore>()((set) => ({
     ...initState,
-    updateNumpad: (newNumpad: string) =>
-      set((state) => ({ numpad: state.numpad + newNumpad })),
+    updateNumpad: (newNumpad) => {
+      set((state) => {
+        if (state.numpad.length >= 4) return state;
+        return { numpad: [...state.numpad, newNumpad] };
+      });
+    },
   }));
 };
