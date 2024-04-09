@@ -2,10 +2,11 @@
 
 import VisuallyHidden from '@/components/VisuallyHidden';
 import React, { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
-import { useNumpadStore } from './KeypadProvider';
+import { useNumpadStore, useSubmitNumpadStroe } from './KeypadProvider';
 import styled from 'styled-components';
 
 interface InputTextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
+  uses: string;
   setter: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -34,7 +35,11 @@ function Input(props: InputLabelProps) {
 
 Input.TextField = React.forwardRef<HTMLInputElement, InputTextFieldProps>(
   (props, ref) => {
-    const { numpad } = useNumpadStore((state) => state);
+    const { numpad } =
+      props.uses === 'register'
+        ? useNumpadStore((state) => state)
+        : useSubmitNumpadStroe((state) => state);
+
     const [numpads, updateNumpads] = React.useState<Numpads[]>(
       Array.from({ length: 4 }, () => ({
         isUsed: false,

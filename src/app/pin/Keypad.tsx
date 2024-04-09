@@ -4,26 +4,29 @@ import React from 'react';
 import { KeypadInfo } from '@/utils/keypad';
 import { SvgGrid } from '@/utils/keypad';
 import styled from 'styled-components';
-import { useNumpadStore } from './KeypadProvider';
+import { useNumpadStore, useSubmitNumpadStroe } from './KeypadProvider';
 import Button from '@/components/Button/Button';
 import { motion } from 'framer-motion';
+import useToggle from '@/hooks/use-toggle';
 
 interface Props {
   padInfo: KeypadInfo;
+  uses: string;
+  isIdle: boolean;
 }
 
 function Keypad({ props }: { props: Props }) {
-  const { padInfo } = props;
+  const { padInfo, uses } = props;
   const { keypad } = padInfo;
   const { svgGrid } = keypad;
-  const { numpad, updateNumpad } = useNumpadStore((state) => state);
+
+  const { numpad, updateNumpad } =
+    uses === 'register'
+      ? useNumpadStore((state) => state)
+      : useSubmitNumpadStroe((state) => state);
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div>
-        <p>보안 키를 입력해주세요</p>
-        <p>4자리로 입력해주세요</p>
-      </div>
       <div
         className="flex flex-col justify-evenly border pb-6 pt-6 pl-2 pr-2 rounded-md bg-slate-50"
         style={{ width: '21cqw', border: '2px solid var(--color-text)' }}

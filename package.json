@@ -29,6 +29,7 @@
     "@vercel/postgres": "^0.7.2",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
+    "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.1",

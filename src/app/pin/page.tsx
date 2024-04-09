@@ -1,6 +1,8 @@
 import React from 'react';
 import KeyLayout from './Keylayout';
 import { NumpadProvider } from './KeypadProvider';
+import registerAction from './register';
+import confirmAction from './confirm';
 
 async function getPadInfo() {
   const baseurl =
@@ -16,7 +18,8 @@ async function getPadInfo() {
 }
 
 async function Page() {
-  const padInfo = await getPadInfo();
+  const registerPadInfo = await getPadInfo();
+  const confrimPadInfo = await getPadInfo();
 
   return (
     <NumpadProvider>
@@ -24,14 +27,16 @@ async function Page() {
         <KeyLayout
           key={'register-pin-number'}
           uses={'register'}
-          padInfo={padInfo}
+          padInfo={registerPadInfo}
+          action={registerAction}
         />
       </div>
       <div>
         <KeyLayout
           key={'confirm-pin-number'}
           uses={'confirm'}
-          padInfo={padInfo}
+          padInfo={confrimPadInfo}
+          action={confirmAction}
         />
       </div>
     </NumpadProvider>

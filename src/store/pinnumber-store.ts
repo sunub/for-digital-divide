@@ -14,8 +14,26 @@ export const defaultInitState: NumpadState = {
   numpad: [],
 };
 
+export const defaultSubmitInitState: NumpadState = {
+  numpad: [],
+};
+
 export const createNumpadStore = (
   initState: NumpadState = defaultInitState,
+) => {
+  return createStore<NumpadStore>()((set) => ({
+    ...initState,
+    updateNumpad: (newNumpad) => {
+      set((state) => {
+        if (state.numpad.length >= 4) return state;
+        return { numpad: [...state.numpad, newNumpad] };
+      });
+    },
+  }));
+};
+
+export const createSumbitNumpadStore = (
+  initState: NumpadState = defaultSubmitInitState,
 ) => {
   return createStore<NumpadStore>()((set) => ({
     ...initState,

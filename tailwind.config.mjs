@@ -47,7 +47,12 @@ export default {
         50: '50%',
       },
       backgroundColor: {
+        text: 'var(--color-text)',
         confirm: 'var(--color-confirm)',
+      },
+      blur: {
+        1: '1px',
+        2: '2px',
       },
     },
   },

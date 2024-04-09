@@ -4,12 +4,19 @@ import React from 'react';
 import Input from './Input';
 import Keypad from './Keypad';
 import { KeypadInfo } from '@/utils/keypad';
-import { baseurl } from '@/constants/constants';
-import pinAction from './submit';
+import { useNumpadStore, useSubmitNumpadStroe } from './KeypadProvider';
 
 interface KeyLayoutProps {
   uses: 'register' | 'confirm';
   padInfo: KeypadInfo;
+  action: (
+    decodedPinNumbers: string[],
+    padInfo: KeypadInfo,
+  ) => Promise<{
+    status: string;
+    id: string;
+    msg: string;
+  }>;
 }
 
 interface ErrorStatus {
@@ -27,18 +34,22 @@ function ErrorList({ id, errors }: { id?: string; errors?: string | null }) {
 }
 
 function KeyLayout(props: KeyLayoutProps) {
+  const { padInfo, uses, action } = props;
   const [isOpen, setOpen] = React.useState(false);
   const [pinErrorStatus, setPinErrorStatus] = React.useState<ErrorStatus>({
     hasError: false,
     errorId: '',
     msg: null,
   });
+  const [isIdle, setIsIdle] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const containerRef = React.useRef<HTMLFormElement>(null);
+  const validNumpadLength = 4;
 
-  const { padInfo, uses } = props;
   const keypadProps = {
     padInfo,
+    uses,
+    isIdle,
   };
 
   React.useEffect(() => {
@@ -48,6 +59,11 @@ function KeyLayout(props: KeyLayoutProps) {
         !containerRef.current.contains(event.target as Node)
       ) {
         setOpen(false);
+        setPinErrorStatus({
+          hasError: false,
+          errorId: '',
+          msg: null,
+        });
       }
     }
 
@@ -65,12 +81,24 @@ function KeyLayout(props: KeyLayoutProps) {
       className="flex flex-col items-center"
       action={async (formData: FormData) => {
         let pinNumbers = formData.get('pinNumbers');
-        if (!pinNumbers) return;
+        if (!pinNumbers)
+          return setPinErrorStatus({
+            hasError: true,
+            errorId: 'pin-pattern-input',
+            msg: '핀번호를 입력해주세요.',
+          });
 
         const decodedPinNumbers = (pinNumbers as string).split(',');
-        const actionData = await pinAction(decodedPinNumbers, padInfo.hashes);
+        const actionData = await action(decodedPinNumbers, padInfo);
 
-        console.log(actionData);
+        if (decodedPinNumbers.length !== validNumpadLength) {
+          setPinErrorStatus({
+            hasError: true,
+            errorId: 'pin-pattern-input',
+            msg: '핀번호는 4자여야 합니다.',
+          });
+        }
+
         if (actionData.status === 'error' && actionData.msg) {
           setPinErrorStatus({
             hasError: true,
@@ -87,13 +115,28 @@ function KeyLayout(props: KeyLayoutProps) {
         <Input.TextField
           ref={inputRef}
           id={`pin-pattern-input-${uses}`}
+          uses={uses}
           autoComplete={'new-password'}
           setter={setOpen}
           aria-invalid={pinErrorStatus.hasError || undefined}
           aria-describedby={pinErrorStatus.errorId}
         />
         <div>
-          <ErrorList id={pinErrorStatus.errorId} errors={pinErrorStatus.msg} />
+          {isOpen ? (
+            <div>
+              {pinErrorStatus.hasError ? (
+                <ErrorList
+                  id={pinErrorStatus.errorId}
+                  errors={pinErrorStatus.msg}
+                />
+              ) : (
+                <React.Fragment>
+                  <p>보안 키를 입력해주세요</p>
+                  <p>4자리로 입력해주세요</p>
+                </React.Fragment>
+              )}
+            </div>
+          ) : null}
         </div>
       </Input>
       <div>{isOpen && <Keypad props={keypadProps} />}</div>

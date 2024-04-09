@@ -1,5 +1,6 @@
 'use server';
 
+import { KeypadInfo } from '@/utils/keypad';
 import { cookies } from 'next/headers';
 import { Pool, QueryResult } from 'pg';
 import * as v from 'valibot';
@@ -16,11 +17,12 @@ const PinSchema = v.object({
   pinnumkeys: v.array(v.tuple([v.string(), v.number()])),
 });
 
-export default async function pinAction(
+export default async function registerAction(
   decodedPinNumbers: string[],
-  pinNumKeys: [string, number][],
+  padInfo: KeypadInfo,
 ) {
   const username = cookies().get('username');
+  const pinNumKeys = padInfo.hashes;
 
   const result = v.safeParse(PinSchema, {
     username: username?.value,
@@ -94,6 +96,4 @@ export default async function pinAction(
     id: 'pin-pattern-register-success',
     msg: '핀번호가 성공적으로 등록되었습니다.',
   };
-  // revalidatePath(`${baseurl}/pin`);
-  // redirect(`${baseurl}/pin`);
 }
