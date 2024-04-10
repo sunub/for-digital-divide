@@ -3,7 +3,7 @@
 import { KeypadInfo } from '@/utils/keypad';
 import { Base64 } from 'js-base64';
 import { cookies } from 'next/headers';
-import { Pool, QueryResult } from 'pg';
+import { Pool } from 'pg';
 import * as v from 'valibot';
 
 const PinSchema = v.object({
@@ -28,6 +28,20 @@ async function confirmAction(decodedPinNumbers: string[], padInfo: KeypadInfo) {
     };
   }
   const decodedUsername = Base64.decode(cookieUsername.value);
+
+  const result = v.safeParse(PinSchema, {
+    username: decodedUsername,
+    pinnumber: decodedPinNumbers,
+    pinnumkeys: padInfo.hashes,
+  });
+
+  if (!result.success) {
+    return {
+      status: 'error',
+      id: 'pin-pattern-confirm-error',
+      msg: '잘못된 핀번호 형식입니다.',
+    };
+  }
 
   const pool = new Pool({
     host: process.env.SUNUB_POSTGRES_HOST,

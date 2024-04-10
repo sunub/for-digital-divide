@@ -20,10 +20,11 @@ function Keypad({ props }: { props: Props }) {
   const { keypad } = padInfo;
   const { svgGrid } = keypad;
 
-  const { numpad, updateNumpad } =
+  const { numpad, updateNumpad, deleteNumpad } =
     uses === 'register'
       ? useNumpadStore((state) => state)
       : useSubmitNumpadStroe((state) => state);
+  console.log(svgGrid);
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -39,11 +40,17 @@ function Keypad({ props }: { props: Props }) {
                   <li
                     key={crypto.randomUUID()}
                     style={{ width: '7cqw' }}
-                    className="flex justify-center align-middle"
+                    className="flex justify-center align-middle relative"
                   >
-                    <button type="button" className="text-sm">
-                      전체삭제
-                    </button>
+                    <NumpadButton
+                      type="button"
+                      className="text-sm"
+                      onClick={() => deleteNumpad()}
+                    >
+                      <span className="block z-10 relative text-pretty leading-5">
+                        전체삭제
+                      </span>
+                    </NumpadButton>
                   </li>
                 );
               }
@@ -51,20 +58,20 @@ function Keypad({ props }: { props: Props }) {
               return (
                 <Li
                   key={crypto.randomUUID()}
-                  className="flex justify-center align-middle p-2"
+                  className="flex justify-center align-middle p-2 relative"
                   style={{ width: '7cqw' }}
                 >
-                  <button type="button">
+                  <NumpadButton type="button">
                     <NumPad
                       $x={x}
                       $y={y}
                       className={`w-numpad h-numpad bg-numpad block`}
                       onClick={() => {
-                        if (numpad.length >= 4) return;
+                        if (numpad.length >= 4 || num == '100') return;
                         updateNumpad(`${num}`);
                       }}
                     />
-                  </button>
+                  </NumpadButton>
                 </Li>
               );
             })}
@@ -80,15 +87,13 @@ function Keypad({ props }: { props: Props }) {
 
 const Li = styled(motion.li)``;
 
-const NumPad = styled.span<{ $x: number; $y: number }>`
-  background-position: ${({ $x, $y }) => `${$x}px ${$y}px`};
-  position: relative;
+const NumpadButton = styled.button`
   &::before {
     content: '';
     display: block;
     position: absolute;
-    top: -5.75px;
-    left: -10.75px;
+    top: 5.75px;
+    left: 8.75px;
 
     width: 60px;
     height: 60px;
@@ -100,6 +105,11 @@ const NumPad = styled.span<{ $x: number; $y: number }>`
     background-color: var(--color-button);
     mix-blend-mode: multiply;
   }
+`;
+
+const NumPad = styled.span<{ $x: number; $y: number }>`
+  background-position: ${({ $x, $y }) => `${$x}px ${$y}px`};
+  position: relative;
 `;
 
 export default Keypad;

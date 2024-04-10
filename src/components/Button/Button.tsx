@@ -18,6 +18,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const isIdle = status === 'idle';
 
     React.useEffect(() => {
+      if (isClick) {
+        setTimeout(() => toggleClick(), 1000);
+      }
+    }, [isClick]);
+
+    React.useEffect(() => {
       if (status === 'pending') {
         animate(
           [

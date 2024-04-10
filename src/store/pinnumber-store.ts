@@ -6,6 +6,7 @@ export type NumpadState = {
 
 export type NumpadActions = {
   updateNumpad: (newNumpad: string) => void;
+  deleteNumpad: () => void;
 };
 
 export type NumpadStore = NumpadState & NumpadActions;
@@ -29,6 +30,11 @@ export const createNumpadStore = (
         return { numpad: [...state.numpad, newNumpad] };
       });
     },
+    deleteNumpad: () => {
+      set(() => {
+        return { numpad: [] };
+      });
+    },
   }));
 };
 
@@ -41,6 +47,11 @@ export const createSumbitNumpadStore = (
       set((state) => {
         if (state.numpad.length >= 4) return state;
         return { numpad: [...state.numpad, newNumpad] };
+      });
+    },
+    deleteNumpad: () => {
+      set(() => {
+        return { numpad: [] };
       });
     },
   }));

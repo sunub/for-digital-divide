@@ -52,12 +52,13 @@ Input.TextField = React.forwardRef<HTMLInputElement, InputTextFieldProps>(
     React.useEffect(() => {
       if (numpad.length <= validNumpadLength) {
         updateNumpads((prev) => {
-          const newNumpads = [...prev];
-          newNumpads[numpad.length - 1] = {
-            isUsed: true,
-          };
-
-          return newNumpads;
+          return prev.map((_, index) => {
+            if (index < numpad.length) {
+              return { isUsed: true };
+            } else {
+              return { isUsed: false };
+            }
+          });
         });
       }
     }, [numpad]);
