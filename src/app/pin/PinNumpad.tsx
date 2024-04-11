@@ -6,16 +6,13 @@ import { SvgGrid } from '@/utils/keypad';
 import styled from 'styled-components';
 import { useNumpadStore, useSubmitNumpadStroe } from './KeypadProvider';
 import Button from '@/components/Button/Button';
-import { motion } from 'framer-motion';
-import useToggle from '@/hooks/use-toggle';
 
-interface Props {
+interface PinNumpadProps {
   padInfo: KeypadInfo;
-  uses: string;
-  isIdle: boolean;
+  uses: 'register' | 'confirm';
 }
 
-function Keypad({ props }: { props: Props }) {
+function PinNumpad(props: PinNumpadProps) {
   const { padInfo, uses } = props;
   const { keypad } = padInfo;
   const { svgGrid } = keypad;
@@ -26,10 +23,14 @@ function Keypad({ props }: { props: Props }) {
       : useSubmitNumpadStroe((state) => state);
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 shadow-card_lower p-6 rounded-xl bg-white">
+      <div>
+        <h1 className="text-l font-bold">보안 키를 입력해주세요</h1>
+        <p className="text-sm pt-2">4자리로 입력해주세요</p>
+      </div>
       <div
-        className="flex flex-col justify-evenly border pb-6 pt-6 pl-2 pr-2 rounded-md bg-slate-50"
-        style={{ width: '21cqw', border: '2px solid var(--color-text)' }}
+        className="flex flex-col justify-evenly pb-6 pt-6 pl-2 pr-2 rounded-md"
+        style={{ width: '21cqw' }}
       >
         {svgGrid.map((row) => (
           <ul key={crypto.randomUUID()} className="flex flex-row">
@@ -56,7 +57,7 @@ function Keypad({ props }: { props: Props }) {
 
               if (num == '100') {
                 return (
-                  <Li
+                  <li
                     key={crypto.randomUUID()}
                     className="flex justify-center align-middle p-2 relative"
                     style={{ width: '7cqw' }}
@@ -85,12 +86,12 @@ function Keypad({ props }: { props: Props }) {
                         form.requestSubmit();
                       }}
                     />
-                  </Li>
+                  </li>
                 );
               }
 
               return (
-                <Li
+                <li
                   key={crypto.randomUUID()}
                   className="flex justify-center align-middle p-2 relative"
                   style={{ width: '7cqw' }}
@@ -106,20 +107,18 @@ function Keypad({ props }: { props: Props }) {
                       }}
                     />
                   </NumpadButton>
-                </Li>
+                </li>
               );
             })}
           </ul>
         ))}
       </div>
-      <div>
+      <SubmitBtnContainer>
         <Button type="submit">확인</Button>
-      </div>
+      </SubmitBtnContainer>
     </div>
   );
 }
-
-const Li = styled(motion.li)``;
 
 const NumpadButton = styled.button`
   &::before {
@@ -146,4 +145,21 @@ const NumPad = styled.span<{ $x: number; $y: number }>`
   position: relative;
 `;
 
-export default Keypad;
+const SubmitBtnContainer = styled.div`
+  position: relative;
+
+  &::before {
+    display: block;
+    content: '';
+    height: 2.5px;
+    width: 64px;
+    border-radius: 16px;
+
+    position: absolute;
+    top: -36px;
+    left: calc(50% - 32px);
+    background-color: color-mix(in oklch, var(--color-text), transparent 20%);
+  }
+`;
+
+export default PinNumpad;

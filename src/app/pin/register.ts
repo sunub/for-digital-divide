@@ -1,6 +1,7 @@
 'use server';
 
 import { KeypadInfo } from '@/utils/keypad';
+import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { Pool, QueryResult } from 'pg';
 import * as v from 'valibot';
@@ -16,6 +17,14 @@ const PinSchema = v.object({
   ]),
   pinnumkeys: v.array(v.tuple([v.string(), v.number()])),
 });
+
+export async function reorderKeypad(isReorder: boolean) {
+  if (isReorder) {
+    revalidateTag('keypad');
+    return;
+  }
+  return;
+}
 
 export default async function registerAction(
   decodedPinNumbers: string[],

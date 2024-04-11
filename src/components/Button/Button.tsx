@@ -206,7 +206,7 @@ export const Btn = styled.button.attrs((props: any) => ({
     oklch(68.88% 0.231 26.47) 0%
   );
 
-  --input-default: oklch(96.88% 0.015 294.47);
+  --input-default: oklch(99.71% 0 66);
   --input-confirm: oklch(84.51% 0.162 147.29);
   --input-destructive: oklch(68.88% 0.231 26.47);
 

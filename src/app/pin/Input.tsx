@@ -20,12 +20,13 @@ interface Numpads {
 
 function Input(props: InputLabelProps) {
   const { htmlFor, children, ...rest } = props;
-
   return (
     <React.Fragment>
       <label htmlFor={htmlFor} className="flex h-fit w-fit" {...rest}>
         <h1>
-          {htmlFor === 'pin-pattern-input' ? '보안 PIN 입력' : '보안 PIN 확인'}
+          {htmlFor === 'pin-pattern-input-confirm'
+            ? '보안 PIN 확인'
+            : '보안 PIN 등록'}
         </h1>
       </label>
       {children}
