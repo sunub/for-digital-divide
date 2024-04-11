@@ -2,7 +2,10 @@
 
 import VisuallyHidden from '@/components/VisuallyHidden';
 import React, { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
-import { useNumpadStore, useSubmitNumpadStroe } from './KeypadProvider';
+import {
+  useNumpadStore,
+  useSubmitNumpadStroe,
+} from '../../context/NumpadContext';
 import styled from 'styled-components';
 
 interface InputTextFieldProps extends InputHTMLAttributes<HTMLInputElement> {

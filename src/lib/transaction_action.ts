@@ -1,8 +1,8 @@
-"use server";
+'use server';
 
-import pg from "pg";
-import * as v from "valibot";
-import bcrypt from "bcrypt";
+import pg, { QueryResult } from 'pg';
+import * as v from 'valibot';
+import bcrypt from 'bcrypt';
 
 interface VirtualUserData {
   userId: string;
@@ -22,7 +22,7 @@ interface VirtualUserData {
 async function seedTransactionHistory() {
   const { Pool } = pg;
   const pool = new Pool({
-    connectionString: process.env.SUNUB_POSTGRES_URL + "?sslmode=require",
+    connectionString: process.env.SUNUB_POSTGRES_URL + '?sslmode=require',
   });
   const client = await pool.connect();
 
@@ -36,7 +36,7 @@ async function seedTransactionHistory() {
   const isExistDetailTable = await client.query(isExistDetailTableQuery);
   if (isExistDetailTable.rows[0].exists) {
     console.log(
-      "가상 은행 계좌에 대한 거래 내역 상세 테이블이 이미 존재합니다",
+      '가상 은행 계좌에 대한 거래 내역 상세 테이블이 이미 존재합니다',
     );
   } else {
     try {
@@ -49,10 +49,10 @@ async function seedTransactionHistory() {
       `;
 
       await client.query(createDetailTable);
-      console.log("가상 은행 계좌에 대한 거래 내역 상세 테이블 추가");
+      console.log('가상 은행 계좌에 대한 거래 내역 상세 테이블 추가');
     } catch (error) {
       console.error(
-        "가상 은행 계좌에 대한 거래 내역 상세 테이블 추가 중 에러 발생",
+        '가상 은행 계좌에 대한 거래 내역 상세 테이블 추가 중 에러 발생',
         error,
       );
     }
@@ -67,7 +67,7 @@ async function seedTransactionHistory() {
   `;
   const isExistHistoryTable = await client.query(isExistHistoryTableQuery);
   if (isExistHistoryTable.rows[0].exists) {
-    console.log("가상 은행 계좌에 대한 거래 내역 테이블이 이미 존재합니다");
+    console.log('가상 은행 계좌에 대한 거래 내역 테이블이 이미 존재합니다');
     client.release();
     return;
   }
@@ -88,10 +88,10 @@ async function seedTransactionHistory() {
     `;
 
     await client.query(createTable);
-    console.log("가상 은행 계좌에 대한 거래 내역 테이블 추가");
+    console.log('가상 은행 계좌에 대한 거래 내역 테이블 추가');
   } catch (error) {
     console.error(
-      "가상 은행 계좌에 대한 거래 내역 테이블 추가 중 에러 발생",
+      '가상 은행 계좌에 대한 거래 내역 테이블 추가 중 에러 발생',
       error,
     );
   }
@@ -109,10 +109,10 @@ async function insertIntoTypeDetails(
       INSERT INTO transaction_type_details (code, description)
       VALUES ($1, $2);
     `;
-    await client.query(insertTypeDetails, [code, description]);
-    console.log("가상 은행 거래 내역 상세 테이블 추가");
+    await client.query<QueryResult>(insertTypeDetails, [code, description]);
+    console.log('가상 은행 거래 내역 상세 테이블 추가');
   } catch (error) {
-    console.error("가상 은행 거래 내역 상세 테이블 추가 중 에러 발생", error);
+    console.error('가상 은행 거래 내역 상세 테이블 추가 중 에러 발생', error);
   }
 }
 
@@ -122,16 +122,16 @@ async function insertIntoTypeDetails(
 async function initVirtualTypeDetails() {
   const codes = [100, 101, 102, 103, 104];
   const descriptions = [
-    "입금",
-    "기일 출금",
-    "체크 카드",
-    "ATM 출금",
-    "현금 인출",
+    '입금',
+    '기일 출금',
+    '체크 카드',
+    'ATM 출금',
+    '현금 인출',
   ];
 
   const { Pool } = pg;
   const pool = new Pool({
-    connectionString: process.env.SUNUB_POSTGRES_URL + "?sslmode=require",
+    connectionString: process.env.SUNUB_POSTGRES_URL + '?sslmode=require',
   });
   const client = await pool.connect();
 
@@ -161,7 +161,7 @@ async function insertTransactionHistory(
       INSERT INTO transaction_history (user_id, username, counter_party, account_number, transaction_type, transaction_type_id, transaction_amount, transaction_time)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
     `;
-    await client.query(insertTransaction, [
+    await client.query<QueryResult>(insertTransaction, [
       userId,
       username,
       counterParty,
@@ -171,9 +171,9 @@ async function insertTransactionHistory(
       transactionAmount,
       transactionTime,
     ]);
-    console.log("가상 은행 거래 내역 추가");
+    console.log('가상 은행 거래 내역 추가');
   } catch (error) {
-    console.error("가상 은행 거래 내역 추가 중 에러 발생", error);
+    console.error('가상 은행 거래 내역 추가 중 에러 발생', error);
   }
 }
 
@@ -185,7 +185,7 @@ async function insertTransactionHistory(
 async function insertToTransactionHistoryTable(userdata: VirtualUserData[]) {
   const { Pool } = pg;
   const pool = new Pool({
-    connectionString: process.env.SUNUB_POSTGRES_URL + "?sslmode=require",
+    connectionString: process.env.SUNUB_POSTGRES_URL + '?sslmode=require',
   });
   const client = await pool.connect();
 
@@ -196,53 +196,53 @@ async function insertToTransactionHistoryTable(userdata: VirtualUserData[]) {
 
 const virtualUserData: VirtualUserData[] = [
   {
-    userId: "bs123c5672@gmail.com",
-    username: "김철수",
-    counterParty: "김영희",
-    accountNumber: "123456789012",
-    transactionType: "입금",
+    userId: 'bs123c5672@gmail.com',
+    username: '김철수',
+    counterParty: '김영희',
+    accountNumber: '123456789012',
+    transactionType: '입금',
     transactionTypeDetailId: 100,
     transactionAmount: 10000,
-    transactionTime: "2024-02-06 10:00:00",
+    transactionTime: '2024-02-06 10:00:00',
   },
   {
-    userId: "bsc5672@gmail.com",
-    username: "박지영",
-    counterParty: "박영수",
-    accountNumber: "123456780913",
-    transactionType: "출금",
+    userId: 'bsc5672@gmail.com',
+    username: '박지영',
+    counterParty: '박영수',
+    accountNumber: '123456780913',
+    transactionType: '출금',
     transactionTypeDetailId: 103,
     transactionAmount: 20000,
-    transactionTime: "2024-02-06 11:00:00",
+    transactionTime: '2024-02-06 11:00:00',
   },
   {
-    userId: "df21dxce@ggole.com",
-    username: "이영희",
-    counterParty: "이철수",
-    accountNumber: "123456789014",
-    transactionType: "입금",
+    userId: 'df21dxce@ggole.com',
+    username: '이영희',
+    counterParty: '이철수',
+    accountNumber: '123456789014',
+    transactionType: '입금',
     transactionTypeDetailId: 101,
     transactionAmount: 30000,
-    transactionTime: "2024-02-06 12:00:00",
+    transactionTime: '2024-02-06 12:00:00',
   },
   {
-    userId: "fe21sad@ggole.com",
-    username: "최민수",
-    counterParty: "최영수",
-    accountNumber: "123456789015",
-    transactionType: "출금",
+    userId: 'fe21sad@ggole.com',
+    username: '최민수',
+    counterParty: '최영수',
+    accountNumber: '123456789015',
+    transactionType: '출금',
     transactionTypeDetailId: 104,
     transactionAmount: 40000,
-    transactionTime: "2024-02-06 13:00:00",
+    transactionTime: '2024-02-06 13:00:00',
   },
   {
-    userId: "dg23sde@ggogle.com",
-    username: "김지영",
-    counterParty: "김철수",
-    accountNumber: "123456789016",
-    transactionType: "입금",
+    userId: 'dg23sde@ggogle.com',
+    username: '김지영',
+    counterParty: '김철수',
+    accountNumber: '123456789016',
+    transactionType: '입금',
     transactionTypeDetailId: 102,
     transactionAmount: 50000,
-    transactionTime: "2024-02-06 14:00:00",
+    transactionTime: '2024-02-06 14:00:00',
   },
 ];

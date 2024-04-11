@@ -1,38 +1,38 @@
-"use server";
+'use server';
 
 /**
  * @description
  * ID와 비밀번호를 검증하여 로그인하는 함수
  */
 
-import pg from "pg";
-import { maxLength, minLength, object, safeParse, string } from "valibot";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import bcrypt from "bcrypt";
+import pg, { QueryResult } from 'pg';
+import { maxLength, minLength, object, safeParse, string } from 'valibot';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import bcrypt from 'bcrypt';
 
 type LoginAction = {
   type:
-    | "wrongId"
-    | "wrongPassword"
-    | "wrongLengthID"
-    | "wrongLengthPassword"
-    | "error"
-    | "success";
+    | 'wrongId'
+    | 'wrongPassword'
+    | 'wrongLengthID'
+    | 'wrongLengthPassword'
+    | 'error'
+    | 'success';
 };
 
 const { Pool } = pg;
 const pool = new Pool({
-  connectionString: process.env.SUNUB_POSTGRES_URL + "?sslmode=require",
+  connectionString: process.env.SUNUB_POSTGRES_URL + '?sslmode=require',
 });
 
 const LoginSchema = object({
-  username: string("아이디 입력", [
-    minLength(3, "최소 3글자의 아이디를 입력해주세요."),
-    maxLength(20, "최대 20글자의 아이디를 입력해주세요."),
+  username: string('아이디 입력', [
+    minLength(3, '최소 3글자의 아이디를 입력해주세요.'),
+    maxLength(20, '최대 20글자의 아이디를 입력해주세요.'),
   ]),
-  password: string("비밀번호 입력", [
-    minLength(8, "최소 8글자의 비밀번호를 입력해주세요."),
+  password: string('비밀번호 입력', [
+    minLength(8, '최소 8글자의 비밀번호를 입력해주세요.'),
   ]),
 });
 
@@ -43,8 +43,8 @@ interface CreateResult {
 
 function validateFormDataField(formData: FormData) {
   const validateDataField = safeParse(LoginSchema, {
-    username: formData.get("username"),
-    password: formData.get("password"),
+    username: formData.get('username'),
+    password: formData.get('password'),
   });
 
   if (!validateDataField.success) {
@@ -61,13 +61,13 @@ function validateFormDataField(formData: FormData) {
 }
 
 export async function authenticate(formData: FormData): Promise<{
-  type: LoginAction["type"];
+  type: LoginAction['type'];
 }> {
   const startTime = performance.now();
 
   let { username, password } = validateFormDataField(formData);
 
-  if (!username || !password) return { type: "error" };
+  if (!username || !password) return { type: 'error' };
 
   let isAuthenticationSuccess = {
     password: false,
@@ -82,7 +82,7 @@ export async function authenticate(formData: FormData): Promise<{
 
     if (queryUserInfo.rows.length === 0) {
       return {
-        type: "wrongId",
+        type: 'wrongId',
       };
     }
 
@@ -95,13 +95,13 @@ export async function authenticate(formData: FormData): Promise<{
   } catch (error) {
     console.error(error);
     return {
-      type: "error",
+      type: 'error',
     };
   }
 
   if (!isAuthenticationSuccess.password) {
     return {
-      type: "wrongPassword",
+      type: 'wrongPassword',
     };
   }
   // End time
@@ -110,10 +110,10 @@ export async function authenticate(formData: FormData): Promise<{
   // Calculate elapsed time
   const elapsedTime = endTime - startTime;
 
-  console.log("로그인 시 소요된 시간: " + elapsedTime / 1000 + "s");
+  console.log('로그인 시 소요된 시간: ' + elapsedTime / 1000 + 's');
 
-  revalidatePath("/dashboard");
-  redirect("/dashboard");
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
 }
 
 export async function createUserInfo(
@@ -122,11 +122,11 @@ export async function createUserInfo(
   let { username, password } = validateFormDataField(formData);
   const client = await pool.connect();
 
-  const date = new Date().toISOString().split("T")[0];
+  const date = new Date().toISOString().split('T')[0];
   password = await bcrypt.hash(password!, 10);
 
   try {
-    const result = await client.query(
+    const result = await client.query<QueryResult>(
       `
       INSERT INTO users(username, password, date)
       VALUES ($1, $2, $3)
@@ -136,9 +136,9 @@ export async function createUserInfo(
     );
 
     if (result.rowCount && result.rowCount > 0) {
-      console.log("Data successfully inserted");
+      console.log('Data successfully inserted');
     } else {
-      console.log("Data not inserted, possibly due to conflict");
+      console.log('Data not inserted, possibly due to conflict');
     }
 
     client.release();
@@ -146,10 +146,10 @@ export async function createUserInfo(
     console.error(err);
     return {
       success: false,
-      message: "데이터베이스 오류",
+      message: '데이터베이스 오류',
     };
   }
 
-  revalidatePath("/dashboard/transfer");
-  redirect("/dashboard/transfer");
+  revalidatePath('/dashboard/transfer');
+  redirect('/dashboard/transfer');
 }

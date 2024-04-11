@@ -1,11 +1,9 @@
 import React from 'react';
-import { NumpadProvider } from './KeypadProvider';
-import PinInput from './PinInput';
-import registerAction from './register';
-import confirmAction from './confirm';
-import { revalidateTag } from 'next/cache';
-import PinNumpad from './PinNumpad';
-import * as v from 'valibot';
+import { NumpadProvider } from '@/context/NumpadContext';
+import PinInput from '@/components/PinNumber/PinInput';
+import PinNumpad from '@/components/PinNumber/PinNumpad';
+import registerAction from '@/utils/pin/register';
+import confirmAction from '@/utils/pin/confirm';
 
 async function getPadInfo() {
   const baseurl =

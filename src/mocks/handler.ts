@@ -29,25 +29,24 @@ const SVGGridScheme = v.object({
 });
 
 export const handlers = [
-  http.get(`http://localhost:3000/api/keypad`, () => {
-    const shuffledArray = shuffleArray(SVG_HTMLS);
-    const svgGrid = getSVGGrid(shuffledArray);
-    const check = SVGGridScheme._parse(svgGrid);
-    if (check.output === null) {
-      return HttpResponse.json({}, { status: 400 });
-    }
-
-    return HttpResponse.json(svgGrid, { status: 200 });
-  }),
+  // http.get(`http://localhost:3000/api/keypad`, () => {
+  //   const shuffledArray = shuffleArray(SVG_HTMLS);
+  //   const svgGrid = getSVGGrid(shuffledArray);
+  //   const check = SVGGridScheme._parse(svgGrid);
+  //   if (check.output === null) {
+  //     return HttpResponse.json({}, { status: 400 });
+  //   }
+  //   return HttpResponse.json(svgGrid, { status: 200 });
+  // }),
 ];
 
 export const keypadApi = async () => {
-  const shuffledArray = shuffleArray(SVG_HTMLS);
-  const svgGrid = getSVGGrid(shuffledArray);
-  const check = SVGGridScheme._parse(svgGrid);
-  console.log(svgGrid);
-  if (check.output === null) {
-    return HttpResponse.json({}, { status: 400 });
-  }
-  return HttpResponse.json(svgGrid, { status: 200 });
+  // const shuffledArray = shuffleArray(SVG_HTMLS);
+  // const svgGrid = getSVGGrid(shuffledArray);
+  // const check = SVGGridScheme._parse(svgGrid);
+  // console.log(svgGrid);
+  // if (check.output === null) {
+  //   return HttpResponse.json({}, { status: 400 });
+  // }
+  // return HttpResponse.json(svgGrid, { status: 200 });
 };

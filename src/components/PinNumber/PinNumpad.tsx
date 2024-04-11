@@ -4,7 +4,10 @@ import React from 'react';
 import { KeypadInfo } from '@/utils/keypad';
 import { SvgGrid } from '@/utils/keypad';
 import styled from 'styled-components';
-import { useNumpadStore, useSubmitNumpadStroe } from './KeypadProvider';
+import {
+  useNumpadStore,
+  useSubmitNumpadStroe,
+} from '../../context/NumpadContext';
 import Button from '@/components/Button/Button';
 
 interface PinNumpadProps {

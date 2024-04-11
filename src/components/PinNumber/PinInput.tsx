@@ -2,12 +2,9 @@
 
 import React from 'react';
 import Input from './Input';
-import Keypad from './Keypad';
 import { KeypadInfo } from '@/utils/keypad';
-import { useNumpadStore, useSubmitNumpadStroe } from './KeypadProvider';
-import { revalidateTag } from 'next/cache';
 import * as v from 'valibot';
-import { reorderKeypad } from './register';
+import { reorderKeypad } from '@/utils/pin/register';
 import PinSuccess from './PinSuccess';
 
 interface PinInputProps {

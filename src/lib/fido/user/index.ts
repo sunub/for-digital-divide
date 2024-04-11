@@ -1,11 +1,11 @@
-"use server";
+'use server';
 
-import { Pool, PoolClient, QueryResult } from "pg";
-import { cookies } from "next/headers";
-import { decode } from "js-base64";
-import crypto from "crypto";
-import usePgPool from "@/hooks/use-pgpool.hook";
-import { NextRequest } from "next/server";
+import { Pool, PoolClient, QueryResult } from 'pg';
+import { cookies } from 'next/headers';
+import { decode } from 'js-base64';
+import crypto from 'crypto';
+import usePgPool from '@/hooks/use-pgpool.hook';
+import { NextRequest } from 'next/server';
 
 interface Credential {
   credId: string;
@@ -21,7 +21,7 @@ interface User {
 
 class User {
   static async signedInStatus() {
-    const session = cookies().get("session")?.value;
+    const session = cookies().get('session')?.value;
     if (!session) return false;
 
     const decodedSession = JSON.parse(decode(session as string));
@@ -58,16 +58,19 @@ class User {
       const query = `
         UPDATE fido_users
         SET credentials = $1
-        WHERE id = $3;        
+        WHERE id = $2;        
       `;
 
-      return await client.query(query, [user.credentials, user.id]);
+      return await client.query(query, [
+        JSON.stringify(user.credentials),
+        user.id,
+      ]);
     });
     return findResult;
   }
 
   static async findByPassword(password: string) {
-    const session = cookies().get("session")?.value as string;
+    const session = cookies().get('session')?.value as string;
     const decodedSession = JSON.parse(decode(session));
     const userId = decode(decodedSession.id);
 
@@ -98,7 +101,7 @@ class User {
         DO UPDATE SET signed_in = EXCLUDED.signed_in;
       `;
 
-      return await client.query(query, [id, username, true]);
+      return await client.query<QueryResult>(query, [id, username, true]);
     });
 
     return findResult;
@@ -157,7 +160,7 @@ class User {
   }
 
   static async getSession(req: NextRequest) {
-    const session = req.cookies.get("session")?.value;
+    const session = req.cookies.get('session')?.value;
     const decodedSession = decode(session as string);
     const parsedSession = JSON.parse(decodedSession);
     const id = parsedSession.id;
