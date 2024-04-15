@@ -81,8 +81,8 @@ export default async function registerAction(
 
   if (selectResult.rows.length > 0) {
     return {
-      status: 'error',
-      id: 'pin-pattern-input-error',
+      status: 'success',
+      id: 'pin-pattern-input-success',
       msg: '이미 등록된 번호가 있습니다.',
     };
   }
