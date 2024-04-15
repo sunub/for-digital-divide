@@ -92,12 +92,12 @@ export const Center = styled.div`
 `;
 
 export const GestureCircle = styled.circle`
-  fill: none;
+  fill: color-mix(in oklch, oklch(71.22% 0 0 / 0.3), transparent);
+  opacity: 0;
   stroke: none;
-  transition: all 500ms ease;
-
-  &:hover {
-  }
+  transition: all 300ms ease;
+  transform: scale(0.3);
+  transform-origin: center;
 `;
 
 export const GestureButton = styled.button`
@@ -105,8 +105,11 @@ export const GestureButton = styled.button`
   place-items: center;
   width: fit-content;
 
-  &:hover ${GestureCircle} {
-    fill: color-mix(in oklch, oklch(71.22% 0 0 / 0.3), transparent);
+  &:hover {
+    ${GestureCircle} {
+      opacity: 1;
+      transform: scale(1.1);
+    }
   }
 `;
 
@@ -143,8 +146,9 @@ export const DeviceMainWrapper = styled.div`
 
 export const ContentWrapper = styled.div`
   display: grid;
-  grid-template-rows: [main-header] 300px [main-content] 1fr [main-footer] 170px;
+  grid-template-rows: [main-header] 100px [main-content] 1fr [main-footer] 170px;
   grid-template-columns: [main-column] 1fr;
+  justify-items: center;
 
   padding-left: 32px;
   padding-right: 32px;

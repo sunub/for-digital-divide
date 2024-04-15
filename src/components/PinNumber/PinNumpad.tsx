@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { use } from 'react';
 import { KeypadInfo } from '@/utils/keypad';
 import { SvgGrid } from '@/utils/keypad';
 import styled from 'styled-components';
 import {
+  NumpadContext,
   useNumpadStore,
   useSubmitNumpadStroe,
 } from '../../context/NumpadContext';
@@ -20,7 +21,7 @@ function PinNumpad(props: PinNumpadProps) {
   const { keypad } = padInfo;
   const { svgGrid } = keypad;
 
-  const { numpad, updateNumpad, deleteNumpad } =
+  const { numpad, status, updateNumpad, deleteNumpad } =
     uses === 'register'
       ? useNumpadStore((state) => state)
       : useSubmitNumpadStroe((state) => state);
@@ -31,12 +32,12 @@ function PinNumpad(props: PinNumpadProps) {
         <h1 className="text-l font-bold">보안 키를 입력해주세요</h1>
         <p className="text-sm pt-2">4자리로 입력해주세요</p>
       </div>
-      <div
-        className="flex flex-col justify-evenly pb-6 pt-6 pl-2 pr-2 rounded-md"
-        style={{ width: '21cqw' }}
-      >
+      <div className="flex flex-col justify-evenly pb-6 pl-2 pr-2 rounded-md w-full">
         {svgGrid.map((row) => (
-          <ul key={crypto.randomUUID()} className="flex flex-row">
+          <ul
+            key={crypto.randomUUID()}
+            className="flex flex-row w-full justify-around items-center"
+          >
             {row.map(({ x, y, num }: SvgGrid) => {
               if (num === '101') {
                 return (
@@ -45,15 +46,13 @@ function PinNumpad(props: PinNumpadProps) {
                     style={{ width: '7cqw' }}
                     className="flex justify-center align-middle relative"
                   >
-                    <NumpadButton
+                    <button
                       type="button"
-                      className="text-sm"
+                      className="text-xs"
                       onClick={() => deleteNumpad()}
                     >
-                      <span className="block z-10 relative text-pretty leading-5">
-                        전체삭제
-                      </span>
-                    </NumpadButton>
+                      <DeleteBtn>전체삭제</DeleteBtn>
+                    </button>
                   </li>
                 );
               }
@@ -65,7 +64,7 @@ function PinNumpad(props: PinNumpadProps) {
                     className="flex justify-center align-middle p-2 relative"
                     style={{ width: '7cqw' }}
                   >
-                    <label htmlFor="reorder-numpad-btn">
+                    <label htmlFor={`reorder-numpad-btn-${uses}`}>
                       <NumPad
                         $x={x}
                         $y={y}
@@ -78,7 +77,7 @@ function PinNumpad(props: PinNumpadProps) {
                     </label>
                     <input
                       name="reorder"
-                      id="reorder-numpad-btn"
+                      id={`reorder-numpad-btn-${uses}`}
                       className="w-0 h-0"
                       type="radio"
                       onChange={() => {
@@ -99,7 +98,7 @@ function PinNumpad(props: PinNumpadProps) {
                   className="flex justify-center align-middle p-2 relative"
                   style={{ width: '7cqw' }}
                 >
-                  <NumpadButton type="button">
+                  <button type="button">
                     <NumPad
                       $x={x}
                       $y={y}
@@ -109,7 +108,7 @@ function PinNumpad(props: PinNumpadProps) {
                         updateNumpad(`${num}`);
                       }}
                     />
-                  </NumpadButton>
+                  </button>
                 </li>
               );
             })}
@@ -117,35 +116,132 @@ function PinNumpad(props: PinNumpadProps) {
         ))}
       </div>
       <SubmitBtnContainer>
-        <Button type="submit">확인</Button>
+        <Button type="submit" status={status}>
+          확인
+        </Button>
       </SubmitBtnContainer>
     </div>
   );
 }
+const DeleteBtn = styled.span`
+  display: block;
+  z-index: 10;
+  position: relative;
+  text-wrap: pretty;
+  line-height: 1.25rem;
+  cursor: pointer;
 
-const NumpadButton = styled.button`
   &::before {
     content: '';
     display: block;
     position: absolute;
-    top: 5.75px;
-    left: 8.75px;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%) scale(0.3);
 
     width: 60px;
     height: 60px;
     border-radius: 50%;
     aspect-ratio: 1/ 1;
+
+    transition: all 250ms;
+    opacity: 0;
+    background-color: var(--color-button);
+  }
+
+  &:active::before {
+    opacity: 0.1;
+    transform: translateX(-50%) translateY(-50%) scale(1.2);
   }
 
   &:hover::before {
-    background-color: var(--color-button);
+    opacity: 0.2;
+    transform: translateY(-50%) translateX(-50%) scale(1);
     mix-blend-mode: multiply;
+  }
+
+  @keyframes bounce-numpad-box {
+    from,
+    20%,
+    53%,
+    80%,
+    to {
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      transform: translateX(-50%) translateY(-50%) scale3d(1, 1, 1);
+    }
+    40%,
+    43% {
+      animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+      transform: translateX(-50%) translateY(-50%) scale3d(0.78, 0.78, 0.78);
+    }
+    70% {
+      animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+      transform: translateX(-50%) translateY(-50%) scale3d(0.9, 0.9, 0.9);
+    }
+    90% {
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      transform: translateX(-50%) translateY(-50%) scale3d(0.95, 0.95, 0.95);
+    }
   }
 `;
 
 const NumPad = styled.span<{ $x: number; $y: number }>`
+  cursor: pointer;
   background-position: ${({ $x, $y }) => `${$x}px ${$y}px`};
   position: relative;
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%) scale(0.3);
+
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    aspect-ratio: 1/ 1;
+
+    transition: all 250ms;
+    opacity: 0;
+    background-color: var(--color-button);
+  }
+
+  &:active::before {
+    opacity: 0.1;
+    transform: translateX(-50%) translateY(-50%) scale(1.2);
+  }
+
+  &:hover::before {
+    opacity: 0.2;
+    transform: translateY(-50%) translateX(-50%) scale(1);
+    mix-blend-mode: multiply;
+  }
+
+  @keyframes bounce-numpad-box {
+    from,
+    20%,
+    53%,
+    80%,
+    to {
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      transform: translateX(-50%) translateY(-50%) scale3d(1, 1, 1);
+    }
+    40%,
+    43% {
+      animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+      transform: translateX(-50%) translateY(-50%) scale3d(0.78, 0.78, 0.78);
+    }
+    70% {
+      animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+      transform: translateX(-50%) translateY(-50%) scale3d(0.9, 0.9, 0.9);
+    }
+    90% {
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      transform: translateX(-50%) translateY(-50%) scale3d(0.95, 0.95, 0.95);
+    }
+  }
 `;
 
 const SubmitBtnContainer = styled.div`

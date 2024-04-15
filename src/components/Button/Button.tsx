@@ -2,10 +2,11 @@ import useToggle from '@/hooks/use-toggle';
 import styled from 'styled-components';
 import React from 'react';
 import { motion, useAnimate } from 'framer-motion';
+import { Status } from '@/store/pinnumber-store';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'default' | 'confirm' | 'destructive';
-  status?: 'idle' | 'pending' | 'success' | 'error';
+  status?: Status;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -210,6 +211,7 @@ export const Btn = styled.button.attrs((props: any) => ({
   --input-confirm: oklch(84.51% 0.162 147.29);
   --input-destructive: oklch(68.88% 0.231 26.47);
 
+  cursor: pointer;
   background-color: transparent;
   border-radius: 0.75rem;
   border: none;

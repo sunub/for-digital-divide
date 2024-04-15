@@ -6,6 +6,9 @@ import { KeypadInfo } from '@/utils/keypad';
 import * as v from 'valibot';
 import { reorderKeypad } from '@/utils/pin/register';
 import PinSuccess from './PinSuccess';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import { useNumpadStore, useSubmitNumpadStroe } from '@/context/NumpadContext';
 
 interface PinInputProps {
   children: React.ReactNode;
@@ -58,6 +61,10 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const containerRef = React.useRef<HTMLFormElement>(null);
   const isHydrated = useHydrated();
+  const { updateStatus } =
+    uses === 'register'
+      ? useNumpadStore((state) => state)
+      : useSubmitNumpadStroe((state) => state);
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -84,13 +91,17 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
   return (
     <form
       ref={containerRef}
-      className="flex flex-col gap-2 items-center"
-      id="pin-pattern-form"
+      className="flex flex-col gap-2 items-center relative mt-4 w-fit"
+      id={`pin-pattern-form-${uses}`}
       noValidate={isHydrated}
       aria-invalid={pinErrorStatus.hasError || undefined}
       aria-describedby={pinErrorStatus.errorId}
       tabIndex={-1}
+      onClick={() => {
+        setOpen(true);
+      }}
       action={async (formData: FormData) => {
+        updateStatus('pending');
         const isReorder = formData.get('reorder') === 'on';
 
         if (isReorder) {
@@ -102,17 +113,19 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
         const result = v.safeParse(PinNumberSchema, formPinNumber.split(','));
 
         if (!result.success) {
+          updateStatus('idle');
           setPinErrorStatus({
             hasError: true,
             errorId: 'pin-pattern-input',
             msg: result.issues[0].message,
           });
+          return;
         }
 
         const pinNumber = result.output as string[];
         const actionResult = await action(pinNumber, padInfo);
-        console.log(actionResult);
         if (actionResult.status === 'error') {
+          updateStatus('idle');
           setPinErrorStatus({
             hasError: true,
             errorId: actionResult.id,
@@ -123,6 +136,7 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
 
         setOpen(true);
         setSuccess(true);
+        updateStatus('idle');
       }}
     >
       {isSuccess ? (
@@ -130,10 +144,7 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
       ) : (
         <React.Fragment>
           <div className="shadow-card_lower pb-4 pt-4 pl-8 pr-8 rounded-lg flex flex-col items-center gap-2 bg-white">
-            <Input
-              htmlFor={`pin-pattern-input-${uses}`}
-              onClick={() => setOpen(true)}
-            >
+            <Input htmlFor={`pin-pattern-input-${uses}`}>
               <Input.TextField
                 ref={inputRef}
                 id={`pin-pattern-input-${uses}`}
@@ -156,12 +167,47 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
             )}
           </div>
           <div className="px-4 min-h-[32px] pb-3 pt-1 text-center">
-            {isOpen && <React.Fragment>{children}</React.Fragment>}
+            {isOpen && <div>{children}</div>}
           </div>
         </React.Fragment>
       )}
     </form>
   );
 }
+
+const NumpadWrapper = styled.div<{ $isOpen: boolean }>`
+  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
+  transition: all 200ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  transform-origin: top center;
+  will-change: transform;
+  animation: ${({ $isOpen }) => ($isOpen ? 'numpad-open' : 'numpad-close')}
+    200ms ease forwards;
+
+  @keyframes numpad-open {
+    20%,
+    from {
+      opacity: 0;
+      transform: translateY(0%) scaleY(0) scaleX(1);
+    }
+
+    to {
+      transform: translateY(0%) scaleY(1) scaleX(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes numpad-close {
+    20%,
+    from {
+      opacity: 1;
+      transform: translateY(0%) scaleY(1) scaleX(1);
+    }
+
+    to {
+      transform: translateY(0%) scaleY(0) scaleX(1);
+      opacity: 0;
+    }
+  }
+`;
 
 export default PinInput;
