@@ -1,18 +1,9 @@
 'use client';
 
 import styled from 'styled-components';
-import {
-  ForwardRefComponent,
-  HTMLMotionProps,
-  animate,
-  motion,
-  stagger,
-  useAnimate,
-} from 'framer-motion';
+import { motion, stagger, useAnimate } from 'framer-motion';
 import React from 'react';
-import useToggle from '@/hooks/use-toggle';
-import { NotificationContext } from '@/context/NotificationContext';
-import Icon from '../icons';
+import { useNotificationStore } from '@/context/NotificationContext';
 
 interface NotificationProps extends React.HTMLAttributes<HTMLLIElement> {
   id: string;
@@ -31,7 +22,7 @@ function NotificationItem({
   const listRef = React.useRef<HTMLLIElement>(null);
   const contentRef = React.useRef(null);
   const [scope, animate] = useAnimate();
-  const { action } = React.useContext(NotificationContext);
+  const { remove } = useNotificationStore((state) => state);
 
   React.useEffect(() => {
     if (!bellRef.current || !closeRef.current || !contentRef.current) return;
@@ -56,10 +47,6 @@ function NotificationItem({
     );
   }, []);
 
-  React.useEffect(() => {
-    console.log('load');
-  }, [action]);
-
   return (
     <List id={id} ref={scope} {...delegated}>
       <Wrapper>
@@ -82,7 +69,7 @@ function NotificationItem({
               y: ['0%', '100%'],
               opacity: [1, 0],
             }).then(() => {
-              action.remove(id);
+              remove(id);
             });
           }}
         >
