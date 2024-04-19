@@ -1,21 +1,21 @@
 'use client';
 
 import React from 'react';
-import { NotificationContext } from '@/context/NotificationContext';
+import { useNotificationStore } from '@/context/NotificationContext';
 import { ArrowIcon } from '@/icons';
 import Modal from '@/components/ui/modal';
 import Username from '@/components/LoginForm/LoginInput/Username';
+import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
-  const { action } = React.useContext(NotificationContext);
+  const searchParams = useSearchParams();
+  const { add } = useNotificationStore((state) => state);
 
   React.useEffect(() => {
-    const id = crypto.randomUUID();
-    action.add({
-      id,
-      message: `본인의 이름을 적어주셔도 되고 임의의 이름을 적어주셔도 되요! 이름을
-        적고 확인을 눌러 주세요!`,
+    add({
+      id: 'welcome',
       type: 'default',
+      message: 'Welcome to the app!',
     });
   }, []);
 

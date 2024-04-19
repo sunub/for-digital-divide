@@ -13,6 +13,59 @@
   line-height: calc(1em + 0.8rem);
   -webkit-font-smoothing: antialiased;
 }
+
+:root {
+  --color-background: oklch(96.88% 0.015 294.47);
+  --color-text: oklch(42.44% 0.011 17.58);
+  --color-transparent: oklch(42.44% 0.011 17.58 / 20%);
+  --color-primary: oklch(96.86% 0.009 288.17775174927874);
+  --color-button: oklch(65.57% 0.19552898037793698 288.17775174927874);
+  --color-highlight: oklch(73.96% 0.1963 25.278467161119735);
+  --color-confirm: oklch(84.51% 0.162 147.29);
+  --default-shadow: linear-gradient(
+    to left,
+    oklch(21.25% 0.005 17.53) 0%,
+    oklch(50.2% 0.013 17.59) 9%,
+    oklch(50.2% 0.013 17.59) 91%,
+    oklch(21.25% 0.005 17.53) 100%
+  );
+  --confirm-shadow: linear-gradient(
+    to left,
+    oklch(60.96% 0.114 146.9) 0%,
+    oklch(73.59% 0.114 146.9) 9%,
+    oklch(73.59% 0.114 146.9) 91%,
+    oklch(60.96% 0.114 146.9) 100%
+  );
+  --destructive-shadow: linear-gradient(
+    to left,
+    oklch(68.88% 0.231 26.47) 0%,
+    oklch(65.88% 0.231 26.47) 9%,
+    oklch(65.88% 0.231 26.47) 91%,
+    oklch(68.88% 0.231 26.47) 0%
+  );
+  /* oklch(65.29% 0.231 25.278467161119735) */
+  --input: oklch(41.69% 0.104 284.48);
+  --input-invalid: oklch(58.82% 0.182 25.278467161119735);
+
+  --ring: oklch(76.7% 0.123 284.14);
+  --accent: oklch(65.57% 0.19552898037793698 288.17775174927874);
+  --accent-foreground: var(--color-background);
+
+  --foreground-primary: oklch(96.86% 0.009 288.17775174927874);
+  --foreground-destructive: oklch(58.82% 0.182 25.278467161119735);
+
+  --background: oklch(96.88% 0.015 294.47);
+
+  --primary: oklch(85.93% 0.0733 288.25);
+  --primary-foreground: oklch(42.44% 0.011 17.58);
+
+  --secondary: oklch(91.4% 0.014 314.75);
+  --secondary-foreground: oklch(42.44% 0.011 17.58);
+
+  --destructive: oklch(73.96% 0.1586202546972356 25.278467161119735);
+  --destructive-foreground: oklch(96.88% 0.015 294.47);
+}
+
 html {
   display: block;
 }
@@ -21,7 +74,7 @@ html,
 body {
   --text-size: 24px;
   height: 100%;
-  font-family: var(--nanum-square-neo), var(--wotfard), sans-serif;
+  font-family: var(--nanum-square-neo), sans-serif;
   font-size: var(--text-size);
   background-color: var(--color-background);
 }

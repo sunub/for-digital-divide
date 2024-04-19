@@ -63,32 +63,3 @@ async function Page() {
 }
 
 export default Page;
-
-// action={async (formData: FormData) => {
-//   let pinNumbers = formData.get('pinNumbers');
-//   if (!pinNumbers)
-//     return setPinErrorStatus({
-//       hasError: true,
-//       errorId: 'pin-pattern-input',
-//       msg: '핀번호를 입력해주세요.',
-//     });
-
-//   const decodedPinNumbers = (pinNumbers as string).split(',');
-//   const actionData = await action(decodedPinNumbers, padInfo);
-
-//   if (decodedPinNumbers.length !== validNumpadLength) {
-//     setPinErrorStatus({
-//       hasError: true,
-//       errorId: 'pin-pattern-input',
-//       msg: '핀번호는 4자여야 합니다.',
-//     });
-//   }
-
-//   if (actionData.status === 'error' && actionData.msg) {
-//     setPinErrorStatus({
-//       hasError: true,
-//       errorId: 'pin-pattern-input',
-//       msg: actionData.msg,
-//     });
-//   }
-// }}
