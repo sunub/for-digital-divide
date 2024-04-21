@@ -9,7 +9,6 @@ type NotificationItem = [string, Notification];
 
 function NotificationList() {
   const notifications = useNotificationStore((state) => state.notifications);
-  console.log(notifications);
 
   return (
     <ol

@@ -1,5 +1,6 @@
-import { createStore } from 'zustand';
+import { createStore, create } from 'zustand';
 import { z } from 'zod';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 export type Notification = {
   id: string;
@@ -45,22 +46,32 @@ export type NotificationStore = NotificationState & NotificationAction;
 export const createNotificationStore = (
   initState: NotificationState = defaultInitState,
 ) => {
-  return createStore<NotificationStore>((set) => ({
-    ...initState,
-    add: (notification: Notification) => {
-      set((state) => {
-        if (state.notifications.find((n) => n.id === notification.id)) {
-          return state;
-        }
-        state.notifications.push(notification);
-        return state;
-      });
-    },
-    remove: (id: string) => {
-      set((state) => {
-        state.notifications = state.notifications.filter((n) => n.id !== id);
-        return state;
-      });
-    },
-  }));
+  return createStore<NotificationState & NotificationAction>()(
+    persist(
+      (set) => ({
+        ...initState,
+        add: (notification: Notification) => {
+          set((state) => {
+            if (state.notifications.find((n) => n.id === notification.id)) {
+              return state;
+            }
+            state.notifications.push(notification);
+            return state;
+          });
+        },
+        remove: (id: string) => {
+          set((state) => {
+            state.notifications = state.notifications.filter(
+              (n) => n.id !== id,
+            );
+            return state;
+          });
+        },
+      }),
+      {
+        name: 'notification-store',
+        storage: createJSONStorage(() => localStorage),
+      },
+    ),
+  );
 };
