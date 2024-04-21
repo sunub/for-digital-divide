@@ -8,14 +8,13 @@ import Username from '@/components/LoginForm/LoginInput/Username';
 import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
-  const searchParams = useSearchParams();
   const { add } = useNotificationStore((state) => state);
 
   React.useEffect(() => {
     add({
-      id: 'welcome',
+      id: 'username',
+      message: '사용자 이름을 입력해주세요',
       type: 'default',
-      message: 'Welcome to the app!',
     });
   }, []);
 
@@ -24,7 +23,7 @@ export default function Home() {
       <Modal isOpen={true}>
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-xl">
-            아래를 클릭 후 <b>키보드로</b> 입력해주세요!
+            아래를 클릭 후 <b className="font-black">키보드로</b> 입력해주세요!
           </h1>
           <ArrowIcon rotate={'rotate(-90deg)'} />
         </div>
