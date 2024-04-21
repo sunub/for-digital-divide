@@ -1,77 +1,40 @@
 'use client';
 
 import React from 'react';
-import NotificationItem from '@/components/NotificationItem';
-
-interface NotificationContextProps {
-  notificationList: Notification[];
-  action: {
-    add: (notification: Notification) => void;
-    remove: (id: string) => void;
-  };
-}
-
-export interface Notification {
-  id: string;
-  message: string;
-  type: 'default' | 'error' | 'success';
-}
-
-interface ContextValue {
-  notificationList: Notification[];
-  action: {
-    add: (notification: Notification) => void;
-    remove: (id: string) => void;
-  };
-}
+import { type StoreApi, useStore } from 'zustand';
+import {
+  type NotificationStore,
+  createNotificationStore,
+} from '@/store/notification-store';
 
 export const NotificationContext =
-  React.createContext<NotificationContextProps>({
-    notificationList: [],
-    action: {
-      add: () => {},
-      remove: () => {},
-    },
-  });
+  React.createContext<StoreApi<NotificationStore> | null>(null);
 
-function NotificationContextProvider({
+export function NotificationProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [notificationList, setNotification] = React.useState<Notification[]>(
-    [],
-  );
-
-  const contextValue = React.useMemo((): ContextValue => {
-    const add = (notification: Notification) => {
-      const newNotification = [...notificationList, notification];
-      setNotification(newNotification);
-    };
-
-    const remove = (id: string) => {
-      if (id.length == 0) {
-        setNotification([]);
-        return;
-      }
-
-      const newNotification = notificationList.filter((item) => item.id !== id);
-      setNotification(newNotification);
-    };
-
-    const action = {
-      add,
-      remove,
-    };
-
-    return { notificationList, action };
-  }, [notificationList, setNotification]);
+  const notificationRef = React.useRef<StoreApi<NotificationStore>>();
+  if (!notificationRef.current) {
+    notificationRef.current = createNotificationStore();
+  }
 
   return (
-    <NotificationContext.Provider value={contextValue}>
+    <NotificationContext.Provider value={notificationRef.current}>
       {children}
     </NotificationContext.Provider>
   );
 }
 
-export default NotificationContextProvider;
+export const useNotificationStore = <T,>(
+  selector: (store: NotificationStore) => T,
+): T => {
+  const notificationContext = React.useContext(NotificationContext);
+  if (!notificationContext) {
+    throw new Error(
+      'useNotificationStore must be used within a NotificationContextProvider',
+    );
+  }
+  return useStore(notificationContext, selector);
+};

@@ -66,6 +66,50 @@ export default {
         1: '1px',
         2: '2px',
       },
+      colors: {
+        border: 'oklch(42.44% 0.011 17.58)',
+        input: {
+          DEFAULT: 'oklch(65.57% 0.19552898037793698 288.17775174927874)',
+          invalid: 'oklch(73.96% 0.1963 25.278467161119735)',
+        },
+        ring: {
+          DEFAULT: 'oklch(86.83% 0.06751643147886291 285.8383540015746)',
+          invalid: 'oklch(64.17% 0.221 26.06)',
+        },
+        background: 'var(--color-background)',
+        foreground: {
+          DEFAULT: 'oklch(76.7% 0.123 284.14)',
+          destructive: 'oklch(64.17% 0.221 26.06)',
+        },
+        primary: {
+          DEFAULT: 'var(--primary)',
+          foreground: 'var(--primary-foreground)',
+        },
+        secondary: {
+          DEFAULT: 'var(--secondary)',
+          foreground: 'var(--secondary-foreground)',
+        },
+        destructive: {
+          DEFAULT: 'var(--destructive)',
+          foreground: 'var(--destructive-foreground)',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'var(--accent)',
+          foreground: 'var(--color-background)',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+      },
     },
   },
   plugins: [],

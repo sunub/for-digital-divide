@@ -8,14 +8,8 @@ import NotificationItem from '../NotificationItem';
 type NotificationItem = [string, Notification];
 
 function NotificationList() {
-  const [notificationList, setNotificationList] = React.useState<
-    NotificationItem[]
-  >([]);
-  const { notifications } = useNotificationStore((state) => state);
-
-  React.useEffect(() => {
-    setNotificationList([...notifications.entries()]);
-  }, [notifications]);
+  const notifications = useNotificationStore((state) => state.notifications);
+  console.log(notifications);
 
   return (
     <ol
@@ -24,14 +18,9 @@ function NotificationList() {
       aria-label="Notification"
       aria-live="polite"
     >
-      {notificationList &&
-        notificationList.map(([id, notification]: NotificationItem) => (
-          <NotificationItem
-            key={id}
-            id={id}
-            type={notification.type}
-            message={notification.message}
-          />
+      {notifications &&
+        notifications.map(({ id, message, type }) => (
+          <NotificationItem key={id} id={id} type={type} message={message} />
         ))}
     </ol>
   );

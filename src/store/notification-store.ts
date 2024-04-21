@@ -2,16 +2,17 @@ import { createStore } from 'zustand';
 import { z } from 'zod';
 
 export type Notification = {
+  id: string;
   message: string;
   type: 'default' | 'error' | 'success';
 };
 
 export type NotificationState = {
-  notifications: Map<string, Notification>;
+  notifications: Notification[];
 };
 
 export type NotificationAction = {
-  add: (notification: Notification, id: string) => void;
+  add: (notification: Notification) => void;
   remove: (id: string) => void;
 };
 
@@ -36,7 +37,7 @@ export const NotificationStateSchema = z.map(
 );
 
 export const defaultInitState = {
-  notifications: new Map<string, Notification>(),
+  notifications: [],
 } as NotificationState;
 
 export type NotificationStore = NotificationState & NotificationAction;
@@ -46,15 +47,18 @@ export const createNotificationStore = (
 ) => {
   return createStore<NotificationStore>((set) => ({
     ...initState,
-    add: (notification: Notification, id: string) => {
+    add: (notification: Notification) => {
       set((state) => {
-        state.notifications.set(id, notification);
+        if (state.notifications.find((n) => n.id === notification.id)) {
+          return state;
+        }
+        state.notifications.push(notification);
         return state;
       });
     },
     remove: (id: string) => {
       set((state) => {
-        state.notifications.delete(id);
+        state.notifications = state.notifications.filter((n) => n.id !== id);
         return state;
       });
     },

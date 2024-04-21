@@ -9,13 +9,15 @@ import PinSuccess from './PinSuccess';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNumpadStore, useSubmitNumpadStroe } from '@/context/NumpadContext';
+import { useNotificationStore } from '@/context/NotificationContext';
+import { goToUsername } from '@/utils/revalidate';
 
 interface PinInputProps {
   children: React.ReactNode;
   uses: 'register' | 'confirm';
   padInfo: KeypadInfo;
   action: (
-    decodedPinNumbers: string[],
+    formData: FormData,
     padInfo: KeypadInfo,
   ) => Promise<{
     status: string;
@@ -58,9 +60,11 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
     errorId: '',
     msg: null,
   });
+
   const inputRef = React.useRef<HTMLInputElement>(null);
   const containerRef = React.useRef<HTMLFormElement>(null);
   const isHydrated = useHydrated();
+
   const { updateStatus } =
     uses === 'register'
       ? useNumpadStore((state) => state)
@@ -101,30 +105,12 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
         setOpen(true);
       }}
       action={async (formData: FormData) => {
-        updateStatus('pending');
-        const isReorder = formData.get('reorder') === 'on';
+        const actionResult = await action(formData, padInfo);
 
-        if (isReorder) {
-          reorderKeypad(isReorder);
-          return;
-        }
-
-        let formPinNumber = formData.get('pinNumbers') as string;
-        const result = v.safeParse(PinNumberSchema, formPinNumber.split(','));
-
-        if (!result.success) {
-          updateStatus('idle');
-          setPinErrorStatus({
-            hasError: true,
-            errorId: 'pin-pattern-input',
-            msg: result.issues[0].message,
-          });
-          return;
-        }
-
-        const pinNumber = result.output as string[];
-        const actionResult = await action(pinNumber, padInfo);
         if (actionResult.status === 'error') {
+          if (actionResult.id === 'username-not-found') {
+            return goToUsername();
+          }
           updateStatus('idle');
           setPinErrorStatus({
             hasError: true,
@@ -133,10 +119,42 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
           });
           return;
         }
+        // updateStatus('pending');
+        // const isReorder = formData.get('reorder') === 'on';
 
-        setOpen(true);
-        setSuccess(true);
-        updateStatus('idle');
+        // if (isReorder) {
+        //   reorderKeypad(isReorder);
+        //   return;
+        // }
+
+        // let formPinNumber = formData.get('pinNumbers') as string;
+        // const result = v.safeParse(PinNumberSchema, formPinNumber.split(','));
+
+        // if (!result.success) {
+        //   updateStatus('idle');
+        //   setPinErrorStatus({
+        //     hasError: true,
+        //     errorId: 'pin-pattern-input',
+        //     msg: result.issues[0].message,
+        //   });
+        //   return;
+        // }
+
+        // const pinNumber = result.output as string[];
+        // const actionResult = await action(pinNumber, padInfo);
+        // if (actionResult.status === 'error') {
+        //   updateStatus('idle');
+        //   setPinErrorStatus({
+        //     hasError: true,
+        //     errorId: actionResult.id,
+        //     msg: actionResult.msg,
+        //   });
+        //   return;
+        // }
+
+        // setOpen(true);
+        // setSuccess(true);
+        // updateStatus('idle');
       }}
     >
       {isSuccess ? (
