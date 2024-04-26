@@ -7,7 +7,9 @@ export default function Device({ children }: { children: React.ReactNode }) {
   return (
     <Styled.RootWrapper>
       <Styled.OuterShadow>
-        <Styled.InnerWindow>{children}</Styled.InnerWindow>
+        <Styled.InnerWindow className="overflow-x-hidden">
+          {children}
+        </Styled.InnerWindow>
       </Styled.OuterShadow>
     </Styled.RootWrapper>
   );
