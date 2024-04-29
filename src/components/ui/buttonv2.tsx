@@ -4,22 +4,17 @@ import { cn } from '@/utils/misc';
 import React from 'react';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors outline-none focus-visible:ring-4 focus-within:ring-4 ring-ring ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'relative inline-flex items-center justify-center text-sm rounded-[16px] font-extralight transition-all shadow-button outline-none focus-visible:ring-4 focus-within:ring-4 ring-ring ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:shadow-button active:bg-button-default active:text-button-default-foreground',
   {
     variants: {
       variant: {
         default:
-          'bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground',
+          'bg-button-default text hover:text-button-active-foreground hover:bg-button-active hover:shadow-button-active',
         destructive:
-          'bg-destructive text-destructive-foreground hover:bg-red-500',
-        outline:
-          'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-slate-200',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
+          'bg-button-destructive text-destructive-foreground hover:shadow-button-active',
       },
       size: {
-        default: 'h-10 px-4 py-2',
+        default: 'w-button h-button px-4 py-2',
         wide: 'px-24 py-5',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
@@ -35,7 +30,7 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.HTMLAttributes<HTMLButtonElement>,
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }

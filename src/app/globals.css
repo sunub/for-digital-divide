@@ -14,7 +14,21 @@
   -webkit-font-smoothing: antialiased;
 }
 
+::view-transition-group(*) {
+  animation-timing-function: var(--ease-squish-1);
+}
+
+@font-face {
+  src: url('/font/NanumSquareNeo-Variable.woff2') format('font-woff2');
+  font-family: 'NanumSquare';
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+
 :root {
+  --nanum-square-neo: 'NanumSquare';
+
   --color-background: oklch(96.88% 0.015 294.47);
   --color-text: oklch(42.44% 0.011 17.58);
   --color-transparent: oklch(42.44% 0.011 17.58 / 20%);
@@ -125,9 +139,6 @@ input::-webkit-search-results-decoration {
 
 button {
   background: none;
-  cursor:
-    url('/images/cursor_pointer.png') 16 6,
-    pointer;
   touch-action: manipulation;
   outline-offset: 4px;
 

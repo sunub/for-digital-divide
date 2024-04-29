@@ -144,3 +144,73 @@ const Label = styled.label<{ $x: number }>`
   transform: translate(${({ $x }) => $x}%, 0);
   transition: transform 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
 `;
+
+// <div className="p-[22px]">
+//         <input
+//           type="number"
+//           maxLength={4}
+//           className="w-1 h-1 opacity-0 hidden"
+//           inputMode="numeric"
+//           autoFocus
+//         />
+//         <ol className="flex flex-row gap-4 ">
+//           {pinnumber.map((v, i) => (
+//             <li
+//               key={`pinumber-display-${i}`}
+//               className="w-[46px] h-[63px] bg-pinInput rounded-[12px] text-slate-950 text-center"
+//             >
+//               <span>{v == 0 ? null : v}</span>
+//             </li>
+//           ))}
+//         </ol>
+//       </div>
+
+//       <div className="flex flex-col gap-[2px] border-slate-700 border">
+//         <ol className="text-device-text flex flex-row w-[273px] gap-[2px]">
+//           <li className="bg-device text-[36px] rounded-tl-[16px] w-[100px] h-[91px] place-content-center text-center">
+//             <label htmlFor="padnumber-1" className="w-full h-fulln select-none">
+//               1
+//               <input
+//                 type="radio"
+//                 id="padnumber-1"
+//                 name="padnumber"
+//                 value={1}
+//                 onChange={(e) => {
+//                   console.log(e.target.value);
+//                   e.target.checked = false;
+//                 }}
+//               />
+//             </label>
+//           </li>
+//           <li className="bg-device text-[36px] w-[100px] h-[91px] place-content-center text-center">
+//             <input type="radio" name="padnumber" value={2} />
+//             <button className="w-full h-full">2</button>
+//           </li>
+//           <li className="bg-device text-[36px] rounded-tr-[16px] w-[100px] h-[91px] place-content-center text-center">
+//             <input type="radio" name="padnumber" value={3} />
+//             <button className="w-full h-full">3</button>
+//           </li>
+//         </ol>
+//         {/* <ol className="text-device-text flex flex-row w-[273px] gap-[2px]">
+//           <li className="bg-device text-[36px] w-[100px] h-[91px] place-content-center text-center">
+//             <button className="w-full h-full">4</button>
+//           </li>
+//           <li className="bg-device text-[36px] w-[100px] h-[91px] place-content-center text-center">
+//             <button className="w-full h-full">5</button>
+//           </li>
+//           <li className="bg-device text-[36px] w-[100px] h-[91px] place-content-center text-center">
+//             <button className="w-full h-full">6</button>
+//           </li>
+//         </ol>
+//         <ol className="text-device-text flex flex-row w-[273px] gap-[2px]">
+//           <li className="bg-device text-[36px] rounded-bl-[16px] w-[100px] h-[91px] place-content-center text-center">
+//             <button className="w-full h-full">7</button>
+//           </li>
+//           <li className="bg-device text-[36px] w-[100px] h-[91px] place-content-center text-center">
+//             <button className="w-full h-full">8</button>
+//           </li>
+//           <li className="bg-device text-[36px] rounded-br-[16px] w-[100px] h-[91px] place-content-center text-center">
+//             <button className="w-full h-full">9</button>
+//           </li>
+//         </ol> */}
+//       </div>

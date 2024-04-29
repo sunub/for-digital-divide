@@ -1,10 +1,12 @@
-import React from "react";
-import useToggle from "@/hook/use-toggle";
-import styled from "styled-components";
-import { animate, motion, useAnimate } from "framer-motion";
+import React from 'react';
+import useToggle from '@/hooks/use-toggle';
+import styled from 'styled-components';
+import { animate, motion, useAnimate } from 'framer-motion';
+
+type Status = 'idle' | 'pending' | 'success' | 'error';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "confirm" | "destructive";
+  variant?: 'default' | 'confirm' | 'destructive';
   status?: Status;
 }
 
@@ -12,17 +14,17 @@ const pendingAnimation = () => {
   animate(
     [
       [
-        "span#upper-dot-pending",
+        'span#upper-dot-pending',
         { y: -57, scale: 1.25 },
-        { type: "spring", duration: 2, damping: 10, stiffness: 100, at: 0.25 },
+        { type: 'spring', duration: 2, damping: 10, stiffness: 100, at: 0.25 },
       ],
       [
-        "span#lower-dot-pending",
+        'span#lower-dot-pending',
         { y: -27, scale: 0.75 },
-        { type: "spring", duration: 2, damping: 10, stiffness: 100, at: 0.25 },
+        { type: 'spring', duration: 2, damping: 10, stiffness: 100, at: 0.25 },
       ],
     ],
-    { repeat: Infinity, repeatType: "loop" }
+    { repeat: Infinity, repeatType: 'loop' },
   );
 };
 
@@ -50,17 +52,17 @@ const Shape = ({
 };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = "default", status = "idle", children }, ref) => {
+  ({ variant = 'default', status = 'idle', children }, ref) => {
     const [isClick, toggleClick] = useToggle(false);
     const [scope, animate] = useAnimate();
-    const isIdle = status === "idle";
-    const isPending = status === "pending";
+    const isIdle = status === 'idle';
+    const isPending = status === 'pending';
 
     React.useEffect(() => {
       if (isClick) bounceUp(toggleClick);
     }, [isClick, toggleClick]);
     React.useEffect(() => {
-      if (status === "pending") pendingAnimation();
+      if (status === 'pending') pendingAnimation();
     }, [status]);
 
     return (
@@ -85,10 +87,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         </Shape>
       </Btn>
     );
-  }
+  },
 );
 
-Button.displayName = "Button";
+Button.displayName = 'Button';
 
 const Dot = styled(motion.span)`
   transform-origin: center 2rem;
@@ -110,12 +112,12 @@ const Front = styled(motion.div)<{ $isClick: boolean }>`
 
   border-radius: 1rem;
   background-color: ${(props) =>
-    props.$isClick ? "var(--color-confirm)" : "var(--input-default)"};
+    props.$isClick ? 'var(--color-confirm)' : 'var(--input-default)'};
   border: 5px solid
     ${(props) =>
-      props.$isClick ? "var(--color-confirm)" : "var(--color-text)"};
+      props.$isClick ? 'var(--color-confirm)' : 'var(--color-text)'};
   color: ${(props) =>
-    props.$isClick ? "oklch(45.88% 0.184 142.89)" : "var(--color-text)"};
+    props.$isClick ? 'oklch(45.88% 0.184 142.89)' : 'var(--color-text)'};
 
   user-select: none;
   will-change: transform;
@@ -165,11 +167,11 @@ export const Edge = styled.span<{ $isClick: boolean }>`
   border-bottom-right-radius: 16px;
   border-bottom-left-radius: 16px;
   background-image: ${(props) =>
-    props.$isClick ? "var(--confirm-shadow)" : "var(--default-shadow)"};
+    props.$isClick ? 'var(--confirm-shadow)' : 'var(--default-shadow)'};
 `;
 
 export const Btn = styled.button.attrs((props: any) => ({
-  "aria-pressed": props.$isClick ?? false,
+  'aria-pressed': props.$isClick ?? false,
 }))<{ $isClick: boolean; $isPending: boolean }>`
   cursor: pointer;
   background-color: transparent;
@@ -179,7 +181,7 @@ export const Btn = styled.button.attrs((props: any) => ({
   -webkit-tap-highlight-color: transparent;
 
   outline-offset: 4px;
-  width: ${(props: any) => (props.$isPending ? "3rem" : "fit-content")};
+  width: ${(props: any) => (props.$isPending ? '3rem' : 'fit-content')};
   height: fit-content;
   font-size: 1.5rem;
   transition: width 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
@@ -194,15 +196,15 @@ export const Btn = styled.button.attrs((props: any) => ({
     transition: transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
   }
 
-  &[aria-pressed="true"] ${Front} {
+  &[aria-pressed='true'] ${Front} {
     transform: translateY(
-      ${(props: any) => (props.$isClick ? "-2px" : "-8px")}
+      ${(props: any) => (props.$isClick ? '-2px' : '-8px')}
     );
     animation: backwards;
     transition: transform 100ms;
   }
 
-  &[aria-pressed="true"] ${Shadow} {
+  &[aria-pressed='true'] ${Shadow} {
     transform: translateY(2px);
     transition: transform 340ms;
   }

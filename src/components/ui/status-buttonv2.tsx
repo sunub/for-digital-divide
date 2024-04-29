@@ -1,64 +1,68 @@
-'use client';
-
-import React from 'react';
+import * as React from 'react';
+import { cn } from '@/utils/misc';
+import { Button, type ButtonProps } from './buttonv2';
 import styled from 'styled-components';
-import { Button } from '@/components/ui/buttonv2';
-import { StatusButton } from '@/components/ui/status-buttonv2';
 
-function Page() {
-  const colors = [
-    'oklch(92.86% 0.036 289.07)',
-    'oklch(94.48% 0.028 290.23)',
-    'oklch(92.86% 0.036 289.07)',
-    'oklch(90.93% 0.045 288.25)',
-    'oklch(87.45% 0.064 286.931)',
-  ];
+const COLORS = [
+  'oklch(92.86% 0.036 289.07)',
+  'oklch(94.48% 0.028 290.23)',
+  'oklch(92.86% 0.036 289.07)',
+  'oklch(90.93% 0.045 288.25)',
+  'oklch(87.45% 0.064 286.931)',
+];
+
+export const StatusButton = React.forwardRef<
+  HTMLButtonElement,
+  ButtonProps & { status: 'pending' | 'success' | 'error' | 'idle' }
+>(({ status = 'idle', className, children, ...props }, ref) => {
+  const companion = {
+    pending: (
+      <PendingWrapper>
+        {COLORS.map((color, i) => (
+          <PendingBlock key={`${i}th-pending-block`} $bg={color} $delay={i} />
+        ))}
+      </PendingWrapper>
+    ),
+    success: <span>✅</span>,
+    error: <span>❌</span>,
+    idle: null,
+  }[status];
+
+  const padding = status !== 'pending' ? 'px-4 py-2' : 'p-0';
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <div className="">
-          <h1>UI Test</h1>
-          <p>Test</p>
-        </div>
-        <div>
-          <PendingButton className="w-button h-button flex flex-row">
-            {colors.map((color, i) => (
-              <PendingBlock
-                key={`${i}th-pending-block`}
-                $bg={color}
-                $delay={i}
-              />
-            ))}
-            <ButtonBtm />
-          </PendingButton>
-        </div>
-      </div>
-      <div>
-        <Button variant={'destructive'}>확인</Button>
-      </div>
-      <div>
-        <StatusButton status={'idle'}>확인</StatusButton>
-      </div>
-    </div>
+    <Button
+      ref={ref}
+      className={cn('flex justify-center gap-4', className, padding)}
+      {...props}
+    >
+      {status === 'idle' ? <div>{children}</div> : null}
+      {companion}
+      {status !== 'idle' ? <PendingBtm /> : null}
+    </Button>
   );
-}
+});
 
-const PendingButton = styled.button`
+StatusButton.displayName = 'Button';
+
+const PendingWrapper = styled.div`
   position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  height: 100%;
 
   &:has(span) :first-child {
-    border-top-left-radius: 18px;
+    border-top-left-radius: 16px;
     border-bottom-left-radius: 18px;
   }
 
   &:has(span) :nth-child(5) {
-    border-top-right-radius: 18px;
+    border-top-right-radius: 16px;
     border-bottom-right-radius: 18px;
   }
 `;
 
-const ButtonBtm = styled.div`
+const PendingBtm = styled.div`
   position: absolute;
   z-index: 1;
   top: 2px;
@@ -117,5 +121,3 @@ const PendingBlock = styled.span<{ $bg: string; $delay: number }>`
     }
   }
 `;
-
-export default Page;
