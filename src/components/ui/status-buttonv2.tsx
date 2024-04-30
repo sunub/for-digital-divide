@@ -36,7 +36,7 @@ export const StatusButton = React.forwardRef<
       className={cn('flex justify-center gap-4', className, padding)}
       {...props}
     >
-      {status === 'idle' ? <div>{children}</div> : null}
+      {status === 'idle' ? <React.Fragment>{children}</React.Fragment> : null}
       {companion}
       {status !== 'idle' ? <PendingBtm /> : null}
     </Button>

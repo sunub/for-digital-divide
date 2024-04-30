@@ -11,10 +11,10 @@ const buttonVariants = cva(
         default:
           'bg-button-default text hover:text-button-active-foreground hover:bg-button-active hover:shadow-button-active',
         destructive:
-          'bg-button-destructive text-destructive-foreground hover:shadow-button-active',
+          'bg-button-destructive text-destructive-foreground hover:shadow-button-active hover:bg-destructive-active hover:text-destructive-active-foreground',
       },
       size: {
-        default: 'w-button h-button px-4 py-2',
+        default: 'w-fit h-fit px-4 py-2',
         wide: 'px-24 py-5',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
