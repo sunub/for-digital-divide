@@ -1,6 +1,6 @@
 import React from 'react';
 import { NumpadProvider } from '@/context/NumpadContext';
-import PinInput from '@/components/PinNumber/PinInput';
+import PinForm from '@/components/PinNumber/PinForm';
 import PinNumpad from '@/components/PinNumber/PinNumpad';
 import registerAction from '@/utils/pin/register';
 import confirmAction from '@/utils/pin/confirm';
@@ -28,36 +28,18 @@ async function Page() {
 
   return (
     <NumpadProvider>
-      <Device
-        mainContent={
-          <React.Fragment>
-            <PinInput
-              key={'register-pin-number'}
-              uses={'register'}
-              padInfo={registerPadInfo}
-              action={registerAction}
-            >
-              <PinNumpad
-                key={'register-pin-number'}
-                uses={'register'}
-                padInfo={registerPadInfo}
-              />
-            </PinInput>
-            <PinInput
-              key={'confirm-pin-number'}
-              uses={'confirm'}
-              padInfo={confrimPadInfo}
-              action={confirmAction}
-            >
-              <PinNumpad
-                key={'confirm-pin-number'}
-                uses={'confirm'}
-                padInfo={confrimPadInfo}
-              />
-            </PinInput>
-          </React.Fragment>
-        }
-      />
+      <PinForm
+        key={'register-pin-number'}
+        uses={'register'}
+        padInfo={registerPadInfo}
+        pinAction={registerAction}
+      >
+        <PinNumpad
+          key={'register-pin-number'}
+          uses={'register'}
+          padInfo={registerPadInfo}
+        />
+      </PinForm>
     </NumpadProvider>
   );
 }

@@ -43,8 +43,7 @@ function PinNumpad(props: PinNumpadProps) {
                 return (
                   <li
                     key={crypto.randomUUID()}
-                    style={{ width: '7cqw' }}
-                    className="flex justify-center align-middle relative"
+                    className="bg-device text-[36px] rounded-br-[16px] w-[100px] h-[91px] place-content-center text-center"
                   >
                     <button
                       type="button"
@@ -61,8 +60,7 @@ function PinNumpad(props: PinNumpadProps) {
                 return (
                   <li
                     key={crypto.randomUUID()}
-                    className="flex justify-center align-middle p-2 relative"
-                    style={{ width: '7cqw' }}
+                    className="bg-device text-[36px] rounded-bl-[16px] w-[100px] h-[91px] flex justify-center p-2 relative items-center"
                   >
                     <label htmlFor={`reorder-numpad-btn-${uses}`}>
                       <NumPad

@@ -3,20 +3,22 @@
 import React from 'react';
 import Input from './Input';
 import { KeypadInfo } from '@/utils/keypad';
-import * as v from 'valibot';
-import { reorderKeypad } from '@/utils/pin/register';
 import PinSuccess from './PinSuccess';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
 import { useNumpadStore, useSubmitNumpadStroe } from '@/context/NumpadContext';
 import { useNotificationStore } from '@/context/NotificationContext';
+import { reorderKeypad } from '@/utils/pin/register';
 import { goToUsername } from '@/utils/revalidate';
+import { useForm } from '@conform-to/react';
+import { getZodConstraint, parseWithZod } from '@conform-to/zod';
+import { z } from 'zod';
+import { useFormState } from '@conform-to/react/context';
 
-interface PinInputProps {
+interface PinFormProps {
   children: React.ReactNode;
   uses: 'register' | 'confirm';
   padInfo: KeypadInfo;
-  action: (
+  pinAction: (
     formData: FormData,
     padInfo: KeypadInfo,
   ) => Promise<{
@@ -32,11 +34,10 @@ interface ErrorStatus {
   msg: string | null;
 }
 
-const validNumpadLength = 4;
-const PinNumberSchema = v.array(v.string(), [
-  v.minLength(validNumpadLength, '핀번호는 4자여야 합니다.'),
-  v.maxLength(validNumpadLength, '핀번호는 4자여야 합니다.'),
-]);
+const PinFormSchema = z.object({
+  reorder: z.string().optional(),
+  pin: z.string().refine((value) => value.split(',').length === 4),
+});
 
 function ErrorList({ id, errors }: { id?: string; errors?: string | null }) {
   return errors?.length ? (
@@ -52,7 +53,7 @@ function useHydrated() {
   return hydrated;
 }
 
-function PinInput({ uses, children, padInfo, action }: PinInputProps) {
+function PinForm({ uses, children, padInfo, pinAction }: PinFormProps) {
   const [isOpen, setOpen] = React.useState(false);
   const [isSuccess, setSuccess] = React.useState(false);
   const [pinErrorStatus, setPinErrorStatus] = React.useState<ErrorStatus>({
@@ -63,7 +64,9 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
 
   const inputRef = React.useRef<HTMLInputElement>(null);
   const containerRef = React.useRef<HTMLFormElement>(null);
+  const numpadRef = React.useRef<HTMLDivElement>(null);
   const isHydrated = useHydrated();
+  const { add } = useNotificationStore((state) => state);
 
   const { updateStatus } =
     uses === 'register'
@@ -105,12 +108,25 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
         setOpen(true);
       }}
       action={async (formData: FormData) => {
-        const actionResult = await action(formData, padInfo);
+        updateStatus('pending');
+        const isReorder = formData.get('reorder') === 'on';
 
+        if (isReorder) {
+          reorderKeypad(isReorder);
+          return;
+        }
+
+        const actionResult = await pinAction(formData, padInfo);
         if (actionResult.status === 'error') {
           if (actionResult.id === 'username-not-found') {
+            add({
+              id: 'username-not-found',
+              message: actionResult.msg,
+              type: 'error',
+            });
             return goToUsername();
           }
+
           updateStatus('idle');
           setPinErrorStatus({
             hasError: true,
@@ -119,42 +135,11 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
           });
           return;
         }
-        // updateStatus('pending');
-        // const isReorder = formData.get('reorder') === 'on';
 
-        // if (isReorder) {
-        //   reorderKeypad(isReorder);
-        //   return;
-        // }
-
-        // let formPinNumber = formData.get('pinNumbers') as string;
-        // const result = v.safeParse(PinNumberSchema, formPinNumber.split(','));
-
-        // if (!result.success) {
-        //   updateStatus('idle');
-        //   setPinErrorStatus({
-        //     hasError: true,
-        //     errorId: 'pin-pattern-input',
-        //     msg: result.issues[0].message,
-        //   });
-        //   return;
-        // }
-
-        // const pinNumber = result.output as string[];
-        // const actionResult = await action(pinNumber, padInfo);
-        // if (actionResult.status === 'error') {
-        //   updateStatus('idle');
-        //   setPinErrorStatus({
-        //     hasError: true,
-        //     errorId: actionResult.id,
-        //     msg: actionResult.msg,
-        //   });
-        //   return;
-        // }
-
-        // setOpen(true);
-        // setSuccess(true);
-        // updateStatus('idle');
+        setOpen(true);
+        setSuccess(true);
+        updateStatus('idle');
+        updateStatus('pending');
       }}
     >
       {isSuccess ? (
@@ -185,7 +170,7 @@ function PinInput({ uses, children, padInfo, action }: PinInputProps) {
             )}
           </div>
           <div className="px-4 min-h-[32px] pb-3 pt-1 text-center">
-            {isOpen && <div>{children}</div>}
+            {children}
           </div>
         </React.Fragment>
       )}
@@ -198,6 +183,7 @@ const NumpadWrapper = styled.div<{ $isOpen: boolean }>`
   transition: all 200ms cubic-bezier(0.215, 0.61, 0.355, 1);
   transform-origin: top center;
   will-change: transform;
+  scroll-behavior: smooth;
   animation: ${({ $isOpen }) => ($isOpen ? 'numpad-open' : 'numpad-close')}
     200ms ease forwards;
 
@@ -228,4 +214,4 @@ const NumpadWrapper = styled.div<{ $isOpen: boolean }>`
   }
 `;
 
-export default PinInput;
+export default PinForm;

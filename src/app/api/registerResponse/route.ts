@@ -1,14 +1,14 @@
-"use server";
+'use server';
 
-import User from "@/lib/fido/user";
-import { isoBase64URL } from "@simplewebauthn/server/helpers";
-import { decode } from "js-base64";
-import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
-import { verifyRegistrationResponse } from "@simplewebauthn/server";
+import User from '@/lib/fido/user';
+import { isoBase64URL } from '@simplewebauthn/server/helpers';
+import { decode } from 'js-base64';
+import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
+import { verifyRegistrationResponse } from '@simplewebauthn/server';
 
 export async function POST(req: NextRequest) {
-  const session = req.cookies.get("session")?.value;
+  const session = req.cookies.get('session')?.value;
   const decodedSession = decode(session as string);
   const parsedSession = JSON.parse(decodedSession);
   const userId = parsedSession.id;
@@ -20,8 +20,8 @@ export async function POST(req: NextRequest) {
   const expectedChallenge = user.challenge;
   const expectedOrigin = `https://localhost:3000`;
   const expectedRPID =
-    process.env.NODE_ENV === "production" ? process.env.HOSTNAME : "localhost";
-  const credId = isoBase64URL.fromBuffer(Buffer.from(credential.id, "base64"));
+    process.env.NODE_ENV === 'production' ? process.env.HOSTNAME : 'localhost';
+  const credId = isoBase64URL.fromBuffer(Buffer.from(credential.id, 'base64'));
   const type = credential.type;
 
   try {
@@ -34,11 +34,11 @@ export async function POST(req: NextRequest) {
 
     const { verified, registrationInfo } = vertification;
     if (!verified || !registrationInfo) {
-      throw new Error("User verification failed.");
+      throw new Error('User verification failed.');
     }
     const { credentialPublicKey, credentialID, counter } = registrationInfo;
     const base64PublicKey = isoBase64URL.fromBuffer(credentialPublicKey);
-    const base64CredentialID = isoBase64URL.fromBuffer(credentialID);
+    const base64CredentialID = isoBase64URL.fromBuffer(credentialID as any);
 
     const existingCredential = user.credential.find(
       (cred: any) => cred.credId === base64CredentialID,
@@ -60,5 +60,5 @@ export async function POST(req: NextRequest) {
     console.error(e);
   }
 
-  return NextResponse.json({ message: "Hello, world!" });
+  return NextResponse.json({ message: 'Hello, world!' });
 }

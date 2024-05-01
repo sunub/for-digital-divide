@@ -1,9 +1,8 @@
-"use client";
+'use client';
 
-import { preload } from "react-dom";
+import { preload } from 'react-dom';
 
 export function PreloadResources() {
-  // @ts-expect-error
-  preload("sprite.svg", { as: "image" });
+  preload('sprite.svg', { as: 'image' });
   return null;
 }

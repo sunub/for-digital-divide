@@ -22,7 +22,9 @@ export function DeviceContent({ children }: { children: React.ReactNode }) {
           defaultChecked
         />
       </ContentOpener>
-      {children}
+      <div className="flex flex-col justify-center items-center w-full h-full">
+        {children}
+      </div>
     </div>
   );
 }

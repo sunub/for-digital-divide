@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       credentialID: isoBase64URL.toBuffer(cred.id),
       transport: cred.transport,
       counter: 0,
-    };
+    } as any;
 
     const verification = await verifyAuthenticationResponse({
       response: credential,

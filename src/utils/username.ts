@@ -24,7 +24,7 @@ function formAction(formData: FormData) {
     return NextResponse.json(
       {
         status: 'error',
-        message: result.error.message,
+        message: '사용자 이름이 올바르지 않습니다.',
       },
       {
         status: 400,

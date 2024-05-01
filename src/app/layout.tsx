@@ -6,13 +6,6 @@ import { NotificationProvider } from '@/context/NotificationContext';
 import localFont from 'next/font/local';
 import NotificationList from '@/components/NotificationList';
 
-const nanumFont = localFont({
-  src: '../../public/font/NanumSquareNeo.woff2',
-  display: 'swap',
-  variable: '--nanum-square-neo',
-  preload: true,
-});
-
 // const wotfard = localFont({
 //   src: '../fonts/Wotfard.woff2',
 //   display: 'swap',
@@ -28,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="kor" className={cx(nanumFont.variable)}>
+    <html lang="kor">
       <head>
         <style>
           {`

@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
       rpID:
         process.env.NODE_ENV === 'development'
           ? 'localhost'
-          : process.env.HOSTNAME,
+          : process.env.HOSTNAME || '',
       allowCredentials: [],
     });
 

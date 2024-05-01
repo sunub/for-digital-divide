@@ -286,3 +286,54 @@ a:visited {
     flex-direction: column;
   }
 }
+
+@container devsite-content (height < 935px) {
+  #device-root {
+    width: 90cqw;
+    height: 100cqh;
+  }
+
+  #device-wrapper {
+    grid-template-columns: [content-device] var(--content-height) [drawer-device] var(
+        --drawer-height
+      );
+    grid-template-rows: 1fr;
+    align-items: center;
+    width: 70cqw;
+    height: 80cqh;
+  }
+
+  #drawer-container {
+    height: var(--drawer-container-size);
+    width: 100%;
+    align-items: center;
+
+    &:has(input:checked) {
+      border-top-left-radius: 16px;
+      border-top-right-radius: 36px;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 36px;
+
+      grid-template-columns: [opener] var(--drawer-opener) [drawer-content] var(
+          --drawer-content
+        );
+      grid-template-rows: 1fr;
+    }
+
+    &:has(input:checked) > label#drawer-label {
+      height: 100cqh;
+      width: 100%;
+    }
+  }
+
+  #drawer-label::before {
+    top: calc(50% - 27px);
+    left: calc(50% - 3px);
+    height: 54px;
+    width: 6px;
+  }
+
+  span.pin-pointer {
+    --pin-pointer-width: 5cqw;
+  }
+}

@@ -15,6 +15,7 @@ export default function UserPage() {
   const [pinnumber, setPinnumber] = React.useState(
     Array.from({ length: 4 }, () => 0),
   );
+  const pin = Array.from({ length: 4 }, () => '');
 
   function handleChecked(e: React.ChangeEvent<HTMLInputElement>) {
     setPadnumber((prev) => {
@@ -33,8 +34,18 @@ export default function UserPage() {
     <form>
       <DeviceFrame>
         <DeviceContent>
-          <div className="flex flex-col justify-center items-center">
-            <h1>HI</h1>
+          <div>
+            <h1>PIN 번호를 입력해주세요</h1>
+          </div>
+
+          <div className="inline-flex flex-row gap-4">
+            {pin.map((className, i) => (
+              <Pointer
+                key={`${i}th-pin-pointer`}
+                id={`${i}th-pin-pointer`}
+                className={`pin-pointer ${className}`}
+              />
+            ))}
           </div>
         </DeviceContent>
         <Drawer>
@@ -45,6 +56,29 @@ export default function UserPage() {
     </form>
   );
 }
+
+const Pointer = styled.span`
+  --pin-pointer-width: 10cqw;
+
+  position: relative;
+  display: inline-block;
+  width: var(--pin-pointer-width);
+  height: 8cqh;
+  background: oklch(92.86% 0.036 289.07 / 60%);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.06);
+
+  &::before {
+    content: '';
+    width: 30px;
+    height: 3px;
+    border-radius: 5px;
+    background: oklch(99.88% 0.015 294.47);
+
+    position: absolute;
+    bottom: 10%;
+    left: calc(50% - 15px);
+  }
+`;
 
 function Buttons() {
   return (

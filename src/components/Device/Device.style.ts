@@ -36,7 +36,6 @@ export const InnerWindow = styled.div.attrs({
   border-radius: 4cqh;
   background: oklch(97.65% 0 0);
   container: device-frame / size;
-  padding: 18px;
 `;
 
 export const AppWrapper = styled.div`

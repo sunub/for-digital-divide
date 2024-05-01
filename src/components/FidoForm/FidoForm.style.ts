@@ -82,9 +82,12 @@ export const InputWrapper = styled.div<{
 }>`
   position: relative;
 
-  display: flex;
+  display: grid;
+  grid: [username-input] 1fr / [username-input] 1fr;
+  place-content: center;
+  /* display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: center; */
   ${(props) =>
     props.$isUpper &&
     'border-bottom: 1px solid oklch(16.73% 0.005 83 / 20%); border-bottom: 1px solid oklch(16.73% 0.005 83 / 20%);'}
@@ -109,6 +112,7 @@ export const InputWrapper = styled.div<{
 `;
 
 export const Input = styled.input`
+  grid-area: username-input;
   border: none;
   padding: 16px 0 16px 0;
   font-weight: 700;
@@ -126,6 +130,10 @@ export const Input = styled.input`
     outline: none;
     appearance: none;
   }
+`;
+
+export const Label = styled.label`
+  grid-area: username-input;
 `;
 
 export const VisbilityButton = styled.button`
@@ -157,12 +165,14 @@ export const HelperList = styled.li<{ $left: number }>`
 `;
 
 export const Placeholder = styled.div<{ $isFocus: boolean }>`
-  position: absolute;
-  top: 17.5px;
-  left: 57.5px;
+  grid-area: username-input;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   pointer-events: none;
   user-select: none;
-  will-change: transform, background, color; // Inform the browser that these properties are likely to change
+  will-change: transform, background, color; // will-change를 이용하여 브라우저에 미리 어떤 값이 변경될지를 알려줌으로 성능 향상을 이루고자 한다.
   background: ${(props) =>
     props.$isFocus ? 'oklch(96.33% 0.017 294.49)' : 'transparent'};
   color: ${(props) =>
@@ -171,9 +181,9 @@ export const Placeholder = styled.div<{ $isFocus: boolean }>`
       : 'var(--color-text)'};
 
   transform: ${(props) =>
-    props.$isFocus ? 'translateY(-110%) scale(0.8)' : ''};
+    props.$isFocus ? 'translateY(-50%) scale(0.8)' : ''};
   transition:
     transform 200ms ease-in-out,
     background 200ms ease-in-out,
-    color 200ms ease-in-out; // Specify transitions for each property
+    color 200ms ease-in-out; // 각각의 속성에 대하여 다른 transition을 적용하여 각각의 컴포넌트 애니메이션의 속도를 조절한다.
 `;

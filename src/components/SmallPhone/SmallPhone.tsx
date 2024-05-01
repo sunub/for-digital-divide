@@ -84,13 +84,11 @@ function layered_shadow(layer: number, gapX: number, gapY: number): string {
 function SmallPhone(props: SmallPhoneProps) {
   const { isOpen, toggleOpen } = props;
   const router = useRouter();
-  const { action } = React.useContext(NotificationContext);
 
   return (
     <Phone
       onClick={() => {
         toggleOpen();
-        action.remove('');
       }}
       onAnimationComplete={(definition) => {
         if (definition === 'open') {

@@ -43,6 +43,7 @@ export default {
         phone: '376px',
         numpad: '40px',
         '33%': '33%',
+        button: '100px',
       },
       borderColor: {
         text: 'var(--color-text)',
@@ -58,6 +59,7 @@ export default {
         phone: '779px',
         numpad: '50px',
         '2px': '2px',
+        button: '50px',
       },
       backgroundImage: {
         numpad: 'url(/images/numpad.png)',
@@ -73,6 +75,8 @@ export default {
         0px 9.6px 25.5px rgba(0, 0, 0, 0.042),
         0px 18px 47.6px rgba(0, 0, 0, 0.05),
         0px 43px 114px rgba(0, 0, 0, 0.07)`,
+        button: 'inset 0 4px 8px rgba(0, 0, 0, 0.25)',
+        'button-active': '0 4px 8px rgba(0, 0, 0, 0.55)',
       },
       borderRadius: {
         50: '50%',
@@ -139,6 +143,26 @@ export default {
         },
         drawer: {
           DEFAULT: 'oklch(76.64% 0.13 292.01)',
+          foreground: 'oklch(96.88% 0.015 294.47)',
+        },
+        'button-default': {
+          DEFAULT: 'oklch(90.62% 0.047 286.718)',
+          foreground: 'oklch(28.06% 0.024 291.84)',
+        },
+        'button-active': {
+          DEFAULT: 'oklch(56.76% 0.071 292.01 / 95.53%)',
+          foreground: 'oklch(96.88% 0.015 294.47)',
+        },
+        'button-confirm': {
+          DEFAULT: 'oklch(84.32% 0.114 146.91)',
+          foreground: 'oklch(46.84% 0.099 111.15)',
+        },
+        'button-destructive': {
+          DEFAULT: 'oklch(74.12% 0.157 25.26)',
+          foreground: 'oklch(28.06% 0.024 291.84)',
+        },
+        'destructive-active': {
+          DEFAULT: 'oklch(56.18% 0.182 25.26)',
           foreground: 'oklch(96.88% 0.015 294.47)',
         },
       },
