@@ -111,7 +111,7 @@ const Frame = styled.div`
   }
 
   &:has(label[for='drawer'] > input:checked) {
-    --content-height: 2fr;
+    --content-height: 3fr;
     --drawer-height: 3fr;
     --drawer-animation: bounce-drawer-box;
     --drawer-container-size: 100%;

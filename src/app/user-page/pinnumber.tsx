@@ -13,7 +13,7 @@ const PinnumberSchema = z.object({
   pinnumber: z.string().length(4),
 });
 
-export default function Pinnumber() {
+export default function UserPage() {
   const [form, fields] = useForm({
     id: 'pinnumber-input',
     constraint: getZodConstraint(PinnumberSchema),

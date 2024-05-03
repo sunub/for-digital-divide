@@ -1,5 +1,10 @@
 import React from 'react';
 import Pinnumber from './pinnumber';
+import { NumpadProvider } from '@/context/NumpadContext';
+import { DeviceContent, Drawer } from '@/components/ui/device';
+import DeviceForm from './form';
+import Content from './content';
+import PinPad from './drawer';
 
 async function getPadInfo() {
   const baseurl =
@@ -20,7 +25,18 @@ async function getPadInfo() {
 async function Page() {
   let registerPadInfo = await getPadInfo();
 
-  return <Pinnumber numpad={registerPadInfo} />;
+  return (
+    <NumpadProvider>
+      <DeviceForm>
+        <DeviceContent>
+          <Content />
+        </DeviceContent>
+        <Drawer>
+          <PinPad padInfo={registerPadInfo} />
+        </Drawer>
+      </DeviceForm>
+    </NumpadProvider>
+  );
 }
 
 export default Page;
