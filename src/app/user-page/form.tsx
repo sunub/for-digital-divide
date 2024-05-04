@@ -8,36 +8,31 @@ import { Button } from '@/components/ui/buttonv2';
 import { useForm } from '@conform-to/react';
 import { z } from 'zod';
 import { getZodConstraint } from '@conform-to/zod';
+import { useFormStatus, useFormState } from 'react-dom';
+import { registerAction } from '@/utils/pin/register';
+import { KeypadInfo } from '@/utils/keypad';
+import { goToUsername } from '@/utils/revalidate';
 
 const PinnumberSchema = z.object({
   pinnumber: z.string().length(4),
 });
-
-function DeviceForm({ children }: { children: React.ReactNode }) {
+function DeviceForm({
+  padInfo,
+  children,
+}: {
+  padInfo: KeypadInfo;
+  children: React.ReactNode;
+}) {
+  const status = useFormStatus();
+  const [lastResult, action] = useFormState(registerAction, undefined);
   const [form, fields] = useForm({
     id: 'pinnumber-input',
     constraint: getZodConstraint(PinnumberSchema),
+    lastResult,
   });
-  const [pinnumber, setPinnumber] = React.useState(
-    Array.from({ length: 4 }, () => -1),
-  );
-  const pin = Array.from({ length: 4 }, () => '');
-
-  function deletePinnumber() {
-    setPinnumber(Array.from({ length: 4 }, () => -1));
-  }
-
-  function handleNumpadClick(e: React.MouseEvent<HTMLButtonElement>) {
-    const value = Number(e.currentTarget.textContent);
-    setPinnumber((prev) => {
-      const next = [...prev];
-      next[prev.findIndex((v) => v === -1)] = Number(value);
-      return next;
-    });
-  }
 
   return (
-    <form id={form.id} noValidate>
+    <form id={form.id} action={action} noValidate>
       <DeviceFrame>{children}</DeviceFrame>
     </form>
   );

@@ -20,6 +20,7 @@ export function DeviceContent({ children }: { children: React.ReactNode }) {
           name="device"
           value="content"
           defaultChecked
+          readOnly
         />
       </ContentOpener>
       <div className="flex flex-col justify-center items-center w-full h-full">
@@ -33,7 +34,7 @@ export function Drawer({ children }: { children: React.ReactNode }) {
   return (
     <DrawerContainer id="drawer-container">
       <DrawerOpener htmlFor="drawer" id="drawer-label">
-        <Input type="radio" id="drawer" name="device" value="drawer" />
+        <Input type="radio" id="drawer" name="device" value="drawer" readOnly />
       </DrawerOpener>
       <DrawerContent id="drawer-content">{children}</DrawerContent>
     </DrawerContainer>
@@ -103,7 +104,7 @@ const Frame = styled.div`
     0.6px 1.5px 19.3px rgba(0, 0, 0, 0.065),
     1px 2.5px 32px rgba(0, 0, 0, 0.076),
     2px 5px 64px rgba(0, 0, 0, 0.1);
-  transition: all 500ms cubic-bezier(0.17, 1.48, 0.24, 1);
+  transition: grid 500ms cubic-bezier(0.17, 1.48, 0.24, 1);
 
   &:has(label[for='device-content'] > input:checked) {
     --content-height: 20fr;
@@ -127,6 +128,7 @@ const DrawerContent = styled.div`
   flex-direction: column;
   gap: 36px;
   align-items: center;
+  z-index: var(--drawer-content-z);
 `;
 
 const Input = styled.input`
@@ -143,16 +145,20 @@ const DrawerContainer = styled.div`
   --drawer-opener: 1fr;
   --translateY-val: 50%;
   --drawer-btm-radius: 16px;
+  --drawer-content-z: -1;
 
   display: grid;
   grid-template-rows: [opener] var(--drawer-opener) [drawer-content] var(
       --drawer-content
     );
-  width: 100%;
+  width: 100cqw;
   align-items: center;
   place-content: center;
   overflow: hidden;
+
   position: relative;
+  margin-left: auto;
+  margin-right: auto;
 
   background-color: oklch(86.46% 0.073 293.45);
   border-top-left-radius: 16px;
@@ -161,21 +167,22 @@ const DrawerContainer = styled.div`
   border-bottom-right-radius: var(--drawer-btm-radius);
 
   &:has(input:checked) {
-    --drawer-content: 1fr;
-    --drawer-opener: 20px;
+    --drawer-content: 10fr;
+    --drawer-opener: 1fr;
     --translateY-val: 0%;
     --drawer-btm-radius: 36px;
+    --drawer-content-z: 0;
   }
 
-  &:has(input:not(:checked)) {
+  /* &:has(input:not(:checked)) {
     ::before {
       animation: emphasis 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
     }
-  }
+  } */
 
-  & > div#drawer-content {
+  /* & > div#drawer-content {
     transform: translateY(var(--translateY-val));
-  }
+  } */
 `;
 
 const DrawerOpener = styled.label`

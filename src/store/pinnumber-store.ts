@@ -16,7 +16,7 @@ export type NumpadActions = {
 export type NumpadStore = NumpadState & NumpadActions;
 
 export const defaultInitState: NumpadState = {
-  numpad: [],
+  numpad: Array.from({ length: 4 }, () => ''),
   status: 'idle',
 };
 
@@ -37,15 +37,17 @@ export const createNumpadStore = (
         };
       });
     },
-    updateNumpad: (newNumpad) => {
+    updateNumpad: (numpad) => {
       set((state) => {
-        if (state.numpad.length >= 4) return state;
-        return { numpad: [...state.numpad, newNumpad] };
+        const newNumpad = [...state.numpad];
+        const firstInputIndex = state.numpad.findIndex((v) => v === '');
+        newNumpad[firstInputIndex] = numpad;
+        return { numpad: newNumpad };
       });
     },
     deleteNumpad: () => {
       set(() => {
-        return { numpad: [] };
+        return { numpad: Array.from({ length: 4 }, () => '') };
       });
     },
   }));

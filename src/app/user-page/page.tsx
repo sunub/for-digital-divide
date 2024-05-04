@@ -1,5 +1,4 @@
 import React from 'react';
-import Pinnumber from './pinnumber';
 import { NumpadProvider } from '@/context/NumpadContext';
 import { DeviceContent, Drawer } from '@/components/ui/device';
 import DeviceForm from './form';
@@ -27,7 +26,7 @@ async function Page() {
 
   return (
     <NumpadProvider>
-      <DeviceForm>
+      <DeviceForm padInfo={registerPadInfo}>
         <DeviceContent>
           <Content />
         </DeviceContent>

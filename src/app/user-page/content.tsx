@@ -2,37 +2,47 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import { useNumpadStore } from '@/context/NumpadContext';
 
 function Content() {
+  const pin = useNumpadStore((s) => s.numpad);
+
   return (
     <React.Fragment>
       <div className="flex flex-col place-content-center gap-4">
-        <div className="place-content-center text-center">
+        <div className="place-content-center text-center select-none">
           <p className="text-xl font-bold text-pretty">PIN 번호를</p>
           <p className="text-xl font-bold text-pretty">입력해주세요</p>
         </div>
         <PointerWrapper>
-          {/* {pin.map((className, i) => (
+          {pin.map((pinnumber, i) => (
             <Pointer
               key={`${i}th-pin-pointer`}
               id={`${i}th-pin-pointer`}
-              className={`pin-pointer ${className}`}
+              className={'pin-pointer'}
             >
+              <input
+                name="pinnumbers"
+                value={pin[i]}
+                type="text"
+                className="hidden w-0 h-0 select-none"
+                readOnly
+              />
               <input
                 type="radio"
                 name="pointer"
-                checked={i === 0 ? true : pinnumber[i - 1] !== -1}
+                checked={i === 0 ? true : pinnumber !== ''}
                 className="pin-pointer-input"
                 readOnly
               />
               <input
                 type="radio"
-                checked={pinnumber[i] !== -1}
+                checked={pinnumber !== ''}
                 className="pinnumber-display"
                 readOnly
               />
             </Pointer>
-          ))} */}
+          ))}
         </PointerWrapper>
       </div>
     </React.Fragment>
