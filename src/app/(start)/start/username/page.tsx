@@ -5,9 +5,10 @@ import { useNotificationStore } from '@/context/NotificationContext';
 import Username from '@/components/LoginForm/LoginInput/Username';
 import Button from '@/components/Button';
 import usernameAction from '@/utils/action/username';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormState, useFormStatus, FormStatus } from 'react-dom';
 import { useForm } from '@conform-to/react';
 import { parseWithZod, getZodConstraint } from '@conform-to/zod';
+import { useAnimate } from 'framer-motion';
 import { z } from 'zod';
 
 const usernameSchema = z.object({
@@ -19,7 +20,7 @@ const usernameSchema = z.object({
 
 export default function Home() {
   const [result, action] = useFormState(usernameAction, null);
-
+  const status = useFormStatus();
   const [form, fields] = useForm({
     id: 'init-username-form',
     lastResult: result,
@@ -32,6 +33,7 @@ export default function Home() {
     },
   });
   const { add, remove } = useNotificationStore((state) => state);
+  const [_, animate] = useAnimate();
 
   React.useEffect(() => {
     add({
@@ -40,7 +42,39 @@ export default function Home() {
       type: 'default',
     });
   }, []);
-  console.log(status);
+
+  React.useEffect(() => {
+    if (result && result?.status === 'error') {
+      add({
+        id: 'username-error',
+        message: '이름을 입력한 후 확인 버튼을 눌러주세요!',
+        type: 'error',
+      });
+
+      const timer = window.setTimeout(() => {
+        const listItem = document.querySelector(
+          `li#username-error`,
+        ) as HTMLElement;
+        animate(listItem, {
+          y: ['0%', '100%'],
+          opacity: [1, 0],
+        }).then(() => remove('username-error'));
+      }, 3500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [result]);
+
+  React.useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const listItem = document.querySelector(`li#username`) as HTMLElement;
+      animate(listItem, {
+        y: ['0%', '100%'],
+        opacity: [1, 0],
+      }).then(() => remove('username'));
+    }, 3500);
+    return () => clearTimeout(timer);
+  }, [add]);
 
   return (
     <form
@@ -55,15 +89,6 @@ export default function Home() {
             아래를 클릭 후 <b className="font-black">키보드로</b> 입력해주세요!
           </h1>
         </label>
-        {result && result.status === 'error' && (
-          <div className="text-red-500 text-center">
-            <p className="text-s">이름이 입력되지 않았습니다!</p>
-            <p className="text-s">
-              아래의 칸에 이름을 입력한 후{' '}
-              <strong className="text-l font-black">확인</strong>을 눌러주세요!
-            </p>
-          </div>
-        )}
         <ArrowIcon />
       </div>
       <div className="ml-auto mr-auto">
@@ -78,13 +103,12 @@ export default function Home() {
           labelContent="사용자 이름"
         />
       </div>
-      <SubmitButton />
+      <SubmitButton status={status} />
     </form>
   );
 }
 
-function SubmitButton() {
-  const status = useFormStatus();
+function SubmitButton({ status }: { status: FormStatus }) {
   return (
     <div className="flex place-content-center align-middle pt-4">
       <Button

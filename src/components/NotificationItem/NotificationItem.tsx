@@ -13,7 +13,7 @@ interface NotificationProps extends React.HTMLAttributes<HTMLLIElement> {
 
 function NotificationItem({
   id,
-  type,
+  type = 'default',
   message,
   ...delegated
 }: NotificationProps) {
@@ -23,6 +23,12 @@ function NotificationItem({
   const contentRef = React.useRef(null);
   const [scope, animate] = useAnimate();
   const { remove } = useNotificationStore((state) => state);
+
+  const svglink = {
+    success: '/sprite.svg#bell',
+    default: '/sprite.svg#bell',
+    error: '/sprite.svg#bell',
+  };
 
   React.useEffect(() => {
     if (!bellRef.current || !closeRef.current || !contentRef.current) return;
@@ -48,14 +54,15 @@ function NotificationItem({
   }, []);
 
   return (
-    <List id={id} ref={scope} {...delegated}>
+    <List id={id} ref={scope} $type={type} {...delegated}>
       <Wrapper>
         <Svg
+          $type={type}
           initial={{ x: '100%', opacity: 0 }}
           style={{ stroke: 'var(--color-background)' }}
           ref={bellRef}
         >
-          <use href="/sprite.svg#bell" />
+          <use href={svglink[type]} />
         </Svg>
         <CloseBtn
           layout="position"
@@ -64,19 +71,9 @@ function NotificationItem({
             stiffness: 400,
             damping: 60,
           }}
-          onClick={() => {
-            animate(scope.current, {
-              y: ['0%', '100%'],
-              opacity: [1, 0],
-            }).then(() => {
-              remove(id);
-            });
-          }}
+          onClick={() => remove(id)}
         >
-          <Svg
-            ref={closeRef}
-            style={{ stroke: 'var(--color-text)', strokeWidth: '2px' }}
-          >
+          <Svg $type={type} ref={closeRef} style={{ strokeWidth: '2px' }}>
             <use href="/sprite.svg#xCircle" />
           </Svg>
         </CloseBtn>
@@ -86,28 +83,48 @@ function NotificationItem({
         id="notification-content"
         ref={contentRef}
       >
-        <p>{message}</p>
+        {message
+          ? message.split('\n').map((msg) => <p key={msg}>{msg}</p>)
+          : null}
       </Content>
     </List>
   );
 }
 
-const List = styled.li`
-  background-color: oklch(31.57% 0.024 288.17775174927874);
+const getNotificationColor = (type: 'error' | 'default' | 'success') => {
+  let bg = '';
+  switch (type) {
+    case 'error':
+      bg = 'oklch(59.12% 0.224 18)';
+      break;
+    case 'success':
+      bg = 'oklch(61.18% 0.174 149.29)';
+
+      break;
+    default:
+      bg = 'oklch(31.57% 0.024 288.17775174927874)';
+      break;
+  }
+  return bg;
+};
+
+const List = styled.li<{ $type: 'error' | 'default' | 'success' }>`
+  background-color: ${({ $type }) => getNotificationColor($type)};
   color: var(--color-background);
   font-size: 0.75rem;
 
   border-radius: 8px;
   padding: 1rem;
 
-  max-width: 400px;
-  width: 100%;
-
+  width: fit-content;
   animation: slideUp 0.3s ease forwards;
+
+  margin-left: auto;
+  margin-right: auto;
 
   @keyframes slideUp {
     from {
-      transform: translateY(100%);
+      transform: translateY(-100%);
     }
     to {
       transform: translateY(0%);
@@ -124,16 +141,17 @@ const Wrapper = styled.div`
 
 const CloseBtn = styled(motion.button)`
   display: inline-flex;
-  justify-content: flex-end;
+  justify-content: center;
   width: fit-content;
   color: var(--color-background);
 `;
 
-const Svg = styled(motion.svg)`
+const Svg = styled(motion.svg)<{ $type: 'error' | 'default' | 'success' }>`
   width: 24px;
   height: 24px;
   transform: scale(1.5);
   fill: var(--color-background);
+  stroke: ${({ $type }) => getNotificationColor($type)};
 `;
 
 const Content = styled(motion.div)``;

@@ -5,14 +5,6 @@ import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
 import { NotificationProvider } from '@/context/NotificationContext';
 import localFont from 'next/font/local';
 import NotificationList from '@/components/NotificationList';
-
-// const wotfard = localFont({
-//   src: '../fonts/Wotfard.woff2',
-//   display: 'swap',
-//   variable: '--wotfard',
-//   preload: true,
-// });
-
 const cx = (...classes: string[]) => classes.filter(Boolean).join(' ');
 
 export default function RootLayout({
@@ -45,9 +37,9 @@ export default function RootLayout({
           <NotificationProvider>
             <div id="_next">
               <section id="devsite-wrapper">
-                <div id="devsite-header">
+                {/* <div id="devsite-header">
                   <Header />
-                </div>
+                </div> */}
                 <div id="devsite-content">
                   <div id="devsite-content__site-main">{children}</div>
                 </div>

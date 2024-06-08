@@ -1,10 +1,9 @@
 import React from 'react';
 import { NumpadProvider } from '@/context/NumpadContext';
-import PinForm from '@/components/PinNumber/PinForm';
-import PinNumpad from '@/components/PinNumber/PinNumpad';
-import registerAction from '@/utils/pin/register';
-import confirmAction from '@/utils/pin/confirm';
-import Device from '@/components/Device';
+import { DeviceContent, Drawer } from '@/components/ui/device';
+import DeviceForm from '@/components/Device/device-form';
+import Content from './content';
+import PinPad from './numpad';
 
 async function getPadInfo() {
   const baseurl =
@@ -24,22 +23,17 @@ async function getPadInfo() {
 
 async function Page() {
   let registerPadInfo = await getPadInfo();
-  let confrimPadInfo = await getPadInfo();
 
   return (
     <NumpadProvider>
-      <PinForm
-        key={'register-pin-number'}
-        uses={'register'}
-        padInfo={registerPadInfo}
-        pinAction={registerAction}
-      >
-        <PinNumpad
-          key={'register-pin-number'}
-          uses={'register'}
-          padInfo={registerPadInfo}
-        />
-      </PinForm>
+      <DeviceForm padInfo={registerPadInfo}>
+        <DeviceContent>
+          <Content />
+        </DeviceContent>
+        <Drawer>
+          <PinPad padInfo={registerPadInfo} />
+        </Drawer>
+      </DeviceForm>
     </NumpadProvider>
   );
 }

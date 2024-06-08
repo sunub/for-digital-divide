@@ -72,6 +72,8 @@ const ContentOpener = styled.label`
 const Container = styled.div`
   container: device / size;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   width: 45cqw;
   height: 75cqh;
@@ -113,7 +115,7 @@ const Frame = styled.div`
 
   &:has(label[for='drawer'] > input:checked) {
     --content-height: 3fr;
-    --drawer-height: 3fr;
+    --drawer-height: 4fr;
     --drawer-animation: bounce-drawer-box;
     --drawer-container-size: 100%;
   }

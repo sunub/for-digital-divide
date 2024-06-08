@@ -3,33 +3,75 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import useToggle from '@/hooks/use-toggle';
 import { useRouter } from 'next/navigation';
-import { NotificationContext } from '@/context/NotificationContext';
 
 interface SmallPhoneProps {
   isOpen: boolean;
   toggleOpen: () => void;
 }
 
-const Phone = styled(motion.button)`
+const Phone = styled(motion.button)<{ $isOpen: boolean }>`
   background: transparent;
   display: grid;
-
   cursor: pointer;
   outline-offset: 4px;
   :focus:not(:focus-visible) {
     outline: none;
   }
+
+  &::before {
+    --inner2: oklch(65.57% 0.19 288.17);
+    --outter: oklch(96.88% 0.015 294.47);
+    --inner1: oklch(65% 0.206 288.34 / 60%);
+
+    content: ' ';
+    width: 150cqw;
+    height: 200cqw;
+
+    position: absolute;
+    top: calc(50cqw - 75cqw);
+    left: calc(50cqw - 80cqw);
+    z-index: -1;
+    border-radius: 25%;
+    display: ${(props) => (props.$isOpen ? 'none' : 'inline-block')};
+
+    background-position: 0% 0%;
+    background-size: 300% 300%;
+    background: radial-gradient(
+      var(--inner2) 30%,
+      var(--inner1) 40%,
+      var(--inner1) 50%,
+      var(--outter),
+      var(--outter)
+    );
+    pointer-events: none;
+    animation: blink 2s ease infinite;
+  }
+
+  &:hover::before {
+    background-position: 100% 100%;
+    transform: scale(1.08, 1.03);
+  }
+
+  @keyframes blink {
+    0% {
+      opacity: 0;
+      transform: scale3d(0, 0, 0);
+    }
+
+    85% {
+      opacity: 1;
+      transform: scale3d(1, 1.2, 2);
+    }
+
+    100% {
+      opacity: 0;
+      transform: scale3d(0, 0, 0);
+    }
+  }
 `;
 
 const Icon = styled.svg<{ $layerColors: string; $isOpen: boolean }>`
-  width: 100cqw;
-  height: fit-content;
-
-  max-width: 532px;
-  max-height: 1264px;
-
   aspect-ratio: 1 / 2;
 
   border-radius: ${(props) => (props.$isOpen ? '0px' : '57px')};
@@ -70,8 +112,8 @@ function layered_shadow(layer: number, gapX: number, gapY: number): string {
   let values = '';
 
   for (let i = 0; i < layer; i++) {
-    let colorIndex = 91 - i * 1.45;
-    const color = `oklch(${colorIndex}% 0 0)`;
+    let colorIndex = 83 - i * 1.45;
+    const color = `oklch(${colorIndex}% 0.206 288.34 / 60%)`;
     let value = `${(i * gapX).toFixed(1)}rem ${(i * gapY).toFixed(
       1,
     )}rem ${color}`;
@@ -87,20 +129,21 @@ function SmallPhone(props: SmallPhoneProps) {
 
   return (
     <Phone
+      $isOpen={isOpen}
       onClick={() => {
         toggleOpen();
       }}
       onAnimationComplete={(definition) => {
         if (definition === 'open') {
-          router.prefetch('/start/agree-to-terms');
-          router.push('/start/agree-to-terms');
+          router.prefetch('/pin');
+          router.push('/pin');
         }
       }}
       initial={false}
       animate={isOpen ? 'open' : 'closed'}
       variants={{
         closed: { rotateX: 66, rotateZ: 45, scale: 0.15 },
-        open: { rotateX: 0, rotateZ: 0, scale: 1 },
+        open: { rotateX: 0, rotateZ: 0, scale: 0.6, y: '10px' },
       }}
     >
       <Icon
@@ -113,23 +156,26 @@ function SmallPhone(props: SmallPhoneProps) {
         $layerColors={isOpen ? '' : layered_shadow(13, 0.3, 0.3)}
       >
         <path
-          d="M0 75C0 33.5787 33.5786 0 75 0H568C609.421 0 643 33.5786 643 75V1189C643 1230.42 609.421 1264 568 1264H75C33.5786 1264 0 1230.42 0 1189V75Z"
-          fill="#D9D9D9"
-        />
-        <path
           d="M4 81C4 39.5786 37.5786 6 79 6H564C605.421 6 639 39.5786 639 81V1179C639 1220.42 605.421 1254 564 1254H79C37.5786 1254 4 1220.42 4 1179V81Z"
-          fill="#ACACAC"
+          fill="oklch(86.46% 0.073 293.45)"
         />
         <path
           d="M8 89C8 47.5786 41.5786 14 83 14H560C601.421 14 635 47.5786 635 89V1171C635 1212.42 601.421 1246 560 1246H83C41.5786 1246 8 1212.42 8 1171V89Z"
-          fill="black"
+          fill="oklch(63.93% 0.206 288.34 / 60%)"
         />
         <Screen
           d="M27 88C27 57.6244 51.6243 33 82 33H561C591.376 33 616 57.6243 616 88V1172C616 1202.38 591.376 1227 561 1227H82C51.6243 1227 27 1202.38 27 1172V88Z"
-          fill="#F7F7F7"
+          fill="oklch(96.88% 0.015 294.47)"
           $open={isOpen}
         />
-        <rect x="255" y="59" width="133" height="42" rx="21" fill="black" />
+        <rect
+          x="255"
+          y="59"
+          width="133"
+          height="42"
+          rx="21"
+          fill="oklch(63.93% 0.206 288.34 / 60%)"
+        />
       </Icon>
     </Phone>
   );

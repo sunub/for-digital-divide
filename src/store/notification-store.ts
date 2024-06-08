@@ -1,4 +1,4 @@
-import { createStore, create } from 'zustand';
+import { createStore } from 'zustand';
 import { z } from 'zod';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
@@ -25,6 +25,7 @@ export const NotificationSchema = z.object({
     z.literal('success'),
   ]),
 });
+
 export const NotificationStateSchema = z.map(
   z.string(),
   z.object({
@@ -55,17 +56,13 @@ export const createNotificationStore = (
             if (state.notifications.find((n) => n.id === notification.id)) {
               return state;
             }
-            state.notifications.push(notification);
-            return state;
+            return { notifications: [...state.notifications, notification] };
           });
         },
         remove: (id: string) => {
-          set((state) => {
-            state.notifications = state.notifications.filter(
-              (n) => n.id !== id,
-            );
-            return state;
-          });
+          set((state) => ({
+            notifications: state.notifications.filter((n) => n.id !== id),
+          }));
         },
       }),
       {

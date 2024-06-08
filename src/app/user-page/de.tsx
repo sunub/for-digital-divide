@@ -1,7 +1,6 @@
 'use client';
 
 import styled from 'styled-components';
-import Device from './device';
 import React from 'react';
 import { Button } from '@/components/ui/status-button';
 
@@ -20,7 +19,7 @@ export default function UserPage() {
   const decreaseOrder = () => setIndex(() => (index - 1 < 0 ? 2 : index - 1));
 
   return (
-    <Device>
+    <div>
       <h1 className="text-xl font-bold">Account Page</h1>
       <form className="relative grid place-items-center">
         <Fieldset
@@ -108,7 +107,7 @@ export default function UserPage() {
           </Label>
         </Fieldset>
       </form>
-    </Device>
+    </div>
   );
 }
 

@@ -49,6 +49,21 @@ function Username(props: UsernameProps) {
 
 export default Username;
 
+const InputWrapper = styled.div`
+  position: relative;
+
+  display: grid;
+  grid: [username-input] 1fr / [username-input] 1fr;
+  align-items: center;
+  place-content: center;
+
+  border: 2px solid;
+  border-color: oklch(16.73% 0.005 83 / 20%);
+  border-radius: 2.25rem;
+  padding: 4px 16px 4px 16px;
+  gap: 4px;
+`;
+
 const Input = styled.input`
   grid-area: username-input;
   border: none;
@@ -79,6 +94,7 @@ const Placeholder = styled.div<{ $isFocus: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
+  height: fit-content;
 
   pointer-events: none;
   user-select: none;
@@ -91,23 +107,9 @@ const Placeholder = styled.div<{ $isFocus: boolean }>`
       : 'var(--color-text)'};
 
   transform: ${(props) =>
-    props.$isFocus ? 'translateY(-50%) scale(0.8)' : ''};
+    props.$isFocus ? 'translateY(-80%) scale(0.8)' : ''};
   transition:
     transform 200ms ease-in-out,
     background 200ms ease-in-out,
     color 200ms ease-in-out; // 각각의 속성에 대하여 다른 transition을 적용하여 각각의 컴포넌트 애니메이션의 속도를 조절한다.
-`;
-
-const InputWrapper = styled.div`
-  position: relative;
-
-  display: grid;
-  grid: [username-input] 1fr / [username-input] 1fr;
-  place-content: center;
-
-  border: 2px solid;
-  border-color: oklch(16.73% 0.005 83 / 20%);
-  border-radius: 2.25rem;
-  padding: 4px 16px 4px 16px;
-  gap: 4px;
 `;

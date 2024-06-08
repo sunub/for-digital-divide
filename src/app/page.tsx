@@ -17,11 +17,9 @@ function InitPage() {
           </AlignCenter>
           <TextContainer>
             <p>
-              이 홈페이지는 단순한 <b>데모(가짜)</b> 페이지 입니다. 모바일 은행
-              어플 사용에 어려움이 있는 분들을 돕기 위한 목적으로 제작된 페이지
-              입니다.홈페이지에서 작성하는 어떠한 데이터도 저장되지 않으니
-              걱정하지 않으셔도 됩니다! 시작하시려면 아래의 <b>시작하기</b>를
-              눌러주세요!
+              이 홈페이지는 단순한 <b>데모(가짜)</b> 페이지 입니다.홈페이지에서
+              작성하는 어떠한 데이터도 저장되지 않으니 걱정하지 않으셔도 됩니다!
+              시작하시려면 아래의 <b>시작하기</b>를 눌러주세요!
             </p>
           </TextContainer>
           <Spacer size={32} axis="vertical" />
@@ -73,10 +71,10 @@ const BackDrop = styled.div`
   background: oklch(3.53% 0 73 / 50%);
   backdrop-filter: blur(20px);
   z-index: -1;
-  top: -64px;
+  top: 0px;
   left: 0px;
-  width: 100cqw;
-  height: calc(100cqh + 64px);
+  width: 100%;
+  height: 100%;
 `;
 
 export default InitPage;

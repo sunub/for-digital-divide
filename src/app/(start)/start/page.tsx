@@ -19,11 +19,7 @@ export default function Home() {
     toggleOpen,
   };
 
-  return (
-    <div>
-      <LinkToAgreeToTerm {...smallPhoneProps} />
-    </div>
-  );
+  return <LinkToAgreeToTerm {...smallPhoneProps} />;
 }
 
 function LinkToAgreeToTerm(props: SmallPhoneProps) {
@@ -45,7 +41,9 @@ function LinkToAgreeToTerm(props: SmallPhoneProps) {
 
 const Title = styled(motion.div)`
   position: absolute;
+  left: 0;
   top: 25cqh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
