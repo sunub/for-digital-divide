@@ -6,7 +6,10 @@ import { cookies } from 'next/headers';
 import PermissionRequest from './request';
 
 async function Page() {
-  const hasRequestedPermission = cookies().get('hasRequestedPermission')?.value;
+  const cookieStore = await cookies();
+  const hasRequestedPermission = cookieStore.get(
+    'hasRequestedPermission',
+  )?.value;
   return (
     <React.Fragment>
       {hasRequestedPermission === 'true' ? (
