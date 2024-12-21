@@ -6,24 +6,10 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { ArrowIcon } from '@/icons';
 import useToggle from '@/hooks/use-toggle';
-
-interface SmallPhoneProps {
-  isOpen: boolean;
-  toggleOpen: () => void;
-}
+import Loading from '@/app/login/loading';
 
 export default function Home() {
   const [isOpen, toggleOpen] = useToggle(false);
-  const smallPhoneProps = {
-    isOpen,
-    toggleOpen,
-  };
-
-  return <LinkToAgreeToTerm {...smallPhoneProps} />;
-}
-
-function LinkToAgreeToTerm(props: SmallPhoneProps) {
-  const { isOpen } = props;
 
   return (
     <React.Fragment>
@@ -33,8 +19,7 @@ function LinkToAgreeToTerm(props: SmallPhoneProps) {
           <ArrowIcon />
         </Title>
       )}
-
-      <SmallPhone {...props} />
+      <SmallPhone isOpen={isOpen} toggleOpen={toggleOpen} />
     </React.Fragment>
   );
 }

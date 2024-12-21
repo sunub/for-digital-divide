@@ -1,34 +1,34 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import styled from "styled-components";
+import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
 function LoginAnimation() {
   const circles = [
     {
       cx: 70,
-      cy: "50%",
-      r: "2cqh",
-      fill: "#8F76FF",
+      cy: '50%',
+      r: '2cqh',
+      fill: '#8F76FF',
     },
     {
       cx: 170,
-      cy: "50%",
-      r: "2cqh",
-      fill: "#FF7E76",
+      cy: '50%',
+      r: '2cqh',
+      fill: '#FF7E76',
     },
-    { cx: 270, cy: "50%", r: "2cqh", fill: "#8F76FF" },
+    { cx: 270, cy: '50%', r: '2cqh', fill: '#8F76FF' },
     {
       cx: 370,
-      cy: "50%",
-      r: "2cqh",
-      fill: "#98DF9F",
+      cy: '50%',
+      r: '2cqh',
+      fill: '#98DF9F',
     },
     {
       cx: 470,
-      cy: "50%",
-      r: "2cqh",
-      fill: "#8F76FF",
+      cy: '50%',
+      r: '2cqh',
+      fill: '#8F76FF',
     },
   ];
 
@@ -56,12 +56,13 @@ function LoginAnimation() {
             transition={{
               delay: 200 * Math.sin(0.001 * index),
               duration: 10,
-              type: "spring",
+              type: 'spring',
               damping: 9,
               stiffness: 120,
               repeat: Infinity,
-              repeatType: "reverse",
+              repeatType: 'reverse',
               repeatDelay: 0.001,
+              zIndex: 1000,
             }}
           />
         );

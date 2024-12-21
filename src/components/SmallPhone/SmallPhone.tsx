@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import Loading from '@/app/login/loading';
 
 interface SmallPhoneProps {
   isOpen: boolean;
@@ -13,39 +14,10 @@ interface SmallPhoneProps {
 const Phone = styled(motion.button)<{ $isOpen: boolean }>`
   background: transparent;
   display: grid;
-  cursor: pointer;
+  cursor: ${(props) => (props.$isOpen ? 'default' : 'pointer')};
   outline-offset: 4px;
   :focus:not(:focus-visible) {
     outline: none;
-  }
-
-  &::before {
-    --inner2: oklch(65.57% 0.19 288.17);
-    --outter: oklch(96.88% 0.015 294.47);
-    --inner1: oklch(65% 0.206 288.34 / 60%);
-
-    content: ' ';
-    width: 150cqw;
-    height: 200cqw;
-
-    position: absolute;
-    top: calc(50cqw - 75cqw);
-    left: calc(50cqw - 80cqw);
-    z-index: -1;
-    border-radius: 25%;
-    display: ${(props) => (props.$isOpen ? 'none' : 'inline-block')};
-
-    background-position: 0% 0%;
-    background-size: 300% 300%;
-    background: radial-gradient(
-      var(--inner2) 30%,
-      var(--inner1) 40%,
-      var(--inner1) 50%,
-      var(--outter),
-      var(--outter)
-    );
-    pointer-events: none;
-    animation: blink 2s ease infinite;
   }
 
   &:hover::before {
@@ -129,16 +101,13 @@ function SmallPhone(props: SmallPhoneProps) {
 
   return (
     <Phone
+      disabled={isOpen}
       $isOpen={isOpen}
       onClick={() => {
         toggleOpen();
+        router.prefetch('/pin');
       }}
-      onAnimationComplete={(definition) => {
-        if (definition === 'open') {
-          router.prefetch('/pin');
-          router.push('/pin');
-        }
-      }}
+      onAnimationComplete={() => router.push('/pin')}
       initial={false}
       animate={isOpen ? 'open' : 'closed'}
       variants={{
@@ -146,6 +115,7 @@ function SmallPhone(props: SmallPhoneProps) {
         open: { rotateX: 0, rotateZ: 0, scale: 0.6, y: '10px' },
       }}
     >
+      {isOpen && <Loading />}
       <Icon
         width="643"
         height="1264"
