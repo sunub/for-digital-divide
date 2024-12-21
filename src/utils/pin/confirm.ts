@@ -19,7 +19,8 @@ const PinSchema = v.object({
 });
 
 async function confirmAction(decodedPinNumbers: string[], padInfo: KeypadInfo) {
-  const cookieUsername = cookies().get('username');
+  const cookieStore = await cookies();
+  const cookieUsername = cookieStore.get('username');
   if (cookieUsername === undefined) {
     return {
       status: 'error',

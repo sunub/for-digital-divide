@@ -21,7 +21,8 @@ interface User {
 
 class User {
   static async signedInStatus() {
-    const session = cookies().get('session')?.value;
+    const cookieStore = await cookies();
+    const session = cookieStore.get('session')?.value;
     if (!session) return false;
 
     const decodedSession = JSON.parse(decode(session as string));
@@ -70,7 +71,8 @@ class User {
   }
 
   static async findByPassword(password: string) {
-    const session = cookies().get('session')?.value as string;
+    const cookieStore = await cookies();
+    const session = cookieStore.get('session')?.value as string;
     const decodedSession = JSON.parse(decode(session));
     const userId = decode(decodedSession.id);
 

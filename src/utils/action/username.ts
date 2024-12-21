@@ -1,7 +1,6 @@
 'use server';
 
 import { z } from 'zod';
-import { parseWithZod } from '@conform-to/zod';
 import { Base64 } from 'js-base64';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -11,22 +10,26 @@ const usernameSchema = z.object({
   username: z
     .string()
     .min(1, '1글자 이상 입력해주세요.')
-    .max(40, '40글자 이하로 입력해주세요.'),
+    .max(40, '40글자 이하로 입력해주세요.')
+    .transform((value) => value.replace(/\s+/g, ' ')),
 });
 
-async function usernameAction(prevState: unknown, formData: FormData) {
-  const submission = parseWithZod(formData, {
-    schema: usernameSchema,
-  });
-
-  if (submission.status === 'error') {
-    return submission.reply();
+async function usernameAction(currentState: unknown, formData: FormData) {
+  const formObject = Object.fromEntries(formData.entries());
+  const parsedUsername = usernameSchema.safeParse(formObject);
+  console.log(parsedUsername);
+  if (!parsedUsername.success) {
+    return {
+      status: 'error',
+      payload: parsedUsername.error,
+    };
   }
 
-  const { username } = submission.payload;
+  const { username } = parsedUsername.data;
   const encodedUsername = Base64.encode(username as string);
+  const cookieStore = await cookies();
 
-  cookies().set('username', encodedUsername, {
+  cookieStore.set('username', encodedUsername, {
     secure: true,
     sameSite: 'lax',
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),

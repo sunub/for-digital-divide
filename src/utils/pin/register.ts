@@ -39,7 +39,8 @@ export async function reorderKeypad(isReorder: boolean) {
 }
 
 export async function registerAction(formData: FormData, padInfo: KeypadInfo) {
-  const username = cookies().get('username');
+  const cookieStore = await cookies();
+  const username = cookieStore.get('username');
   if (username?.value === undefined) {
     return {
       status: 'error',

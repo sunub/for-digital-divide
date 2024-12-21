@@ -15,7 +15,7 @@ const UsernameSchema = v.object({
   ]),
 });
 
-function formAction(formData: FormData) {
+async function formAction(formData: FormData) {
   const result = v.safeParse(UsernameSchema, {
     username: formData.get('username'),
   });
@@ -34,8 +34,8 @@ function formAction(formData: FormData) {
 
   const { username } = result.output;
   const encodedUsername = Base64.encode(username);
-
-  cookies().set('username', encodedUsername, {
+  const cookieStore = await cookies();
+  cookieStore.set('username', encodedUsername, {
     secure: true,
     sameSite: 'lax',
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
