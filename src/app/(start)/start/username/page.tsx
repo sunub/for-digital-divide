@@ -1,85 +1,68 @@
 'use client';
 
-import React from 'react';
+import { memo, useEffect } from 'react';
 import { useNotificationStore } from '@/context/NotificationContext';
 import Username from '@/components/LoginForm/LoginInput/Username';
 import Button from '@/components/Button';
 import usernameAction from '@/utils/action/username';
-import { useFormState, useFormStatus, FormStatus } from 'react-dom';
-import { useForm } from '@conform-to/react';
-import { parseWithZod, getZodConstraint } from '@conform-to/zod';
+import { useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
 import { useAnimate } from 'framer-motion';
-import { z } from 'zod';
-
-const usernameSchema = z.object({
-  username: z
-    .string()
-    .min(1, '1글자 이상 입력해주세요.')
-    .max(40, '40글자 이하로 입력해주세요.'),
-});
 
 export default function Home() {
-  const [result, action] = useFormState(usernameAction, null);
+  const [actionState, formAction] = useActionState(usernameAction, null);
   const status = useFormStatus();
-  const [form, fields] = useForm({
-    id: 'init-username-form',
-    lastResult: result,
-    constraint: getZodConstraint(usernameSchema),
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: usernameSchema });
-    },
-    defaultValue: {
-      username: '',
-    },
-  });
   const { add, remove } = useNotificationStore((state) => state);
   const [_, animate] = useAnimate();
 
-  React.useEffect(() => {
+  function toastMessage({
+    id,
+    message,
+    type,
+  }: {
+    id: string;
+    message: string;
+    type: 'error' | 'success' | 'default';
+  }) {
     add({
+      id,
+      message,
+      type,
+    });
+
+    const timer = window.setTimeout(() => {
+      const listItem = document.querySelector(`li#${id}`) as HTMLElement;
+      if (!listItem) return;
+      animate(listItem, {
+        y: ['0%', '100%'],
+        opacity: [1, 0],
+      }).then(() => remove(id));
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }
+
+  useEffect(() => {
+    toastMessage({
       id: 'username',
       message: '사용자 이름을 입력해주세요',
       type: 'default',
     });
   }, []);
 
-  React.useEffect(() => {
-    if (result && result?.status === 'error') {
-      add({
+  useEffect(() => {
+    if (actionState?.status === 'error') {
+      toastMessage({
         id: 'username-error',
         message: '이름을 입력한 후 확인 버튼을 눌러주세요!',
         type: 'error',
       });
-
-      const timer = window.setTimeout(() => {
-        const listItem = document.querySelector(
-          `li#username-error`,
-        ) as HTMLElement;
-        animate(listItem, {
-          y: ['0%', '100%'],
-          opacity: [1, 0],
-        }).then(() => remove('username-error'));
-      }, 3500);
-
-      return () => clearTimeout(timer);
     }
-  }, [result]);
-
-  React.useEffect(() => {
-    const timer = window.setTimeout(() => {
-      const listItem = document.querySelector(`li#username`) as HTMLElement;
-      animate(listItem, {
-        y: ['0%', '100%'],
-        opacity: [1, 0],
-      }).then(() => remove('username'));
-    }, 3500);
-    return () => clearTimeout(timer);
-  }, [add]);
+  }, [actionState]);
 
   return (
     <form
-      id={form.id}
-      action={action}
+      id={'init-username-form'}
       className="w-[100cqw] h-[100cqh] flex flex-col place-content-center gap-3"
       noValidate
     >
@@ -95,7 +78,7 @@ export default function Home() {
         <Username
           id="init-username"
           type="text"
-          name={fields.username.name}
+          name={'username'}
           autoComplete="username"
           minLength={1}
           maxLength={40}
@@ -103,26 +86,21 @@ export default function Home() {
           labelContent="사용자 이름"
         />
       </div>
-      <SubmitButton status={status} />
+      <div className="flex place-content-center align-middle pt-4">
+        <Button
+          type="submit"
+          formAction={formAction}
+          status={status.pending ? 'pending' : 'idle'}
+          disabled={status.pending}
+        >
+          확인
+        </Button>
+      </div>
     </form>
   );
 }
 
-function SubmitButton({ status }: { status: FormStatus }) {
-  return (
-    <div className="flex place-content-center align-middle pt-4">
-      <Button
-        type="submit"
-        status={status.pending ? 'pending' : 'idle'}
-        disabled={status.pending}
-      >
-        확인
-      </Button>
-    </div>
-  );
-}
-
-function ArrowIcon() {
+const ArrowIcon = memo(() => {
   return (
     <svg
       width="27"
@@ -140,4 +118,4 @@ function ArrowIcon() {
       />
     </svg>
   );
-}
+});

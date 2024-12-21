@@ -1,14 +1,11 @@
-import LoadingAnimation from "@/components/LoadingAnimation";
+import LoadingAnimation from '@/components/LoadingAnimation';
+import { HTMLAttributes } from 'react';
 
-function Loading() {
+function Loading({ props }: { props?: HTMLAttributes<HTMLDivElement> }) {
   return (
     <div
-      style={{
-        display: "grid",
-        width: "100cqw",
-        height: "87cqh",
-        placeContent: "center",
-      }}
+      className={`grid place-content-center absolute w-full h-full ${props ? props.className : ''}`}
+      {...props}
     >
       <LoadingAnimation />
     </div>

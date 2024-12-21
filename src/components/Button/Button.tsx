@@ -9,7 +9,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   status?: Status;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const ButtonRefComponent = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     { variant = 'default', status = 'idle', children, onClick, ...props },
     ref,
@@ -103,6 +103,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   },
 );
+
+const Button = React.memo(ButtonRefComponent);
 
 const Dot = styled(motion.span)`
   transform-origin: center 2rem;
