@@ -25,11 +25,10 @@
   font-display: swap;
   font-style: normal;
 }
-
 :root {
   --nanum-square-neo: 'NanumSquare';
 
-  --color-thumb: oklch(92.17% 0.039 291.94);
+  --color-thumb: oklch(45.42% 0.007 239.95);
   --color-thumb-background: oklch(45.42% 0.007 239.95);
   --color-background: oklch(96.88% 0.015 294.47);
   --color-text: oklch(42.44% 0.011 17.58);
@@ -93,12 +92,6 @@ body {
   font-family: var(--nanum-square-neo), sans-serif;
   font-size: var(--text-size);
   background-color: var(--color-background);
-}
-
-body {
-  cursor:
-    url('/images/cursor_default.png') 0 0,
-    auto;
 }
 
 #_next {
@@ -291,20 +284,18 @@ a:visited {
 }
 
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
   height: 12px;
-  background-color: var(--color-thumb-background);
+  background-color: oklch(92.17% 0.039 291.94) transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  border: 2px solid var(--color-thumb-background);
+  border-radius: 8px;
   background-color: var(--color-thumb);
 }
 
 ::-webkit-scrollbar-track {
-  border-radius: 3px;
-  background: var(--color-thumb) transparent;
+  background: oklch(92.17% 0.039 291.94) transparent;
 }
 
 @container root (width <= 360px) {

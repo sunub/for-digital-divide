@@ -6,6 +6,7 @@ import Spacer from '@/constants/Spacer';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
 function InitPage() {
   return (
@@ -17,8 +18,9 @@ function InitPage() {
           </AlignCenter>
           <TextContainer>
             <p>
-              이 홈페이지는 단순한 <b>데모(가짜)</b> 페이지 입니다.홈페이지에서
-              작성하는 어떠한 데이터도 저장되지 않으니 걱정하지 않으셔도 됩니다!
+              이 홈페이지는 단순한 <b>데모(가짜)</b> 페이지 입니다.
+            </p>
+            <p>
               시작하시려면 아래의 <b>시작하기</b>를 눌러주세요!
             </p>
           </TextContainer>
@@ -50,7 +52,6 @@ const DevsiteContentSiteContent = styled.div`
 const TextContainer = styled.div`
   display: grid;
   place-items: center;
-  height: 20cqh;
   overflow-y: scroll;
   padding: 1rem 1rem;
 `;
