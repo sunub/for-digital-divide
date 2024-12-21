@@ -31,7 +31,8 @@ export async function POST(req: NextRequest) {
     challenge: options.challenge,
   };
 
-  cookies().set('session', encode(JSON.stringify(sessionValue)), {
+  const cookieStore = await cookies();
+  cookieStore.set('session', encode(JSON.stringify(sessionValue)), {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
