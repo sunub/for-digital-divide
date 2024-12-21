@@ -1,6 +1,7 @@
 {
   "name": "for-digital-divide",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -23,12 +24,12 @@
     "jose": "^5.2.4",
     "js-base64": "^3.7.7",
     "js-cookie": "^3.0.5",
-    "next": "14.2.2",
+    "next": "^15.1.0",
     "node-fetch": "^3.3.2",
     "pg": "^8.11.5",
     "punycode": "^2.3.1",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-focus-lock": "^2.12.1",
     "react-remove-scroll": "^2.5.9",
     "styled-components": "^6.1.8",
