@@ -63,7 +63,6 @@ export async function registerAction(formData: FormData, padInfo: KeypadInfo) {
   }
 
   const pinnumbers = submission.value.pinnumbers;
-  console.log(pinnumbers);
   const result = PinSchema.safeParse({
     username: username.value,
     pinnumbers,
@@ -101,29 +100,40 @@ export async function registerAction(formData: FormData, padInfo: KeypadInfo) {
     selectQuery,
     [decodedUsername],
   );
+  console.log(selectResult);
 
   let insertQuery;
   if (selectResult.rows.length > 0) {
     insertQuery = `
-      INSERT INTO pin_number (username, pin_number, pin_num_keys)
+      INSERT INTO pin_number (username, pinnumbers, pin_num_keys)
       VALUES ($1, $2, $3)
       ON CONFLICT (username)
-      DO UPDATE SET pin_number = $2, pin_num_keys = $3
+      DO UPDATE SET pinnumbers = $2, pin_num_keys = $3
       RETURNING *;
       `;
   } else {
     insertQuery = `
-      INSERT INTO pin_number (username, pin_number, pin_num_keys)
+      INSERT INTO pin_number (username, pinnumbers, pin_num_keys)
       VALUES ($1, $2, $3)
       RETURNING *;
     `;
   }
 
-  await client.query<QueryResult<typeof PinSchema>>(insertQuery, [
-    decodedUsername,
-    result.data.pinnumbers,
-    JSON.stringify(result.data.pinnumkeys),
-  ]);
+  try {
+    await client.query<QueryResult<typeof PinSchema>>(insertQuery, [
+      decodedUsername,
+      JSON.stringify(result.data.pinnumbers),
+      JSON.stringify(result.data.pinnumkeys),
+    ]);
+  } catch (error) {
+    console.error(error);
+    await client.release(true);
+    return {
+      status: 'error',
+      id: 'pin-pattern-register-failure',
+      msg: '핀번호 등록에 실패했습니다.',
+    };
+  }
 
   await client.release(true);
 
