@@ -1,0 +1,65 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("SUNUB_POSTGRES_PRISMA_URL")
+  directUrl = env("SUNUB_POSTGRES_URL_NON_POOLING")
+}
+
+model Pattern {
+  id       String   @id
+  pattern  String[]
+  length   Int
+  username String   @unique
+  UserInfo UserInfo @relation(fields: [username], references: [username])
+}
+
+model PinHash {
+  id       String   @id
+  username String   @unique
+  hash     Json
+  UserInfo UserInfo @relation(fields: [username], references: [username])
+}
+
+model PinNumbers {
+  id       String
+  numbers  String[]
+  username String   @unique
+  UserInfo UserInfo @relation(fields: [username], references: [username])
+}
+
+model Post {
+  id       String   @id
+  slug     String   @unique
+  category String
+  date     DateTime
+  summary  String
+  title    String
+  Tags     Tags[]
+
+  @@index([category, date])
+  @@index([slug])
+}
+
+model Redirects {
+  id          String   @id
+  source      String
+  destination String
+  createdAt   DateTime @default(now())
+
+  @@unique([source, destination])
+  @@index([source])
+}
+
+model Tags {
+  id       String @id
+  name     String @db.VarChar(30)
+  postSlug String
+  Post     Post   @relation(fields: [postSlug], references: [slug])
+}
+
+model UserInfo {
+  id         String
+  username   String      @unique
+  Pattern    Pattern?
+  PinHash    PinHash?
+  PinNumbers PinNumbers?
+}
