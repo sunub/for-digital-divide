@@ -8,12 +8,14 @@ import usernameAction from '@/utils/action/username';
 import { useFormStatus } from 'react-dom';
 import { useActionState } from 'react';
 import { useAnimate } from 'framer-motion';
+import { useToastMsg } from '@/hooks/use-toast-msg';
 
 export default function Home() {
   const [actionState, formAction] = useActionState(usernameAction, null);
   const status = useFormStatus();
   const { add, remove } = useNotificationStore((state) => state);
   const [_, animate] = useAnimate();
+  const showToastMsg = useToastMsg();
 
   function toastMessage({
     id,
@@ -43,7 +45,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    toastMessage({
+    showToastMsg({
       id: 'username',
       message: '사용자 이름을 입력해주세요',
       type: 'default',
@@ -52,7 +54,7 @@ export default function Home() {
 
   useEffect(() => {
     if (actionState?.status === 'error') {
-      toastMessage({
+      showToastMsg({
         id: 'username-error',
         message: '이름을 입력한 후 확인 버튼을 눌러주세요!',
         type: 'error',
