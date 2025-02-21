@@ -108,7 +108,7 @@ function Lock() {
   }, []);
 
   React.useEffect(() => {
-    function resize(ref: React.RefObject<HTMLCanvasElement>) {
+    function resize(ref: React.RefObject<HTMLCanvasElement | null>) {
       if (!ref.current) return;
       const canvas = ref.current;
       const stageWidth = canvas.clientWidth;

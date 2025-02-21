@@ -54,7 +54,6 @@ function reducer(
 }
 
 function Page() {
-  const constraintsRef = useRef<HTMLDivElement>(null);
   const [state, dispatch] = useReducer(reducer, {
     isPatternVisible: false,
     isPasskeyVisible: false,
@@ -99,7 +98,7 @@ function Page() {
 
   return (
     <DeviceFrame>
-      <DeviceContent ref={constraintsRef} className="pt-8 gap-4">
+      <DeviceContent className="pt-8 gap-4">
         {APPS.map(({ type, icon, pos, href, disabled }) => (
           <AppContainer
             key={type}
