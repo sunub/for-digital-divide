@@ -1,11 +1,8 @@
 import React from 'react';
 import './globals.css';
-import Header from '@compo/Header';
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
-import { NotificationProvider } from '@/context/NotificationContext';
-import localFont from 'next/font/local';
 import NotificationList from '@/components/NotificationList';
-const cx = (...classes: string[]) => classes.filter(Boolean).join(' ');
+import { ReloadButton } from '@/components/ReloadButton';
 
 export default function RootLayout({
   children,
@@ -15,14 +12,6 @@ export default function RootLayout({
   return (
     <html lang="kor">
       <head>
-        <style>
-          {`
-            body {
-              container: root / inline-size;
-              font-size: var(--text-size);
-            }
-          `}
-        </style>
         <link
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet preload"
@@ -34,19 +23,11 @@ export default function RootLayout({
       </head>
       <body id="root">
         <StyledComponentsRegistry>
-          <NotificationProvider>
-            <div id="_next">
-              <section id="devsite-wrapper">
-                {/* <div id="devsite-header">
-                  <Header />
-                </div> */}
-                <div id="devsite-content">
-                  <div id="devsite-content__site-main">{children}</div>
-                </div>
-              </section>
-            </div>
-            <NotificationList />
-          </NotificationProvider>
+          <div id="_next">
+            <div id="devsite-content">{children}</div>
+            <ReloadButton />
+          </div>
+          <NotificationList />
         </StyledComponentsRegistry>
       </body>
     </html>
