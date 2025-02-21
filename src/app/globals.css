@@ -87,7 +87,7 @@ html {
 
 html,
 body {
-  --text-size: 24px;
+  --text-size: 18px;
   height: 100%;
   font-family: var(--nanum-square-neo), sans-serif;
   font-size: var(--text-size);
@@ -211,7 +211,6 @@ a:visited {
 #devsite-content {
   /* grid-area: devsite-content-row / devsite-content-column; */
   container: devsite-content / size;
-
   display: flex;
   width: 100%;
   height: 100%;
@@ -242,6 +241,14 @@ a:visited {
   top: 0;
   left: calc(50cqw - 15cqw);
   z-index: 1000;
+}
+
+#device-wrapper {
+  --dashboard-grid-rows: repeat(8, 1fr);
+  --dashboard-grid-cols: repeat(5, 1fr);
+
+  padding-left: 32px;
+  padding-right: 32px;
 }
 
 @container root (width < 769px) {
@@ -286,7 +293,11 @@ a:visited {
 ::-webkit-scrollbar {
   width: 8px;
   height: 12px;
-  background-color: oklch(92.17% 0.039 291.94) transparent;
+  background-color: color-mix(
+    in oklch,
+    oklch(92.17% 0.039 291.94),
+    transparent
+  );
 }
 
 ::-webkit-scrollbar-thumb {
@@ -295,7 +306,7 @@ a:visited {
 }
 
 ::-webkit-scrollbar-track {
-  background: oklch(92.17% 0.039 291.94) transparent;
+  background: color-mix(in oklch, oklch(92.17% 0.039 291.94), transparent);
 }
 
 @container root (width <= 360px) {
@@ -311,6 +322,9 @@ a:visited {
   }
 
   #device-wrapper {
+    --dashboard-grid-rows: repeat(5, 1fr);
+    --dashboard-grid-cols: repeat(8, 1fr);
+
     grid-template-columns: [content-device] var(--content-height) [drawer-device] var(
         --drawer-height
       );
