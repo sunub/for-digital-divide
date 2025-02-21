@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import * as jose from 'jose';
+import withPgClient from '../withPgClient';
 import { prisma } from '@root/prisma/prisma';
 
 const usernameSchema = z.object({
@@ -27,12 +28,16 @@ async function usernameAction(currentState: unknown, formData: FormData) {
   const { username } = parsedUsername.data;
   const cookieStore = await cookies();
 
-  const secret = crypto.getRandomValues(new Uint8Array(32));
+  const rawSecret = process.env.JWT_SECRET;
+  if (!rawSecret) {
+    throw new Error('JWT_SECRET 환경 변수가 설정되어 있지 않습니다.');
+  }
+  const secretKey = Buffer.from(rawSecret, 'base64');
   const sid = await new jose.EncryptJWT({ username })
     .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
     .setIssuedAt()
     .setExpirationTime('2h')
-    .encrypt(secret);
+    .encrypt(secretKey);
 
   try {
     await prisma.userInfo.upsert({
