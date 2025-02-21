@@ -3,7 +3,6 @@
 import React, { HTMLAttributes } from 'react';
 import styled from 'styled-components';
 import Button from '@/components/Button';
-import formAction from '@/utils/username';
 
 interface ModalProps extends HTMLAttributes<HTMLDialogElement> {
   children: React.ReactNode;
@@ -15,7 +14,7 @@ const Modal = React.forwardRef<HTMLDialogElement, ModalProps>((props, ref) => {
 
   return (
     <Dialog ref={ref} open {...rest}>
-      <Form action={async (formData: FormData) => formAction(formData)}>
+      <Form>
         {children}
         <Button type="submit">확인</Button>
       </Form>

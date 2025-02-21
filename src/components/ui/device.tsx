@@ -1,16 +1,34 @@
 'use client';
 
 import styled from 'styled-components';
+import { cn } from '@/utils/misc';
+import { BackBtn, HomeBtn } from '../Icon';
 
-export function DeviceFrame({ children }: { children: React.ReactNode }) {
+interface DeviceFrameProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+}
+
+interface DeviceContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  ref?: React.RefObject<HTMLDivElement>;
+  children: React.ReactNode;
+}
+
+interface DeviceFooterProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode;
+}
+
+export function DeviceFrame({ children, ...props }: DeviceFrameProps) {
   return (
     <Container id="device-root">
-      <Frame id="device-wrapper">{children}</Frame>
+      <Frame id="device-wrapper" {...props}>
+        {children}
+        <DeviceFooter />
+      </Frame>
     </Container>
   );
 }
 
-export function DeviceContent({ children }: { children: React.ReactNode }) {
+export function DeviceContent({ children, ref, ...props }: DeviceContentProps) {
   return (
     <div className="relative w-full h-full">
       <ContentOpener htmlFor="device-content">
@@ -23,7 +41,14 @@ export function DeviceContent({ children }: { children: React.ReactNode }) {
           readOnly
         />
       </ContentOpener>
-      <div className="flex flex-col justify-center items-center w-full h-full">
+      <div
+        {...props}
+        ref={ref}
+        className={cn(
+          'flex flex-col justify-center items-center w-full h-full',
+          props.className,
+        )}
+      >
         {children}
       </div>
     </div>
@@ -40,6 +65,33 @@ export function Drawer({ children }: { children: React.ReactNode }) {
     </DrawerContainer>
   );
 }
+
+export function DeviceFooter({ ...props }: DeviceFooterProps) {
+  return (
+    <DeviceFooterContainer {...props}>
+      <PlaceCenter $type="home">
+        <HomeBtn />
+      </PlaceCenter>
+      <PlaceCenter $type="back">
+        <BackBtn />
+      </PlaceCenter>
+    </DeviceFooterContainer>
+  );
+}
+
+const PlaceCenter = styled.div<{ $type: 'home' | 'back' }>`
+  display: grid;
+  place-items: center;
+  grid-area: ${({ $type }) => ($type === 'home' ? 'home' : 'back')};
+`;
+
+const DeviceFooterContainer = styled.div`
+  display: grid;
+  width: 100%;
+  height: fit-content;
+  grid-template-columns: [empty] 1fr [home] 1fr [back] 1fr;
+  grid-template-rows: 1fr;
+`;
 
 const ContentOpener = styled.label`
   --hide-scale: 1;
@@ -84,14 +136,16 @@ const Frame = styled.div`
   --drawer-height: 1fr;
   --drawer-animation: null;
   --drawer-container-size: 90%;
+  --drawer-content-display: flex;
 
   display: grid;
-  grid-template-rows: [content-device] var(--content-height) [drawer-device] var(
-      --drawer-height
-    );
+  grid-template-rows:
+    [content-device] var(--content-height)
+    [drawer-device] var(--drawer-height);
   justify-items: center;
   width: 100%;
   height: 100%;
+  position: relative;
 
   padding: 6px;
   background-color: oklch(96.88% 0.015 294.47);
@@ -109,6 +163,7 @@ const Frame = styled.div`
   transition: grid 500ms cubic-bezier(0.17, 1.48, 0.24, 1);
 
   &:has(label[for='device-content'] > input:checked) {
+    --drawer-content-display: none;
     --content-height: 20fr;
     --drawer-height: 1fr;
   }
@@ -123,10 +178,24 @@ const Frame = styled.div`
   & > div#drawer-container {
     width: var(--drawer-container-size);
   }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: calc(50% - 50px);
+
+    width: 100px;
+    height: 20px;
+    justify-self: center;
+    background: oklch(88.25% 0.0276 297.27);
+    border-radius: 1e5px;
+    z-index: 1000;
+  }
 `;
 
 const DrawerContent = styled.div`
-  display: flex;
+  display: var(--drawer-content-display);
   flex-direction: column;
   gap: 36px;
   align-items: center;
@@ -176,15 +245,15 @@ const DrawerContainer = styled.div`
     --drawer-content-z: 0;
   }
 
-  /* &:has(input:not(:checked)) {
+  &:has(input:not(:checked)) {
     ::before {
       animation: emphasis 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
     }
-  } */
+  }
 
-  /* & > div#drawer-content {
+  & > div#drawer-content {
     transform: translateY(var(--translateY-val));
-  } */
+  }
 `;
 
 const DrawerOpener = styled.label`

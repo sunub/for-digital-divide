@@ -129,7 +129,7 @@ const Front = styled(motion.div)<{ $isClick: boolean }>`
     props.$isClick ? 'var(--color-confirm)' : 'var(--input-default)'};
   border: 5px solid
     ${(props) =>
-      props.$isClick ? 'var(--color-confirm)' : 'var(--color-text)'};
+      props.$isClick ? 'var(--color-confirm)' : 'oklch(65.57% 0.19 288.17)'};
   color: ${(props) =>
     props.$isClick ? 'oklch(45.88% 0.184 142.89)' : 'var(--color-text)'};
 
@@ -160,7 +160,7 @@ export const Shadow = styled.span`
   top: 3px;
   border: none;
   border-radius: 1rem;
-  background-color: oklch(0% 0 14.09 / 35%);
+  background-color: oklch(0% 0 14.09 / 25%);
   transition: transform 400ms cubic-bezier(0.3, 0.7, 0.4, 1);
 
   filter: blur(2px);
@@ -189,10 +189,10 @@ export const Btn = styled.button.attrs((props: any) => ({
 }))<{ $isClick: boolean; $isPending: boolean }>`
   --default-shadow: linear-gradient(
     to left,
-    oklch(21.25% 0.005 17.53) 0%,
-    oklch(50.2% 0.013 17.59) 9%,
-    oklch(50.2% 0.013 17.59) 91%,
-    oklch(21.25% 0.005 17.53) 100%
+    oklch(65.57% 0.19 288.17) 0%,
+    oklch(75.57% 0.19 288.17) 9%,
+    oklch(75.57% 0.19 288.17) 91%,
+    oklch(35.57% 0.19 288.17) 100%
   );
   --confirm-shadow: linear-gradient(
     to left,
@@ -232,7 +232,7 @@ export const Btn = styled.button.attrs((props: any) => ({
 
   &:hover ${Front} {
     filter: brightness(110%);
-    transform: translateY(-18px);
+    transform: translateY(-12px);
     transition: transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1);
   }
 
