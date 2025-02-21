@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Pin from '@/app/pin/page';
+import Pin from '@/app/dashboard/pin/page';
 import { handlers, keypadApi } from '@tests/server/handlers';
 import { setupServer } from 'msw/node';
 import { HttpResponse, http } from 'msw';
