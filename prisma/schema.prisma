@@ -1,11 +1,15 @@
+// prisma/schema.prisma
 datasource db {
-  provider  = "postgresql"
-  url       = env("SUNUB_POSTGRES_PRISMA_URL")
-  directUrl = env("SUNUB_POSTGRES_URL_NON_POOLING")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
 }
 
 model Pattern {
-  id       String   @id
+  id       Int      @id @default(autoincrement())
   pattern  String[]
   length   Int
   username String   @unique
@@ -13,14 +17,14 @@ model Pattern {
 }
 
 model PinHash {
-  id       String   @id
+  id       Int      @id @default(autoincrement())
   username String   @unique
   hash     Json
   UserInfo UserInfo @relation(fields: [username], references: [username])
 }
 
 model PinNumbers {
-  id       String
+  id       Int      @id @default(autoincrement())
   numbers  String[]
   username String   @unique
   UserInfo UserInfo @relation(fields: [username], references: [username])
@@ -57,8 +61,9 @@ model Tags {
 }
 
 model UserInfo {
-  id         String
+  id         String      @id @default(cuid())
   username   String      @unique
+  sessionId  String?     @unique @map("session_id")
   Pattern    Pattern?
   PinHash    PinHash?
   PinNumbers PinNumbers?
