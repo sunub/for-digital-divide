@@ -4,8 +4,8 @@ import { Pool, PoolClient, QueryResult } from 'pg';
 import { cookies } from 'next/headers';
 import { decode } from 'js-base64';
 import crypto from 'crypto';
-import usePgPool from '@/hooks/use-pgpool.hook';
 import { NextRequest } from 'next/server';
+import withPgClient from '@/utils/withPgClient';
 
 interface Credential {
   credId: string;
@@ -30,7 +30,7 @@ class User {
   }
 
   static async findByUsername(username: string) {
-    const findResult = await usePgPool(async (client) => {
+    const findResult = await withPgClient(async (client) => {
       const query = `
         SELECT * FROM fido_users
         WHERE username = $1;
@@ -42,7 +42,7 @@ class User {
   }
 
   static async findByUserId(id: string): Promise<QueryResult<User>> {
-    const findResult = await usePgPool(async (client) => {
+    const findResult = await withPgClient(async (client) => {
       const query = `
         SELECT * FROM fido_users
         WHERE id = $1;
@@ -55,7 +55,7 @@ class User {
   }
 
   static async update(user: User) {
-    const findResult = await usePgPool(async (client) => {
+    const findResult = await withPgClient(async (client) => {
       const query = `
         UPDATE fido_users
         SET credentials = $1
@@ -76,7 +76,7 @@ class User {
     const decodedSession = JSON.parse(decode(session));
     const userId = decode(decodedSession.id);
 
-    const findResult = await usePgPool(async (client) => {
+    const findResult = await withPgClient(async (client) => {
       const query = `
         SELECT * FROM fido_passwords
         WHERE id = $1;
@@ -95,7 +95,7 @@ class User {
   }
 
   static async insertSession(id: string, username: string) {
-    const findResult = await usePgPool(async (client) => {
+    const findResult = await withPgClient(async (client) => {
       const query = `
         INSERT INTO fido_session (id, username, signed_in)
         VALUES ($1, $2, $3)
@@ -110,7 +110,7 @@ class User {
   }
 
   static async updateChallenge(challenge: string, id: string) {
-    const findResult = await usePgPool(async (client) => {
+    const findResult = await withPgClient(async (client) => {
       const query = `
         UPDATE fido_session
         SET challenge = $1
@@ -123,7 +123,7 @@ class User {
   }
 
   static async findUserSession(id: string) {
-    const findResult = await usePgPool(async (client) => {
+    const findResult = await withPgClient(async (client) => {
       const query = `
         SELECT * FROM fido_session
         WHERE id = $1;
@@ -135,7 +135,7 @@ class User {
   }
 
   static async updateCredential(credential: string, id: string) {
-    const result = await usePgPool(async (client) => {
+    const result = await withPgClient(async (client) => {
       const query = `
         UPDATE fido_session
         SET credential = $1
@@ -149,7 +149,7 @@ class User {
   }
 
   static async deleteChallenge(id: string) {
-    const result = await usePgPool(async (client) => {
+    const result = await withPgClient(async (client) => {
       const query = `
         UPDATE fido_session
         SET challenge = NULL
@@ -167,7 +167,7 @@ class User {
     const parsedSession = JSON.parse(decodedSession);
     const id = parsedSession.id;
 
-    const findResult = await usePgPool(async (client) => {
+    const findResult = await withPgClient(async (client) => {
       const query = `
         SELECT * FROM fido_session
         WHERE id = $1;
