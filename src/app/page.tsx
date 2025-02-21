@@ -25,7 +25,7 @@ function InitPage() {
             </p>
           </TextContainer>
           <Spacer size={32} axis="vertical" />
-          <Link href={'/start/username'}>
+          <Link href={'/intro'}>
             <Button>시작하기</Button>
           </Link>
           <Spacer size={32} axis="vertical" />
