@@ -44,7 +44,7 @@ export const defaultInitState = {
 
 export type NotificationStore = NotificationState & NotificationAction;
 
-export const createNotificationStore = (
+const createNotificationStore = (
   initState: NotificationState = defaultInitState,
 ) => {
   return createStore<NotificationState & NotificationAction>()(
@@ -72,3 +72,5 @@ export const createNotificationStore = (
     ),
   );
 };
+
+export const notificationStore = createNotificationStore();
