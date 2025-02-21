@@ -1,10 +1,11 @@
 'use server';
 
 import { z } from 'zod';
-import { Base64 } from 'js-base64';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
+import * as jose from 'jose';
+import withPgClient from '../withPgClient';
+import { prisma } from '@root/prisma/prisma';
 
 const usernameSchema = z.object({
   username: z
@@ -17,7 +18,6 @@ const usernameSchema = z.object({
 async function usernameAction(currentState: unknown, formData: FormData) {
   const formObject = Object.fromEntries(formData.entries());
   const parsedUsername = usernameSchema.safeParse(formObject);
-  console.log(parsedUsername);
   if (!parsedUsername.success) {
     return {
       status: 'error',
@@ -26,17 +26,36 @@ async function usernameAction(currentState: unknown, formData: FormData) {
   }
 
   const { username } = parsedUsername.data;
-  const encodedUsername = Base64.encode(username as string);
   const cookieStore = await cookies();
 
-  cookieStore.set('username', encodedUsername, {
-    secure: true,
-    sameSite: 'lax',
-    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
-  });
+  const secret = crypto.getRandomValues(new Uint8Array(32));
+  const sid = await new jose.EncryptJWT({ username })
+    .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
+    .setIssuedAt()
+    .setExpirationTime('2h')
+    .encrypt(secret);
 
-  revalidatePath('/start');
-  redirect(`/start`);
+  try {
+    await prisma.userInfo.upsert({
+      where: { username },
+      create: { username, sessionId: sid },
+      update: { sessionId: sid },
+    });
+
+    cookieStore.set('session_id', sid, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+    });
+  } catch (error) {
+    console.error(error);
+    return {
+      status: 'error',
+      payload: '사용자 이름을 저장하는 중 오류가 발생했습니다.',
+    };
+  }
+  redirect(`/dashboard`);
 }
 
 export default usernameAction;

@@ -3,10 +3,10 @@
 import { KeypadInfo } from '@/utils/keypad';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
-import { Pool, QueryResult } from 'pg';
 import { parseWithZod } from '@conform-to/zod';
 import { z } from 'zod';
 import { goToUsername } from '../revalidate';
+import { prisma } from '@root/prisma/prisma';
 
 const validNumpadLength = 4;
 const noneEmptyString = z.string().min(1);
@@ -25,7 +25,7 @@ const FormSchema = z.object({
 const PinHashSchema = z.tuple([z.string(), z.number()]);
 
 const PinSchema = z.object({
-  username: z.string(),
+  session_id: z.string(),
   pinnumbers: PinNumberSchema,
   pinnumkeys: z.array(PinHashSchema),
 });
@@ -38,10 +38,23 @@ export async function reorderKeypad(isReorder: boolean) {
   return;
 }
 
+async function getUserInfo(session_id: string) {
+  try {
+    const username = await prisma.userInfo.findUnique({
+      where: { sessionId: session_id },
+    });
+    return username;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
 export async function registerAction(formData: FormData, padInfo: KeypadInfo) {
   const cookieStore = await cookies();
-  const username = cookieStore.get('username');
-  if (username?.value === undefined) {
+  const session_id = cookieStore.get('session_id');
+
+  if (session_id?.value === undefined) {
     return {
       status: 'error',
       id: 'username-not-found',
@@ -64,7 +77,7 @@ export async function registerAction(formData: FormData, padInfo: KeypadInfo) {
 
   const pinnumbers = submission.value.pinnumbers;
   const result = PinSchema.safeParse({
-    username: username.value,
+    session_id: session_id.value,
     pinnumbers,
     pinnumkeys: pinNumKeys,
   });
@@ -77,69 +90,39 @@ export async function registerAction(formData: FormData, padInfo: KeypadInfo) {
     };
   }
 
-  const decodedUsername = Buffer.from(username.value, 'base64').toString(
-    'utf-8',
-  );
-
-  const pool = new Pool({
-    host: process.env.SUNUB_POSTGRES_HOST,
-    user: process.env.SUNUB_POSTGRES_USER,
-    connectionString: process.env.SUNUB_POSTGRES_URL + '?sslmode=require',
-    connectionTimeoutMillis: 2000,
-    idleTimeoutMillis: 30000,
-  });
-
-  const client = await pool.connect();
-  const selectQuery = `
-    SELECT username
-    FROM pin_number
-    WHERE username = $1;
-  `;
-
-  const selectResult = await client.query<QueryResult<typeof PinSchema>>(
-    selectQuery,
-    [decodedUsername],
-  );
-  console.log(selectResult);
-
-  let insertQuery;
-  if (selectResult.rows.length > 0) {
-    insertQuery = `
-      INSERT INTO pin_number (username, pinnumbers, pin_num_keys)
-      VALUES ($1, $2, $3)
-      ON CONFLICT (username)
-      DO UPDATE SET pinnumbers = $2, pin_num_keys = $3
-      RETURNING *;
-      `;
-  } else {
-    insertQuery = `
-      INSERT INTO pin_number (username, pinnumbers, pin_num_keys)
-      VALUES ($1, $2, $3)
-      RETURNING *;
-    `;
-  }
-
-  try {
-    await client.query<QueryResult<typeof PinSchema>>(insertQuery, [
-      decodedUsername,
-      JSON.stringify(result.data.pinnumbers),
-      JSON.stringify(result.data.pinnumkeys),
-    ]);
-  } catch (error) {
-    console.error(error);
-    await client.release(true);
+  const username = await getUserInfo(session_id.value);
+  if (username?.username === null || username == null) {
     return {
       status: 'error',
-      id: 'pin-pattern-register-failure',
-      msg: '핀번호 등록에 실패했습니다.',
+      id: 'username-not-found',
+      msg: '세션 아이디에 해당하는 사용자를 찾을 수 없습니다.',
     };
   }
 
-  await client.release(true);
+  try {
+    await prisma.pinNumbers.upsert({
+      where: { username: username.username },
+      update: { numbers: pinnumbers },
+      create: { username: username.username, numbers: pinnumbers },
+    });
 
-  return {
-    status: 'success',
-    id: 'pin-pattern-register-success',
-    msg: '핀번호가 성공적으로 등록되었습니다.',
-  };
+    await prisma.pinHash.upsert({
+      where: { username: username.username },
+      update: { hash: pinNumKeys },
+      create: { username: username.username, hash: pinNumKeys },
+    });
+
+    return {
+      status: 'success',
+      id: 'pin-pattern-register-success',
+      msg: '핀번호가 성공적으로 등록되었습니다.',
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      status: 'error',
+      id: 'pin-pattern-register-error',
+      msg: '핀번호 등록 중 오류가 발생했습니다.',
+    };
+  }
 }
