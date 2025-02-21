@@ -1,12 +1,10 @@
 'use client';
 
 import Button from '@/components/Button/Default';
-import { TypeButton } from '@/components/TypeButton';
 import Spacer from '@/constants/Spacer';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
 
 function InitPage() {
   return (

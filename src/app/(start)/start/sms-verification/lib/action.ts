@@ -1,7 +1,7 @@
 'use server';
 
 import webpush from 'web-push';
-import usePgPool from '@/hooks/use-pgpool.hook';
+import withPgClient from '@/utils/withPgClient';
 
 export async function getVAPIDKey(formData: FormData) {
   const username = formData.get('name') as string;
@@ -9,7 +9,7 @@ export async function getVAPIDKey(formData: FormData) {
   const phoneNum = phone.replace(/-/g, '');
 
   const getSubscription = async () => {
-    return usePgPool(async (client) => {
+    return withPgClient(async (client) => {
       const query = `SELECT * FROM push_subscriptions WHERE username = $1`;
       return await client.query(query, [username]);
     });
@@ -23,7 +23,7 @@ export async function getVAPIDKey(formData: FormData) {
   const vapidKeys = webpush.generateVAPIDKeys();
 
   const setSubscription = async () => {
-    return await usePgPool(async (client) => {
+    return await withPgClient(async (client) => {
       const query = `INSERT INTO push_subscriptions(username, subscription, phone_num) VALUES($1, $2, $3)`;
       await client.query(query, [username, vapidKeys.privateKey, phoneNum]);
     });
