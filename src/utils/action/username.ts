@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import * as jose from 'jose';
-import withPgClient from '../withPgClient';
 import { prisma } from '@root/prisma/prisma';
 
 const usernameSchema = z.object({
