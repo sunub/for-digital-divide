@@ -4,19 +4,16 @@ import { memo, useEffect } from 'react';
 import Username from '@/components/LoginForm/LoginInput/Username';
 import Button from '@/components/Button';
 import usernameAction from '@/utils/action/username';
-import { useFormStatus } from 'react-dom';
 import { useActionState } from 'react';
 import { useToastMsg } from '@/hooks/use-toast-msg';
-import {
-  DeviceContent,
-  DeviceFooter,
-  DeviceFrame,
-} from '@/components/ui/device';
+import { DeviceContent, DeviceFrame } from '@/components/ui/device';
 import { motion, useSpring } from 'motion/react';
 
 export default function Home() {
-  const [actionState, formAction] = useActionState(usernameAction, null);
-  const status = useFormStatus();
+  const [actionState, formAction, isPending] = useActionState(
+    usernameAction,
+    null,
+  );
   const showToastMsg = useToastMsg();
   const width = useSpring('1px');
 
@@ -85,8 +82,8 @@ export default function Home() {
             <Button
               type="submit"
               formAction={formAction}
-              status={status.pending ? 'pending' : 'idle'}
-              disabled={status.pending}
+              status={isPending ? 'pending' : 'idle'}
+              disabled={isPending}
             >
               확인
             </Button>

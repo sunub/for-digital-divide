@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import * as jose from 'jose';
-import withPgClient from '../withPgClient';
 import { prisma } from '@root/prisma/prisma';
 
 const usernameSchema = z.object({
@@ -32,26 +31,32 @@ async function usernameAction(currentState: unknown, formData: FormData) {
   if (!rawSecret) {
     throw new Error('JWT_SECRET 환경 변수가 설정되어 있지 않습니다.');
   }
+  console.time('jwt:encrypt');
   const secretKey = Buffer.from(rawSecret, 'base64');
   const sid = await new jose.EncryptJWT({ username })
     .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
     .setIssuedAt()
     .setExpirationTime('2h')
     .encrypt(secretKey);
+  console.timeEnd('jwt:encrypt');
 
   try {
+    console.time('prisma:upsert');
     await prisma.userInfo.upsert({
       where: { username },
       create: { username, sessionId: sid },
       update: { sessionId: sid },
     });
+    console.timeEnd('prisma:upsert');
 
+    console.time('cookieStore.set');
     cookieStore.set('session_id', sid, {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
     });
+    console.timeEnd('cookieStore.set');
   } catch (error) {
     console.error(error);
     return {
@@ -59,7 +64,8 @@ async function usernameAction(currentState: unknown, formData: FormData) {
       payload: '사용자 이름을 저장하는 중 오류가 발생했습니다.',
     };
   }
-  redirect(`/dashboard`);
+
+  throw redirect('/dashboard');
 }
 
 export default usernameAction;
