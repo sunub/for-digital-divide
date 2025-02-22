@@ -10,7 +10,6 @@ const nextConfig = {
     styledComponents: true,
   },
   output: 'standalone',
-
   headers: async () => {
     return [
       {
