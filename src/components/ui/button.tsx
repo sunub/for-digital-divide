@@ -1,7 +1,7 @@
 import React from 'react';
 import useToggle from '@/hooks/use-toggle';
 import styled from 'styled-components';
-import { animate, motion, useAnimate } from 'framer-motion';
+import { animate, motion, useAnimate } from 'motion/react';
 
 type Status = 'idle' | 'pending' | 'success' | 'error';
 

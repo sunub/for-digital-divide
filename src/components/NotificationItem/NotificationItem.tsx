@@ -1,7 +1,7 @@
 'use client';
 
 import styled from 'styled-components';
-import { motion, stagger, useAnimate } from 'framer-motion';
+import { motion, stagger, useAnimate } from 'motion/react';
 import React from 'react';
 import { useNotificationStore } from '@/context/NotificationContext';
 

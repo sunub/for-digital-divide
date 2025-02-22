@@ -8,7 +8,7 @@ import LoginInput from './LoginInput';
 import LoginButton from './LoginButton';
 import InvalidMessage from '../InvalidMessage';
 import useToggle from '@/hooks/use-toggle';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 function generateErrorMsg(type: string): string {
   switch (type) {

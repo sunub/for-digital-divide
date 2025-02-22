@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { useRouter } from 'next/navigation';
 
 interface SmallPhoneProps {

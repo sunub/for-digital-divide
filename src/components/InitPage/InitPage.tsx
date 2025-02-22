@@ -2,8 +2,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Spacer from '../Spacer';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 const TitleWrapper = styled(motion.div)`
   display: flex;

@@ -1,7 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import { motion } from 'motion/react';
 
 function LoginAnimation() {
   const circles = [

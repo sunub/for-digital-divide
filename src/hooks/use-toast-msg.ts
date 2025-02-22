@@ -1,5 +1,5 @@
 import { useNotificationStore } from '@/context/NotificationContext';
-import { useAnimate } from 'framer-motion';
+import { useAnimate } from 'motion/react';
 import { useCallback, useEffect, useRef } from 'react';
 
 interface ToastMsgProps {
