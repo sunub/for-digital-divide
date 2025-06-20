@@ -1,9 +1,6 @@
 import { z } from 'zod';
 
-const AUTH_METHODS_CODE = [
-  'PIN',
-  'OAUTH'
-] as const;
+const AUTH_METHODS_CODE = ['PIN', 'OAUTH'] as const;
 
 export type AuthMethodCode = z.infer<typeof AuthMethodCodeSchema>;
 
@@ -17,8 +14,8 @@ export const AuthMethodSchema = z.object({
   method: AuthMethodCodeSchema,
   credential: z.string(),
   provider: z.string(),
-  provider_uid: z.string().optional(),
-  createdAt: z.string().datetime(),
+  provider_uid: z.string(),
+  createdAt: z.string().datetime().optional(),
 });
 
 export type AuthMethod = z.infer<typeof AuthMethodSchema>;

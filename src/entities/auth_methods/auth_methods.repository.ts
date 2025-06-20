@@ -1,7 +1,6 @@
-import { prisma } from "@root/prisma";
-
-import type { AuthMethod, AuthMethodCode } from "./auth_methods.model";
-import type { UsersId } from "../users/users.model";
+import { prisma } from '@root/prisma';
+import type { AuthMethod, AuthMethodCode } from './auth_methods.model';
+import type { UsersId } from '../users/users.model';
 
 export const authMethodsRepository = {
   async findByUserId(user_id: UsersId) {
@@ -10,7 +9,23 @@ export const authMethodsRepository = {
     });
   },
 
-  async create(data: Omit<AuthMethod, "auth_method_id">) {
+  async upsertDataByUserId(data: Omit<AuthMethod, 'auth_method_id'>) {
+    const authMethodExists = await prisma.auth_methods.findFirst({
+      where: { user_id: data.user_id, method: data.method },
+    });
+    console.log('authMethodExists', authMethodExists);
+    console.log('data', data);
+
+    return prisma.auth_methods.upsert({
+      where: {
+        auth_method_id: authMethodExists?.auth_method_id || 0,
+      },
+      update: data,
+      create: data,
+    });
+  },
+
+  async create(data: Omit<AuthMethod, 'auth_method_id'>) {
     return prisma.auth_methods.create({
       data,
     });
@@ -33,5 +48,5 @@ export const authMethodsRepository = {
         method: authMethod,
       },
     });
-  }
-}
+  },
+};

@@ -25,16 +25,16 @@ export const TRANSACTION_NAMES = [
 ] as const;
 
 export const TransactionTypeNameMap: Record<TransactionTypeCode, TransactionTypeName> = {
-  'ADJUSTMENT': '장부조정',
-  'DEPOSIT': '입금',
-  'FEE': '수수료',
-  'INTEREST': '이자',
-  'PAYMENT': '결제',
-  'REFUND': '환불',
-  'REVERSAL': '취소',
-  'TRANSFER': '이체',
-  'WITHDRAWAL': '출금',
-}
+  ADJUSTMENT: '장부조정',
+  DEPOSIT: '입금',
+  FEE: '수수료',
+  INTEREST: '이자',
+  PAYMENT: '결제',
+  REFUND: '환불',
+  REVERSAL: '취소',
+  TRANSFER: '이체',
+  WITHDRAWAL: '출금',
+};
 
 export const TransactionTypeCodeSchema = z.enum(TRNASACTION_CODES);
 export type TransactionTypeCode = z.infer<typeof TransactionTypeCodeSchema>;

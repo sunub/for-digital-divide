@@ -1,4 +1,4 @@
-import { prisma } from "@root/prisma";
+import { prisma } from '@root/prisma';
 
 export const accountTypesRepository = {
   async findByCode(code: string) {
@@ -7,7 +7,7 @@ export const accountTypesRepository = {
         where: { code },
       });
     } catch (error) {
-      console.error("Error finding account type by code:", error);
+      console.error('Error finding account type by code:', error);
       throw error;
     }
   },
@@ -15,8 +15,8 @@ export const accountTypesRepository = {
     try {
       return await prisma.account_types.findMany();
     } catch (error) {
-      console.error("Error finding all account types:", error);
+      console.error('Error finding all account types:', error);
       throw error;
     }
   },
-}
+};

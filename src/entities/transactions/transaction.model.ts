@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { TRNASACTION_CODES } from "@/entities/transaction_types/transaction_types.model";
+import { z } from 'zod';
+import { TRNASACTION_CODES } from '@/entities/transaction_types/transaction_types.model';
 
-export type Transaction = z.infer<typeof TransactionSchema>; 
+export type Transaction = z.infer<typeof TransactionSchema>;
 
 export const TransactionIdSchema = z.number().int();
 export const AccountNumberSchema = z.number().int();

@@ -1,5 +1,5 @@
-import type { AccountType } from "./accounts.model";
-import { accountsRepository } from "./accounts.repository";
+import type { AccountType } from './accounts.model';
+import { accountsRepository } from './accounts.repository';
 
 export const accountsService = {
   async findByUserId(user_id: number) {
@@ -17,4 +17,4 @@ export const accountsService = {
   async findByAccountNumber(account_number: number) {
     return accountsRepository.findByAccountNumber(account_number);
   },
-}
+};

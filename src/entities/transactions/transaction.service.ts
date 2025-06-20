@@ -1,11 +1,11 @@
-import { Transaction } from "./transaction.model";
-import { transactionsRepository } from "./transaction.repository";
+import { Transaction } from './transaction.model';
+import { transactionsRepository } from './transaction.repository';
 
 export const transactionsService = {
   async findById(transaction_id: number) {
     return transactionsRepository.findById(transaction_id);
   },
-  async create(data: Omit<Transaction, "transaction_id">) {
+  async create(data: Omit<Transaction, 'transaction_id'>) {
     return transactionsRepository.create(data);
   },
   async delete(transaction_id: number) {
@@ -16,5 +16,5 @@ export const transactionsService = {
   },
   async findByAccountNumber(account_number: number) {
     return transactionsRepository.findByAccountNumber(account_number);
-  }
-}
+  },
+};

@@ -1,5 +1,5 @@
-import { TransactionTypeCode } from "./transaction_types.model";
-import { transactionTypeRepository } from "./transaction_types.repository";
+import { TransactionTypeCode } from './transaction_types.model';
+import { transactionTypeRepository } from './transaction_types.repository';
 
 export const transactionTypeService = {
   async findByCode(code: TransactionTypeCode) {
@@ -7,5 +7,5 @@ export const transactionTypeService = {
   },
   async findAll() {
     return transactionTypeRepository.findAll();
-  }
-}
+  },
+};

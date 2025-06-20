@@ -1,5 +1,5 @@
-import { prisma } from "@root/prisma";
-import type { AccountType } from "./accounts.model";
+import { prisma } from '@root/prisma';
+import type { AccountType } from './accounts.model';
 
 export const accountsRepository = {
   async findByUserId(user_id: number) {
@@ -25,4 +25,4 @@ export const accountsRepository = {
       where: { account_number },
     });
   },
-}
+};
