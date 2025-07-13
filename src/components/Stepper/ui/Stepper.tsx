@@ -1,23 +1,19 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import { CheckIcon, PickaxeIcon } from 'lucide-react';
-import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
 import styled from 'styled-components';
-import { useStepper } from '../hooks/useStepper';
 import { stepperAtom } from '../store/atom';
-import { SIGN_UP_STEPS } from '../store/atom';
+import { CheckIcon, PickaxeIcon } from 'lucide-react';
 
 export const CONFIRM_COLOR = 'oklch(0.404 0.2121 288.17775174927874)';
 
 export function Stepper() {
-  const [stepper, updateStepper] = useAtom(stepperAtom);
+  const [stepper, _] = useAtom(stepperAtom);
 
   return (
     <Container className="flex flex-col gap-2">
       {stepper.steps.map(step => {
-        if (3 <= step.index && step.index <= 4) {
+        if (step.index === 3) {
           return (
             <ChildIndicator key={step.id} $done={step.done} $isProgress={true}>
               {stepper.currentStep === step.index ? (
@@ -64,18 +60,13 @@ export function Stepper() {
   );
 }
 
-const ptet = styled.div`
-  clip-path: path;
-`;
-
 const Container = styled.ol`
   position: fixed;
   top: 50%;
   left: 1rem;
-  transform: translateY(-50%);
-  z-index: -1;
 
   display: flex;
+  width: 20cqw;
   flex-direction: column;
   gap: 8px;
   padding: 16px;
@@ -85,6 +76,7 @@ const Container = styled.ol`
 
   font-size: 0.75rem;
   user-select: none;
+  transform: translateY(-50%);
 `;
 
 const Indicator = styled.li<{ $done: boolean; $isProgress: boolean }>`
