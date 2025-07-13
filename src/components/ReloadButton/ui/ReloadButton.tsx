@@ -1,18 +1,17 @@
 'use client';
 
+import { animate, motion, press } from 'motion/react';
 import { memo, useState } from 'react';
-import { motion, animate, press } from 'motion/react';
 
 function Icon() {
   const [rotation, setRotation] = useState(0);
 
   const handleClick = () => {
-    press('.reload-button', (el) => {
+    press('.reload-button', el => {
       animate(el, { scale: 0.8 }, { type: 'spring', stiffness: 1000 });
-      return () =>
-        animate(el, { scale: 1 }, { type: 'spring', stiffness: 500 });
+      return () => animate(el, { scale: 1 }, { type: 'spring', stiffness: 500 });
     });
-    setRotation((prev) => prev + 360);
+    setRotation(prev => prev + 360);
     window.location.reload();
   };
 
