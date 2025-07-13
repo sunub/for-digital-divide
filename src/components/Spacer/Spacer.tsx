@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-type Axis = "horizontal" | "vertical";
+type Axis = 'horizontal' | 'vertical';
 
 function getWidthByDirection(axis: Axis, size: number) {
-  return axis === "horizontal" && size ? size : 1;
+  return axis === 'horizontal' && size ? size : 1;
 }
 
 function getHeightByDirection(axis: Axis, size: number) {
-  return axis === "vertical" && size ? size : 1;
+  return axis === 'vertical' && size ? size : 1;
 }
 
 const SpacerSpan = styled.span<{
