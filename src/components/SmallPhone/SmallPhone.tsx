@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
-import styled from 'styled-components';
 import { motion } from 'motion/react';
 import { useRouter } from 'next/navigation';
-import Loading from '@/app/login/loading';
+import React from 'react';
+import styled from 'styled-components';
 
 interface SmallPhoneProps {
   isOpen: boolean;
@@ -17,9 +16,7 @@ function layered_shadow(layer: number, gapX: number, gapY: number): string {
   for (let i = 0; i < layer; i++) {
     let colorIndex = 83 - i * 1.45;
     const color = `oklch(${colorIndex}% 0.206 288.34 / 60%)`;
-    let value = `${(i * gapX).toFixed(1)}rem ${(i * gapY).toFixed(
-      1,
-    )}rem ${color}`;
+    let value = `${(i * gapX).toFixed(1)}rem ${(i * gapY).toFixed(1)}rem ${color}`;
     values += `${value} ,`;
   }
 
@@ -71,7 +68,7 @@ function SmallPhone(props: SmallPhoneProps) {
 const Phone = styled(motion.button)<{ $isOpen: boolean }>`
   background: transparent;
   display: grid;
-  cursor: ${(props) => (props.$isOpen ? 'default' : 'pointer')};
+  cursor: ${props => (props.$isOpen ? 'default' : 'pointer')};
   outline-offset: 4px;
   :focus:not(:focus-visible) {
     outline: none;
@@ -105,21 +102,17 @@ const Icon = styled.svg<{ $layerColors: string; $isOpen: boolean }>`
   height: 75cqh;
   aspect-ratio: 1 / 2;
 
-  border-radius: ${(props) => (props.$isOpen ? '0px' : '57px')};
-  box-shadow:
-    inset -0.5rem -0.3rem 0.1rem 0.2rem oklch(81.43% 0 0),
-    inset -0.7rem -0.7rem 0.1rem 0.2rem oklch(81.43% 0 0),
-    inset -1rem -1rem 0 0.4rem oklch(81.43% 0 0),
-    ${(props) => props.$layerColors},
-    6rem 7rem 6rem 10px oklch(32.3% 0.002 247.36),
+  border-radius: ${props => (props.$isOpen ? '0px' : '57px')};
+  box-shadow: inset -0.5rem -0.3rem 0.1rem 0.2rem oklch(81.43% 0 0),
+    inset -0.7rem -0.7rem 0.1rem 0.2rem oklch(81.43% 0 0), inset -1rem -1rem 0 0.4rem oklch(81.43% 0 0),
+    ${props => props.$layerColors}, 6rem 7rem 6rem 10px oklch(32.3% 0.002 247.36),
     10rem 10rem 5rem 20px oklch(32.3% 0.002 247.36 / 0.2);
   transition: box-shadow 200ms ease-in-out;
 `;
 
 const Screen = styled.path<{ $open: boolean }>`
-  filter: ${(props) => (props.$open ? 'none' : 'brightness(0.8)')};
-  animation: ${(props) => (props.$open ? '' : 'screen_brighter')} 2s infinite
-    ease;
+  filter: ${props => (props.$open ? 'none' : 'brightness(0.8)')};
+  animation: ${props => (props.$open ? '' : 'screen_brighter')} 2s infinite ease;
 
   @keyframes screen_brighter {
     0% {

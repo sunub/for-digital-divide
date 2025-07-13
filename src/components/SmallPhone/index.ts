@@ -1,2 +1,2 @@
-export * from "./SmallPhone";
-export { default } from "./SmallPhone";
+export * from './SmallPhone';
+export { default } from './SmallPhone';
