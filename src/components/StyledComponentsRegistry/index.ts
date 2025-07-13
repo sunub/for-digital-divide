@@ -1,2 +1,2 @@
-export * from "./StyledComponentsRegistry";
-export { default } from "./StyledComponentsRegistry";
+export * from './StyledComponentsRegistry';
+export { default } from './StyledComponentsRegistry';
