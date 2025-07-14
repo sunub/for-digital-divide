@@ -1,9 +1,13 @@
 'use client';
 
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
 import { motion } from 'motion/react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { useStepper } from '@/components/Stepper/hooks/useStepper';
+import { useHistory } from '@/shared/hooks/useHistory';
+import { Loading } from '@/components/Loading';
+import { GirdCenterDiv } from '@/shared/style/component/div';
 
 interface SmallPhoneProps {
   isOpen: boolean;
@@ -18,8 +22,8 @@ const layeredShadow = (layers: number, gapX: number, gapY: number): string =>
   }).join(' ,');
 
 const phoneVariants = {
-  closed: { rotateX: 66, rotateZ: 45, scale: 0.15 },
-  open: { rotateX: 0, rotateZ: 0, scale: 1 },
+  closed: { rotateX: 66, rotateZ: 45, scale: 1 },
+  open: { rotateX: 0, rotateZ: 0, scale: 2.5 },
 };
 
 const screenBrighter = keyframes`
@@ -39,28 +43,41 @@ const screenBrighter = keyframes`
 
 const SmallPhone: React.FC<SmallPhoneProps> = ({ isOpen, toggleOpen }) => {
   const router = useRouter();
+  const phoneRef = useRef<HTMLButtonElement>(null);
+  const { add } = useHistory();
+  useStepper();
 
-  const handleClick = () => {
-    toggleOpen();
-    router.prefetch('/username');
-  };
+  useEffect(() => {
+    router.prefetch('/login');
+  }, []);
 
   return (
     <Phone
+      ref={phoneRef}
       disabled={isOpen}
       $isOpen={isOpen}
-      onClick={handleClick}
-      onAnimationComplete={() => router.push('/username')}
+      onClick={() => toggleOpen()}
+      onAnimationComplete={latest => {
+        if (latest === 'open') {
+          add(new URL('/intro', window.location.href).toString());
+          router.push('/login');
+        }
+      }}
       initial={false}
       animate={isOpen ? 'open' : 'closed'}
       variants={phoneVariants}
     >
+      {isOpen && (
+        <LoadingContainer>
+          <Loading />
+        </LoadingContainer>
+      )}
       <Icon
         viewBox="0 0 496 978"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         $isOpen={isOpen}
-        $layerColors={isOpen ? '' : layeredShadow(13, 0.3, 0.3)}
+        $layerColors={isOpen ? '' : layeredShadow(5, 0.3, 0.3)}
       >
         <path
           d="M0 49C0 21.938 21.938 0 49 0H447C474.062 0 496 21.938 496 49V929C496 956.062 474.062 978 447 978H49C21.9381 978 0 956.062 0 929V49Z"
@@ -77,7 +94,16 @@ const SmallPhone: React.FC<SmallPhoneProps> = ({ isOpen, toggleOpen }) => {
   );
 };
 
+const LoadingContainer = styled(GirdCenterDiv)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
+
 const Phone = styled(motion.button)<{ $isOpen: boolean }>`
+  width: fit-content;
   background: transparent;
   display: grid;
   cursor: ${({ $isOpen }) => ($isOpen ? 'default' : 'pointer')};
@@ -94,23 +120,19 @@ const Phone = styled(motion.button)<{ $isOpen: boolean }>`
 `;
 
 const Icon = styled.svg<{ $layerColors: string; $isOpen: boolean }>`
-  height: 75cqh;
+  height: var(--intro-phone-height);
   aspect-ratio: 1 / 2;
-  border-radius: ${({ $isOpen }) => ($isOpen ? '0px' : '57px')};
-  box-shadow:
-    inset -0.5rem -0.3rem 0.1rem 0.2rem oklch(81.43% 0 0),
-    inset -0.7rem -0.7rem 0.1rem 0.2rem oklch(81.43% 0 0),
-    inset -1rem -1rem 0 0.4rem oklch(81.43% 0 0),
-    ${({ $layerColors }) => $layerColors},
-    6rem 7rem 6rem 10px oklch(32.3% 0.002 247.36),
-    10rem 10rem 5rem 20px oklch(32.3% 0.002 247.36 / 0.2);
+  border-radius: ${({ $isOpen }) => ($isOpen ? '0px' : '17px')};
+  box-shadow: inset -0.5rem -0.3rem 0.1rem 0.2rem oklch(81.43% 0 0),
+    inset -0.7rem -0.7rem 0.1rem 0.2rem oklch(81.43% 0 0), inset -10rem -1rem 0 0.4rem oklch(81.43% 0 0),
+    ${({ $layerColors }) => $layerColors}, 2.75rem 2.75rem 6rem 10px oklch(32.3% 0.002 247.36 / 0.75),
+    1rem 1rem 5rem 20px oklch(32.3% 0.002 247.36 / 0.2);
   transition: box-shadow 200ms ease-in-out;
 `;
 
 const Screen = styled.path<{ $open: boolean }>`
   filter: ${({ $open }) => ($open ? 'none' : 'brightness(0.8)')};
-  animation: ${({ $open }) => ($open ? 'none' : screenBrighter)} 2s infinite
-    ease;
+  animation: ${({ $open }) => ($open ? 'none' : screenBrighter)} 2s infinite ease;
 `;
 
 export { SmallPhone };
