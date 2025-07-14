@@ -3,12 +3,8 @@
 import * as d3 from 'd3';
 import { useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';
+import styled from 'styled-components';
 
-// =================================================================
-// 타입 정의 (Zod 스키마 기반)
-// =================================================================
-
-// 실제 프로젝트의 값으로 대체해야 합니다.
 const TRNASACTION_CODES = ['DEPOSIT', 'WITHDRAWAL', 'PAYMENT'] as const;
 
 export const TransactionSchema = z.object({
@@ -414,7 +410,7 @@ export function TransactionChart({ transactionData }: { transactionData: Transac
   }, [filteredData, selectedPeriod]);
 
   return (
-    <div className="transaction-chart-container">
+    <ChartRootContainer className="transaction-chart-container">
       <div className="chart-controls" style={{ marginBottom: '20px', textAlign: 'center' }}>
         <label htmlFor="period-select" style={{ marginRight: '10px', fontWeight: 'bold' }}>
           조회 기간:
@@ -439,6 +435,12 @@ export function TransactionChart({ transactionData }: { transactionData: Transac
         {isUpdating && <span style={{ marginLeft: '10px', color: '#666', fontSize: '12px' }}>차트 업데이트 중...</span>}
       </div>
       <div id="transaction-chart-dataviz" style={{ position: 'relative' }} />
-    </div>
+    </ChartRootContainer>
   );
 }
+
+const ChartRootContainer = styled.div`
+  max-width: 100cqw;
+  width: 100%;
+  margin: 0 auto;
+`;
