@@ -1,4 +1,4 @@
-class Canvas {
+export class Canvas {
   canvas: HTMLCanvasElement;
   stageWidth: number;
   stageHeight: number;

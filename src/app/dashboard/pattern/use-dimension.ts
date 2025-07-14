@@ -9,7 +9,6 @@ function useDimension(canvas: HTMLCanvasElement) {
   React.useEffect(() => {
     const resize = () => {
       if (!canvas) return;
-      const pixelRatio = window.devicePixelRatio > 1 ? 2 : 1;
       setClientWidth(canvas.clientWidth);
       setClientHeight(canvas.clientHeight);
     };

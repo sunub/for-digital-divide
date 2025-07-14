@@ -16,7 +16,7 @@ function createDots(stageWidth: number, stageHeight: number, radius: number) {
   const centerX = Math.floor(stageWidth / 2);
   const centerY = Math.floor(stageHeight / 2);
 
-  let dist = Math.floor(stageWidth / 5);
+  const dist = Math.floor(stageWidth / 5);
   const dots = [];
   for (let i = 0; i < 3; i++) {
     dots.push(
@@ -60,14 +60,8 @@ const bounce = function (pos: number) {
   }
 };
 
-const buildKeyframes = (
-  easing: (pos: number) => number,
-  delat: number,
-  points = 50,
-) => {
-  const result = [...new Array(points + 1)]
-    .map((_, i) => easing(i * (1 / points)))
-    .map((value) => value * delat);
+const buildKeyframes = (easing: (pos: number) => number, delat: number, points = 50) => {
+  const result = [...new Array(points + 1)].map((_, i) => easing(i * (1 / points))).map((value) => value * delat);
   return result;
 };
 
@@ -157,10 +151,7 @@ function Lock() {
 
       const updatedDots = dots.map((row) => {
         return row.map((dot) => {
-          const distance = Math.sqrt(
-            (clientX - dot.x) * (clientX - dot.x) +
-              (clientY - dot.y) * (clientY - dot.y),
-          );
+          const distance = Math.sqrt((clientX - dot.x) * (clientX - dot.x) + (clientY - dot.y) * (clientY - dot.y));
 
           if (distance < dot.radius) {
             return { ...dot, isFocus: !dot.isFocus };
@@ -209,9 +200,7 @@ function Lock() {
       for (let i = 0; i < dots.length; i++) {
         for (let j = 0; j < dots[i].length; j++) {
           const { id, x, y, radius } = dots[i][j];
-          const distance = Math.sqrt(
-            (clientX - x) * (clientX - x) + (clientY - y) * (clientY - y),
-          );
+          const distance = Math.sqrt((clientX - x) * (clientX - x) + (clientY - y) * (clientY - y));
           if (currDots.id !== id && distance < radius) {
             return dots[i][j];
           }
@@ -227,9 +216,7 @@ function Lock() {
           setPrevDots((prev) => new Map([...prev, [currDots.id, currDots]]));
         }
         if (!prevDots.has(newLinkedDot.id)) {
-          setPrevDots(
-            (prev) => new Map([...prev, [newLinkedDot.id, newLinkedDot]]),
-          );
+          setPrevDots((prev) => new Map([...prev, [newLinkedDot.id, newLinkedDot]]));
         }
         setcurrDots(newLinkedDot);
       }
@@ -250,18 +237,11 @@ function Lock() {
       }
     }
 
-    function bouncingAnimation(
-      clientWidth: number,
-      clientHeight: number,
-      ctx: CanvasRenderingContext2D,
-    ) {
+    function bouncingAnimation(clientWidth: number, clientHeight: number, ctx: CanvasRenderingContext2D) {
       for (let i = 0; i < dots.length; i++) {
         for (let j = 0; j < dots[i].length; j++) {
           const { x, y, radius } = dots[i][j];
-          const distance = Math.sqrt(
-            (clientWidth - x) * (clientWidth - x) +
-              (clientHeight - y) * (clientHeight - y),
-          );
+          const distance = Math.sqrt((clientWidth - x) * (clientWidth - x) + (clientHeight - y) * (clientHeight - y));
 
           if (distance < radius) {
             console.log(32);
