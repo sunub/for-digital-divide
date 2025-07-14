@@ -1,24 +1,18 @@
 'use client';
 
 import React from 'react';
-import useToggle from '@/hooks/use-toggle';
+import useToggle from '@/shared/hooks/use-toggle';
 
-function CheckBox({
-  id,
-  name,
-  required,
-}: {
-  id: string;
-  name: string;
-  required?: boolean;
-}) {
+function CheckBox({ id, name, required }: { id: string; name: string; required?: boolean }) {
   const [isChecked, toggleChecked] = useToggle(false);
 
   return (
     <React.Fragment>
       <button
         type="button"
-        className={`flex items-center justify-center w-1 h-1 ${isChecked ? 'bg-confirm' : 'bg-slate-100'} border-solid border-2 ${isChecked ? 'border-slate-100' : 'border-slate-800'} p-2 rounded-md text-slate-100`}
+        className={`flex items-center justify-center w-1 h-1 ${
+          isChecked ? 'bg-confirm' : 'bg-slate-100'
+        } border-solid border-2 ${isChecked ? 'border-slate-100' : 'border-slate-800'} p-2 rounded-md text-slate-100`}
         aria-invalid={false}
         onClick={toggleChecked}
       >
