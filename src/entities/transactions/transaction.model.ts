@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { TRNASACTION_CODES } from '@/entities/transaction_types/transaction_types.model';
 
 export type Transaction = z.infer<typeof TransactionSchema>;
@@ -13,5 +13,5 @@ export const TransactionSchema = z.object({
   transaction_type: z.enum(TRNASACTION_CODES),
   counterparty_account_number: z.number().int().optional(),
   description: z.string().max(255).optional(),
-  occurred_at: z.string().datetime(),
+  occurred_at: z.date(),
 });

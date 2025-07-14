@@ -70,16 +70,18 @@ export async function deleteTransactionController(req: NextRequest) {
 export async function getAllTransactionsController() {
   try {
     const transactions = await transactionsService.findAll();
-    const parsedTransactions = transactions.map(transaction => TransactionSchema.safeParse(transaction));
+    const parsedTransactions = transactions.map((transaction: unknown) => TransactionSchema.safeParse(transaction));
 
-    const errors = parsedTransactions.filter(result => !result.success);
+    const errors = parsedTransactions.filter(
+      (result: ReturnType<typeof TransactionSchema.safeParse>) => !result.success,
+    );
     if (errors.length > 0) {
       return NextResponse.json({ error: 'Invalid transaction data' }, { status: 500 });
     }
 
     return NextResponse.json(
-      parsedTransactions.map(result => result.data),
-      { status: 200 }
+      parsedTransactions.map((result: ReturnType<typeof TransactionSchema.safeParse>) => result.data),
+      { status: 200 },
     );
   } catch (error) {
     console.error('Error fetching all transactions:', error);
@@ -98,16 +100,18 @@ export async function getTransactionsByAccountNumberController(req: NextRequest)
 
   try {
     const transactions = await transactionsService.findByAccountNumber(parsedAccountNumber.data);
-    const parsedTransactions = transactions.map(transaction => TransactionSchema.safeParse(transaction));
+    const parsedTransactions = transactions.map((transaction: unknown) => TransactionSchema.safeParse(transaction));
 
-    const errors = parsedTransactions.filter(result => !result.success);
+    const errors = parsedTransactions.filter(
+      (result: ReturnType<typeof TransactionSchema.safeParse>) => !result.success,
+    );
     if (errors.length > 0) {
       return NextResponse.json({ error: 'Invalid transaction data' }, { status: 500 });
     }
 
     return NextResponse.json(
-      parsedTransactions.map(result => result.data),
-      { status: 200 }
+      parsedTransactions.map((result: ReturnType<typeof TransactionSchema.safeParse>) => result.data),
+      { status: 200 },
     );
   } catch (error) {
     console.error('Error fetching transactions by account number:', error);

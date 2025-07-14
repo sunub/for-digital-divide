@@ -1,4 +1,4 @@
-import { prisma } from '@root/prisma';
+import { prisma } from '@root/prisma/prisma';
 
 export const accountTypesRepository = {
   async findByCode(code: string) {

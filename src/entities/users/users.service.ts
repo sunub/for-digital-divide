@@ -5,8 +5,11 @@ export const userService = {
   async findByUserId(user_id: UsersId) {
     return usersRepository.findByUserId(user_id);
   },
+  async findByEmail(email: string) {
+    return usersRepository.findByEmail(email);
+  },
 
-  async upsertSessionByUsernameAndEmail(username: string, email: string, session_id: string) {
+  async upsertSessionByUsernameAndEmail(username: string, email: string, session_id?: string) {
     return usersRepository.upsertSessionByUsernameAndEmail(username, email, session_id);
   },
 

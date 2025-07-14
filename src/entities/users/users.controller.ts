@@ -32,9 +32,13 @@ export async function getUserByIdController(req: NextRequest) {
 
 export async function createUserController(req: NextRequest) {
   try {
-    const { username } = await req.json();
+    const { username, email } = await req.json();
     const session_id = bcrypt.hashSync(`${Date.now()}-${Math.random()}`, 10);
-    await userService.create(username, session_id);
+    await userService.create({
+      name: username,
+      email,
+      session_id,
+    });
   } catch (error) {
     console.error('Error creating user:', error);
     throw new Error('Internal Server Error');

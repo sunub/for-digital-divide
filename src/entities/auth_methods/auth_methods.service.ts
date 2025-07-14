@@ -7,6 +7,10 @@ export const authMethodsService = {
     return authMethodsRepository.findByUserId(user_id);
   },
 
+  async findByDeviceId(device_id: string) {
+    return authMethodsRepository.findByDeviceId(device_id);
+  },
+
   async upsertDataByUserId(data: Omit<AuthMethod, 'auth_method_id'>) {
     return authMethodsRepository.upsertDataByUserId(data);
   },

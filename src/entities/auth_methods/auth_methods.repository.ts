@@ -1,4 +1,4 @@
-import { prisma } from '@root/prisma';
+import { prisma } from '@root/prisma/prisma';
 import type { AuthMethod, AuthMethodCode } from './auth_methods.model';
 import type { UsersId } from '../users/users.model';
 
@@ -6,6 +6,12 @@ export const authMethodsRepository = {
   async findByUserId(user_id: UsersId) {
     return prisma.auth_methods.findMany({
       where: { user_id },
+    });
+  },
+
+  async findByDeviceId(device_id: string) {
+    return prisma.auth_methods.findMany({
+      where: { provider_uid: device_id },
     });
   },
 

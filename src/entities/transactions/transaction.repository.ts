@@ -1,4 +1,4 @@
-import { prisma } from '@root/prisma';
+import { prisma } from '@root/prisma/prisma';
 import { Transaction } from './transaction.model';
 
 export const transactionsRepository = {
@@ -10,6 +10,12 @@ export const transactionsRepository = {
   async create(data: Omit<Transaction, 'transaction_id'>) {
     return prisma.transactions.create({
       data,
+    });
+  },
+  async createMany(data: Omit<Transaction, 'transaction_id'>[]) {
+    return prisma.transactions.createMany({
+      data,
+      skipDuplicates: true,
     });
   },
   async delete(transaction_id: number) {

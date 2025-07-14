@@ -1,4 +1,4 @@
-import { prisma } from '@root/prisma';
+import { prisma } from '@root/prisma/prisma';
 import type { AccountType } from './accounts.model';
 
 export const accountsRepository = {

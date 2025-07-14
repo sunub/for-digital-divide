@@ -7,7 +7,6 @@ import { UsersIdSchema } from '../users/users.model';
 
 export async function getAuthMethodsByUserId(req: NextRequest) {
   const cookies = req.cookies;
-  const authToken = cookies.get('auth_token')?.value;
   const userId = cookies.get('user_id')?.value;
   const parsedUserId = UsersIdSchema.safeParse(Number(userId));
 
@@ -17,15 +16,15 @@ export async function getAuthMethodsByUserId(req: NextRequest) {
 
   try {
     const authMethods = await authMethodsService.findByUserId(parsedUserId.data);
-    const parsedAuthMethods = authMethods.map(method => AuthMethodSchema.safeParse(method));
-    const invalidMethods = parsedAuthMethods.filter(result => !result.success);
+    const parsedAuthMethods = authMethods.map((method) => AuthMethodSchema.safeParse(method));
+    const invalidMethods = parsedAuthMethods.filter((result) => !result.success);
 
     if (invalidMethods.length > 0) {
       return NextResponse.json({ error: 'Invalid auth methods', details: invalidMethods }, { status: 400 });
     }
     return NextResponse.json(
-      parsedAuthMethods.map(result => result.data),
-      { status: 200 }
+      parsedAuthMethods.map((result) => result.data),
+      { status: 200 },
     );
   } catch (error) {
     console.error('Error fetching auth methods by user ID:', error);
@@ -43,7 +42,7 @@ export async function createAuthMethod(req: NextRequest) {
     }
 
     const newAuthMethod: Omit<typeof parsedAuthMethod.data, 'auth_method_id'> = parsedAuthMethod.data;
-    const createdAuthMethod = await authMethodsService.create(newAuthMethod);
+    const createdAuthMethod = await authMethodsService.upsertDataByUserId(newAuthMethod);
 
     return NextResponse.json(createdAuthMethod, { status: 201 });
   } catch (error) {
@@ -90,16 +89,16 @@ export async function getAuthMethodByUserIdAndMethod(req: NextRequest) {
       return NextResponse.json({ error: 'Auth method not found' }, { status: 404 });
     }
 
-    const parsedAuthMethods = authMethods.map(method => AuthMethodSchema.safeParse(method));
-    const invalidMethods = parsedAuthMethods.filter(result => !result.success);
+    const parsedAuthMethods = authMethods.map((method) => AuthMethodSchema.safeParse(method));
+    const invalidMethods = parsedAuthMethods.filter((result) => !result.success);
 
     if (invalidMethods.length > 0) {
       return NextResponse.json({ error: 'Invalid auth methods', details: invalidMethods }, { status: 400 });
     }
 
     return NextResponse.json(
-      parsedAuthMethods.map(result => result.data),
-      { status: 200 }
+      parsedAuthMethods.map((result) => result.data),
+      { status: 200 },
     );
   } catch (error) {
     console.error('Error fetching auth method by user ID and method:', error);

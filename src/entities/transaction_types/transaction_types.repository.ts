@@ -1,4 +1,4 @@
-import { prisma } from '@root/prisma';
+import { prisma } from '@root/prisma/prisma';
 import { TransactionTypeCode } from './transaction_types.model';
 
 export const transactionTypeRepository = {

@@ -1,4 +1,4 @@
-import { prisma } from '@root/prisma';
+import { prisma } from '@root/prisma/prisma';
 import { Users, UsersId } from './users.model';
 
 export const usersRepository = {
@@ -7,7 +7,12 @@ export const usersRepository = {
       where: { user_id },
     });
   },
-  async upsertSessionByUsernameAndEmail(username: string, email: string, session_id: string) {
+  async findByEmail(email: string) {
+    return prisma.users.findFirst({
+      where: { email },
+    });
+  },
+  async upsertSessionByUsernameAndEmail(username: string, email: string, session_id?: string) {
     return prisma.users.upsert({
       where: { name: username, email },
       update: { session_id },

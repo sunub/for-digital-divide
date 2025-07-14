@@ -11,7 +11,7 @@ export async function getAccountByUserId(req: NextRequest) {
 
   try {
     const accounts = await accountsService.findByUserId(Number(userId));
-    const parsedAccounts = accounts.map(account => AccountsSchema.parse(account));
+    const parsedAccounts = accounts.map((account: unknown) => AccountsSchema.parse(account));
 
     return new Response(JSON.stringify(parsedAccounts), {
       status: 200,

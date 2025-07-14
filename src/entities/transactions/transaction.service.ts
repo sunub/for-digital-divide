@@ -8,6 +8,9 @@ export const transactionsService = {
   async create(data: Omit<Transaction, 'transaction_id'>) {
     return transactionsRepository.create(data);
   },
+  async createMany(data: Omit<Transaction, 'transaction_id'>[]) {
+    return transactionsRepository.createMany(data);
+  },
   async delete(transaction_id: number) {
     return transactionsRepository.delete(transaction_id);
   },
