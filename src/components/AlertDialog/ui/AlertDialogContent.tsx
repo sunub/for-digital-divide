@@ -103,7 +103,7 @@ const Backdrop = styled.div`
   inset: 0;
   border-radius: 2.45rem;
   background-color: oklch(0.2158 0.0666 288.17775174927874 / 50%);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(10px);
   z-index: 40;
 
   &[data-state='open'] {

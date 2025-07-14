@@ -91,7 +91,6 @@ export const Frame = styled.div`
   height: 100%;
   position: relative;
 
-  padding: 6px;
   background-color: oklch(96.88% 0.015 294.47);
   border: 6px solid oklch(63.93% 0.206 288.34 / 60%);
   border-radius: 50px;
@@ -105,7 +104,6 @@ export const Frame = styled.div`
     1px 2.5px 32px rgba(0, 0, 0, 0.076),
     2px 5px 64px rgba(0, 0, 0, 0.1);
   transition: grid 500ms cubic-bezier(0.17, 1.48, 0.24, 1);
-  padding-top: 2.25rem;
 
   &:has(label[for='device-content'] > input:checked) {
     --drawer-content-display: none;

@@ -80,8 +80,8 @@
   --destructive-foreground: oklch(96.88% 0.015 294.47);
 
   --pad-button-text-size: 2rem;
-  --pad-button-width: 80px;
-  --pad-button-height: 85px;
+  --pad-button-width: 60px;
+  --pad-button-height: 65px;
   --pad-button-radius: 8px;
   --pad-button-scale: 1;
   --intro-phone-height: 350px;
@@ -340,8 +340,6 @@ button {
 @container devsite-content (height < 1035px) {
   * {
     --pad-button-text-size: 2rem;
-    --pad-button-width: 60px;
-    --pad-button-height: 65px;
     --pad-button-radius: 8px;
     --pad-button-scale: 0.8;
     --intro-phone-height: 250px;
