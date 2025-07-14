@@ -17,9 +17,7 @@ function ResizeFont() {
       <Styled.Title>
         <h1>시작하기 전 글씨 크기를 조절 해주세요</h1>
       </Styled.Title>
-      <Styled.ResizeWrapper>
-        이 글씨가 잘 보이게끔 크기를 조절 해주세요.
-      </Styled.ResizeWrapper>
+      <Styled.ResizeWrapper>이 글씨가 잘 보이게끔 크기를 조절 해주세요.</Styled.ResizeWrapper>
       <div></div>
       <div
         style={{
