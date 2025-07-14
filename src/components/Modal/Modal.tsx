@@ -17,7 +17,9 @@ function Modal({
   React.useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') {
-        handleDismiss && handleDismiss(false);
+        if (handleDismiss) {
+          handleDismiss(false);
+        }
       }
     }
 
@@ -30,13 +32,9 @@ function Modal({
     <ReactFocusLock>
       <RemoveScroll>
         <Styled.Wrapper>
-          <Styled.Backdrop
-            onClick={() => handleDismiss && handleDismiss(false)}
-          />
+          <Styled.Backdrop onClick={() => handleDismiss && handleDismiss(false)} />
           <Styled.Modal ref={modalRef}>
-            <Styled.CloseButton
-              onClick={() => handleDismiss && handleDismiss(false)}
-            >
+            <Styled.CloseButton onClick={() => handleDismiss && handleDismiss(false)}>
               <span className="material-icons">close</span>
             </Styled.CloseButton>
             {children}
