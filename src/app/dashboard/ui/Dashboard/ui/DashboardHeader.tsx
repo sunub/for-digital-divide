@@ -6,46 +6,59 @@ import styled from 'styled-components';
 import { SmileIcon, LogOutIcon, HandIcon } from 'lucide-react';
 import { motion, useAnimate } from 'motion/react';
 import { Tooltip } from '@/components/Tooltip';
+import { useSearchParams } from 'next/navigation';
+import Spacer from '@/constants/Spacer';
 
 export function DashboardHeader({ username }: { username: string | null }) {
+  const searchParams = useSearchParams();
   const [scope, animate] = useAnimate();
 
-  return (
-    <HeaderContainer>
-      <HeaderLeftContainer
-        onMouseEnter={() => {
-          animate(scope.current, { scale: [0, 1, 1.2, 1] }, { duration: 0.5 });
-          animate(scope.current, { rotate: [0, 80, -30, 80, 40] }, { duration: 1 });
-        }}
-        onMouseLeave={() => {
-          animate(scope.current, { rotate: [40, -80, 30, -80, 0] }, { duration: 0.5 });
-          animate(scope.current, { scale: [1, 1.2, 1, 0] }, { duration: 1 });
-        }}
-      >
-        <HeaderIconContainer>
-          <HandIconContainer
-            ref={scope}
-            initial={{ rotate: 0, scale: 0 }}
-            transition={{ duration: 3, ease: 'anticipate', repeat: Infinity }}
-          >
-            <HandIcon size={18} strokeWidth={3} fill="white" />
-          </HandIconContainer>
-          <SmileIcon size={18} strokeWidth={3} fill="white" />
-        </HeaderIconContainer>
-        <p>
-          <Username>{username || 'Guest'}</Username>님
-        </p>
-      </HeaderLeftContainer>
+  const isRegisterPinPage = searchParams.get('page') === 'register-pin';
 
-      <HeaderRightContainer>
-        <Tooltip>
-          <Tooltip.Trigger>
-            <LogOutIcon size={18} strokeWidth={3} />
-          </Tooltip.Trigger>
-          <Tooltip.Content>로그아웃</Tooltip.Content>
-        </Tooltip>
-      </HeaderRightContainer>
-    </HeaderContainer>
+  return (
+    <>
+      {isRegisterPinPage ? (
+        <EmptyHeaderContainer>
+          <Spacer axis="vertical" size={68} />
+        </EmptyHeaderContainer>
+      ) : (
+        <HeaderContainer>
+          <HeaderLeftContainer
+            onMouseEnter={() => {
+              animate(scope.current, { scale: [0, 1, 1.2, 1] }, { duration: 0.5 });
+              animate(scope.current, { rotate: [0, 80, -30, 80, 40] }, { duration: 1 });
+            }}
+            onMouseLeave={() => {
+              animate(scope.current, { rotate: [40, -80, 30, -80, 0] }, { duration: 0.5 });
+              animate(scope.current, { scale: [1, 1.2, 1, 0] }, { duration: 1 });
+            }}
+          >
+            <HeaderIconContainer>
+              <HandIconContainer
+                ref={scope}
+                initial={{ rotate: 0, scale: 0 }}
+                transition={{ duration: 3, ease: 'anticipate', repeat: Infinity }}
+              >
+                <HandIcon size={18} strokeWidth={3} fill="white" />
+              </HandIconContainer>
+              <SmileIcon size={18} strokeWidth={3} fill="white" />
+            </HeaderIconContainer>
+            <p>
+              <Username>{username || 'Guest'}</Username>님
+            </p>
+          </HeaderLeftContainer>
+
+          <HeaderRightContainer>
+            <Tooltip>
+              <Tooltip.Trigger>
+                <LogOutIcon size={18} strokeWidth={3} />
+              </Tooltip.Trigger>
+              <Tooltip.Content>로그아웃</Tooltip.Content>
+            </Tooltip>
+          </HeaderRightContainer>
+        </HeaderContainer>
+      )}
+    </>
   );
 }
 
@@ -85,4 +98,9 @@ const HandIconContainer = styled(motion.div)`
   position: absolute;
   top: -8px;
   left: 12px;
+`;
+
+const EmptyHeaderContainer = styled.div`
+  grid-area: dashboard-header / 1;
+  ${fullSize};
 `;
