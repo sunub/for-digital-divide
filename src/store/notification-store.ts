@@ -1,6 +1,6 @@
-import { createStore } from 'zustand';
 import { z } from 'zod';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { createStore } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 export type Notification = {
   id: string;
@@ -19,23 +19,15 @@ export type NotificationAction = {
 
 export const NotificationSchema = z.object({
   message: z.string(),
-  type: z.union([
-    z.literal('default'),
-    z.literal('error'),
-    z.literal('success'),
-  ]),
+  type: z.union([z.literal('default'), z.literal('error'), z.literal('success')]),
 });
 
 export const NotificationStateSchema = z.map(
   z.string(),
   z.object({
     message: z.string(),
-    type: z.union([
-      z.literal('default'),
-      z.literal('error'),
-      z.literal('success'),
-    ]),
-  }),
+    type: z.union([z.literal('default'), z.literal('error'), z.literal('success')]),
+  })
 );
 
 export const defaultInitState = {
@@ -44,32 +36,30 @@ export const defaultInitState = {
 
 export type NotificationStore = NotificationState & NotificationAction;
 
-const createNotificationStore = (
-  initState: NotificationState = defaultInitState,
-) => {
+const createNotificationStore = (initState: NotificationState = defaultInitState) => {
   return createStore<NotificationState & NotificationAction>()(
     persist(
-      (set) => ({
+      set => ({
         ...initState,
         add: (notification: Notification) => {
-          set((state) => {
-            if (state.notifications.find((n) => n.id === notification.id)) {
+          set(state => {
+            if (state.notifications.find(n => n.id === notification.id)) {
               return state;
             }
             return { notifications: [...state.notifications, notification] };
           });
         },
         remove: (id: string) => {
-          set((state) => ({
-            notifications: state.notifications.filter((n) => n.id !== id),
+          set(state => ({
+            notifications: state.notifications.filter(n => n.id !== id),
           }));
         },
       }),
       {
         name: 'notification-store',
         storage: createJSONStorage(() => localStorage),
-      },
-    ),
+      }
+    )
   );
 };
 

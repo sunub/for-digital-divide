@@ -25,10 +25,8 @@ export const defaultSubmitInitState: NumpadState = {
   status: 'idle',
 };
 
-export const createNumpadStore = (
-  initState: NumpadState = defaultInitState,
-) => {
-  return createStore<NumpadStore>()((set) => ({
+export const createNumpadStore = (initState: NumpadState = defaultInitState) => {
+  return createStore<NumpadStore>()(set => ({
     ...initState,
     updateStatus: (newStatus: Status) => {
       set(() => {
@@ -37,10 +35,10 @@ export const createNumpadStore = (
         };
       });
     },
-    updateNumpad: (numpad) => {
-      set((state) => {
+    updateNumpad: numpad => {
+      set(state => {
         const newNumpad = [...state.numpad];
-        const firstInputIndex = state.numpad.findIndex((v) => v === '');
+        const firstInputIndex = state.numpad.findIndex(v => v === '');
         newNumpad[firstInputIndex] = numpad;
         return { numpad: newNumpad };
       });
@@ -53,10 +51,8 @@ export const createNumpadStore = (
   }));
 };
 
-export const createSumbitNumpadStore = (
-  initState: NumpadState = defaultSubmitInitState,
-) => {
-  return createStore<NumpadStore>()((set) => ({
+export const createSumbitNumpadStore = (initState: NumpadState = defaultSubmitInitState) => {
+  return createStore<NumpadStore>()(set => ({
     ...initState,
     updateStatus: (newStatus: Status) => {
       set(() => {
@@ -65,8 +61,8 @@ export const createSumbitNumpadStore = (
         };
       });
     },
-    updateNumpad: (newNumpad) => {
-      set((state) => {
+    updateNumpad: newNumpad => {
+      set(state => {
         if (state.numpad.length >= 4) return state;
         return { numpad: [...state.numpad, newNumpad] };
       });
