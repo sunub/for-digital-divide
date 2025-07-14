@@ -3,7 +3,6 @@
 import React from 'react';
 import PatternPath from './PatternPath';
 import PatterPoints from './PatternPoint';
-import { _decodeClientDataJSONInternals } from '@simplewebauthn/server/esm/helpers/decodeClientDataJSON';
 
 const JUMPING_COMBS = [
   [0, 1, 2],
@@ -21,14 +20,14 @@ interface PatternState {
   width: number;
   mouseX: number;
   mouseY: number;
-  timeout: any;
-  timeout2: any;
+  timeout: unknown;
+  timeout2: unknown;
   error: boolean;
   errorText: boolean;
   errorMessage: string;
 }
 
-function PatternLock({ correctPattern }: { correctPattern: number[] }) {
+function PatternLock() {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [isMouseDown, setMouseDown] = React.useState(false);
   const [rectInfo, setRectInfo] = React.useState<DOMRect | null>(null);
@@ -58,8 +57,7 @@ function PatternLock({ correctPattern }: { correctPattern: number[] }) {
 
   const handleMouseOver = (i: number) => {
     if (state.path.indexOf(i) > -1 || !isMouseDown) return;
-
-    let newPath = [...state.path];
+    const newPath = [...state.path];
     const jump = checkJumping(i);
     if (jump) newPath.push(jump);
     newPath.push(i);
@@ -71,12 +69,9 @@ function PatternLock({ correctPattern }: { correctPattern: number[] }) {
   };
 
   const checkJumping = (nextPoint: number) => {
-    let lastPoint = state.path[state.path.length - 1];
+    const lastPoint = state.path[state.path.length - 1];
     for (const [x, jumpy, y] of JUMPING_COMBS) {
-      if (
-        (x === nextPoint && y === lastPoint) ||
-        (x === lastPoint && y === nextPoint)
-      ) {
+      if ((x === nextPoint && y === lastPoint) || (x === lastPoint && y === nextPoint)) {
         return jumpy;
       }
     }
@@ -84,7 +79,7 @@ function PatternLock({ correctPattern }: { correctPattern: number[] }) {
   };
 
   const mouseUpEvent = () => {
-    let isLengthCorrect = state.path.length > 3;
+    const isLengthCorrect = state.path.length > 3;
 
     if (state.path.length > 0) {
       if (isLengthCorrect) {
@@ -125,7 +120,7 @@ function PatternLock({ correctPattern }: { correctPattern: number[] }) {
     function handleMouseUp() {
       setMouseDown(false);
 
-      let isLengthCorrect = state.path.length > 3;
+      const isLengthCorrect = state.path.length > 3;
 
       if (state.path.length > 0) {
         if (isLengthCorrect) {
@@ -133,9 +128,7 @@ function PatternLock({ correctPattern }: { correctPattern: number[] }) {
           setState((prev) => ({
             ...prev,
             error: true,
-            errorMessage: isLengthCorrect
-              ? 'Wrong pattern'
-              : 'Pattern too short',
+            errorMessage: isLengthCorrect ? 'Wrong pattern' : 'Pattern too short',
             timeout: setTimeout(() => {
               setState((prev) => ({
                 ...prev,
@@ -175,12 +168,7 @@ function PatternLock({ correctPattern }: { correctPattern: number[] }) {
   }, []);
 
   const points = Array.from({ length: 9 }, (_, i) => (
-    <PatterPoints
-      key={i}
-      id={i}
-      onMouseDown={handleMouseDown}
-      onMouseOver={handleMouseOver}
-    />
+    <PatterPoints key={i} id={i} onMouseDown={handleMouseDown} onMouseOver={handleMouseOver} />
   ));
 
   return (

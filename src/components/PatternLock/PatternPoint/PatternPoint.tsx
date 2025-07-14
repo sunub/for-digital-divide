@@ -10,13 +10,13 @@ interface PatternPointProps {
 
 function PatternPoint(props: PatternPointProps) {
   const ref = React.useRef<HTMLDivElement>(null);
-  const [state, setState] = React.useState({
-    elem: null,
-    top: 0,
-    left: 0,
-    width: 0,
-    height: 0,
-  });
+  // const [state, setState] = React.useState({
+  //   elem: null,
+  //   top: 0,
+  //   left: 0,
+  //   width: 0,
+  //   height: 0,
+  // });
 
   const {
     onMouseDown,
@@ -28,19 +28,19 @@ function PatternPoint(props: PatternPointProps) {
   React.useEffect(() => {
     if (!ref.current) return;
 
-    function handleResize() {
-      if (!ref.current) return;
+    // function handleResize() {
+    //   if (!ref.current) return;
 
-      let { top, left } = ref.current.getBoundingClientRect();
+    //   const { top, left } = ref.current.getBoundingClientRect();
 
-      setState((prev) => ({
-        ...prev,
-        top,
-        left,
-        width: ref.current?.offsetWidth ? ref.current.offsetWidth : 0,
-        height: ref.current?.offsetHeight ? ref.current.offsetHeight : 0,
-      }));
-    }
+    //   setState((prev) => ({
+    //     ...prev,
+    //     top,
+    //     left,
+    //     width: ref.current?.offsetWidth ? ref.current.offsetWidth : 0,
+    //     height: ref.current?.offsetHeight ? ref.current.offsetHeight : 0,
+    //   }));
+    // }
   }, []);
 
   // function mouseMove() {
@@ -55,16 +55,8 @@ function PatternPoint(props: PatternPointProps) {
   //   }
   // }
   return (
-    <div
-      ref={ref}
-      className="flex items-center justify-center w-33% min-h-33% flex-1-33 flex-wrap"
-      id={`${id}`}
-    >
-      <div
-        className="p-3"
-        onMouseDown={(e) => onMouseDown(e)}
-        onMouseOver={() => onMouseOver(id)}
-      >
+    <div ref={ref} className="flex items-center justify-center w-33% min-h-33% flex-1-33 flex-wrap" id={`${id}`}>
+      <div className="p-3" onMouseDown={(e) => onMouseDown(e)} onMouseOver={() => onMouseOver(id)}>
         <div className="w-2 h-2 rounded-50 aspect-[1/1] bg-slate-500 cursor-pointer" />
       </div>
     </div>
