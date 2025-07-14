@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { stepperAtom } from '../store/atom';
 
 export function useStepper() {
-  const [_, setStepper] = useAtom(stepperAtom);
+  const [, setStepper] = useAtom(stepperAtom);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -14,9 +14,9 @@ export function useStepper() {
   }, [pathname]);
 
   const updateStep = () =>
-    setStepper(prev => {
-      let steps = prev.steps;
-      const currentStepIndex = steps.findIndex(s => {
+    setStepper((prev) => {
+      const steps = prev.steps;
+      const currentStepIndex = steps.findIndex((s) => {
         return s.path === pathname;
       });
       return {
@@ -29,10 +29,10 @@ export function useStepper() {
     });
 
   const clearSteps = () => {
-    setStepper(prev => ({
+    setStepper((prev) => ({
       ...prev,
       currentStep: 0,
-      steps: prev.steps.map(step => ({ ...step, done: false })),
+      steps: prev.steps.map((step) => ({ ...step, done: false })),
     }));
   };
 

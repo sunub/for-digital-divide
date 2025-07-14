@@ -8,11 +8,11 @@ import { CheckIcon, PickaxeIcon } from 'lucide-react';
 export const CONFIRM_COLOR = 'oklch(0.404 0.2121 288.17775174927874)';
 
 export function Stepper() {
-  const [stepper, _] = useAtom(stepperAtom);
+  const [stepper] = useAtom(stepperAtom);
 
   return (
     <Container className="flex flex-col gap-2">
-      {stepper.steps.map(step => {
+      {stepper.steps.map((step) => {
         if (step.index === 3) {
           return (
             <ChildIndicator key={step.id} $done={step.done} $isProgress={true}>

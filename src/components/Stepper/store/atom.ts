@@ -1,7 +1,7 @@
 'use client';
 
 import { z } from 'zod';
-import { atomWithStorage, createJSONStorage } from 'jotai/utils';
+import { atomWithStorage } from 'jotai/utils';
 
 const StepperSchema = z.object({
   currentStep: z.number(),
@@ -12,7 +12,7 @@ const StepperSchema = z.object({
       done: z.boolean(),
       index: z.number(),
       path: z.string(),
-    })
+    }),
   ),
 });
 
