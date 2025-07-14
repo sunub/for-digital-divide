@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import SearchIcon from "./SearchIcon";
-import styled from "styled-components";
-import SearchBar from "./SearchBar";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import SearchBar from './SearchBar';
+import SearchIcon from './SearchIcon';
 
 const Container = styled.div`
   position: relative;
@@ -21,8 +21,8 @@ export default function Search() {
   }, [isOpen]);
 
   const colors = {
-    background: "black",
-    fill: "white",
+    background: 'black',
+    fill: 'white',
   };
 
   return (

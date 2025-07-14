@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import styles from "./SearchBar.module.css";
-import VisuallyHidden from "../VisuallyHidden";
+import React from 'react';
+import styles from './SearchBar.module.css';
+import VisuallyHidden from '../VisuallyHidden';
 
 function SearchBar({ children, ...delegated }: { children: React.ReactNode }) {
   return (
@@ -22,7 +22,7 @@ SearchBar.TextField = React.forwardRef<HTMLInputElement>((props, ref) => {
     <input
       {...props}
       ref={ref}
-      className={styles["search-area__text-field"]}
+      className={styles['search-area__text-field']}
       type="text"
       placeholder="검색어를 입력하세요"
       autoComplete="off"
@@ -30,6 +30,6 @@ SearchBar.TextField = React.forwardRef<HTMLInputElement>((props, ref) => {
   );
 });
 
-SearchBar.TextField.displayName = "SearchBar";
+SearchBar.TextField.displayName = 'SearchBar';
 
 export default SearchBar;
