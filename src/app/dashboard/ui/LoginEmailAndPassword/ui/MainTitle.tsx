@@ -2,7 +2,7 @@
 
 import styled from 'styled-components';
 import { motion, useSpring } from 'motion/react';
-import { memo, use, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Gugi } from 'next/font/google';
 
 const gugi = Gugi({ subsets: ['latin'], weight: '400' });
@@ -13,12 +13,12 @@ export const MainTitle = memo(() => {
   const opacity = useSpring(1);
 
   useEffect(() => {
-    setTranslateY(prev => {
-      prev.forEach(spring => spring.set('0rem'));
+    setTranslateY((prev) => {
+      prev.forEach((spring) => spring.set('0rem'));
       return prev;
     });
-    setTranslateX(prev => {
-      prev.forEach(spring => spring.set('0rem'));
+    setTranslateX((prev) => {
+      prev.forEach((spring) => spring.set('0rem'));
       return prev;
     });
     opacity.set(1);

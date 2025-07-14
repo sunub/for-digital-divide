@@ -17,7 +17,7 @@ export function usePasswordValidation() {
       setError(null);
       return true;
     }
-    let validateResult = PasswordSchema.safeParse(value);
+    const validateResult = PasswordSchema.safeParse(value);
     if (!validateResult.success) {
       setError(PASSWORD_ERROR_MESSAGE);
     }

@@ -11,7 +11,15 @@ import { SubmitButton } from './SubmitButton';
 export function Form({ children }: { children: React.ReactNode }) {
   const [actionState, formAction, isPending] = useActionState(emailPasswordLoginAction, null);
 
-  useFormActionToast(actionState, '/dashboard');
+  // actionState를 useFormActionToast가 기대하는 형태로 변환
+  const transformedActionState = actionState
+    ? {
+        status: actionState.status as 'success' | 'error',
+        payload: Array.isArray(actionState.payload) ? actionState.payload.join(', ') : actionState.payload,
+      }
+    : null;
+
+  useFormActionToast(transformedActionState, '/dashboard');
 
   return (
     <form id={'init-username-form'} action={formAction} className="flex flex-col place-content-center gap-3" noValidate>
@@ -35,7 +43,9 @@ function ArrowIconIndicator() {
 const IconContainer = styled(FlexCenterDiv)`
   gap: 0.5rem;
   color: var(--color-button);
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
   will-change: transform, opacity;
   opacity: 0.3;
   padding-bottom: 0.5rem;
