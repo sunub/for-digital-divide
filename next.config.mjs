@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
   basePath: '',
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
@@ -9,36 +8,37 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  output: 'standalone',
-  headers: async () => {
+  async headers() {
+    const cspHeader = `
+      default-src 'self';
+      script-src 'self' 'unsafe-eval' 'unsafe-inline';
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      img-src 'self' blob: data:;
+      font-src 'self' https://fonts.gstatic.com;
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self';
+      frame-ancestors 'none';
+      block-all-mixed-content;
+      upgrade-insecure-requests;
+    `;
+
     return [
       {
-        source: '/(.*)',
-        headers: SecurityHeaders,
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: cspHeader.replace(/\s{2,}/g, ' ').trim(),
+          },
+          {
+            key: 'X-Requested-With',
+            value: 'XMLHttpRequest',
+          },
+        ],
       },
     ];
   },
 };
-
-const ContentSecurityPolicy = `
-    default-src 'self' 'unsafe-inline' 'unsafe-eval';
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    font-src 'self' data: https://fonts.gstatic.com;
-    script-src 'self' 'unsafe-eval' 'unsafe-inline';
-    img-src * blob: data:;
-    media-src 'none';
-    connect-src *;
-`;
-
-const SecurityHeaders = [
-  {
-    key: 'Content-Security-Policy',
-    value: ContentSecurityPolicy.replace(/\n/g, ''),
-  },
-  {
-    key: 'X-Requested-With',
-    value: 'XMLHttpRequest',
-  },
-];
 
 export default nextConfig;
