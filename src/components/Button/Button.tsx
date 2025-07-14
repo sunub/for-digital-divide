@@ -1,7 +1,7 @@
-import useToggle from '@/hooks/use-toggle';
-import styled from 'styled-components';
-import React from 'react';
 import { motion, useAnimate } from 'motion/react';
+import React from 'react';
+import styled from 'styled-components';
+import useToggle from '@/shared/hooks/use-toggle';
 import { Status } from '@/store/pinnumber-store';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -10,10 +10,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const ButtonRefComponent = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    { variant = 'default', status = 'idle', children, onClick, ...props },
-    ref,
-  ) => {
+  ({ status = 'idle', children, onClick, ...props }, ref) => {
     const [isClick, toggleClick] = useToggle(false);
     const [scope, animate] = useAnimate();
     const [textScope, textAnimate] = useAnimate();
@@ -85,13 +82,7 @@ const ButtonRefComponent = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     return (
-      <ButtonWrapper
-        ref={ref}
-        $isClick={isClick}
-        $isPending={status === 'pending'}
-        onClick={handleClick}
-        {...props}
-      >
+      <ButtonWrapper ref={ref} $isClick={isClick} $isPending={status === 'pending'} onClick={handleClick} {...props}>
         <div>
           <Edge $isClick={isClick} />
           <Shadow />
@@ -191,11 +182,10 @@ export const Edge = styled.span<{ $isClick: boolean }>`
   background-image: var(--default-shadow);
 `;
 
-/* 전체 버튼 래퍼 */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const ButtonWrapper = styled.button.attrs((props: any) => ({
   'aria-pressed': props.$isClick ?? false,
 }))<{ $isClick: boolean; $isPending: boolean }>`
-  /* 커스텀 CSS 변수들 */
   --default-shadow: linear-gradient(
     to left,
     oklch(65.57% 0.19 288.17) 0%,

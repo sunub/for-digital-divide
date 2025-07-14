@@ -16,11 +16,8 @@ export const Front = styled.div<{ $isClick: boolean }>`
   font-weight: 700;
 
   border-radius: 25px;
-  background-color: ${(props) =>
-    props.$isClick ? 'var(--color-confirm)' : 'var(--color-background)'};
-  border: 5px solid
-    ${(props) =>
-      props.$isClick ? 'var(--color-confirm)' : 'var(--color-text)'};
+  background-color: ${(props) => (props.$isClick ? 'var(--color-confirm)' : 'var(--color-background)')};
+  border: 5px solid ${(props) => (props.$isClick ? 'var(--color-confirm)' : 'var(--color-text)')};
 
   user-select: none;
   will-change: transform;
@@ -76,11 +73,10 @@ export const Edge = styled.span<{ $isClick: boolean }>`
   border-top-right-radius: 30px;
   border-bottom-right-radius: 25px;
   border-bottom-left-radius: 25px;
-  background-image: ${(props) =>
-    props.$isClick ? 'var(--confirm-shadow)' : 'var(--default-shadow)'};
+  background-image: ${(props) => (props.$isClick ? 'var(--confirm-shadow)' : 'var(--default-shadow)')};
 `;
 
-export const Btn = styled.button.attrs((props: any) => ({
+export const Btn = styled.button.attrs<{ $isClick: boolean }>((props) => ({
   'aria-pressed': props.$isClick ?? false,
 }))<{ $isClick: boolean }>`
   --default-shadow: linear-gradient(
