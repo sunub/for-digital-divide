@@ -14,12 +14,15 @@ export function EmailAndPasswordField() {
   return (
     <Container>
       <EmailInput
-        key={'register-email__input-field'}
+        id="login-email__input-field"
+        key={'login-email__input-field'}
         style={{ borderRadius: '10px 10px 0px 0px' }}
         validateAction={validateEmail}
       />
       <PasswordInput
-        key={'register-password__input-field'}
+        id="login-password__input-field"
+        autoCompletes={'current-password'}
+        key={'login-password__input-field'}
         style={{ borderRadius: '0px 0px 10px 10px', borderTop: '0px' }}
         validateAction={validatePassword}
       />

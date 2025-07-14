@@ -19,6 +19,8 @@ export function EmailAndPasswordField() {
         validateAction={validateEmail}
       />
       <PasswordInput
+        id="register-password__input-field"
+        autoCompletes={'new-password'}
         key={'register-password__input-field'}
         style={{ borderRadius: '0px 0px 10px 10px', borderTop: '0px' }}
         validateAction={validatePassword}

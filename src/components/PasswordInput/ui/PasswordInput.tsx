@@ -7,7 +7,9 @@ import { EyeIcon, EyeClosedIcon } from 'lucide-react';
 import VisuallyHidden from '@/components/VisuallyHidden';
 import { InputRootContainer, InputContainer, InputWrapper, IconWrapper, Placeholder, Input } from '../style';
 
-interface PasswordInputProps extends React.HTMLAttributes<HTMLDivElement> {
+interface PasswordInputProps extends React.HTMLAttributes<HTMLInputElement> {
+  id?: string;
+  autoCompletes?: React.InputHTMLAttributes<HTMLInputElement>['autoComplete'];
   validateAction?: (value: unknown) => boolean;
 }
 
@@ -38,9 +40,9 @@ export function PasswordInput(props: PasswordInputProps) {
           <Input
             ref={inputRef}
             value={value}
-            onChange={e => setValue(e.target.value)}
-            autoComplete={'new-password'}
-            id={'sign-up_new-password'}
+            onChange={(e) => setValue(e.target.value)}
+            autoComplete={props.autoCompletes || 'new-password'}
+            id={props.id || 'sign-up_new-password'}
             type={passwordVisibility}
             name={'password'}
             style={{
@@ -55,7 +57,7 @@ export function PasswordInput(props: PasswordInputProps) {
           <Button
             $isFocused={true}
             type="button"
-            onClick={() => setPasswordVisibility(prev => (prev === 'password' ? 'text' : 'password'))}
+            onClick={() => setPasswordVisibility((prev) => (prev === 'password' ? 'text' : 'password'))}
           >
             {passwordVisibility === 'password' ? <EyeClosedIcon size={'16px'} /> : <EyeIcon size={'16px'} />}
           </Button>
@@ -68,7 +70,7 @@ export function PasswordInput(props: PasswordInputProps) {
 const Button = styled.button<{ $isFocused: boolean }>`
   position: absolute;
   right: 1rem;
-  visibility: ${props => (props.$isFocused ? 'visible' : 'hidden')};
-  opacity: ${props => (props.$isFocused ? 1 : 0)};
+  visibility: ${(props) => (props.$isFocused ? 'visible' : 'hidden')};
+  opacity: ${(props) => (props.$isFocused ? 1 : 0)};
   transition: opacity 300ms ease-in-out;
 `;
