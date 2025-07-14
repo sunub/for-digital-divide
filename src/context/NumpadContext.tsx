@@ -2,16 +2,11 @@
 
 import React, { type ReactNode } from 'react';
 import { type StoreApi, useStore } from 'zustand';
+import { createNumpadStore, type NumpadStore } from '@/store/pinnumber-store';
 
-import { type NumpadStore, createNumpadStore } from '@/store/pinnumber-store';
+export const NumpadContext = React.createContext<StoreApi<NumpadStore> | null>(null);
 
-export const NumpadContext = React.createContext<StoreApi<NumpadStore> | null>(
-  null,
-);
-
-export const SubmitContext = React.createContext<StoreApi<NumpadStore> | null>(
-  null,
-);
+export const SubmitContext = React.createContext<StoreApi<NumpadStore> | null>(null);
 
 export interface NumpadProviderProps {
   children: ReactNode;
@@ -22,11 +17,7 @@ export const NumpadProvider = ({ children }: NumpadProviderProps) => {
 
   if (!numpadRef.current) numpadRef.current = createNumpadStore();
 
-  return (
-    <NumpadContext.Provider value={numpadRef.current}>
-      {children}
-    </NumpadContext.Provider>
-  );
+  return <NumpadContext.Provider value={numpadRef.current}>{children}</NumpadContext.Provider>;
 };
 
 export const useNumpadStore = <T,>(selector: (store: NumpadStore) => T): T => {
@@ -39,9 +30,7 @@ export const useNumpadStore = <T,>(selector: (store: NumpadStore) => T): T => {
   return useStore(numpadStoreContext, selector);
 };
 
-export const useSubmitNumpadStroe = <T,>(
-  selector: (store: NumpadStore) => T,
-): T => {
+export const useSubmitNumpadStroe = <T,>(selector: (store: NumpadStore) => T): T => {
   const numpadStoreContext = React.useContext(SubmitContext);
 
   if (!numpadStoreContext) {
