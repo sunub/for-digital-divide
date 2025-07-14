@@ -1,10 +1,5 @@
 type LoginAction = {
-  type:
-    | 'wrongId'
-    | 'wrongPassword'
-    | 'wrongLengthID'
-    | 'wrongLengthPassword'
-    | 'error';
+  type: 'wrongId' | 'wrongPassword' | 'wrongLengthID' | 'wrongLengthPassword' | 'error';
 };
 
 type ErrorMessage = {
