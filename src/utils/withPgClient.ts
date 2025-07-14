@@ -17,9 +17,7 @@ interface User {
   createdAt: Date;
 }
 
-async function withPgClient(
-  asyncCallbackFn: (client: PoolClient) => Promise<QueryResult<User> | any>,
-) {
+async function withPgClient(asyncCallbackFn: (client: PoolClient) => Promise<QueryResult<User> | User[]>) {
   const client = await pool.connect();
   try {
     return await asyncCallbackFn(client);

@@ -55,28 +55,26 @@ const utils = {
  * @param {string} str
  */
 function encrypt(str: string): string {
-  const asciCodes = str.split('').map((char) => char.charCodeAt(0));
-  const binary8Bit = asciCodes.map((num) => asciiToBinary(num));
+  const asciCodes = str.split('').map(char => char.charCodeAt(0));
+  const binary8Bit = asciCodes.map(num => asciiToBinary(num));
   let binaryStr = binary8Bit.join('');
 
   let bit = Array.from({ length: 100 }, (_, i) =>
-    i % 11 == 0 || i % 5 == 0 || i % 12 === 0 || i % 22 === 0 ? '0' : '1',
+    i % 11 == 0 || i % 5 == 0 || i % 12 === 0 || i % 22 === 0 ? '0' : '1'
   );
   binaryStr = addingBitMod448(binaryStr, bit);
 
   const length = binary8Bit.join('').length;
   let binaryLength = asciiToBinary(length);
 
-  bit = Array.from({ length: 100 }, (_, i) =>
-    i % 3 == 0 || i % 7 == 0 || i % 31 === 0 || i % 22 === 0 ? '0' : '1',
-  );
+  bit = Array.from({ length: 100 }, (_, i) => (i % 3 == 0 || i % 7 == 0 || i % 31 === 0 || i % 22 === 0 ? '0' : '1'));
   binaryLength = addingBit64(binaryLength, bit);
 
   binaryStr += binaryLength;
   const chunk = stringSplit(binaryStr, 512);
-  const chunkWords = chunk.map((chunk) => stringSplit(chunk, 32));
+  const chunkWords = chunk.map(chunk => stringSplit(chunk, 32));
 
-  const words80 = chunkWords.map((chunk) => {
+  const words80 = chunkWords.map(chunk => {
     const words = chunk.map(binaryToInt);
 
     for (let i = 16; i < 80; i++) {
@@ -94,7 +92,7 @@ function encrypt(str: string): string {
       words.push(newWord);
     }
 
-    return words.map((word) => intToBinary(word));
+    return words.map(word => intToBinary(word));
   });
 
   let h0 = binaryToInt('01100111010001010010001100000001');
@@ -122,10 +120,7 @@ function encrypt(str: string): string {
         f = utils.xor(utils.xor(b, c), d);
         k = 0x6ed9eba1;
       } else if (j < 60) {
-        f = utils.or(
-          utils.or(utils.and(b, c), utils.and(b, d)),
-          utils.and(c, d),
-        );
+        f = utils.or(utils.or(utils.and(b, c), utils.and(b, d)), utils.and(c, d));
         k = 0x8f1bbcdc;
       } else {
         f = utils.xor(utils.xor(b, c), d);
@@ -133,11 +128,8 @@ function encrypt(str: string): string {
       }
 
       const temp = utils.binaryAddition(
-        utils.binaryAddition(
-          utils.binaryAddition(utils.leftRotate(a, 5), f),
-          utils.binaryAddition(e, words[j]),
-        ),
-        k,
+        utils.binaryAddition(utils.binaryAddition(utils.leftRotate(a, 5), f), utils.binaryAddition(e, words[j])),
+        k
       );
 
       e = d;
@@ -154,9 +146,7 @@ function encrypt(str: string): string {
     h4 = utils.binaryAddition(h4, e);
   }
 
-  const finalHash = [h0, h1, h2, h3, h4]
-    .map((h) => h.toString(16).padStart(8, '0'))
-    .join('');
+  const finalHash = [h0, h1, h2, h3, h4].map(h => h.toString(16).padStart(8, '0')).join('');
 
   return finalHash;
 }

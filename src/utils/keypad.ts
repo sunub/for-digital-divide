@@ -53,28 +53,28 @@ export function getSVGGrid(array: number[][]): KeypadInfo {
   });
 
   const shuffledGrid: SvgGrid[][] = [
-    shuffledNumpadAxis.slice(0, 3).map(([x, y, num], i) => {
+    shuffledNumpadAxis.slice(0, 3).map(([x, y], i) => {
       return {
         y,
         x,
         num: hashKeys[i],
       };
     }),
-    shuffledNumpadAxis.slice(3, 6).map(([x, y, num], i) => {
+    shuffledNumpadAxis.slice(3, 6).map(([x, y], i) => {
       return {
         y,
         x,
         num: hashKeys[i + 3],
       };
     }),
-    shuffledNumpadAxis.slice(6, 9).map(([x, y, num], i) => {
+    shuffledNumpadAxis.slice(6, 9).map(([x, y], i) => {
       return {
         y,
         x,
         num: hashKeys[i + 6],
       };
     }),
-    shuffledNumpadAxis.slice(9, 10).map(([x, y, num], i) => {
+    shuffledNumpadAxis.slice(9, 10).map(([x, y], i) => {
       return {
         y,
         x,
