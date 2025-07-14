@@ -12,11 +12,12 @@ export const DashboardRootContainer = styled.div`
   overflow-y: scroll;
   ${fullSize}
 
-  /* Firefox */
   scrollbar-width: none;
-
-  /* Chrome, Safari, Edge, Opera */
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+export const DashboardContentContainer = styled.div`
+  grid-area: dashboard-content / 1;
 `;

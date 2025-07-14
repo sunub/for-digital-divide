@@ -1,6 +1,6 @@
 'use client';
 
-import { RootContainer } from '../style';
+import { AnimatePresenceRootContainer } from '../style';
 import { AnimatePresence, MotionNodeAnimationOptions } from 'motion/react';
 
 const pageVariants: MotionNodeAnimationOptions['variants'] = {
@@ -18,17 +18,17 @@ const pageTransition: MotionNodeAnimationOptions['transition'] = {
 export function AnimatePresenceContainer({ children }: { children: React.ReactNode }) {
   return (
     <AnimatePresence mode="wait">
-      <RootContainer
+      <AnimatePresenceRootContainer
         key={'dashboard-main-page'}
         initial="initial"
         animate="in"
         exit="out"
         variants={pageVariants}
         transition={pageTransition}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%' }}
       >
         {children}
-      </RootContainer>
+      </AnimatePresenceRootContainer>
     </AnimatePresence>
   );
 }
