@@ -10,7 +10,7 @@ interface ModalProps extends HTMLAttributes<HTMLDialogElement> {
 }
 
 const Modal = React.forwardRef<HTMLDialogElement, ModalProps>((props, ref) => {
-  const { isOpen, children, ...rest } = props;
+  const { children, ...rest } = props;
 
   return (
     <Dialog ref={ref} open {...rest}>

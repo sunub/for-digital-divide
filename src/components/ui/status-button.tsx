@@ -1,59 +1,128 @@
-import { Slot } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'class-variance-authority';
+import * as React from 'react';
+import styled from 'styled-components';
 import { cn } from '@/utils/misc';
-import React from 'react';
+import { Button, ButtonProps } from '@/components/ui/button';
 
-const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors outline-none focus-visible:ring-4 focus-within:ring-4 ring-ring ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-  {
-    variants: {
-      variant: {
-        default:
-          'bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground',
-        destructive:
-          'bg-destructive text-destructive-foreground hover:bg-red-500',
-        outline:
-          'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-slate-200',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
-      },
-      size: {
-        default: 'h-10 px-4 py-2',
-        wide: 'px-24 py-5',
-        sm: 'h-9 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8',
-        pill: 'px-12 py-3 leading-3',
-        icon: 'h-10 w-10',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  },
-);
+const COLORS = [
+  'oklch(92.86% 0.036 289.07)',
+  'oklch(94.48% 0.028 290.23)',
+  'oklch(92.86% 0.036 289.07)',
+  'oklch(90.93% 0.045 288.25)',
+  'oklch(87.45% 0.064 286.931)',
+];
 
-export interface ButtonProps
-  extends React.HTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-}
+export const StatusButton = React.forwardRef<
+  HTMLButtonElement,
+  ButtonProps & { status?: 'pending' | 'success' | 'error' | 'idle' }
+>(({ status = 'idle', className, children, ...props }, ref) => {
+  const companion = {
+    pending: (
+      <PendingWrapper>
+        {COLORS.map((color, i) => (
+          <PendingBlock key={`${i}th-pending-block`} $bg={color} $delay={i} />
+        ))}
+      </PendingWrapper>
+    ),
+    success: <span>✅</span>,
+    error: <span>❌</span>,
+    idle: null,
+  }[status];
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : 'button';
+  const padding = status !== 'pending' ? 'px-4 py-2' : 'p-0';
+  const cursor = status === 'pending' ? 'cursor-progress' : 'cursor-pointer';
+  return (
+    <Button
+      ref={ref}
+      disabled={status === 'pending'}
+      className={cn('flex justify-center gap-4 text-sm', className, padding, cursor)}
+      {...props}
+    >
+      {status === 'idle' ? <React.Fragment>{children}</React.Fragment> : null}
+      {companion}
+      {status !== 'idle' ? <PendingBtm /> : null}
+    </Button>
+  );
+});
 
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    );
-  },
-);
+StatusButton.displayName = 'Button';
 
-Button.displayName = 'Button';
+const PendingWrapper = styled.div`
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  height: 100%;
+  min-height: 41px;
+  cursor: progress;
+  pointer-events: none;
 
-export { Button, buttonVariants };
+  &:has(span) :first-child {
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 18px;
+  }
+
+  &:has(span) :nth-child(5) {
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 18px;
+  }
+`;
+
+const PendingBtm = styled.div`
+  position: absolute;
+  z-index: 1;
+  top: 2px;
+  left: -1px;
+  width: 102px;
+  height: 60px;
+
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 18px;
+  border-bottom-left-radius: 18px;
+
+  background: linear-gradient(
+    90deg,
+    oklch(76.64% 0.13 292.01) 0%,
+    oklch(87.45% 0.0646 286.931) 6%,
+    oklch(87.45% 0.0646 286.931) 91%,
+    oklch(76.64% 0.13 292.01) 100%
+  );
+`;
+
+const PendingBlock = styled.span<{ $bg: string; $delay: number }>`
+  position: relative;
+  z-index: 2;
+
+  display: block;
+  height: 100%;
+  min-height: 45px;
+  width: 20px;
+  will-change: background-color, box-shadow;
+  animation: pending 1.5s ease-in infinite;
+  animation-delay: ${({ $delay }) => ($delay + 0.1) * 0.195}s;
+  transform: translate3d(0, 0, 0);
+
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    background-color: ${({ $bg }) => $bg};
+
+    position: absolute;
+    top: calc(50% - 4px);
+    left: calc(50% - 4px);
+  }
+
+  @keyframes pending {
+    0%,
+    100% {
+      background-color: oklch(87.45% 0.064 286.931);
+      box-shadow: 0 6px 4px 0 oklch(76.64% 0.13 292.01 / 80%);
+    }
+    50% {
+      background-color: oklch(92.86% 0.036 289.07);
+      box-shadow: 0 4px 4px 0 oklch(76.64% 0.13 292.01 / 20%);
+    }
+  }
+`;
