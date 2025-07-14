@@ -6,8 +6,8 @@ import { useStepper } from '@/components/Stepper/hooks/useStepper';
 import { useToast } from '@/provider/toast/hooks/useToast';
 
 interface ActionState {
-  status: 'success' | 'error';
-  payload: string;
+  status: string;
+  payload: string[];
 }
 
 export function useFormActionToast(

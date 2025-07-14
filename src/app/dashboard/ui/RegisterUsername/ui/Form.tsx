@@ -11,15 +11,7 @@ import { SubmitButton } from './SubmitButton';
 export function Form({ children }: { children: React.ReactNode }) {
   const [actionState, formAction, isPending] = useActionState(usernameAction, null);
 
-  // actionState를 useFormActionToast가 기대하는 형태로 변환
-  const transformedActionState = actionState
-    ? {
-        status: actionState.status as 'success' | 'error',
-        payload: Array.isArray(actionState.payload) ? actionState.payload.join(', ') : actionState.payload,
-      }
-    : null;
-
-  useFormActionToast(transformedActionState, '/sign-up/register-pin');
+  useFormActionToast(actionState, '/sign-up/register-pin');
 
   return (
     <form id={'init-username-form'} action={formAction} className="flex flex-col place-content-center gap-3" noValidate>

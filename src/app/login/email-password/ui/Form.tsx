@@ -11,14 +11,7 @@ import { SubmitButton } from './SubmitButton';
 export function Form({ children }: { children: React.ReactNode }) {
   const [actionState, formAction, isPending] = useActionState(emailPasswordLoginAction, null);
 
-  const transformedActionState = actionState
-    ? {
-        status: actionState.status as 'success' | 'error',
-        payload: Array.isArray(actionState.payload) ? actionState.payload.join(', ') : actionState.payload,
-      }
-    : null;
-
-  useFormActionToast(transformedActionState, '/dashboard');
+  useFormActionToast(actionState, '/dashboard');
 
   return (
     <form id={'init-username-form'} action={formAction} className="flex flex-col place-content-center gap-3" noValidate>
