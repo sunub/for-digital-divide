@@ -1,18 +1,11 @@
 'use client';
 
 import React from 'react';
-import Input from './Input';
-import { KeypadInfo } from '@/utils/keypad';
-import PinSuccess from './PinSuccess';
-import styled from 'styled-components';
 import { useNumpadStore, useSubmitNumpadStroe } from '@/context/NumpadContext';
-import { useNotificationStore } from '@/context/NotificationContext';
-import { reorderKeypad } from '@/utils/pin/register';
+import { KeypadInfo } from '@/utils/keypad';
 import { goToUsername } from '@/utils/revalidate';
-import { useForm } from '@conform-to/react';
-import { getZodConstraint, parseWithZod } from '@conform-to/zod';
-import { z } from 'zod';
-import { useFormState } from '@conform-to/react/context';
+import Input from './Input';
+import PinSuccess from './PinSuccess';
 
 interface PinFormProps {
   children: React.ReactNode;
@@ -33,11 +26,6 @@ interface ErrorStatus {
   errorId: string;
   msg: string | null;
 }
-
-const PinFormSchema = z.object({
-  reorder: z.string().optional(),
-  pin: z.string().refine((value) => value.split(',').length === 4),
-});
 
 function ErrorList({ id, errors }: { id?: string; errors?: string | null }) {
   return errors?.length ? (
@@ -64,21 +52,14 @@ function PinForm({ uses, children, padInfo, pinAction }: PinFormProps) {
 
   const inputRef = React.useRef<HTMLInputElement>(null);
   const containerRef = React.useRef<HTMLFormElement>(null);
-  const numpadRef = React.useRef<HTMLDivElement>(null);
   const isHydrated = useHydrated();
-  const { add } = useNotificationStore((state) => state);
 
   const { updateStatus } =
-    uses === 'register'
-      ? useNumpadStore((state) => state)
-      : useSubmitNumpadStroe((state) => state);
+    uses === 'register' ? useNumpadStore((state) => state) : useSubmitNumpadStroe((state) => state);
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setOpen(false);
         setPinErrorStatus({
           hasError: false,
@@ -112,18 +93,12 @@ function PinForm({ uses, children, padInfo, pinAction }: PinFormProps) {
         const isReorder = formData.get('reorder') === 'on';
 
         if (isReorder) {
-          reorderKeypad(isReorder);
           return;
         }
 
         const actionResult = await pinAction(formData, padInfo);
         if (actionResult.status === 'error') {
           if (actionResult.id === 'username-not-found') {
-            add({
-              id: 'username-not-found',
-              message: actionResult.msg,
-              type: 'error',
-            });
             return goToUsername();
           }
 
@@ -160,58 +135,15 @@ function PinForm({ uses, children, padInfo, pinAction }: PinFormProps) {
             </Input>
             {isOpen && (
               <React.Fragment>
-                {pinErrorStatus.hasError && (
-                  <ErrorList
-                    id={pinErrorStatus.errorId}
-                    errors={pinErrorStatus.msg}
-                  />
-                )}
+                {pinErrorStatus.hasError && <ErrorList id={pinErrorStatus.errorId} errors={pinErrorStatus.msg} />}
               </React.Fragment>
             )}
           </div>
-          <div className="px-4 min-h-[32px] pb-3 pt-1 text-center">
-            {children}
-          </div>
+          <div className="px-4 min-h-[32px] pb-3 pt-1 text-center">{children}</div>
         </React.Fragment>
       )}
     </form>
   );
 }
-
-const NumpadWrapper = styled.div<{ $isOpen: boolean }>`
-  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
-  transition: all 200ms cubic-bezier(0.215, 0.61, 0.355, 1);
-  transform-origin: top center;
-  will-change: transform;
-  scroll-behavior: smooth;
-  animation: ${({ $isOpen }) => ($isOpen ? 'numpad-open' : 'numpad-close')}
-    200ms ease forwards;
-
-  @keyframes numpad-open {
-    20%,
-    from {
-      opacity: 0;
-      transform: translateY(0%) scaleY(0) scaleX(1);
-    }
-
-    to {
-      transform: translateY(0%) scaleY(1) scaleX(1);
-      opacity: 1;
-    }
-  }
-
-  @keyframes numpad-close {
-    20%,
-    from {
-      opacity: 1;
-      transform: translateY(0%) scaleY(1) scaleX(1);
-    }
-
-    to {
-      transform: translateY(0%) scaleY(0) scaleX(1);
-      opacity: 0;
-    }
-  }
-`;
 
 export default PinForm;

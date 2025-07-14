@@ -11,19 +11,12 @@ function PinSuccess() {
           viewBox="0 0 24 24"
           stroke="currentColor"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M5 13l4 4L19 7"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
         </svg>
       </div>
       <div className="text-center">
         <h1 className="text-xl font-semibold text-gray-800">등록 완료</h1>
-        <p className=" text-sm text-gray-500">
-          보안 PIN 등록이 완료되었습니다.
-        </p>
+        <p className=" text-sm text-gray-500">보안 PIN 등록이 완료되었습니다.</p>
       </div>
     </div>
   );

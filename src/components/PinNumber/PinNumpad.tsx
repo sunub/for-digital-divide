@@ -1,15 +1,11 @@
 'use client';
 
-import React, { use } from 'react';
+import React from 'react';
+import styled from 'styled-components';
+import Button from '@/components/Button/Button';
 import { KeypadInfo } from '@/utils/keypad';
 import { SvgGrid } from '@/utils/keypad';
-import styled from 'styled-components';
-import {
-  NumpadContext,
-  useNumpadStore,
-  useSubmitNumpadStroe,
-} from '../../context/NumpadContext';
-import Button from '@/components/Button/Button';
+import { useNumpadStore, useSubmitNumpadStroe } from '../../context/NumpadContext';
 
 interface PinNumpadProps {
   padInfo: KeypadInfo;
@@ -22,9 +18,7 @@ function PinNumpad(props: PinNumpadProps) {
   const { svgGrid } = keypad;
 
   const { numpad, status, updateNumpad, deleteNumpad } =
-    uses === 'register'
-      ? useNumpadStore((state) => state)
-      : useSubmitNumpadStroe((state) => state);
+    uses === 'register' ? useNumpadStore((state) => state) : useSubmitNumpadStroe((state) => state);
 
   return (
     <div className="flex flex-col items-center gap-4 shadow-card_lower p-6 rounded-xl bg-white">
@@ -34,10 +28,7 @@ function PinNumpad(props: PinNumpadProps) {
       </div>
       <div className="flex flex-col justify-evenly pb-6 pl-2 pr-2 rounded-md w-full">
         {svgGrid.map((row) => (
-          <ul
-            key={crypto.randomUUID()}
-            className="flex flex-row w-full justify-around items-center"
-          >
+          <ul key={crypto.randomUUID()} className="flex flex-row w-full justify-around items-center">
             {row.map(({ x, y, num }: SvgGrid) => {
               if (num === '101') {
                 return (
@@ -45,11 +36,7 @@ function PinNumpad(props: PinNumpadProps) {
                     key={crypto.randomUUID()}
                     className="bg-device text-[36px] rounded-br-[16px] w-[100px] h-[91px] place-content-center text-center"
                   >
-                    <button
-                      type="button"
-                      className="text-xs"
-                      onClick={() => deleteNumpad()}
-                    >
+                    <button type="button" className="text-xs" onClick={() => deleteNumpad()}>
                       <DeleteBtn>전체삭제</DeleteBtn>
                     </button>
                   </li>
@@ -79,9 +66,7 @@ function PinNumpad(props: PinNumpadProps) {
                       className="w-0 h-0"
                       type="radio"
                       onChange={() => {
-                        const form = document.getElementById(
-                          'pin-pattern-form',
-                        ) as HTMLFormElement;
+                        const form = document.getElementById('pin-pattern-form') as HTMLFormElement;
 
                         form.requestSubmit();
                       }}
@@ -125,7 +110,7 @@ const DeleteBtn = styled.span`
   display: block;
   z-index: 10;
   position: relative;
-  text-wrap: pretty;
+  word-wrap: break-word;
   line-height: 1.25rem;
   cursor: pointer;
 

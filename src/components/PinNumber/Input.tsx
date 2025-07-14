@@ -1,12 +1,9 @@
 'use client';
 
-import VisuallyHidden from '@/components/VisuallyHidden';
 import React, { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
-import {
-  useNumpadStore,
-  useSubmitNumpadStroe,
-} from '../../context/NumpadContext';
 import styled from 'styled-components';
+import VisuallyHidden from '@/components/VisuallyHidden';
+import { useNumpadStore, useSubmitNumpadStroe } from '../../context/NumpadContext';
 
 interface InputTextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   uses: string;
@@ -26,71 +23,61 @@ function Input(props: InputLabelProps) {
   return (
     <React.Fragment>
       <label htmlFor={htmlFor} className="flex h-fit w-fit" {...rest}>
-        <h1>
-          {htmlFor === 'pin-pattern-input-confirm'
-            ? '보안 PIN 확인'
-            : '보안 PIN 등록'}
-        </h1>
+        <h1>{htmlFor === 'pin-pattern-input-confirm' ? '보안 PIN 확인' : '보안 PIN 등록'}</h1>
       </label>
       {children}
     </React.Fragment>
   );
 }
 
-Input.TextField = React.forwardRef<HTMLInputElement, InputTextFieldProps>(
-  (props, ref) => {
-    const { numpad } =
-      props.uses === 'register'
-        ? useNumpadStore((state) => state)
-        : useSubmitNumpadStroe((state) => state);
+Input.TextField = React.forwardRef<HTMLInputElement, InputTextFieldProps>((props, ref) => {
+  const { numpad } =
+    props.uses === 'register' ? useNumpadStore((state) => state) : useSubmitNumpadStroe((state) => state);
 
-    const [numpads, updateNumpads] = React.useState<Numpads[]>(
-      Array.from({ length: 4 }, () => ({
-        isUsed: false,
-      })),
-    );
+  const [numpads, updateNumpads] = React.useState<Numpads[]>(
+    Array.from({ length: 4 }, () => ({
+      isUsed: false,
+    })),
+  );
 
-    const validNumpadLength = 4;
-    const { setter, ...rest } = props;
+  const validNumpadLength = 4;
+  const { setter, ...rest } = props;
 
-    React.useEffect(() => {
-      if (numpad.length <= validNumpadLength) {
-        updateNumpads((prev) => {
-          return prev.map((_, index) => {
-            if (index < numpad.length) {
-              return { isUsed: true };
-            } else {
-              return { isUsed: false };
-            }
-          });
+  React.useEffect(() => {
+    if (numpad.length <= validNumpadLength) {
+      updateNumpads((prev) => {
+        return prev.map((_, index) => {
+          if (index < numpad.length) {
+            return { isUsed: true };
+          } else {
+            return { isUsed: false };
+          }
         });
-      }
-    }, [numpad]);
+      });
+    }
+  }, [numpad]);
 
-    return (
-      <React.Fragment>
-        <div
-          className="flex flex-row justify-around align-middle w-32 h-2"
-          onClick={() => setter(true)}
-        >
-          {numpads.map(({ isUsed }, index) => (
-            <Dot key={`${index}th-dot-text`} $isUsed={isUsed} />
-          ))}
-        </div>
-        <input
-          id="pin-pattern-input"
-          name="pinNumbers"
-          ref={ref}
-          readOnly
-          {...rest}
-          type="password"
-          className="visually-hidden"
-          value={numpad}
-        />
-      </React.Fragment>
-    );
-  },
-);
+  return (
+    <React.Fragment>
+      <VisuallyHidden>핀 번호 입력을 위한 입력 필드입니다. 4자리 숫자를 입력해주세요.</VisuallyHidden>
+      <div className="flex flex-row justify-around align-middle w-32 h-2" onClick={() => setter(true)}>
+        {numpads.map(({ isUsed }, index) => (
+          <Dot key={`${index}th-dot-text`} $isUsed={isUsed} />
+        ))}
+      </div>
+      <input
+        id="pin-pattern-input"
+        name="pinNumbers"
+        ref={ref}
+        readOnly
+        {...rest}
+        type="password"
+        className="visually-hidden"
+        value={numpad}
+      />
+    </React.Fragment>
+  );
+});
 
 Input.TextField.displayName = 'Input TextField';
 
@@ -100,9 +87,7 @@ const Dot = styled.div<{ $isUsed: boolean }>`
   height: 0.75rem;
   display: block;
   background-color: ${({ $isUsed }) =>
-    $isUsed
-      ? 'var(--color-button)'
-      : 'color-mix(in oklch, var(--color-text), transparent)'};
+    $isUsed ? 'var(--color-button)' : 'color-mix(in oklch, var(--color-text), transparent)'};
   border-radius: 50%;
   aspect-ratio: 1 / 1;
 `;
