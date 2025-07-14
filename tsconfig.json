@@ -22,11 +22,13 @@
       "@/*": ["./src/*"],
       "@compo/*": ["./src/components/*"],
       "@icons/*": ["./src/icons/*"],
-      "@hooks/*": ["./src/hooks/*"],
+      "@hooks/*": ["./src/shared/hooks/*"],
       "@lib/*": ["./src/lib/*"],
       "@public/*": ["./public/*"],
       "@tests/*": ["./tests/*"],
-      "@root/*": ["./*"]
+      "@root/*": ["./*"],
+      "@entities/*": ["./src/entities/*"],
+      "@dashboard/*": ["./src/app/dashboard/*"]
     }
   },
   "ts-node": {
@@ -42,7 +44,8 @@
     "**/*.jsx",
     ".next/types/**/*.ts",
     "scripts/seed.mjs",
-    "./type.d.ts"
+    "./type.d.ts",
+    "scripts/generateTransactions.mjs"
   ],
   "exclude": ["./node_modules"]
 }
