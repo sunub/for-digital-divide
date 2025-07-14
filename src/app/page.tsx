@@ -1,12 +1,17 @@
 'use client';
 
-import Button from '@/components/Button/Default';
-import Spacer from '@/constants/Spacer';
-import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+import Button from '@/components/Button/Default';
+import { useStepper } from '@/components/Stepper/hooks/useStepper';
+import Spacer from '@/constants/Spacer';
+import { navigate } from '@/shared/utils/navigate';
+import { useHistory } from '@/shared/hooks/useHistory';
 
 function InitPage() {
+  const { updateStep } = useStepper();
+  const { add } = useHistory();
+
   return (
     <React.Fragment>
       <DevsiteContentSiteContent>
@@ -23,9 +28,15 @@ function InitPage() {
             </p>
           </TextContainer>
           <Spacer size={32} axis="vertical" />
-          <Link href={'/intro'}>
-            <Button>시작하기</Button>
-          </Link>
+          <Button
+            onClick={() => {
+              updateStep();
+              add(new URL('/', window.location.href).toString());
+              navigate('/intro');
+            }}
+          >
+            시작하기
+          </Button>
           <Spacer size={32} axis="vertical" />
         </ContentWrapper>
       </DevsiteContentSiteContent>
@@ -45,6 +56,7 @@ const DevsiteContentSiteContent = styled.div`
   max-width: 800px;
   height: 100cqh;
   padding: 5cqh 6cqh;
+  z-index: 12;
 `;
 
 const TextContainer = styled.div`
@@ -63,13 +75,14 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   border-radius: 36px;
+  z-index: 11;
 `;
 
 const BackDrop = styled.div`
-  position: absolute;
+  position: fixed;
   background: oklch(3.53% 0 73 / 50%);
   backdrop-filter: blur(20px);
-  z-index: -1;
+  z-index: 11;
   top: 0px;
   left: 0px;
   width: 100%;
