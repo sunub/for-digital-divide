@@ -1,4 +1,11 @@
 {
-  "ignore": ["**/*.mdx"],
-  "singleQuote": true
+  "semi": true,
+  "singleQuote": true,
+  "printWidth": 120,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "jsxSingleQuote": false,
+  "arrowParens": "always",
+  "endOfLine": "lf"
 }
