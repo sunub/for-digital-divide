@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const RangeWrapper = styled.div`
   /* grid-area: resize-font-slider / main; */
@@ -20,7 +20,7 @@ export const SliderOutput = styled.span<{
   background-color: var(--color-button);
   border-radius: 9px;
   opacity: ${({ $isHover }) => ($isHover ? 1 : 0.5)};
-  visibility: ${({ $isHover }) => ($isHover ? "visible" : "hidden")};
+  visibility: ${({ $isHover }) => ($isHover ? 'visible' : 'hidden')};
 
   font-size: 12px;
   font-weight: 700;
@@ -29,11 +29,10 @@ export const SliderOutput = styled.span<{
 
   position: absolute;
   top: -54px;
-  left: ${({ $position }) =>
-    `calc(${$position}% + (${-8 - $position * 0.26}px))`};
+  left: ${({ $position }) => `calc(${$position}% + (${-8 - $position * 0.26}px))`};
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 28px;
     left: calc(50% - 5px);
@@ -51,7 +50,7 @@ export const RangeSlider = styled.input<{
   $trackFill: number;
   $hovering: number;
 }>`
-  &[type="range"] {
+  &[type='range'] {
     appearance: none;
     background: transparent;
     outline-offset: 4px;
@@ -61,11 +60,8 @@ export const RangeSlider = styled.input<{
       appearance: none;
       height: 0.5cqh;
       border-radius: 5px;
-      background: linear-gradient(
-          to right,
-          transparent ${({ $trackFill }) => $trackFill}%,
-          oklch(82.08% 0.051 302.57) 0%
-        ),
+      background:
+        linear-gradient(to right, transparent ${({ $trackFill }) => $trackFill}%, oklch(82.08% 0.051 302.57) 0%),
         var(--color-button) fixed;
     }
 
@@ -87,8 +83,7 @@ export const RangeSlider = styled.input<{
       }
 
       &:hover {
-        box-shadow: 0 0 0 ${({ $hovering }) => $hovering}px
-          color-mix(in oklch, var(--color-button), transparent);
+        box-shadow: 0 0 0 ${({ $hovering }) => $hovering}px color-mix(in oklch, var(--color-button), transparent);
       }
     }
   }

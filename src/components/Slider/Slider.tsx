@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import useToggle from "@/hooks/use-toggle";
-import React from "react";
-import * as Styled from "./Slider.style";
+import React from 'react';
+import useToggle from '@/shared/hooks/use-toggle';
+import * as Styled from './Slider.style';
 
 interface SliderProps {
   fontSize: number;
@@ -20,7 +20,6 @@ function Slider(props: SliderProps) {
     const percent = ((fontSize - min) * 100) / (max - min);
     return Math.floor(percent);
   });
-  const [position, setPosition] = React.useState<number>(27.5);
 
   React.useEffect(() => {
     setPercent(() => {
