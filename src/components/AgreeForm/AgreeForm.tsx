@@ -1,9 +1,9 @@
 'use client';
 
-import CheckBox from '@/components/CheckBox';
-import Button from '../Button/Button';
 import styled from 'styled-components';
+import CheckBox from '@/components/CheckBox';
 import { moveToPatternPage } from '@/lib/revalidate';
+import Button from '../Button/Button';
 
 const RequiredLabel = styled.label`
   &::after {
@@ -14,15 +14,7 @@ const RequiredLabel = styled.label`
   }
 `;
 
-function RequiredItem({
-  id,
-  name,
-  content,
-}: {
-  id: string;
-  name: string;
-  content: string;
-}) {
+function RequiredItem({ id, name, content }: { id: string; name: string; content: string }) {
   return (
     <li className="relative flex flex-row items-center gap-3">
       <CheckBox id={id} name={name} required={true} />
@@ -31,15 +23,7 @@ function RequiredItem({
   );
 }
 
-function OptionalItem({
-  id,
-  name,
-  content,
-}: {
-  id: string;
-  name: string;
-  content: string;
-}) {
+function OptionalItem({ id, name, content }: { id: string; name: string; content: string }) {
   return (
     <div className="relative flex flex-row items-center gap-3">
       <CheckBox id={id} name={name} />
@@ -79,19 +63,10 @@ function AgreeForm() {
       onSubmit={() => moveToPatternPage()}
     >
       <ol className="w-full flex flex-col gap-3">
-        {requiredItems.map((item) => (
-          <RequiredItem
-            key={item.id}
-            id={item.id}
-            name={item.name}
-            content={item.content}
-          />
+        {requiredItems.map(item => (
+          <RequiredItem key={item.id} id={item.id} name={item.name} content={item.content} />
         ))}
-        <OptionalItem
-          id={'agree-electric-document'}
-          name="agree-electric-document"
-          content="전자문서 약관동의"
-        />
+        <OptionalItem id={'agree-electric-document'} name="agree-electric-document" content="전자문서 약관동의" />
       </ol>
       <div className="flex w-full justify-end">
         <Button type="submit">확인</Button>
