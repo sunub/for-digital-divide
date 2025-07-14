@@ -8,7 +8,8 @@ export const Container = styled(FlexCenterDiv)`
   position: absolute;
   top: 3.5rem;
   left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
+  transform: translateX(-50%) translateY(10px);
   flex-direction: column;
   z-index: 1000;
 `;
@@ -20,8 +21,8 @@ export const Message = styled(motion.div)`
   align-items: center;
 
   width: 100%;
-  min-width: 20rem;
-  max-width: 40rem;
+  min-width: 25rem;
+  max-width: 25rem;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
   margin: 0.5rem;
@@ -66,4 +67,9 @@ export const SuccessIconContainer = styled(FlexCenterDiv)`
   gap: 0.25rem;
 `;
 
-export const Text = styled.p``;
+export const Text = styled.p`
+  width: 100%;
+  max-width: 20rem;
+  word-break: keep-all;
+  text-align: center;
+`;
