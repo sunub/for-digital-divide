@@ -1,8 +1,8 @@
-import { globSync } from 'glob';
 import fs from 'fs';
+import { globSync } from 'glob';
 import { HTMLElement, parse } from 'node-html-parser';
-import { Config as SVGOConfig, optimize } from 'svgo';
 import path from 'path';
+import { optimize, Config as SVGOConfig } from 'svgo';
 
 const svgoConfig: SVGOConfig = {
   plugins: [{ name: 'convertColors', params: { currentColor: true } }],
@@ -10,17 +10,15 @@ const svgoConfig: SVGOConfig = {
 const svgFiles = globSync('src/components/icons/*.svg');
 const symbols: string[] = [];
 
-svgFiles.forEach((file) => {
+svgFiles.forEach(file => {
   const code = fs.readFileSync(file, 'utf-8');
   const result = optimize(code, svgoConfig).data;
 
   const svgElement = parse(result).querySelector('svg') as HTMLElement;
-  const symbolElement = parse('<symbol/>').querySelector(
-    'symbol',
-  ) as HTMLElement;
+  const symbolElement = parse('<symbol/>').querySelector('symbol') as HTMLElement;
   const fileName = path.basename(file, '.svg');
 
-  svgElement.childNodes.forEach((child) => symbolElement.appendChild(child));
+  svgElement.childNodes.forEach(child => symbolElement.appendChild(child));
   symbolElement.setAttribute('id', fileName);
   if (svgElement.attributes.viewBox) {
     symbolElement.setAttribute('viewBox', svgElement.attributes.viewBox);
