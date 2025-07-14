@@ -31,7 +31,7 @@ function Username(props: UsernameProps) {
         onFocus={handleFocus}
         onBlur={handleBlur}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={e => setValue(e.target.value)}
         {...rest}
       />
       {value.length > 0 ? null : (
@@ -51,12 +51,21 @@ const InputWrapper = styled.div<{ $isFocused: boolean }>`
   grid: [username-input] 1fr / [username-input] 1fr;
   align-items: center;
   place-content: center;
-  border: 2px solid;
-  border-color: ${({ $isFocused }) =>
-    $isFocused ? 'var(--color-button)' : 'oklch(16.73% 0.005 83 / 20%)'};
+  border: 2px solid var(--color-button);
+  opacity: 0.4;
   border-radius: 1.25rem;
   padding: 8px 16px;
   gap: 4px;
+
+  transition: opacity 300ms ease-in-out;
+  will-change: opacity;
+  &:hover {
+    opacity: 1;
+  }
+  &:focus-within {
+    opacity: 1;
+    border-color: var(--color-button);
+  }
 `;
 
 const Input = styled.input`
@@ -83,12 +92,9 @@ const Placeholder = styled.div<{ $isFocus: boolean }>`
   pointer-events: none;
   user-select: none;
   will-change: transform, background, color;
-  background: ${(props) =>
-    props.$isFocus ? 'oklch(96.33% 0.017 294.49)' : 'transparent'};
-  color: ${(props) =>
-    props.$isFocus ? 'var(--color-button)' : 'var(--color-text)'};
-  transform: ${(props) =>
-    props.$isFocus ? 'translateY(-80%) translateX(2%) scale(0.8)' : 'none'};
+  background: ${props => (props.$isFocus ? 'oklch(96.33% 0.017 294.49)' : 'transparent')};
+  color: ${props => (props.$isFocus ? 'var(--color-button)' : 'var(--color-text)')};
+  transform: ${props => (props.$isFocus ? 'translateY(-80%) translateX(2%) scale(0.8)' : 'none')};
   transition:
     transform 200ms ease-in-out,
     background 200ms ease-in-out,

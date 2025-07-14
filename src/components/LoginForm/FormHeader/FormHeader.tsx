@@ -1,6 +1,6 @@
-import React from "react";
-import * as Styled from "./FormHeader.styled";
-import VisuallyHidden from "@compo/VisuallyHidden";
+import React from 'react';
+import VisuallyHidden from '@compo/VisuallyHidden';
+import * as Styled from './FormHeader.styled';
 
 function FormHeader({ title }: { title: string }) {
   return (

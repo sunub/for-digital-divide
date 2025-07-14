@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   grid-area: primary-header / main-start / primary-nav / main-end;
