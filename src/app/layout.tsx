@@ -1,5 +1,5 @@
 import './globals.css';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Gugi } from 'next/font/google';
 import { ReloadButton } from '@/components/ReloadButton';
 import { Stepper } from '@/components/Stepper/ui/Stepper';
@@ -23,7 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <JotaiProvider>
             <div id="_next">
               <div id="devsite-content">
-                <Stepper />
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Stepper />
+                </Suspense>
                 {children}
               </div>
               <ReloadButton />
