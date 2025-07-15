@@ -1,11 +1,12 @@
 'use server';
 
+import os from 'os';
 import path from 'path';
 import chalk from 'chalk';
 import Papa from 'papaparse';
 import ora from 'ora';
 import { createReadStream } from 'fs';
-import { readFile, mkdir } from 'fs/promises';
+import { readFile } from 'fs/promises';
 
 import { accountsService } from '@/entities/accounts/accounts.service';
 import { AccountsSchema, AccountType } from '@/entities/accounts/accounts.model';
@@ -17,9 +18,7 @@ import { getSessionCookieStorage } from '@/utils/cookies/sessionCookieStorage';
 import { generateAndWriteCsv } from '../scripts/generateTransactions.mjs';
 
 const isProduction = process.env.NODE_ENV === 'production';
-const dataFilePath = isProduction
-  ? '/tmp' // 배포 환경
-  : path.join(process.cwd(), 'prisma/data');
+const dataFilePath = os.tmpdir();
 
 function logMemoryUsage(label: string) {
   const memoryUsage = process.memoryUsage();
@@ -126,7 +125,7 @@ async function generateTransactions() {
   const transactionStream = readTransactions();
   const processOra = ora('📖 Reading and processing transaction data...').start();
 
-  const chunkedAndValidatedStream = map(validateAndFilterChunk, chunk(100, transactionStream));
+  const chunkedAndValidatedStream = map(validateAndFilterChunk, chunk(1000, transactionStream));
 
   let chunkCount = 0;
   const LOG_INTERVAL = 50;
@@ -155,36 +154,34 @@ async function generateTransactions() {
 
 export async function seedDemoAccountInfo() {
   const sessionCookie = await getSessionCookieStorage('en_session');
-  if (sessionCookie?.user_id) {
-    const accounts = await accountsService.findByUserId(sessionCookie.user_id);
-    if (accounts.length > 0) {
-      console.log(chalk.green.bold('Demo account already exists, skipping seeding.'));
-      return;
-    }
+  if (!sessionCookie) {
+    console.error('Session cookie not found. Cannot seed demo account info.');
+    return;
   }
 
-  console.log(chalk.blue.bold('--- Database Seeding Start ---'));
-  console.log(`▶️  Running in ${isProduction ? 'Production' : 'Development'} mode.`);
-  console.log(`📂 Using data path: ${dataFilePath}`);
+  const accounts = await accountsService.findByUserId(sessionCookie.user_id);
+  if (accounts.length === 0) {
+    console.log(chalk.blue.bold('--- Database Seeding Start ---'));
+    console.log(`▶️  Running in ${isProduction ? 'Production' : 'Development'} mode.`);
+    console.log(`📂 Using data path: ${dataFilePath}`);
 
-  // 로컬 환경일 경우에만 디렉토리 생성
-  if (!isProduction) {
-    try {
-      await mkdir(dataFilePath, { recursive: true });
-    } catch (error) {
-      console.error(chalk.red(`❌ Failed to create local directory: ${dataFilePath}`), error);
-      return;
-    }
+    logMemoryUsage('Initial State');
+
+    console.time(chalk.cyan('Account Seeding Duration'));
+    await generateAccounts();
+    console.timeEnd(chalk.cyan('Account Seeding Duration'));
+    logMemoryUsage('After Account Seeding');
   }
-
-  logMemoryUsage('Initial State');
-
-  console.time(chalk.cyan('Account Seeding Duration'));
-  await generateAccounts();
-  console.timeEnd(chalk.cyan('Account Seeding Duration'));
-  logMemoryUsage('After Account Seeding');
 
   console.log();
+
+  const accountNumber = accounts[0].account_number;
+  const transactions = await transactionsService.findByAccountNumber(Number(accountNumber.toString()));
+
+  if (transactions.length > 0) {
+    console.log(chalk.blue.bold('--- Transactions Already Seeded ---'));
+    return;
+  }
 
   await generateAndWriteCsv();
 
