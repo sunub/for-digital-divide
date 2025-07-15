@@ -1,12 +1,12 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-export function useRedirectDashboard(isSeedingProgress: boolean) {
+export function useRedirectDashboard(isSeedingCompleted: boolean) {
   const router = useRouter();
   useEffect(() => {
     router.prefetch('/dashboard');
-    if (isSeedingProgress) {
+    if (isSeedingCompleted) {
       router.push('/dashboard');
     }
-  }, [isSeedingProgress, router]);
+  }, [isSeedingCompleted, router]);
 }

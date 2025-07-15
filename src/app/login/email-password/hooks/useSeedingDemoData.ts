@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { seedDemoAccountInfo } from '@root/prisma/seed';
 
-export function useSeedingDemoData(isSeedingProgress: boolean, setIsSeedingProgress: (value: boolean) => void) {
+export function useSeedingDemoData(isSeedingProgress: boolean, onSeedingComplete: (completed: boolean) => void) {
   useEffect(() => {
-    (async () => {
-      if (isSeedingProgress) {
+    if (isSeedingProgress) {
+      (async () => {
+        console.log('데모 데이터 심고 있는 중~~~~~~~~');
         await seedDemoAccountInfo();
-        setIsSeedingProgress(false);
-      }
-    })();
-  }, [isSeedingProgress]);
+        onSeedingComplete(true);
+      })();
+    }
+  }, [isSeedingProgress, onSeedingComplete]);
 }

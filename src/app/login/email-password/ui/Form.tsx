@@ -16,6 +16,7 @@ import type { ActionState } from '../../types';
 export function Form({ children }: { children: React.ReactNode }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSeedingProgress, setIsSeedingProgress] = useState(false);
+  const [isSeedingCompleted, setIsSeedingCompleted] = useState(false);
   const [actionState, formAction, isPending] = useActionState<ActionState, FormData>(emailPasswordLoginAction, {
     status: 'idle',
     payload: [''],
@@ -23,8 +24,11 @@ export function Form({ children }: { children: React.ReactNode }) {
   });
 
   useFormActionToast(actionState, () => setIsSeedingProgress(true));
-  useSeedingDemoData(isSeedingProgress, setIsSeedingProgress);
-  useRedirectDashboard(isSeedingProgress);
+  useSeedingDemoData(isSeedingProgress, (completed) => {
+    setIsSeedingProgress(false);
+    setIsSeedingCompleted(completed);
+  });
+  useRedirectDashboard(isSeedingCompleted);
 
   return (
     <form id={'init-username-form'} action={formAction} className="flex flex-col place-content-center gap-3" noValidate>

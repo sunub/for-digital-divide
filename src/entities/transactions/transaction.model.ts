@@ -11,7 +11,7 @@ export const TransactionSchema = z.object({
   account_number: z.number().int(),
   amount: z.number().min(0),
   transaction_type: z.enum(TRNASACTION_CODES),
-  counterparty_account_number: z.number().int().optional(),
+  counterparty_account_number: z.number().int().optional().nullable(),
   description: z.string().max(255).optional(),
   occurred_at: z.date(),
 });
