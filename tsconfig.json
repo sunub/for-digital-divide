@@ -28,7 +28,8 @@
       "@tests/*": ["./tests/*"],
       "@root/*": ["./*"],
       "@entities/*": ["./src/entities/*"],
-      "@dashboard/*": ["./src/app/dashboard/*"]
+      "@dashboard/*": ["./src/app/dashboard/*"],
+      "@scripts/*": ["./scripts/*"]
     }
   },
   "ts-node": {
