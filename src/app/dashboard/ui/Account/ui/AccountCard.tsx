@@ -14,6 +14,16 @@ export default function AccountCard({
   balance: number;
   accountType: string;
 }) {
+  const formattedBalance = String(balance)
+    .split('')
+    .reverse()
+    .reduce((acc, digit, index) => {
+      if (index > 0 && index % 3 === 0) {
+        return `${digit},${acc}`;
+      }
+      return `${digit}${acc}`;
+    }, '');
+
   return (
     <Card>
       <AccountHeader>
@@ -28,7 +38,7 @@ export default function AccountCard({
       <AccountBalanceContainer>
         <AccountBalanceWrapper>
           <AccountBalance>
-            <RollingNumberList value={balance} />원
+            <RollingNumberList value={formattedBalance} />원
           </AccountBalance>
           <HideNumberButton>숨김</HideNumberButton>
         </AccountBalanceWrapper>

@@ -80,7 +80,9 @@ const CardContentContainer = styled.div`
   backdrop-filter: blur(10px);
   padding: 2px;
   background: rgba(255, 255, 255, 0.15);
-  transition: box-shadow 300ms ease, transform 100ms ease;
+  transition:
+    box-shadow 300ms ease,
+    transform 100ms ease;
 
   &:hover {
     box-shadow: var(--long-shadow);
