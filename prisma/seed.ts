@@ -1,3 +1,5 @@
+'use server';
+
 import path from 'path';
 import chalk from 'chalk';
 import Papa from 'papaparse';
@@ -11,6 +13,7 @@ import { transactionsService } from '@/entities/transactions/transaction.service
 import { TransactionSchema, type Transaction } from '@/entities/transactions/transaction.model';
 import { map } from '@/utils/iterable/map';
 import { chunk } from '@/utils/iterable/chunk';
+import { getSessionCookieStorage } from '@/utils/cookies/sessionCookieStorage';
 
 const dataFilePath = path.join(process.cwd(), 'prisma/data');
 
@@ -121,7 +124,6 @@ async function generateTransactions() {
         return;
       }
     }
-    // ✨ 메모리 측정 로직 추가
     chunkCount++;
     if (chunkCount % LOG_INTERVAL === 0) {
       logMemoryUsage(`Processing chunk #${chunkCount}`);
@@ -132,7 +134,16 @@ async function generateTransactions() {
   transactionsOra.succeed('🎉 Transactions seeded successfully');
 }
 
-(async () => {
+export async function seedDemoAccountInfo() {
+  const sessionCookie = await getSessionCookieStorage('en_session');
+  if (sessionCookie && sessionCookie.user_id) {
+    const accounts = await accountsService.findByUserId(sessionCookie.user_id);
+    if (accounts.length > 0) {
+      console.log(chalk.green.bold('Demo account already exists, skipping seeding.'));
+      return;
+    }
+  }
+
   console.log(chalk.blue.bold('--- Database Seeding Start ---'));
   logMemoryUsage('Initial State');
 
@@ -149,4 +160,4 @@ async function generateTransactions() {
   logMemoryUsage('After Transaction Seeding');
 
   console.log(chalk.green.bold('\n--- Database seeding completed successfully! ---'));
-})();
+}
