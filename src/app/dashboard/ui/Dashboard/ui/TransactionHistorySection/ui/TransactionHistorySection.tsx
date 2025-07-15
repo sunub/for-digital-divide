@@ -3,6 +3,7 @@ import { TransactionChart } from './TransactionChart';
 import type { TransactionList } from '@dashboard/ui/Dashboard/types';
 
 import type { AccountType } from '@/entities/accounts/accounts.model';
+import { TransactionChartCard } from './TransactionChart/ui/TransactionChartCard';
 
 export async function TransactionHistorySection({ account }: { account: AccountType }) {
   const transactionGen = await getTransactions(account.account_number);
@@ -21,5 +22,9 @@ export async function TransactionHistorySection({ account }: { account: AccountT
     description: tx.description ?? undefined,
   }));
 
-  return <TransactionChart transactionData={mappedTransactions} />;
+  return (
+    <TransactionChartCard>
+      <TransactionChart transactionData={mappedTransactions} />
+    </TransactionChartCard>
+  );
 }
