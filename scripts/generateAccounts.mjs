@@ -34,10 +34,13 @@ export async function generateAccountsCSV(user_id, count = 4) {
     csvRows.push(headers.map((h) => acc[h]).join(','));
   }
   const csvContent = csvRows.join('\n');
-  const outputPath = path.join(process.cwd(), '/prisma/data/accounts.csv');
 
-  // 기존 파일이 있으면 내용을 모두 덮어씀
-  fs.writeFileSync(outputPath, '', 'utf8'); // 내용 비우기
+  const baseDir = path.join(process.cwd(), 'prisma', 'data');
+  if (!fs.existsSync(baseDir)) {
+    fs.mkdirSync(baseDir, { recursive: true });
+  }
+  const outputPath = path.join(baseDir, 'accounts.csv');
+
   fs.writeFileSync(outputPath, csvContent, 'utf8');
   console.log('accounts.csv 파일이 새로 작성되었습니다:', outputPath);
 }
