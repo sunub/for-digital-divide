@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import Papa from 'papaparse';
 import ora from 'ora';
 import { createReadStream } from 'fs';
-import { readFile } from 'fs/promises';
+import { readFile, mkdir } from 'fs/promises';
 
 import { accountsService } from '@/entities/accounts/accounts.service';
 import { AccountsSchema, AccountType } from '@/entities/accounts/accounts.model';
@@ -14,8 +14,12 @@ import { TransactionSchema, type Transaction } from '@/entities/transactions/tra
 import { map } from '@/utils/iterable/map';
 import { chunk } from '@/utils/iterable/chunk';
 import { getSessionCookieStorage } from '@/utils/cookies/sessionCookieStorage';
+import { generateAndWriteCsv } from '../scripts/generateTransactions.mjs';
 
-const dataFilePath = path.join(process.cwd(), 'prisma/data');
+const isProduction = process.env.NODE_ENV === 'production';
+const dataFilePath = isProduction
+  ? '/tmp' // 배포 환경
+  : path.join(process.cwd(), 'prisma/data');
 
 function logMemoryUsage(label: string) {
   const memoryUsage = process.memoryUsage();
@@ -29,15 +33,25 @@ const transactionsOra = ora('💸 Seeding Transactions Start');
 async function readAccounts(): Promise<AccountType[]> {
   const readAccountsOra = ora('📖 Reading Accounts Data').start();
   const filePath = path.join(dataFilePath, 'accounts.csv');
-  const fileContent = (await readFile(filePath, 'utf-8')).trim();
-  const parsedData = Papa.parse(fileContent, { header: true });
-  readAccountsOra.succeed('🎉 Accounts data read successfully');
-  return parsedData.data as AccountType[];
+  try {
+    const fileContent = (await readFile(filePath, 'utf-8')).trim();
+    const parsedData = Papa.parse(fileContent, { header: true });
+    readAccountsOra.succeed(`🎉 Accounts data read successfully from ${filePath}`);
+    return parsedData.data as AccountType[];
+  } catch (error) {
+    readAccountsOra.fail(`❌ Failed to read accounts data from ${filePath}`);
+    console.error(error);
+    return [];
+  }
 }
 
 async function generateAccounts() {
   accountsOra.start();
   const accounts = await readAccounts();
+  if (accounts.length === 0) {
+    accountsOra.fail('No account data found to seed.');
+    return;
+  }
 
   const updateAccountsOra = ora('🔄 Validating and updating accounts data').start();
   for (const account of accounts) {
@@ -72,6 +86,12 @@ async function* readTransactions(): AsyncGenerator<Transaction> {
     header: true,
     dynamicTyping: true,
   });
+
+  fileStream.on('error', (err) => {
+    transactionsOra.fail(`❌ Failed to read transactions file: ${filePath}`);
+    console.error(err);
+  });
+
   const stream = fileStream.pipe(parseStream);
   for await (const row of stream) {
     yield row as Transaction;
@@ -84,7 +104,7 @@ async function validateTransaction(transaction: Transaction) {
     account_number: Number(transaction.account_number),
     amount: Number(transaction.amount),
     transaction_type: transaction.transaction_type,
-    counterparty_account_number: Number(transaction.counterparty_account_number),
+    counterparty_account_number: Number(transaction.counterparty_account_number) || null,
     description: transaction.description,
     occurred_at: transaction.occurred_at,
   });
@@ -98,8 +118,7 @@ async function validateTransaction(transaction: Transaction) {
 async function validateAndFilterChunk(transactionChunk: Transaction[]): Promise<Transaction[]> {
   const validationPromises = transactionChunk.map(validateTransaction);
   const validatedResults = await Promise.all(validationPromises);
-  const validTransactions = validatedResults.filter((t): t is Transaction => t !== null);
-  return validTransactions;
+  return validatedResults.filter((t): t is Transaction => t !== null);
 }
 
 async function generateTransactions() {
@@ -110,7 +129,7 @@ async function generateTransactions() {
   const chunkedAndValidatedStream = map(validateAndFilterChunk, chunk(100, transactionStream));
 
   let chunkCount = 0;
-  const LOG_INTERVAL = 50; // 50개 청크마다 메모리 로그 출력 (50 * 100 = 5000개 데이터 처리 시점)
+  const LOG_INTERVAL = 50;
 
   for await (const validTransactionChunk of chunkedAndValidatedStream) {
     if (validTransactionChunk.length > 0) {
@@ -136,7 +155,7 @@ async function generateTransactions() {
 
 export async function seedDemoAccountInfo() {
   const sessionCookie = await getSessionCookieStorage('en_session');
-  if (sessionCookie && sessionCookie.user_id) {
+  if (sessionCookie?.user_id) {
     const accounts = await accountsService.findByUserId(sessionCookie.user_id);
     if (accounts.length > 0) {
       console.log(chalk.green.bold('Demo account already exists, skipping seeding.'));
@@ -145,6 +164,19 @@ export async function seedDemoAccountInfo() {
   }
 
   console.log(chalk.blue.bold('--- Database Seeding Start ---'));
+  console.log(`▶️  Running in ${isProduction ? 'Production' : 'Development'} mode.`);
+  console.log(`📂 Using data path: ${dataFilePath}`);
+
+  // 로컬 환경일 경우에만 디렉토리 생성
+  if (!isProduction) {
+    try {
+      await mkdir(dataFilePath, { recursive: true });
+    } catch (error) {
+      console.error(chalk.red(`❌ Failed to create local directory: ${dataFilePath}`), error);
+      return;
+    }
+  }
+
   logMemoryUsage('Initial State');
 
   console.time(chalk.cyan('Account Seeding Duration'));
@@ -153,6 +185,8 @@ export async function seedDemoAccountInfo() {
   logMemoryUsage('After Account Seeding');
 
   console.log();
+
+  await generateAndWriteCsv();
 
   console.time(chalk.cyan('Transaction Seeding Duration'));
   await generateTransactions();

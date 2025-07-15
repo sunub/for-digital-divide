@@ -46,7 +46,8 @@
     ".next/types/**/*.ts",
     "scripts/seed.mjs",
     "./type.d.ts",
-    "scripts/generateTransactions.mjs"
+    "scripts/generateTransactions.mjs",
+    "eslint.config.mjs"
   ],
   "exclude": ["./node_modules"]
 }
