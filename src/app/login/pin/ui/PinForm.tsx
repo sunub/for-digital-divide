@@ -1,14 +1,19 @@
 'use client';
 
 import { KeypadInfo } from '@/utils/keypad';
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
-import { useToast } from '@/provider/toast/hooks/useToast';
+import { useActionState, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { PinNumpad } from './PinNumpad';
 import styled from 'styled-components';
-import { useNumpadStore } from '@/context/NumpadContext';
 import { pinLoginAction } from '../utils/pinLoginAction';
+
+import type { ActionState } from '../../types';
+import { useFormActionToast } from '@/shared/hooks/useFormActionToast';
+import { SubmittingStatus } from '../../email-password/ui/SubmittingStatus';
+import { ContentOpener } from '@/shared/layout/ui/ContentOpener';
+import { PinContent } from './PinContent';
+import { useSeedingDemoData } from '../../email-password/hooks/useSeedingDemoData';
+import { useRedirectDashboard } from '../../hooks/useRedirectDashboard';
 
 interface PinFormProps extends React.HTMLAttributes<HTMLFormElement> {
   padInfo: KeypadInfo;
@@ -16,9 +21,13 @@ interface PinFormProps extends React.HTMLAttributes<HTMLFormElement> {
 }
 
 export function PinForm({ padInfo, children, ...props }: PinFormProps) {
-  const showToast = useToast();
-  const router = useRouter();
-  const deleteNumpad = useNumpadStore((s) => s.deleteNumpad);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSeedingProgress, setIsSeedingProgress] = useState(false);
+  const [actionState, formAction, isPending] = useActionState<ActionState, FormData>(pinLoginAction, {
+    status: 'idle',
+    payload: [''],
+    currentStep: 'login',
+  });
 
   useEffect(() => {
     const drawerContent = document.getElementById('drawer-content');
@@ -28,22 +37,28 @@ export function PinForm({ padInfo, children, ...props }: PinFormProps) {
     createPortal(<PinNumpad padInfo={padInfo} />, drawerContent);
   }, []);
 
-  useEffect(() => {
-    router.prefetch('/dashboard');
-  }, []);
-
-  const handleAction = useCallback(async (formData: FormData) => {
-    const result = await pinLoginAction(formData);
-    deleteNumpad();
-    if (result.status == 'error') {
-      return showToast('error', result.payload);
-    }
-    showToast('success', '핀 로그인을 성공했습니다.');
-    router.push('/dashboard');
-  }, []);
+  useFormActionToast(actionState, () => setIsSeedingProgress(true));
+  useSeedingDemoData(isSeedingProgress, setIsSeedingProgress);
+  useRedirectDashboard(isSeedingProgress);
 
   return (
-    <Form className="device-form__drawer-container" id={'pinnumber-input'} action={handleAction} noValidate {...props}>
+    <Form
+      className="device-form__drawer-container"
+      id={'pinnumber-input'}
+      action={formAction}
+      noValidate
+      onSubmit={() => setIsSubmitting(true)}
+      {...props}
+    >
+      <ContentOpener />
+      <PinContent>
+        <SubmittingStatus
+          actionState={actionState}
+          isPending={isPending}
+          isSeedingProgress={isSeedingProgress}
+          isSubmitting={isSubmitting}
+        />
+      </PinContent>
       {children}
     </Form>
   );

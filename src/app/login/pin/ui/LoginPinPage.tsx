@@ -1,10 +1,8 @@
 import React from 'react';
 import { NumpadProvider } from '@/context/NumpadContext';
 import { DeviceDrawer } from '@/shared/layout';
-import { PinContent } from './PinContent';
 import { PinForm } from './PinForm';
 import { PinNumpad } from './PinNumpad';
-import { ContentOpener } from '@/shared/layout/ui/ContentOpener';
 import { DrawerIndicator } from './DrawerIndicator';
 
 async function getPadInfo() {
@@ -25,8 +23,6 @@ export default async function LoginPinPage() {
   return (
     <NumpadProvider>
       <PinForm padInfo={registerPadInfo}>
-        <ContentOpener />
-        <PinContent />
         <DrawerIndicator />
         <DeviceDrawer>
           <PinNumpad padInfo={registerPadInfo} />

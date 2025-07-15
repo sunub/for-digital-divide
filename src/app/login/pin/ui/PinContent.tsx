@@ -8,7 +8,7 @@ import { FlexCenterDiv } from '@/shared/style/component/div';
 
 const gugi = Gugi({ subsets: ['latin'], weight: '400' });
 
-export function PinContent() {
+export function PinContent({ children }: { children?: React.ReactNode }) {
   const pin = useNumpadStore((s) => s.numpad);
 
   return (
@@ -32,6 +32,7 @@ export function PinContent() {
           </Pointer>
         ))}
       </PointerWrapper>
+      {children}
     </RootContainer>
   );
 }
