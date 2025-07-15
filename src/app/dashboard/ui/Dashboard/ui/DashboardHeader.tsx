@@ -8,6 +8,7 @@ import { motion, useAnimate } from 'motion/react';
 import { Tooltip } from '@/components/Tooltip';
 import { useSearchParams } from 'next/navigation';
 import Spacer from '@/constants/Spacer';
+import { logoutAction } from '../utils/logoutAction';
 
 export function DashboardHeader({ username }: { username: string | null }) {
   const searchParams = useSearchParams();
@@ -51,7 +52,9 @@ export function DashboardHeader({ username }: { username: string | null }) {
           <HeaderRightContainer>
             <Tooltip>
               <Tooltip.Trigger>
-                <LogOutIcon size={18} strokeWidth={3} />
+                <LogOutButton onClick={() => logoutAction()}>
+                  <LogOutIcon size={18} strokeWidth={3} />
+                </LogOutButton>
               </Tooltip.Trigger>
               <Tooltip.Content>로그아웃</Tooltip.Content>
             </Tooltip>
@@ -72,6 +75,9 @@ const HeaderContainer = styled(FlexDivideDiv)`
   margin-top: 1rem;
 
   color: color-mix(in oklch, var(--color-accent), oklch(0.4002 0.206 288.34));
+  background-color: color-mix(in oklch, var(--color-primary), transparent);
+  backdrop-filter: blur(5px);
+  border-radius: 1rem;
 `;
 
 const HeaderLeftContainer = styled(FlexCenterDiv)`
@@ -103,4 +109,16 @@ const HandIconContainer = styled(motion.div)`
 const EmptyHeaderContainer = styled.div`
   grid-area: dashboard-header / 1;
   ${fullSize};
+`;
+
+const LogOutButton = styled.button`
+  &:hover {
+    background-color: var(--color-button-hover);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  & > svg {
+    color: var(--color-text);
+    transition: color 200ms ease-in-out;
+  }
 `;
