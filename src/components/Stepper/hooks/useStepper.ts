@@ -1,23 +1,25 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { stepperAtom } from '../store/atom';
 
 export function useStepper() {
   const [, setStepper] = useAtom(stepperAtom);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentPath = pathname + (searchParams.size !== 0 ? `?${searchParams.toString()}` : '');
 
   useEffect(() => {
     updateStep();
-  }, [pathname]);
+  }, [pathname, searchParams]);
 
   const updateStep = () =>
     setStepper((prev) => {
       const steps = prev.steps;
       const currentStepIndex = steps.findIndex((s) => {
-        return s.path === pathname;
+        return s.path === currentPath;
       });
       return {
         currentStep: currentStepIndex,

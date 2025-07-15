@@ -1,60 +1,79 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { stepperAtom } from '../store/atom';
-import { CheckIcon, PickaxeIcon } from 'lucide-react';
+import { CheckIcon } from 'lucide-react';
+import { Loading } from '@/components/Loading';
+import { usePathname } from 'next/navigation';
+import { useStepper } from '../hooks/useStepper';
 
 export const CONFIRM_COLOR = 'oklch(0.404 0.2121 288.17775174927874)';
 
+function StepIcon({ done }: { done: boolean }) {
+  return (
+    <IconContainer>
+      <Circle $done={done} />
+      {done && (
+        <CheckIconContainer>
+          <CheckIcon size={10} color={CONFIRM_COLOR} strokeWidth={4} />
+        </CheckIconContainer>
+      )}
+    </IconContainer>
+  );
+}
+
+function StepItem({
+  step,
+  isCurrent,
+  isChild,
+}: {
+  step: { id: string; index: number; label: string; done: boolean };
+  isCurrent: boolean;
+  isChild: boolean;
+}) {
+  return (
+    <StepListItem $done={step.done} $isProgress={isCurrent} $isChild={isChild}>
+      {isCurrent ? (
+        <>
+          <span>{step.label}</span>
+          <LoadingContainer>
+            <Loading size={3} radius="2rem" />
+          </LoadingContainer>
+        </>
+      ) : (
+        <>
+          <StepIcon done={step.done} />
+          <span>{step.label}</span>
+        </>
+      )}
+    </StepListItem>
+  );
+}
+
 export function Stepper() {
+  const pathname = usePathname();
   const [stepper] = useAtom(stepperAtom);
 
+  useStepper();
+
+  if (pathname === '/dashboard') {
+    return (
+      <Container>
+        <StepListItem $done={true} $isProgress={false} $isChild={false}>
+          <StepIcon done={true} />
+          <span>대쉬보드</span>
+        </StepListItem>
+      </Container>
+    );
+  }
+
   return (
-    <Container className="flex flex-col gap-2">
+    <Container>
       {stepper.steps.map((step) => {
-        if (step.index === 3) {
-          return (
-            <ChildIndicator key={step.id} $done={step.done} $isProgress={true}>
-              {stepper.currentStep === step.index ? (
-                <PickaxeIcon size={16} color="var(--color-button)" style={{ marginRight: '4px' }} />
-              ) : (
-                <>
-                  <Circle $done={step.done} />
-                  {step.done && (
-                    <CheckIconContainer>
-                      <CheckIcon size={10} color={CONFIRM_COLOR} strokeWidth={4} />
-                    </CheckIconContainer>
-                  )}
-                </>
-              )}
-              <span>{step.label}</span>
-            </ChildIndicator>
-          );
-        }
-
-        if (stepper.currentStep === step.index) {
-          return (
-            <Indicator key={step.id} $done={step.done} $isProgress={true}>
-              <PickaxeIcon size={16} color="var(--color-button)" style={{ marginRight: '4px' }} />
-              <span>{step.label}</span>
-            </Indicator>
-          );
-        }
-
-        return (
-          <Indicator key={step.id} $done={step.done} $isProgress={false}>
-            <IconContainer>
-              <Circle $done={step.done} />
-              {step.done && (
-                <CheckIconContainer>
-                  <CheckIcon size={10} color={CONFIRM_COLOR} strokeWidth={4} />
-                </CheckIconContainer>
-              )}
-            </IconContainer>
-            <span>{step.label}</span>
-          </Indicator>
-        );
+        const isCurrent = stepper.currentStep === step.index;
+        const isChild = step.index === 3 || step.index === 4;
+        return <StepItem key={step.id} step={step} isCurrent={isCurrent} isChild={isChild} />;
       })}
     </Container>
   );
@@ -64,12 +83,14 @@ const Container = styled.ol`
   position: fixed;
   top: 50%;
   left: 1rem;
+  z-index: 10;
 
   display: flex;
-  width: 20cqw;
   flex-direction: column;
   gap: 8px;
+  width: 20cqw;
   padding: 16px;
+
   background-color: var(--color-background);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -79,31 +100,22 @@ const Container = styled.ol`
   transform: translateY(-50%);
 `;
 
-const Indicator = styled.li<{ $done: boolean; $isProgress: boolean }>`
+const StepListItem = styled.li<{ $done: boolean; $isProgress: boolean; $isChild: boolean }>`
   position: relative;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   color: ${({ $done, $isProgress }) => {
     if ($done) return CONFIRM_COLOR;
     if ($isProgress) return 'var(--color-button)';
     return 'color-mix(in oklch, var(--color-button) 30%, transparent )';
   }};
-`;
 
-const ChildIndicator = styled.li<{ $done: boolean; $isProgress: boolean }>`
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-  color: ${({ $done, $isProgress }) => {
-    if ($done) return CONFIRM_COLOR;
-    if ($isProgress) return 'var(--color-button)';
-    return 'color-mix(in oklch, var(--color-button) 30%, transparent )';
-  }};
-  transform: translateX(1rem);
+  ${({ $isChild }) =>
+    $isChild &&
+    css`
+      transform: translateX(1rem);
+    `}
 `;
 
 const Circle = styled.div<{ $done: boolean }>`
@@ -112,7 +124,6 @@ const Circle = styled.div<{ $done: boolean }>`
   background-color: ${({ $done }) =>
     $done ? CONFIRM_COLOR : 'color-mix(in oklch, var(--color-button) 30%, transparent )'};
   border-radius: 50%;
-  margin-right: 8px;
   flex-shrink: 0;
   transition: background-color 0.3s ease-in-out;
 `;
@@ -120,12 +131,12 @@ const Circle = styled.div<{ $done: boolean }>`
 const CheckIconContainer = styled.div`
   position: absolute;
   top: -4px;
-  left: 4px;
+  left: -2px;
 
   & > svg {
     position: absolute;
     top: 1px;
-    left: 4px;
+    left: 10px;
     z-index: 2;
   }
 
@@ -133,7 +144,7 @@ const CheckIconContainer = styled.div`
     content: '';
     position: absolute;
     top: -1px;
-    left: 3px;
+    left: 8px;
     width: 12px;
     height: 12px;
     border-radius: 50%;
@@ -145,4 +156,11 @@ const CheckIconContainer = styled.div`
 
 const IconContainer = styled.div`
   position: relative;
+`;
+
+const LoadingContainer = styled.div`
+  position: relative;
+  top: -2px;
+  max-width: 50px;
+  margin-left: -4px;
 `;

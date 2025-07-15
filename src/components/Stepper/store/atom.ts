@@ -18,43 +18,43 @@ const StepperSchema = z.object({
 
 type StepperType = z.infer<typeof StepperSchema>;
 
+// {
+//   id: 'sign-up-stepper',
+//   label: '회원가입',
+//   done: false,
+//   index: 2,
+//   path: '/sign-up',
+// },
+// {
+//   id: 'sign-up-user-stepper',
+//   label: '사용자 이름 설정',
+//   done: false,
+//   index: 3,
+//   path: '/sign-up/register-user',
+// },
 export const STEPPERS_MAP: StepperType['steps'] = [
   { id: 'root-stepper', label: '시작', done: false, index: 0, path: '/' },
   { id: 'intro-stepper', label: '소개', done: false, index: 1, path: '/intro' },
   {
-    id: 'sign-up-stepper',
-    label: '회원가입',
-    done: false,
-    index: 2,
-    path: '/sign-up',
-  },
-  {
-    id: 'sign-up-user-stepper',
-    label: '사용자 이름 설정',
-    done: false,
-    index: 3,
-    path: '/sign-up/register-user',
-  },
-  {
     id: 'login-stepper',
     label: '로그인',
     done: false,
-    index: 4,
-    path: '/dashboard/login',
+    index: 2,
+    path: '/login',
   },
   {
     id: 'login-email-stepper',
     label: 'Email 비밀번호 로그인',
     done: false,
-    index: 5,
-    path: '/dashboard/login/email',
+    index: 3,
+    path: '/login?method=email',
   },
   {
     id: 'login-pin-stepper',
-    label: '로그인 PIN 설정',
+    label: 'PIN 로그인',
     done: false,
-    index: 6,
-    path: '/dashboard/login/pin',
+    index: 4,
+    path: '/login?method=pin',
   },
 ];
 

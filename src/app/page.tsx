@@ -3,13 +3,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from '@/components/Button/Default';
-import { useStepper } from '@/components/Stepper/hooks/useStepper';
 import Spacer from '@/constants/Spacer';
 import { navigate } from '@/shared/utils/navigate';
 import { useHistory } from '@/shared/hooks/useHistory';
 
 function InitPage() {
-  const { updateStep } = useStepper();
   const { add } = useHistory();
 
   return (
@@ -30,7 +28,6 @@ function InitPage() {
           <Spacer size={32} axis="vertical" />
           <Button
             onClick={() => {
-              updateStep();
               add(new URL('/', window.location.href).toString());
               navigate('/intro');
             }}

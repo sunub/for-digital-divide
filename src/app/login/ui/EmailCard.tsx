@@ -6,11 +6,9 @@ import { CardLayout } from './CardLayout';
 import { CardContent } from './CardContent';
 import { CircleUserIcon } from 'lucide-react';
 import { HoveringTextField } from './HoveringTextField';
-import { useStepper } from '@/components/Stepper/hooks/useStepper';
 
 export function EmailCard() {
   const [isHover, setIsHover] = useState(false);
-  useStepper();
 
   return (
     <CardLayout>
