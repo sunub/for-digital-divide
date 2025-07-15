@@ -7,6 +7,8 @@ type TooltipContextValue = {
   isVisible: boolean;
   toggleVisible: () => void;
   rootContainerRef: React.RefObject<HTMLDivElement | null>;
+  triggerRef: React.RefObject<HTMLDivElement | null>;
+  setTriggerRef: (ref: React.RefObject<HTMLDivElement | null>) => void;
 };
 
 export const TooltipContext = createContext<TooltipContextValue | null>(null);
@@ -21,10 +23,15 @@ export const useTooltipContext = () => {
 
 export function TooltipProvider({ children }: { children: React.ReactNode }) {
   const rootContainerRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisible = useCallback(() => {
-    setIsVisible(prev => !prev);
+    setIsVisible((prev) => !prev);
+  }, []);
+
+  const setTriggerRef = useCallback((ref: React.RefObject<HTMLDivElement | null>) => {
+    triggerRef.current = ref.current;
   }, []);
 
   const value = useMemo(
@@ -32,8 +39,10 @@ export function TooltipProvider({ children }: { children: React.ReactNode }) {
       isVisible,
       toggleVisible,
       rootContainerRef,
+      triggerRef,
+      setTriggerRef,
     }),
-    [isVisible, toggleVisible]
+    [isVisible, toggleVisible, setTriggerRef],
   );
 
   return (

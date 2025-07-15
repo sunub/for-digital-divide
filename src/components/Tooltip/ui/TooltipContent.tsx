@@ -9,8 +9,8 @@ import { useIsMounted } from '@/shared/hooks/useIsMounted';
 
 export function TooltipContent({ children }: { children: React.ReactNode }) {
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const { rootContainerRef, isVisible } = useTooltipContext();
-  const { top, left, triangleTop } = useTooltipPosition(rootContainerRef);
+  const { triggerRef, isVisible } = useTooltipContext();
+  const { top, left, triangleTop } = useTooltipPosition(triggerRef);
   const isMounted = useIsMounted();
 
   if (!isMounted) return null;
@@ -25,7 +25,7 @@ export function TooltipContent({ children }: { children: React.ReactNode }) {
     >
       {children}
     </Container>,
-    document.getElementById('tooltip-root') || document.body
+    document.getElementById('tooltip-root') || document.body,
   );
 }
 
@@ -62,12 +62,12 @@ const Container = styled.div<{ $isVisible: boolean; $top: number; $left: number;
   &::before {
     content: '';
     position: absolute;
-    top: ${({ $triangleTop }) => $triangleTop}px;
+    top: ${({ $triangleTop }) => $triangleTop + 0.5}px;
     left: 50%;
     transform: translateX(-50%);
     background-color: var(--color-accent);
-    width: var(--tooltip-triangle-width);
-    height: var(--tooltip-triangle-height);
+    width: var(--tooltip-triangle-width, 16px);
+    height: var(--tooltip-triangle-height, 8px);
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   }
 `;

@@ -18,12 +18,12 @@ export function useTooltipPosition(rootContainerRef: React.RefObject<HTMLElement
       return;
     }
 
-    const rootContainer = rootContainerRef.current;
-    const box = rootContainer.getBoundingClientRect();
+    const triggerElement = rootContainerRef.current;
+    const box = triggerElement.getBoundingClientRect();
 
     const newLeft = box.left + box.width / 2;
-    const newTop = box.top + box.height + SPACING * 2;
-    const newTriangleTop = -Math.floor(Math.floor(box.height) / 2) + 1;
+    const newTop = box.bottom + SPACING;
+    const newTriangleTop = -SPACING;
 
     setLeft(newLeft);
     setTop(newTop);
@@ -36,10 +36,12 @@ export function useTooltipPosition(rootContainerRef: React.RefObject<HTMLElement
   useEffect(() => {
     updatePosition();
     window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition);
     return () => {
       window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition);
     };
-  }, []);
+  }, [updatePosition]);
 
   return {
     top,
