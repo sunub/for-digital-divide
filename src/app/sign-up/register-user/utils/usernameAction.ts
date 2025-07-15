@@ -6,6 +6,8 @@ import { cookies } from 'next/headers';
 import { userService } from '@entities/users/users.service';
 import { authMethodsService } from '@/entities/auth_methods/auth_methods.service';
 import { createCookieStorage } from '@/utils/cookies/createCookieStorage';
+import { generateAccountsCSV } from '@scripts/generateAccounts.mjs';
+import { ActionState } from '@/app/login/types';
 
 const USERNAME_ERROR_MESSAGE = '사용자 이름이 올바르지 않습니다.';
 const EMAIL_ERROR_MESSAGE = '이메일 형식이 올바르지 않습니다.';
@@ -14,7 +16,7 @@ const PASSWORD_REGEXES = [/[A-Z]/, /[a-z]/, /[0-9]/, /[^A-Za-z0-9]/];
 
 const formSchema = z.object({
   username: z.string().refine(
-    val => {
+    (val) => {
       if (val.length < 2 || val.length > 20) {
         return false;
       }
@@ -25,7 +27,7 @@ const formSchema = z.object({
     },
     {
       error: USERNAME_ERROR_MESSAGE,
-    }
+    },
   ),
   email: z
     .email({
@@ -38,13 +40,13 @@ const formSchema = z.object({
     .string()
     .trim()
     .refine(
-      val => {
-        if (val.length < 8 || !PASSWORD_REGEXES.every(regex => regex.test(val))) {
+      (val) => {
+        if (val.length < 8 || !PASSWORD_REGEXES.every((regex) => regex.test(val))) {
           return false;
         }
         return true;
       },
-      { error: PASSWORD_ERROR_MESSAGE }
+      { error: PASSWORD_ERROR_MESSAGE },
     ),
 });
 
@@ -54,7 +56,7 @@ type FormInput = {
   password: string;
 };
 
-async function usernameAction(_: unknown, formData: FormData) {
+async function usernameAction(prevState: ActionState, formData: FormData): Promise<ActionState> {
   const rawUsername = formData.get('username');
   const rawEmail = formData.get('email');
   const rawPassword = formData.get('password');
@@ -68,8 +70,9 @@ async function usernameAction(_: unknown, formData: FormData) {
   const parsedFormData = formSchema.safeParse(input);
   if (!parsedFormData.success) {
     return {
+      ...prevState,
       status: 'error',
-      payload: parsedFormData.error.issues.map(issue => issue.message),
+      payload: parsedFormData.error.issues.map((issue) => issue.message),
     };
   }
 
@@ -77,6 +80,7 @@ async function usernameAction(_: unknown, formData: FormData) {
   const sessionCookie = cookieStore.get('en_session');
   if (sessionCookie) {
     return {
+      ...prevState,
       status: 'success',
       payload: ['기존의 세션이 존재합니다. 새로 가입할 필요가 없습니다.'],
     };
@@ -98,10 +102,13 @@ async function usernameAction(_: unknown, formData: FormData) {
     { user_id: user.user_id, provider_uid },
     {
       name: 'rg_token',
-    }
+    },
   );
 
+  await generateAccountsCSV(user.user_id);
+
   return {
+    ...prevState,
     status: 'success',
     payload: ['사용자 이름이 성공적으로 등록되었습니다.'],
   };
