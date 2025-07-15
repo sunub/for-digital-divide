@@ -1,7 +1,6 @@
 'use client';
 
 import { FormStatus, useFormStatus } from 'react-dom';
-import { useStepper } from '@/components/Stepper/hooks/useStepper';
 import { Button } from '@/components/ui/button';
 import { StatusButton } from '@/components/ui/status-button';
 import { useNumpadStore } from '@/context/NumpadContext';
@@ -47,7 +46,7 @@ function PadButton({ shape, x, y, onClick }: { shape: string; x: number; y: numb
 }
 
 function Numpad({ keypad, prefix }: { keypad: KeypadDetail; prefix: string }) {
-  const updateNumpad = useNumpadStore(s => s.updateNumpad);
+  const updateNumpad = useNumpadStore((s) => s.updateNumpad);
   return (
     <div className="flex flex-col gap-[2px]">
       {keypad.svgGrid.map((row, i) => (
@@ -70,7 +69,7 @@ function Numpad({ keypad, prefix }: { keypad: KeypadDetail; prefix: string }) {
 }
 
 function Buttons({ status }: { status: FormStatus }) {
-  const deleteNumpad = useNumpadStore(s => s.deleteNumpad);
+  const deleteNumpad = useNumpadStore((s) => s.deleteNumpad);
 
   return (
     <div className="flex flex-row justify-center w-full h-full gap-4">
@@ -80,6 +79,7 @@ function Buttons({ status }: { status: FormStatus }) {
         status={status.pending ? 'pending' : 'idle'}
         variant={'default'}
         disabled={status.pending}
+        onClick={deleteNumpad}
       >
         확인
       </StatusButton>
@@ -93,7 +93,6 @@ function Buttons({ status }: { status: FormStatus }) {
 export function PinNumpad({ padInfo }: { padInfo: KeypadInfo }) {
   const status = useFormStatus();
   const { keypad } = padInfo;
-  useStepper();
 
   const prefix = nanoid();
   return (
