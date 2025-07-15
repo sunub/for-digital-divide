@@ -74,6 +74,7 @@ export const Container = styled.div`
   height: 75cqh;
   border-radius: 50px;
   overflow: hidden;
+  z-index: 100;
 `;
 
 export const Frame = styled.div`
