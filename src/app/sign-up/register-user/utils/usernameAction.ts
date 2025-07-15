@@ -6,7 +6,6 @@ import { cookies } from 'next/headers';
 import { userService } from '@entities/users/users.service';
 import { authMethodsService } from '@/entities/auth_methods/auth_methods.service';
 import { createCookieStorage } from '@/utils/cookies/createCookieStorage';
-import { generateAccountsCSV } from '@scripts/generateAccounts.mjs';
 import { ActionState } from '@/app/login/types';
 
 const USERNAME_ERROR_MESSAGE = '사용자 이름이 올바르지 않습니다.';
@@ -104,8 +103,6 @@ async function usernameAction(prevState: ActionState, formData: FormData): Promi
       name: 'rg_token',
     },
   );
-
-  await generateAccountsCSV(user.user_id);
 
   return {
     ...prevState,

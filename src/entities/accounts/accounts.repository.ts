@@ -8,6 +8,13 @@ export const accountsRepository = {
     });
   },
 
+  async updateByAccountNumber(account_number: number, data: Partial<AccountType>) {
+    return prisma.accounts.update({
+      where: { account_number },
+      data,
+    });
+  },
+
   async create(data: AccountType) {
     return prisma.accounts.create({
       data,

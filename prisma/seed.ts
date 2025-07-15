@@ -1,24 +1,21 @@
 'use server';
 
-import os from 'os';
-import path from 'path';
 import chalk from 'chalk';
-import Papa from 'papaparse';
 import ora from 'ora';
-import { createReadStream } from 'fs';
-import { readFile } from 'fs/promises';
 
 import { accountsService } from '@/entities/accounts/accounts.service';
-import { AccountsSchema, AccountType } from '@/entities/accounts/accounts.model';
+import { AccountsSchema } from '@/entities/accounts/accounts.model';
 import { transactionsService } from '@/entities/transactions/transaction.service';
 import { TransactionSchema, type Transaction } from '@/entities/transactions/transaction.model';
 import { map } from '@/utils/iterable/map';
 import { chunk } from '@/utils/iterable/chunk';
 import { getSessionCookieStorage } from '@/utils/cookies/sessionCookieStorage';
-import { generateAndWriteCsv } from '../scripts/generateTransactions.mjs';
+import { generateTransactions } from '../scripts/generateTransactions.mjs';
+import { generateAccounts } from '@root/scripts/generateAccounts.mjs';
+
+import type { AccountType } from '@/entities/accounts/accounts.model';
 
 const isProduction = process.env.NODE_ENV === 'production';
-const dataFilePath = os.tmpdir();
 
 function logMemoryUsage(label: string) {
   const memoryUsage = process.memoryUsage();
@@ -29,30 +26,13 @@ function logMemoryUsage(label: string) {
 const accountsOra = ora('💳 Seeding Accounts Start');
 const transactionsOra = ora('💸 Seeding Transactions Start');
 
-async function readAccounts(): Promise<AccountType[]> {
-  const readAccountsOra = ora('📖 Reading Accounts Data').start();
-  const filePath = path.join(dataFilePath, 'accounts.csv');
-  try {
-    const fileContent = (await readFile(filePath, 'utf-8')).trim();
-    const parsedData = Papa.parse(fileContent, { header: true });
-    readAccountsOra.succeed(`🎉 Accounts data read successfully from ${filePath}`);
-    return parsedData.data as AccountType[];
-  } catch (error) {
-    readAccountsOra.fail(`❌ Failed to read accounts data from ${filePath}`);
-    console.error(error);
-    return [];
-  }
-}
-
-async function generateAccounts() {
+async function seedAccounts(userId: number) {
   accountsOra.start();
-  const accounts = await readAccounts();
-  if (accounts.length === 0) {
-    accountsOra.fail('No account data found to seed.');
-    return;
-  }
+  const accounts = generateAccounts(userId, 4);
 
   const updateAccountsOra = ora('🔄 Validating and updating accounts data').start();
+  const createdAccounts = [];
+
   for (const account of accounts) {
     const parsedAccount = AccountsSchema.safeParse({
       account_number: Number(account.account_number),
@@ -65,39 +45,34 @@ async function generateAccounts() {
       updateAccountsOra.fail('❌ Invalid account data');
       console.error(parsedAccount.error);
       accountsOra.fail();
-      return;
+      return [];
     }
 
     const existingAccount = await accountsService.findByAccountNumber(parsedAccount.data.account_number);
     if (existingAccount) {
+      createdAccounts.push(existingAccount);
       continue;
     }
-    await accountsService.create(parsedAccount.data);
+
+    const newAccount = await accountsService.create(parsedAccount.data);
+    createdAccounts.push(newAccount);
   }
   updateAccountsOra.succeed('✅ Accounts data validated and updated successfully');
   accountsOra.succeed('🎉 Accounts seeded successfully');
+  return createdAccounts;
 }
 
-async function* readTransactions(): AsyncGenerator<Transaction> {
-  const filePath = path.join(dataFilePath, 'transactions.csv');
-  const fileStream = createReadStream(filePath);
-  const parseStream = Papa.parse(Papa.NODE_STREAM_INPUT, {
-    header: true,
-    dynamicTyping: true,
-  });
-
-  fileStream.on('error', (err) => {
-    transactionsOra.fail(`❌ Failed to read transactions file: ${filePath}`);
-    console.error(err);
-  });
-
-  const stream = fileStream.pipe(parseStream);
-  for await (const row of stream) {
-    yield row as Transaction;
-  }
+interface GeneratedTransaction {
+  transaction_id: number;
+  account_number: number;
+  amount: number;
+  transaction_type: string;
+  description: string;
+  occurred_at: string;
+  counterparty_account_number?: number;
 }
 
-async function validateTransaction(transaction: Transaction) {
+async function validateTransaction(transaction: GeneratedTransaction) {
   const parsedTransaction = TransactionSchema.safeParse({
     transaction_id: Number(transaction.transaction_id),
     account_number: Number(transaction.account_number),
@@ -105,7 +80,7 @@ async function validateTransaction(transaction: Transaction) {
     transaction_type: transaction.transaction_type,
     counterparty_account_number: Number(transaction.counterparty_account_number) || null,
     description: transaction.description,
-    occurred_at: transaction.occurred_at,
+    occurred_at: new Date(transaction.occurred_at),
   });
   if (!parsedTransaction.success) {
     console.error(parsedTransaction.error);
@@ -114,18 +89,33 @@ async function validateTransaction(transaction: Transaction) {
   return parsedTransaction.data;
 }
 
-async function validateAndFilterChunk(transactionChunk: Transaction[]): Promise<Transaction[]> {
+async function validateAndFilterChunk(transactionChunk: GeneratedTransaction[]): Promise<Transaction[]> {
   const validationPromises = transactionChunk.map(validateTransaction);
   const validatedResults = await Promise.all(validationPromises);
   return validatedResults.filter((t): t is Transaction => t !== null);
 }
 
-async function generateTransactions() {
+async function seedTransactions(accounts: unknown[]) {
   transactionsOra.start();
-  const transactionStream = readTransactions();
-  const processOra = ora('📖 Reading and processing transaction data...').start();
+  const processOra = ora('📊 Generating transaction data...').start();
 
-  const chunkedAndValidatedStream = map(validateAndFilterChunk, chunk(1000, transactionStream));
+  console.log(`🔢 Starting transaction generation for ${(accounts as unknown[]).length} accounts`);
+
+  const { transactions, updatedAccounts } = await generateTransactions(accounts as object[]);
+
+  console.log(`💰 Updating account balances for ${(updatedAccounts as unknown[]).length} accounts`);
+
+  for (const account_info of updatedAccounts as AccountType[]) {
+    const { account_number, balance, ...data } = account_info;
+    const limitedBalance = Math.min(Math.max(balance, -99999999999), 99999999999);
+    console.log(`📝 Updating account ${account_number} with balance: ${limitedBalance}`);
+    await accountsService.updateByAccountNumber(account_number, { ...data, balance: limitedBalance });
+  }
+
+  processOra.text = '🔄 Processing and validating transactions...';
+  console.log(`📋 Processing ${(transactions as unknown[]).length} transactions`);
+
+  const chunkedAndValidatedStream = map(validateAndFilterChunk, chunk(500, transactions as GeneratedTransaction[]));
 
   let chunkCount = 0;
   const LOG_INTERVAL = 50;
@@ -159,16 +149,17 @@ export async function seedDemoAccountInfo() {
     return;
   }
 
-  const accounts = await accountsService.findByUserId(sessionCookie.user_id);
-  if (accounts.length === 0) {
+  const existingAccounts = await accountsService.findByUserId(sessionCookie.user_id);
+  let accounts = existingAccounts;
+
+  if (existingAccounts.length === 0) {
     console.log(chalk.blue.bold('--- Database Seeding Start ---'));
     console.log(`▶️  Running in ${isProduction ? 'Production' : 'Development'} mode.`);
-    console.log(`📂 Using data path: ${dataFilePath}`);
 
     logMemoryUsage('Initial State');
 
     console.time(chalk.cyan('Account Seeding Duration'));
-    await generateAccounts();
+    accounts = await seedAccounts(sessionCookie.user_id);
     console.timeEnd(chalk.cyan('Account Seeding Duration'));
     logMemoryUsage('After Account Seeding');
   }
@@ -177,16 +168,15 @@ export async function seedDemoAccountInfo() {
 
   const accountNumber = accounts[0].account_number;
   const transactions = await transactionsService.findByAccountNumber(Number(accountNumber.toString()));
+  console.log('ExistingAccounts Transaction', transactions.length);
 
   if (transactions.length > 0) {
     console.log(chalk.blue.bold('--- Transactions Already Seeded ---'));
     return;
   }
 
-  await generateAndWriteCsv();
-
   console.time(chalk.cyan('Transaction Seeding Duration'));
-  await generateTransactions();
+  await seedTransactions(accounts);
   console.timeEnd(chalk.cyan('Transaction Seeding Duration'));
   logMemoryUsage('After Transaction Seeding');
 

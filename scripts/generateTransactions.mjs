@@ -1,14 +1,6 @@
-import fs from 'fs/promises';
-import path from 'path';
-import os from 'os';
-
 const isProduction = process.env.NODE_ENV === 'production';
-const OUTPUT_DIR = os.tmpdir();
-const NUM_TRANSACTIONS = 5000;
-const TRANSACTIONS_FILE = 'transactions.csv';
-const ACCOUNTS_FILE = 'accounts.csv';
+const NUM_TRANSACTIONS = 1000; // 5000개에서 1000개로 감소
 
-// --- Helper Functions ---
 const COUNTERPARTY_ACCOUNTS = [330111222333, 550987654321, 770123456789, 660555444333];
 const TRANSACTION_INFO = {
   DEPOSIT: ['월급 입금', '보너스 입금', '자금 이체', '부업 수입', '배당금 입금'],
@@ -31,96 +23,57 @@ const getDayOfWeekMultiplier = (dayOfWeek) =>
 const getAmountRange = (transactionType) => {
   switch (transactionType) {
     case 'DEPOSIT':
-      return { min: 50000, max: 3000000 };
+      return { min: 50000, max: 500000 };
     case 'WITHDRAWAL':
-      return { min: 10000, max: 500000 };
+      return { min: 10000, max: 200000 };
     case 'TRANSFER':
-      return { min: 20000, max: 1000000 };
+      return { min: 20000, max: 300000 };
     case 'PAYMENT':
-      return { min: 5000, max: 300000 };
+      return { min: 5000, max: 100000 };
     default:
-      return { min: 10000, max: 100000 };
+      return { min: 10000, max: 50000 };
   }
 };
 const getRandomTransactionType = (accountType) => {
   const allowedTypes = ALLOWED_TRANSACTIONS[accountType] || [];
-  return allowedTypes.length > 0 ? getRandomItem(allowedTypes) : 'DEPOSIT';
+  if (allowedTypes.length === 0) return 'DEPOSIT';
+
+  // 계좌 타입별 거래 확률 가중치 (현실적인 패턴 반영)
+  const weights = {
+    CHECKING: { DEPOSIT: 0.15, WITHDRAWAL: 0.35, TRANSFER: 0.25, PAYMENT: 0.25 },
+    SAVINGS: { DEPOSIT: 0.3, WITHDRAWAL: 0.4, TRANSFER: 0.3 },
+    CREDIT: { PAYMENT: 0.7, WITHDRAWAL: 0.3 },
+    LOAN: { DEPOSIT: 1.0 },
+  };
+
+  const accountWeights = weights[accountType];
+  if (!accountWeights) return getRandomItem(allowedTypes);
+
+  const random = Math.random();
+  let cumulativeWeight = 0;
+
+  for (const [type, weight] of Object.entries(accountWeights)) {
+    cumulativeWeight += weight;
+    if (random <= cumulativeWeight && allowedTypes.includes(type)) {
+      return type;
+    }
+  }
+
+  return getRandomItem(allowedTypes);
 };
 
 /**
- * 계좌 정보를 파일에서 비동기적으로 읽어옵니다.
- * @returns {Promise<Array<Object>>} 계좌 정보 배열
+ * 거래 내역을 생성하는 메인 함수
+ * @param {Array<Object>} accounts - 계좌 정보 배열
+ * @returns {Promise<{transactions: Array<Object>, updatedAccounts: Array<Object>}>} 생성된 거래 내역과 업데이트된 계좌 정보
  */
-async function readAccountsFromCSV() {
-  const accountsPath = path.join(OUTPUT_DIR, ACCOUNTS_FILE);
-  try {
-    const csvContent = await fs.readFile(accountsPath, 'utf-8');
-    const lines = csvContent.trim().split('\n');
-    const header = lines.shift().split(',');
-    const accounts = lines.map((line) => {
-      const values = line.split(',');
-      const account = header.reduce((obj, key, index) => {
-        let value = values[index];
-        if (value?.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
-        obj[key] = value;
-        return obj;
-      }, {});
-      account.account_number = parseInt(account.account_number, 10);
-      account.user_id = parseInt(account.user_id, 10);
-      account.balance = parseInt(account.balance, 10);
-      return account;
-    });
-    console.log(`✅ 계좌 정보 로드 완료: ${accounts.length}개 계좌`);
-    return accounts;
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      console.error(`❌ 오류: 계좌 파일(${accountsPath})을 찾을 수 없습니다.`);
-    } else {
-      console.error(`❌ 계좌 파일을 읽는 중 오류 발생:`, error);
-    }
-    return [];
-  }
-}
-
-/**
- * 업데이트된 계좌 정보를 CSV에 비동기적으로 저장합니다.
- * @param {Array<Object>} accounts - 저장할 계좌 정보
- */
-async function writeAccountsToCSV(accounts) {
-  const accountsPath = path.join(OUTPUT_DIR, ACCOUNTS_FILE);
-  try {
-    const header = 'account_number,user_id,account_type,balance,created_at';
-    const rows = accounts.map(
-      (acc) => `${acc.account_number},${acc.user_id},${acc.account_type},${acc.balance},"${acc.created_at}"`,
-    );
-    await fs.writeFile(accountsPath, `${header}\n${rows.join('\n')}`, 'utf-8');
-    console.log(`\n✅ 계좌 잔액 업데이트 완료: ${accountsPath}`);
-  } catch (error) {
-    console.error(`❌ 계좌 파일을 쓰는 중 오류 발생:`, error);
-  }
-}
-
-/**
- * 거래 내역을 생성하고 CSV 파일로 저장하는 메인 함수
- */
-export async function generateAndWriteCsv() {
+export async function generateTransactions(accounts) {
   console.log(`\n▶️  실행 환경: ${isProduction ? 'Production' : 'Development'}`);
-  console.log(`📂 파일 저장 경로: ${OUTPUT_DIR}`);
+  console.log(`� 거래 내역 생성 시작: ${accounts.length}개 계좌`);
 
-  // 로컬 환경일 경우에만 디렉토리 생성
-  if (!isProduction) {
-    try {
-      await fs.mkdir(OUTPUT_DIR, { recursive: true });
-    } catch (error) {
-      console.error(`❌ 로컬 디렉토리(${OUTPUT_DIR}) 생성에 실패했습니다.`, error);
-      return;
-    }
-  }
-
-  const accounts = await readAccountsFromCSV();
   if (accounts.length === 0) {
-    console.error('거래 생성을 중단합니다. 계좌 정보를 먼저 생성해주세요.');
-    return;
+    console.error('거래 생성을 중단합니다. 계좌 정보를 먼저 제공해주세요.');
+    return { transactions: [], updatedAccounts: [] };
   }
 
   const accountBalances = new Map(accounts.map((acc) => [acc.account_number, acc.balance]));
@@ -130,78 +83,86 @@ export async function generateAndWriteCsv() {
   const startDate = new Date(now);
   startDate.setMonth(now.getMonth() - 6);
 
-  for (let i = 0; i < NUM_TRANSACTIONS; i++) {
-    const selectedAccount = getRandomItem(accounts);
-    const { account_number, account_type } = selectedAccount;
-    const transaction_type = getRandomTransactionType(account_type);
+  // 계좌별 거래 분배를 위한 설정
+  const transactionsPerAccount = Math.floor(NUM_TRANSACTIONS / accounts.length);
+  const extraTransactions = NUM_TRANSACTIONS % accounts.length;
+  const accountTransactionCounts = accounts.map(
+    (_, index) => transactionsPerAccount + (index < extraTransactions ? 1 : 0),
+  );
 
-    let currentBalance = accountBalances.get(account_number);
-    let amount = 0;
+  console.log(`📊 계좌별 거래 분배: ${accountTransactionCounts.join(', ')}건`);
 
-    // 출금/이체 시 잔액 부족으로 인한 무한 루프 방지 및 조정
-    if (['WITHDRAWAL', 'PAYMENT', 'TRANSFER'].includes(transaction_type)) {
-      if (account_type !== 'CREDIT' && currentBalance <= 1000) continue; // 최소 잔액 없으면 거래 건너뛰기
-      const maxWithdrawal = Math.max(currentBalance * 0.8, 0);
-      const { min, max } = getAmountRange(transaction_type);
-      amount = getRandomNumber(min, Math.min(max, maxWithdrawal));
-    } else {
-      const { min, max } = getAmountRange(transaction_type);
-      amount = getRandomNumber(min, max);
+  let transactionId = 1;
+
+  // 각 계좌별로 거래 생성
+  for (let accountIndex = 0; accountIndex < accounts.length; accountIndex++) {
+    const account = accounts[accountIndex];
+    const { account_number, account_type } = account;
+    const transactionCount = accountTransactionCounts[accountIndex];
+
+    console.log(`💳 계좌 ${account_number} (${account_type}): ${transactionCount}건 거래 생성`);
+
+    for (let i = 0; i < transactionCount; i++) {
+      const transaction_type = getRandomTransactionType(account_type);
+
+      let currentBalance = accountBalances.get(account_number);
+      let amount = 0;
+
+      // 출금/이체 시 잔액 부족으로 인한 무한 루프 방지 및 조정
+      if (['WITHDRAWAL', 'PAYMENT', 'TRANSFER'].includes(transaction_type)) {
+        if (account_type !== 'CREDIT' && currentBalance <= 1000) continue; // 최소 잔액 없으면 거래 건너뛰기
+        const maxWithdrawal = Math.max(currentBalance * 0.8, 0);
+        const { min, max } = getAmountRange(transaction_type);
+        amount = getRandomNumber(min, Math.min(max, maxWithdrawal));
+      } else {
+        const { min, max } = getAmountRange(transaction_type);
+        amount = getRandomNumber(min, max);
+      }
+
+      // 최종 금액 계산
+      // 6개월 이내 랜덤 날짜
+      const occurredAt = new Date(startDate.getTime() + Math.random() * (now.getTime() - startDate.getTime()));
+      const monthMultiplier = getMonthlyMultiplier(occurredAt.getMonth());
+      const dayMultiplier = getDayOfWeekMultiplier(occurredAt.getDay());
+      amount = Math.floor(amount * monthMultiplier * dayMultiplier);
+
+      if (amount <= 0) continue;
+
+      // 잔액 업데이트
+      const newBalance = transaction_type === 'DEPOSIT' ? currentBalance + amount : currentBalance - amount;
+      accountBalances.set(account_number, newBalance);
+
+      // Zod 스키마에 맞게 counterparty_account_number는 undefined 또는 number만 허용
+      let counterparty_account_number = undefined;
+      if (transaction_type === 'TRANSFER') {
+        counterparty_account_number = getRandomItem(COUNTERPARTY_ACCOUNTS);
+      }
+
+      transactions.push({
+        transaction_id: transactionId++,
+        account_number,
+        amount: Math.floor(amount),
+        transaction_type,
+        description: getRandomItem(TRANSACTION_INFO[transaction_type]),
+        occurred_at: occurredAt.toISOString(),
+        ...(counterparty_account_number !== undefined ? { counterparty_account_number } : {}),
+      });
     }
-
-    // 최종 금액 계산
-    // 6개월 이내 랜덤 날짜
-    const occurredAt = new Date(startDate.getTime() + Math.random() * (now.getTime() - startDate.getTime()));
-    const monthMultiplier = getMonthlyMultiplier(occurredAt.getMonth());
-    const dayMultiplier = getDayOfWeekMultiplier(occurredAt.getDay());
-    amount = Math.floor(amount * monthMultiplier * dayMultiplier);
-
-    if (amount <= 0) continue;
-
-    // 잔액 업데이트
-    const newBalance = transaction_type === 'DEPOSIT' ? currentBalance + amount : currentBalance - amount;
-    accountBalances.set(account_number, newBalance);
-
-    // Zod 스키마에 맞게 counterparty_account_number는 undefined 또는 number만 허용
-    let counterparty_account_number = undefined;
-    if (transaction_type === 'TRANSFER') {
-      counterparty_account_number = getRandomItem(COUNTERPARTY_ACCOUNTS);
-    }
-
-    transactions.push({
-      account_number,
-      amount: Math.floor(amount),
-      transaction_type,
-      description: getRandomItem(TRANSACTION_INFO[transaction_type]),
-      occurred_at: occurredAt.toISOString(),
-      ...(counterparty_account_number !== undefined ? { counterparty_account_number } : {}),
-    });
   }
 
   transactions.sort((a, b) => new Date(a.occurred_at) - new Date(b.occurred_at));
 
-  const header =
-    'transaction_id,account_number,amount,transaction_type,description,occurred_at,counterparty_account_number';
-  const rows = transactions.map((tr, index) =>
-    [
-      index + 1,
-      tr.account_number,
-      tr.amount,
-      tr.transaction_type,
-      `"${tr.description}"`,
-      `"${tr.occurred_at}"`,
-      tr.counterparty_account_number || '',
-    ].join(','),
-  );
+  // 거래 타입별 통계 출력
+  const transactionStats = transactions.reduce((stats, tx) => {
+    stats[tx.transaction_type] = (stats[tx.transaction_type] || 0) + 1;
+    return stats;
+  }, {});
 
-  const transactionsPath = path.join(OUTPUT_DIR, TRANSACTIONS_FILE);
-  try {
-    await fs.writeFile(transactionsPath, `${header}\n${rows.join('\n')}`, 'utf-8');
-    console.log(`\n✅ 거래 내역 저장 완료: ${transactionsPath} (${transactions.length}건)`);
-  } catch (error) {
-    console.error('❌ 거래 파일을 쓰는 도중 오류가 발생했습니다:', error);
-    return;
-  }
+  console.log('\n📈 거래 타입별 분배:');
+  Object.entries(transactionStats).forEach(([type, count]) => {
+    const percentage = ((count / transactions.length) * 100).toFixed(1);
+    console.log(`   ${type}: ${count}건 (${percentage}%)`);
+  });
 
   // 최종 잔액을 원본 계좌 정보에 반영
   const updatedAccounts = accounts.map((acc) => ({
@@ -209,5 +170,8 @@ export async function generateAndWriteCsv() {
     balance: accountBalances.get(acc.account_number),
   }));
 
-  await writeAccountsToCSV(updatedAccounts);
+  console.log(`\n✅ 거래 내역 생성 완료: ${transactions.length}건`);
+  console.log(`✅ 계좌 잔액 업데이트 완료: ${updatedAccounts.length}개 계좌`);
+
+  return { transactions, updatedAccounts };
 }
