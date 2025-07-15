@@ -6,6 +6,10 @@ export const accountsService = {
     return accountsRepository.findByUserId(user_id);
   },
 
+  async updateByAccountNumber(account_number: number, data: Partial<AccountType>) {
+    return accountsRepository.updateByAccountNumber(account_number, data);
+  },
+
   async create(data: AccountType) {
     return accountsRepository.create(data);
   },
