@@ -1,17 +1,30 @@
 'use client';
 
 import styled from 'styled-components';
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { useFormActionToast } from '@/shared/hooks/useFormActionToast';
 import { usernameAction } from '../utils/usernameAction';
 import { FlexCenterDiv } from '@/shared/style/component/div';
 import { ArrowIcon } from '@/components/LeadingIconInput/ui/ArrowIcon';
 import { SubmitButton } from './SubmitButton';
+import { ActionState } from '@/app/login/types';
+import { useRouter } from 'next/navigation';
 
 export function Form({ children }: { children: React.ReactNode }) {
-  const [actionState, formAction, isPending] = useActionState(usernameAction, null);
+  const router = useRouter();
+  const [actionState, formAction, isPending] = useActionState<ActionState, FormData>(usernameAction, {
+    status: 'idle',
+    payload: [''],
+    currentStep: 'username',
+  });
 
-  useFormActionToast(actionState, '/login');
+  useEffect(() => {
+    router.prefetch('/login');
+    if (actionState && actionState.status === 'continue') {
+      router.push('/login');
+    }
+  }, [actionState]);
+  useFormActionToast(actionState);
 
   return (
     <form id={'init-username-form'} action={formAction} className="flex flex-col place-content-center gap-3" noValidate>
