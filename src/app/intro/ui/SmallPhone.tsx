@@ -4,7 +4,6 @@ import { motion } from 'motion/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { useStepper } from '@/components/Stepper/hooks/useStepper';
 import { useHistory } from '@/shared/hooks/useHistory';
 import { Loading } from '@/components/Loading';
 import { GirdCenterDiv } from '@/shared/style/component/div';
@@ -45,7 +44,6 @@ const SmallPhone: React.FC<SmallPhoneProps> = ({ isOpen, toggleOpen }) => {
   const router = useRouter();
   const phoneRef = useRef<HTMLButtonElement>(null);
   const { add } = useHistory();
-  useStepper();
 
   useEffect(() => {
     router.prefetch('/login');
@@ -57,7 +55,7 @@ const SmallPhone: React.FC<SmallPhoneProps> = ({ isOpen, toggleOpen }) => {
       disabled={isOpen}
       $isOpen={isOpen}
       onClick={() => toggleOpen()}
-      onAnimationComplete={latest => {
+      onAnimationComplete={(latest) => {
         if (latest === 'open') {
           add(new URL('/intro', window.location.href).toString());
           router.push('/login');
@@ -123,9 +121,12 @@ const Icon = styled.svg<{ $layerColors: string; $isOpen: boolean }>`
   height: var(--intro-phone-height);
   aspect-ratio: 1 / 2;
   border-radius: ${({ $isOpen }) => ($isOpen ? '0px' : '17px')};
-  box-shadow: inset -0.5rem -0.3rem 0.1rem 0.2rem oklch(81.43% 0 0),
-    inset -0.7rem -0.7rem 0.1rem 0.2rem oklch(81.43% 0 0), inset -10rem -1rem 0 0.4rem oklch(81.43% 0 0),
-    ${({ $layerColors }) => $layerColors}, 2.75rem 2.75rem 6rem 10px oklch(32.3% 0.002 247.36 / 0.75),
+  box-shadow:
+    inset -0.5rem -0.3rem 0.1rem 0.2rem oklch(81.43% 0 0),
+    inset -0.7rem -0.7rem 0.1rem 0.2rem oklch(81.43% 0 0),
+    inset -10rem -1rem 0 0.4rem oklch(81.43% 0 0),
+    ${({ $layerColors }) => $layerColors},
+    2.75rem 2.75rem 6rem 10px oklch(32.3% 0.002 247.36 / 0.75),
     1rem 1rem 5rem 20px oklch(32.3% 0.002 247.36 / 0.2);
   transition: box-shadow 200ms ease-in-out;
 `;
