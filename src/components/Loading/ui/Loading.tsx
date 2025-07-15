@@ -4,14 +4,22 @@ import styled from 'styled-components';
 import { GirdCenterDiv } from '@/shared/style/component/div';
 import { fullSize } from '@/shared/style/css/size';
 
-export function Loading({ props }: { props?: HTMLAttributes<HTMLDivElement> }) {
+export function Loading({
+  size = 5,
+  radius = '1rem',
+  ...props
+}: {
+  size?: number;
+  radius?: string;
+  props?: HTMLAttributes<HTMLDivElement>;
+}) {
   return (
-    <Conatiner {...props}>
-      <LoadingAnimation />
-    </Conatiner>
+    <Container {...props}>
+      <LoadingAnimation size={size} radius={radius} />
+    </Container>
   );
 }
 
-const Conatiner = styled(GirdCenterDiv)`
+const Container = styled(GirdCenterDiv)`
   ${fullSize};
 `;

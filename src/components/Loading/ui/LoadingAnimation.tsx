@@ -3,37 +3,37 @@
 import { motion } from 'motion/react';
 import styled from 'styled-components';
 
-function LoginAnimation() {
+function LoginAnimation({ size = 5, radius = '1rem' }: { size?: number; radius?: string }) {
   const circles = [
     {
       cx: 70,
       cy: '50%',
-      r: '1rem',
+      r: radius,
       fill: '#8F76FF',
     },
     {
       cx: 170,
       cy: '50%',
-      r: '1rem',
+      r: radius,
       fill: '#FF7E76',
     },
-    { cx: 270, cy: '50%', r: '1rem', fill: '#8F76FF' },
+    { cx: 270, cy: '50%', r: radius, fill: '#8F76FF' },
     {
       cx: 370,
       cy: '50%',
-      r: '1rem',
+      r: radius,
       fill: '#98DF9F',
     },
     {
       cx: 470,
       cy: '50%',
-      r: '1rem',
+      r: radius,
       fill: '#8F76FF',
     },
-  ];
+  ].slice(0, size);
 
   return (
-    <SVG width="556" height="120" viewBox="0 0 556 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <SVG width={556} height="120" viewBox="0 0 556 120" fill="none" xmlns="http://www.w3.org/2000/svg">
       {circles.map((circle, index) => {
         const startY = 10 - 7.5;
         const endY = 7.5 + 13;
