@@ -11,7 +11,10 @@ export function useFormActionToast(actionState: ActionState | null, callback?: (
     if (!actionState) return;
     if (actionState.status === 'error') {
       showToast('error', actionState.payload);
-    } else if (actionState.status === 'continue' && actionState.nextStep === 'seeding') {
+    } else if (
+      (actionState.status === 'continue' && actionState.nextStep === 'seeding') ||
+      actionState.status === 'success'
+    ) {
       if (callback) {
         callback();
       }

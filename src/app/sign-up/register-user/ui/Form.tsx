@@ -20,10 +20,11 @@ export function Form({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     router.prefetch('/login');
-    if (actionState && actionState.status === 'continue') {
+    if (actionState && actionState.status === 'success') {
       router.push('/login');
     }
   }, [actionState]);
+
   useFormActionToast(actionState);
 
   return (
