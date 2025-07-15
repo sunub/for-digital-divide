@@ -1,39 +1,21 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useStepper } from '@/components/Stepper/hooks/useStepper';
 import { useToast } from '@/provider/toast/hooks/useToast';
+import type { ActionState } from '@/app/login/types';
 
-interface ActionState {
-  status: string;
-  payload: string[];
-}
-
-export function useFormActionToast(
-  actionState: ActionState | null,
-  navigationDestination: string,
-  callback?: () => void,
-) {
+export function useFormActionToast(actionState: ActionState | null, callback?: () => void) {
   const showToast = useToast();
-  const { updateStep } = useStepper();
-  const router = useRouter();
-
-  useEffect(() => {
-    router.prefetch(navigationDestination);
-  }, []);
 
   useEffect(() => {
     if (!actionState) return;
     if (actionState.status === 'error') {
       showToast('error', actionState.payload);
-    } else if (actionState.status === 'success') {
+    } else if (actionState.status === 'continue' && actionState.nextStep === 'seeding') {
       if (callback) {
         callback();
       }
-      updateStep();
       showToast('success', actionState.payload);
-      router.push(navigationDestination);
     }
   }, [actionState]);
 }
