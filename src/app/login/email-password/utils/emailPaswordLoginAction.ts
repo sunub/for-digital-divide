@@ -10,6 +10,8 @@ import { createPermanentCookieStorage } from '@/utils/cookies/permanentCookieSto
 import { UsersSchema } from '@/entities/users/users.model';
 import crypto from 'crypto';
 
+import type { ActionState } from '../../types';
+
 const EMAIL_ERROR_MESSAGE = '이메일 형식이 올바르지 않습니다.';
 const PASSWORD_ERROR_MESSAGE = '비밀번호 형식이 올바르지 않습니다.';
 const PASSWORD_REGEXES = [/[A-Z]/, /[a-z]/, /[0-9]/, /[^A-Za-z0-9]/];
@@ -41,7 +43,7 @@ type FormInput = {
   password: string;
 };
 
-export async function emailPasswordLoginAction(_: unknown, formData: FormData) {
+export async function emailPasswordLoginAction(prevState: ActionState, formData: FormData): Promise<ActionState> {
   const rawEmail = formData.get('email');
   const rawPassword = formData.get('password');
 
@@ -53,6 +55,7 @@ export async function emailPasswordLoginAction(_: unknown, formData: FormData) {
   const parsedFormData = formSchema.safeParse(input);
   if (!parsedFormData.success) {
     return {
+      ...prevState,
       status: 'error',
       payload: parsedFormData.error.issues.map((issue) => issue.message),
     };
@@ -61,8 +64,10 @@ export async function emailPasswordLoginAction(_: unknown, formData: FormData) {
   const cookieStore = await cookies();
   const useInfo = await userService.findByEmail(parsedFormData.data.email);
   const parsedUserInfo = UsersSchema.safeParse(useInfo);
+  console.log('Parsed User Info:', parsedUserInfo);
   if (!parsedUserInfo.success) {
     return {
+      ...prevState,
       status: 'error',
       payload: ['사용자를 찾을 수 없습니다.'],
     };
@@ -92,20 +97,25 @@ export async function emailPasswordLoginAction(_: unknown, formData: FormData) {
   const passwordAuthMethod = usersAuthMethods.find((method) => method.method === 'PASSWORD');
   if (!passwordAuthMethod) {
     return {
+      ...prevState,
       status: 'error',
       payload: ['비밀번호 인증 방법이 설정되어 있지 않습니다.'],
     };
   }
-  console.log('Users Auth Methods:', passwordAuthMethod);
   const isValidPassword = bcrypt.compareSync(parsedFormData.data.password, passwordAuthMethod.credential);
   if (!isValidPassword) {
     return {
+      ...prevState,
       status: 'error',
       payload: ['비밀번호가 일치하지 않습니다.'],
     };
   }
+
   return {
-    status: 'success',
+    ...prevState,
+    user_id,
+    status: 'continue',
     payload: ['로그인에 성공했습니다.'],
+    nextStep: 'seeding',
   };
 }

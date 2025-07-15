@@ -1,17 +1,30 @@
 'use client';
 
 import styled from 'styled-components';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { emailPasswordLoginAction } from '../utils/emailPaswordLoginAction';
 import { useFormActionToast } from '@/shared/hooks/useFormActionToast';
 import { FlexCenterDiv } from '@/shared/style/component/div';
 import { ArrowIcon } from '@/components/LeadingIconInput/ui/ArrowIcon';
 import { SubmitButton } from './SubmitButton';
+import { useSeedingDemoData } from '../hooks/useSeedingDemoData';
+import { SubmittingStatus } from './SubmittingStatus';
+import { useRedirectDashboard } from '../../hooks/useRedirectDashboard';
+
+import type { ActionState } from '../../types';
 
 export function Form({ children }: { children: React.ReactNode }) {
-  const [actionState, formAction, isPending] = useActionState(emailPasswordLoginAction, null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSeedingProgress, setIsSeedingProgress] = useState(false);
+  const [actionState, formAction, isPending] = useActionState<ActionState, FormData>(emailPasswordLoginAction, {
+    status: 'idle',
+    payload: [''],
+    currentStep: 'login',
+  });
 
-  useFormActionToast(actionState, '/dashboard');
+  useFormActionToast(actionState, () => setIsSeedingProgress(true));
+  useSeedingDemoData(isSeedingProgress, setIsSeedingProgress);
+  useRedirectDashboard(isSeedingProgress);
 
   return (
     <form id={'init-username-form'} action={formAction} className="flex flex-col place-content-center gap-3" noValidate>
@@ -19,7 +32,13 @@ export function Form({ children }: { children: React.ReactNode }) {
         <ArrowIconIndicator />
         {children}
       </InputContainer>
-      <SubmitButton isPending={isPending} />
+      <SubmittingStatus
+        actionState={actionState}
+        isSubmitting={isSubmitting}
+        isPending={isPending}
+        isSeedingProgress={isSeedingProgress}
+      />
+      <SubmitButton onClick={() => setIsSubmitting(true)} isPending={isPending} />
     </form>
   );
 }
