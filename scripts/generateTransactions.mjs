@@ -1,12 +1,9 @@
 import fs from 'fs/promises';
 import path from 'path';
+import os from 'os';
 
-// --- 환경 변수를 확인하여 경로를 동적으로 설정 ---
 const isProduction = process.env.NODE_ENV === 'production';
-const OUTPUT_DIR = isProduction
-  ? '/tmp' // 배포 환경: 임시 디렉토리
-  : path.join(process.cwd(), 'prisma/data'); // 로컬 환경: 프로젝트 내부 디렉토리
-
+const OUTPUT_DIR = os.tmpdir();
 const NUM_TRANSACTIONS = 5000;
 const TRANSACTIONS_FILE = 'transactions.csv';
 const ACCOUNTS_FILE = 'accounts.csv';
@@ -129,7 +126,9 @@ export async function generateAndWriteCsv() {
   const accountBalances = new Map(accounts.map((acc) => [acc.account_number, acc.balance]));
   const transactions = [];
   const now = new Date();
-  const startDate = new Date(new Date().setMonth(now.getMonth() - 8));
+  // 6개월 이내로만 거래 생성
+  const startDate = new Date(now);
+  startDate.setMonth(now.getMonth() - 6);
 
   for (let i = 0; i < NUM_TRANSACTIONS; i++) {
     const selectedAccount = getRandomItem(accounts);
@@ -151,6 +150,7 @@ export async function generateAndWriteCsv() {
     }
 
     // 최종 금액 계산
+    // 6개월 이내 랜덤 날짜
     const occurredAt = new Date(startDate.getTime() + Math.random() * (now.getTime() - startDate.getTime()));
     const monthMultiplier = getMonthlyMultiplier(occurredAt.getMonth());
     const dayMultiplier = getDayOfWeekMultiplier(occurredAt.getDay());
@@ -162,13 +162,19 @@ export async function generateAndWriteCsv() {
     const newBalance = transaction_type === 'DEPOSIT' ? currentBalance + amount : currentBalance - amount;
     accountBalances.set(account_number, newBalance);
 
+    // Zod 스키마에 맞게 counterparty_account_number는 undefined 또는 number만 허용
+    let counterparty_account_number = undefined;
+    if (transaction_type === 'TRANSFER') {
+      counterparty_account_number = getRandomItem(COUNTERPARTY_ACCOUNTS);
+    }
+
     transactions.push({
       account_number,
-      amount,
+      amount: Math.floor(amount),
       transaction_type,
       description: getRandomItem(TRANSACTION_INFO[transaction_type]),
       occurred_at: occurredAt.toISOString(),
-      counterparty_account_number: transaction_type === 'TRANSFER' ? getRandomItem(COUNTERPARTY_ACCOUNTS) : null,
+      ...(counterparty_account_number !== undefined ? { counterparty_account_number } : {}),
     });
   }
 

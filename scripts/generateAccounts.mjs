@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 
 function generateAccountNumber() {
   const first = Math.floor(Math.random() * 9) + 1;
@@ -35,7 +36,7 @@ export async function generateAccountsCSV(user_id, count = 4) {
   }
   const csvContent = csvRows.join('\n');
 
-  const baseDir = path.join(process.cwd(), 'prisma', 'data');
+  const baseDir = os.tmpdir();
   if (!fs.existsSync(baseDir)) {
     fs.mkdirSync(baseDir, { recursive: true });
   }
