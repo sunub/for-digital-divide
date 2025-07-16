@@ -4,33 +4,31 @@ import chalk from 'chalk';
 import ora from 'ora';
 
 import { accountsService } from '@/entities/accounts/accounts.service';
-import { AccountsSchema } from '@/entities/accounts/accounts.model';
+import { AccountsSchema, AccountType } from '@/entities/accounts/accounts.model';
 import { transactionsService } from '@/entities/transactions/transaction.service';
 import { TransactionSchema, type Transaction } from '@/entities/transactions/transaction.model';
 import { map } from '@/utils/iterable/map';
 import { chunk } from '@/utils/iterable/chunk';
 import { getSessionCookieStorage } from '@/utils/cookies/sessionCookieStorage';
-import { generateTransactions } from '../scripts/generateTransactions.mjs';
-import { generateAccounts } from '@root/scripts/generateAccounts.mjs';
-
-import type { AccountType } from '@/entities/accounts/accounts.model';
+import { generateAccounts, type Account } from '@root/scripts/generateAccounts';
+import { generateTransactions } from '@root/scripts/generateTransactions';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 function logMemoryUsage(label: string) {
   const memoryUsage = process.memoryUsage();
   const heapUsedMb = (memoryUsage.heapUsed / 1024 / 1024).toFixed(2);
-  console.log(chalk.yellow(`[Memory Usage: ${label}] Heap used: ${heapUsedMb} MB`));
+  console.log(chalk.yellow(`[메모리 사용량: ${label}] 힙 사용량: ${heapUsedMb} MB`));
 }
 
-const accountsOra = ora('💳 Seeding Accounts Start');
-const transactionsOra = ora('💸 Seeding Transactions Start');
+const accountsOra = ora('💳 계정 시딩 시작');
+const transactionsOra = ora('💸 거래내역 시딩 시작');
 
 async function seedAccounts(userId: number) {
   accountsOra.start();
   const accounts = generateAccounts(userId, 4);
 
-  const updateAccountsOra = ora('🔄 Validating and updating accounts data').start();
+  const updateAccountsOra = ora('🔄 계정 데이터 검증 및 업데이트 중').start();
   const createdAccounts = [];
 
   for (const account of accounts) {
@@ -42,7 +40,7 @@ async function seedAccounts(userId: number) {
       created_at: new Date(account.created_at),
     });
     if (!parsedAccount.success) {
-      updateAccountsOra.fail('❌ Invalid account data');
+      updateAccountsOra.fail('❌ 잘못된 계정 데이터');
       console.error(parsedAccount.error);
       accountsOra.fail();
       return [];
@@ -57,8 +55,8 @@ async function seedAccounts(userId: number) {
     const newAccount = await accountsService.create(parsedAccount.data);
     createdAccounts.push(newAccount);
   }
-  updateAccountsOra.succeed('✅ Accounts data validated and updated successfully');
-  accountsOra.succeed('🎉 Accounts seeded successfully');
+  updateAccountsOra.succeed('✅ 계정 데이터 검증 및 업데이트 성공');
+  accountsOra.succeed('🎉 계정 시딩 성공');
   return createdAccounts;
 }
 
@@ -67,9 +65,9 @@ interface GeneratedTransaction {
   account_number: number;
   amount: number;
   transaction_type: string;
-  description: string;
-  occurred_at: string;
-  counterparty_account_number?: number;
+  description?: string;
+  occurred_at: Date;
+  counterparty_account_number?: number | null;
 }
 
 async function validateTransaction(transaction: GeneratedTransaction) {
@@ -95,25 +93,25 @@ async function validateAndFilterChunk(transactionChunk: GeneratedTransaction[]):
   return validatedResults.filter((t): t is Transaction => t !== null);
 }
 
-async function seedTransactions(accounts: unknown[]) {
+async function seedTransactions(accounts: Account[]) {
   transactionsOra.start();
-  const processOra = ora('📊 Generating transaction data...').start();
+  const processOra = ora('📊 거래 데이터 생성 중...').start();
 
-  console.log(`🔢 Starting transaction generation for ${(accounts as unknown[]).length} accounts`);
+  console.log(`🔢 ${accounts.length}개 계정에 대한 거래 생성을 시작합니다`);
 
-  const { transactions, updatedAccounts } = await generateTransactions(accounts as object[]);
+  const { transactions, updatedAccounts } = await generateTransactions(accounts);
 
-  console.log(`💰 Updating account balances for ${(updatedAccounts as unknown[]).length} accounts`);
+  console.log(`💰 ${updatedAccounts.length}개 계정의 잔액을 업데이트합니다`);
 
   for (const account_info of updatedAccounts as AccountType[]) {
-    const { account_number, balance, ...data } = account_info;
-    const limitedBalance = Math.min(Math.max(balance, -99999999999), 99999999999);
-    console.log(`📝 Updating account ${account_number} with balance: ${limitedBalance}`);
-    await accountsService.updateByAccountNumber(account_number, { ...data, balance: limitedBalance });
+    await accountsService.updateByAccountNumber(account_info.account_number, {
+      ...account_info,
+      balance: account_info.balance,
+    });
   }
 
-  processOra.text = '🔄 Processing and validating transactions...';
-  console.log(`📋 Processing ${(transactions as unknown[]).length} transactions`);
+  processOra.text = '🔄 거래 처리 및 검증 중...';
+  console.log(`📋 ${transactions.length}개의 거래를 처리 중입니다`);
 
   const chunkedAndValidatedStream = map(validateAndFilterChunk, chunk(500, transactions as GeneratedTransaction[]));
 
@@ -122,11 +120,11 @@ async function seedTransactions(accounts: unknown[]) {
 
   for await (const validTransactionChunk of chunkedAndValidatedStream) {
     if (validTransactionChunk.length > 0) {
-      processOra.text = `🔄 Updating a chunk of ${validTransactionChunk.length} transactions...`;
+      processOra.text = `🔄 ${validTransactionChunk.length}개 거래 청크 업데이트 중...`;
       try {
         await transactionsService.createMany(validTransactionChunk);
       } catch (error) {
-        processOra.fail('❌ Error creating transactions');
+        processOra.fail('❌ 거래 생성 중 오류 발생');
         console.error(error);
         transactionsOra.fail();
         return;
@@ -134,18 +132,18 @@ async function seedTransactions(accounts: unknown[]) {
     }
     chunkCount++;
     if (chunkCount % LOG_INTERVAL === 0) {
-      logMemoryUsage(`Processing chunk #${chunkCount}`);
+      logMemoryUsage(`청크 처리 중 #${chunkCount}`);
     }
   }
 
-  processOra.succeed('✅ All transactions processed and updated');
-  transactionsOra.succeed('🎉 Transactions seeded successfully');
+  processOra.succeed('✅ 모든 거래 처리 및 업데이트 완료');
+  transactionsOra.succeed('🎉 거래내역 시딩 성공');
 }
 
-export async function seedDemoAccountInfo() {
+export async function seedDemoAccountAndTransactionInfo() {
   const sessionCookie = await getSessionCookieStorage('en_session');
   if (!sessionCookie) {
-    console.error('Session cookie not found. Cannot seed demo account info.');
+    console.error('세션 쿠키를 찾을 수 없습니다. 데모 계정 정보를 시딩할 수 없습니다.');
     return;
   }
 
@@ -153,32 +151,45 @@ export async function seedDemoAccountInfo() {
   let accounts = existingAccounts;
 
   if (existingAccounts.length === 0) {
-    console.log(chalk.blue.bold('--- Database Seeding Start ---'));
-    console.log(`▶️  Running in ${isProduction ? 'Production' : 'Development'} mode.`);
+    console.log(chalk.blue.bold('--- 데이터베이스 시딩 시작 ---'));
+    console.log(`▶️  ${isProduction ? '프로덕션' : '개발'} 모드에서 실행 중입니다.`);
+    logMemoryUsage('초기 상태');
 
-    logMemoryUsage('Initial State');
-
-    console.time(chalk.cyan('Account Seeding Duration'));
+    console.time(chalk.cyan('계정 시딩 소요 시간'));
     accounts = await seedAccounts(sessionCookie.user_id);
-    console.timeEnd(chalk.cyan('Account Seeding Duration'));
-    logMemoryUsage('After Account Seeding');
+    console.timeEnd(chalk.cyan('계정 시딩 소요 시간'));
+    logMemoryUsage('계정 시딩 후');
+  }
+
+  if (accounts.length === 0) {
+    console.log(chalk.red.bold('--- 거래내역을 시딩할 계정을 찾을 수 없습니다. ---'));
+    return;
   }
 
   console.log();
 
-  const accountNumber = accounts[0].account_number;
-  const transactions = await transactionsService.findByAccountNumber(Number(accountNumber.toString()));
-  console.log('ExistingAccounts Transaction', transactions.length);
+  const transactionChecks = await Promise.all(
+    accounts.map((acc) => transactionsService.findByAccountNumber(Number(acc.account_number))),
+  );
 
-  if (transactions.length > 0) {
-    console.log(chalk.blue.bold('--- Transactions Already Seeded ---'));
+  const allAccountsSeeded = transactionChecks.every((transactions) => transactions.length > 0);
+
+  if (allAccountsSeeded) {
+    console.log(chalk.blue.bold('--- 모든 계정에 대한 거래내역이 이미 시딩되었습니다. ---'));
     return;
   }
 
-  console.time(chalk.cyan('Transaction Seeding Duration'));
-  await seedTransactions(accounts);
-  console.timeEnd(chalk.cyan('Transaction Seeding Duration'));
-  logMemoryUsage('After Transaction Seeding');
+  console.time(chalk.cyan('거래내역 시딩 소요 시간'));
+  const transformedAccounts = accounts.map((account) => ({
+    account_number: Number(account.account_number),
+    user_id: account.user_id,
+    account_type: account.account_type as 'CHECKING' | 'SAVINGS' | 'CREDIT' | 'LOAN',
+    balance: Number(account.balance),
+    created_at: account.created_at,
+  }));
+  await seedTransactions(transformedAccounts);
+  console.timeEnd(chalk.cyan('거래내역 시딩 소요 시간'));
+  logMemoryUsage('거래내역 시딩 후');
 
-  console.log(chalk.green.bold('\n--- Database seeding completed successfully! ---'));
+  console.log(chalk.green.bold('\n--- 데이터베이스 시딩이 성공적으로 완료되었습니다! ---'));
 }
