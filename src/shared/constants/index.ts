@@ -20,4 +20,5 @@ export const REDIRECT_REASONS = {
   ALREADY_REGISTERED: 'already-registered',
   EMAIL_NOT_VERIFIED: 'email-not-verified',
   PIN_NOT_VERIFIED: 'pin-not-verified',
+  EXIST_DEVICE_ID: 'exist-device-id',
 } as const;
