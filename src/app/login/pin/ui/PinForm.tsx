@@ -14,6 +14,7 @@ import { ContentOpener } from '@/shared/layout/ui/ContentOpener';
 import { PinContent } from './PinContent';
 import { useSeedingDemoData } from '../../email-password/hooks/useSeedingDemoData';
 import { useRedirectDashboard } from '../../hooks/useRedirectDashboard';
+import { useNumpadStore } from '@/context/NumpadContext';
 
 interface PinFormProps extends React.HTMLAttributes<HTMLFormElement> {
   padInfo: KeypadInfo;
@@ -21,8 +22,10 @@ interface PinFormProps extends React.HTMLAttributes<HTMLFormElement> {
 }
 
 export function PinForm({ padInfo, children, ...props }: PinFormProps) {
+  const deleteNumpad = useNumpadStore((s) => s.deleteNumpad);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSeedingProgress, setIsSeedingProgress] = useState(false);
+  const [isSeedingCompleted, setIsSeedingCompleted] = useState(false);
   const [actionState, formAction, isPending] = useActionState<ActionState, FormData>(pinLoginAction, {
     status: 'idle',
     payload: [''],
@@ -37,9 +40,15 @@ export function PinForm({ padInfo, children, ...props }: PinFormProps) {
     createPortal(<PinNumpad padInfo={padInfo} />, drawerContent);
   }, []);
 
-  useFormActionToast(actionState, () => setIsSeedingProgress(true));
-  useSeedingDemoData(isSeedingProgress, setIsSeedingProgress);
-  useRedirectDashboard(isSeedingProgress);
+  useFormActionToast(actionState, () => {
+    setIsSeedingProgress(true);
+    deleteNumpad();
+  });
+  useSeedingDemoData(isSeedingProgress, (completed) => {
+    setIsSeedingProgress(false);
+    setIsSeedingCompleted(completed);
+  });
+  useRedirectDashboard(isSeedingCompleted);
 
   return (
     <Form

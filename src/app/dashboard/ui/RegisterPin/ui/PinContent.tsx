@@ -10,6 +10,7 @@ const gugi = Gugi({ subsets: ['latin'], weight: '400' });
 
 export function PinContent() {
   const pin = useNumpadStore((s) => s.numpad);
+  console.log('PinContent pin:', pin);
 
   return (
     <RootContainer>
@@ -20,7 +21,7 @@ export function PinContent() {
       <PointerWrapper>
         {pin.map((pinnumber, i) => (
           <Pointer key={`${i}th-pin-pointer`} id={`${i}th-pin-pointer`} className={'pin-pointer'}>
-            <input name="pinnumbers" value={pin[i]} type="text" className="hidden w-0 h-0 select-none" readOnly />
+            <input name="pinnumbers" value={pin[i]} type="hidden" />
             <input
               type="radio"
               name="pointer"
@@ -84,11 +85,13 @@ const Pointer = styled.span`
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.06);
 
   & > input {
+    position: absolute;
     width: 1px;
     height: 1px;
     opacity: 0;
     user-select: none;
-    visibility: hidden;
+    pointer-events: none;
+    clip: rect(0, 0, 0, 0);
   }
 
   &:has(input.pinnumber-display:checked) {

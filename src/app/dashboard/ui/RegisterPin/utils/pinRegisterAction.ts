@@ -15,9 +15,9 @@ interface ActionResult {
 
 const validNumpadLength = 4;
 const PinNumberSchema = z
-  .array(z.string())
+  .array(z.string().min(1))
   .nonempty()
-  .refine(v => v.length === validNumpadLength, {
+  .refine((v) => v.length === validNumpadLength, {
     message: '핀번호는 4자리여야 합니다.',
   });
 
@@ -45,7 +45,7 @@ export async function pinRegisterAction(formData: FormData): Promise<ActionResul
   };
 
   const parsedFormData = FormDataSchema.safeParse(data, {
-    error: iss => {
+    error: (iss) => {
       if (iss.code === 'invalid_type' || (iss.expected === 'array' && iss.received === 'string')) {
         return { message: '핀번호는 4자리여야 합니다.' };
       }
@@ -55,7 +55,7 @@ export async function pinRegisterAction(formData: FormData): Promise<ActionResul
   if (!parsedFormData.success) {
     return {
       status: 'error',
-      message: parsedFormData.error.issues.map(issue => issue.message),
+      message: ['입력된 데이터가 유효하지 않습니다.'],
     };
   }
 

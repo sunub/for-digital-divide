@@ -101,7 +101,9 @@ export async function pinLoginAction(prevState: ActionState, formData: FormData)
 
   return {
     ...prevState,
-    status: 'success',
+    user_id,
+    status: 'continue',
     payload: ['핀번호가 성공적으로 인증되었습니다.'],
+    nextStep: 'seeding',
   };
 }

@@ -79,7 +79,6 @@ function Buttons({ status }: { status: FormStatus }) {
         status={status.pending ? 'pending' : 'idle'}
         variant={'default'}
         disabled={status.pending}
-        onClick={deleteNumpad}
       >
         확인
       </StatusButton>
