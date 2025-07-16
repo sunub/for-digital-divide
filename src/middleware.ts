@@ -4,11 +4,13 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getSessionCookieStorage } from './utils/cookies/sessionCookieStorage';
+import { getPermanentCookieStorage } from './utils/cookies/permanentCookieStorage';
 
 const NEED_TO_AUTHENTICATE_PATHS = ['/dashboard'];
 
 const REDIRECT_REASONS = {
   ALREADY_REGISTERED: 'already-registered',
+  EXIST_DEVICE_ID: 'exist-device-id',
   EMAIL_NOT_VERIFIED: 'email-not-verified',
   PIN_NOT_VERIFIED: 'pin-not-verified',
 } as const;
@@ -34,10 +36,19 @@ export default async function middleware(req: NextRequest) {
 
   if (pathname === '/sign-up/register-user') {
     const sessionCookie = await getSessionCookieStorage('en_session');
+    const deviceCookie = await getPermanentCookieStorage('en_device');
+
     if (sessionCookie && sessionCookie.user_id) {
       const url = req.nextUrl.clone();
       url.pathname = '/login';
       url.searchParams.set('reason', REDIRECT_REASONS.ALREADY_REGISTERED);
+      return NextResponse.redirect(url);
+    }
+
+    if (deviceCookie && deviceCookie.device_id) {
+      const url = req.nextUrl.clone();
+      url.pathname = '/login';
+      url.searchParams.set('reason', REDIRECT_REASONS.EXIST_DEVICE_ID);
       return NextResponse.redirect(url);
     }
   }
