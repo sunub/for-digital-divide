@@ -9,13 +9,13 @@ import { MainTitle } from '../../MainTitle';
 export default async function Dashboard({ accountIndex }: { accountIndex: string | undefined }) {
   const currentIndex = accountIndex || '0';
   const isPinAvailable = await getPinAvailable();
-  const isAlertOpen = !isPinAvailable;
   const accounts = await getAccountsData();
+  console.log('accounts', accounts);
   const primaryAccount = accounts[Number(currentIndex)];
 
   return (
     <>
-      <AlertMessage defaultOpen={isAlertOpen} />
+      <AlertMessage defaultOpen={!isPinAvailable} />
       <MainTitle />
       <DashboardContent>
         <AccountSection accounts={accounts} />

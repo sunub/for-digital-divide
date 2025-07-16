@@ -12,6 +12,6 @@ export async function getPinAvailable() {
   }
 
   const registeredAuthMethod = await authMethodsService.findByDeviceId(parsedDeviceId.data.device_id);
-  const pinMethod = registeredAuthMethod.filter(info => info.method === 'PIN');
-  return pinMethod.length > 0;
+  const pinMethod = registeredAuthMethod.find((info) => info.method === 'PIN');
+  return pinMethod?.provider_uid === parsedDeviceId.data.device_id;
 }
