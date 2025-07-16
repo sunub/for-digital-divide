@@ -1,21 +1,18 @@
 'use client';
 
 import { memo, ReactNode } from 'react';
-import Link from 'next/link';
 import styled, { keyframes } from 'styled-components';
 import { useToast } from '@/provider/toast/hooks/useToast';
 import { useHistory } from '@/shared/hooks/useHistory';
 
 const CardContent = memo(
   ({
-    pinPath,
-    hasDeviceId,
+    hasDeviceId = true,
     setIsHovering,
     header,
     footer,
   }: {
-    pinPath: string;
-    hasDeviceId: boolean;
+    hasDeviceId?: boolean;
     setIsHovering: (isHovering: boolean) => void;
     header: ReactNode;
     footer: ReactNode;
@@ -25,8 +22,10 @@ const CardContent = memo(
 
     return (
       <Wrapper
+        id={`login-selection-pin-number`}
+        className="card"
+        tabIndex={0}
         $hasDeviceId={hasDeviceId}
-        className="cards"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         onClick={() => {
@@ -37,20 +36,13 @@ const CardContent = memo(
           }
         }}
       >
-        <LinkWrapper
-          id={`login-selection-pin-number`}
-          prefetch={true}
-          href={pinPath}
-          className="card"
-          tabIndex={0}
-          $hasDeviceId={hasDeviceId}
-        >
+        <LinkWrapper className="card" tabIndex={0} $hasDeviceId={hasDeviceId}>
           <Header>{header}</Header>
           <Footer>{footer}</Footer>
         </LinkWrapper>
       </Wrapper>
     );
-  }
+  },
 );
 
 const fadeIn = keyframes`
@@ -77,9 +69,11 @@ const Wrapper = styled.div<{ $hasDeviceId?: boolean }>`
   backdrop-filter: blur(10px);
   padding: 2px;
   background: rgba(255, 255, 255, 0.15);
-  transition: box-shadow 300ms ease, transform 100ms ease;
+  transition:
+    box-shadow 300ms ease,
+    transform 100ms ease;
 
-  cursor: ${props => (props.$hasDeviceId ? 'pointer' : 'not-allowed')};
+  cursor: ${(props) => (props.$hasDeviceId ? 'pointer' : 'not-allowed')};
 
   &:hover {
     box-shadow: var(--long-shadow);
@@ -121,8 +115,8 @@ const Footer = styled.span`
   justify-self: center;
 `;
 
-const LinkWrapper = styled(Link)<{ $hasDeviceId?: boolean }>`
-  pointer-events: ${props => (props.$hasDeviceId ? 'auto' : 'none')};
+const LinkWrapper = styled.div<{ $hasDeviceId?: boolean }>`
+  pointer-events: ${(props) => (props.$hasDeviceId ? 'auto' : 'none')};
   display: grid;
   align-items: center;
   grid:
@@ -131,7 +125,7 @@ const LinkWrapper = styled(Link)<{ $hasDeviceId?: boolean }>`
     [card-footer] 15px / 1fr;
   color: color-mix(
     in oklch,
-    ${props => (props.$hasDeviceId ? 'oklch(63.93% 0.206 288.34)' : 'var(--foreground-destructive)')} 90%,
+    ${(props) => (props.$hasDeviceId ? 'oklch(63.93% 0.206 288.34)' : 'var(--foreground-destructive)')} 90%,
     oklch(0.7 0.1825 239.69) 20%
   );
   height: 100%;

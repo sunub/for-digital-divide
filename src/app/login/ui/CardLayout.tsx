@@ -1,24 +1,28 @@
-import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { ReactNode, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-interface CardLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+interface CardLayoutProps extends React.ComponentPropsWithoutRef<typeof Link> {
+  children: ReactNode;
+  hasDeviceId?: boolean;
 }
 
-function CardLayout({ children, ...props }: CardLayoutProps) {
+function CardLayout({ children, href, hasDeviceId = true, ...props }: CardLayoutProps) {
+  const linkContainerRef = useRef<HTMLAnchorElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = containerRef.current;
+    const el = hasDeviceId ? linkContainerRef.current : containerRef.current;
     if (!el) return;
 
     const smallCard = el.querySelector<HTMLDivElement>('.small-card');
     if (!smallCard) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: Event) => {
+      const mouseEvent = e as MouseEvent;
       const { left, top } = el.getBoundingClientRect();
-      const x = e.clientX - left;
-      const y = e.clientY - top;
+      const x = mouseEvent.clientX - left;
+      const y = mouseEvent.clientY - top;
       smallCard.style.setProperty('--mx', `${x}px`);
       smallCard.style.setProperty('--my', `${y}px`);
     };
@@ -29,12 +33,33 @@ function CardLayout({ children, ...props }: CardLayoutProps) {
     };
   }, []);
 
+  if (!hasDeviceId) {
+    return (
+      <RootContainer ref={containerRef} className="card-link-wrapper" tabIndex={0}>
+        {children}
+      </RootContainer>
+    );
+  }
+
   return (
-    <RootContainer {...props} ref={containerRef}>
+    <LinkRootContainer
+      {...props}
+      ref={linkContainerRef}
+      href={href}
+      prefetch={true}
+      className="card-link-wrapper"
+      tabIndex={0}
+    >
       {children}
-    </RootContainer>
+    </LinkRootContainer>
   );
 }
+
+const LinkRootContainer = styled(Link)`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
 
 const RootContainer = styled.div`
   position: relative;

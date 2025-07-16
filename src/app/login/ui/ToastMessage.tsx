@@ -9,6 +9,7 @@ export function ToastMessage({ reason }: { reason: string }) {
     [REDIRECT_REASONS.ALREADY_REGISTERED]: '이미 회원가입을 하셨습니다. 로그인해주세요.',
     [REDIRECT_REASONS.EMAIL_NOT_VERIFIED]: '이메일 인증이 필요합니다. 이메일을 확인해주세요.',
     [REDIRECT_REASONS.PIN_NOT_VERIFIED]: '핀 번호 인증이 필요합니다. 핀 번호를 확인해주세요.',
+    [REDIRECT_REASONS.EXIST_DEVICE_ID]: '기존에 등록된 디바이스가 있습니다. PIN으로 로그인해주세요.',
   };
   const showToast = useToast();
 

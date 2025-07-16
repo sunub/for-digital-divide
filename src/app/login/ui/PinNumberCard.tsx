@@ -15,14 +15,14 @@ export function PinNumberCard() {
   const skeletonRef = useRef<HTMLDivElement>(null);
   const { isLoading: isDataLoading, hasDeviceId } = useDeviceId();
   const isAnimationComplete = useAnimationOnce(skeletonRef);
+
   if (isDataLoading || !isAnimationComplete) {
     return <CardSkeleton skeletonRef={skeletonRef} />;
   }
 
   return (
-    <CardLayout>
+    <CardLayout hasDeviceId={hasDeviceId} href={'/login?method=pin'}>
       <CardContent
-        pinPath={'/login?method=pin'}
         hasDeviceId={hasDeviceId}
         setIsHovering={setIsHover}
         header={hasDeviceId ? <GridIcon /> : <Grid2X2PlusIcon />}

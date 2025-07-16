@@ -11,14 +11,8 @@ export function EmailCard() {
   const [isHover, setIsHover] = useState(false);
 
   return (
-    <CardLayout>
-      <CardContent
-        pinPath={'/login?method=email'}
-        hasDeviceId={true}
-        setIsHovering={setIsHover}
-        header={<CircleUserIcon />}
-        footer="로그인"
-      />
+    <CardLayout href={'/login?method=email'}>
+      <CardContent setIsHovering={setIsHover} header={<CircleUserIcon />} footer="로그인" />
       <SmallCard className="small-card" />
       <HoveringTextField isHovering={isHover} />
     </CardLayout>
