@@ -1,15 +1,19 @@
+import { createVanillaExtractPlugin } from "@vanilla-extract/next-plugin";
+
+const withVanillaExtract = createVanillaExtractPlugin();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: '',
-  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
-  images: {
-    formats: ['image/avif', 'image/webp'],
-  },
-  compiler: {
-    styledComponents: true,
-  },
-  async headers() {
-    const cspHeader = `
+	basePath: "",
+	pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
+	images: {
+		formats: ["image/avif", "image/webp"],
+	},
+	compiler: {
+		styledComponents: true,
+	},
+	async headers() {
+		const cspHeader = `
       default-src 'self';
       script-src 'self' 'unsafe-eval' 'unsafe-inline';
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
@@ -23,22 +27,22 @@ const nextConfig = {
       upgrade-insecure-requests;
     `;
 
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: cspHeader.replace(/\s{2,}/g, ' ').trim(),
-          },
-          {
-            key: 'X-Requested-With',
-            value: 'XMLHttpRequest',
-          },
-        ],
-      },
-    ];
-  },
+		return [
+			{
+				source: "/:path*",
+				headers: [
+					{
+						key: "Content-Security-Policy",
+						value: cspHeader.replace(/\s{2,}/g, " ").trim(),
+					},
+					{
+						key: "X-Requested-With",
+						value: "XMLHttpRequest",
+					},
+				],
+			},
+		];
+	},
 };
 
-export default nextConfig;
+export default withVanillaExtract(nextConfig);
