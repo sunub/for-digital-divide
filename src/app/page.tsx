@@ -1,89 +1,49 @@
-'use client';
+"use client";
 
-import React from 'react';
-import styled from 'styled-components';
-import Button from '@/components/Button/Default';
-import Spacer from '@/constants/Spacer';
-import { navigate } from '@/shared/utils/navigate';
-import { useHistory } from '@/shared/hooks/useHistory';
+import { useRouter } from "next/navigation";
+import React from "react";
+import Button from "@/components/Button";
+import Spacer from "@/constants/Spacer";
+import { useHistory } from "@/shared/hooks/useHistory";
+import * as style from "./page.css";
 
-function InitPage() {
-  const { add } = useHistory();
 
-  return (
-    <React.Fragment>
-      <DevsiteContentSiteContent>
-        <ContentWrapper>
-          <AlignCenter style={{ paddingTop: '32px' }}>
-            <h1>안녕하세요!</h1>
-          </AlignCenter>
-          <TextContainer>
-            <p>
-              이 홈페이지는 단순한 <b>데모(가짜)</b> 페이지 입니다.
-            </p>
-            <p>
-              시작하시려면 아래의 <b>시작하기</b>를 눌러주세요!
-            </p>
-          </TextContainer>
-          <Spacer size={32} axis="vertical" />
-          <Button
-            onClick={() => {
-              add(new URL('/', window.location.href).toString());
-              navigate('/intro');
-            }}
-          >
-            시작하기
-          </Button>
-          <Spacer size={32} axis="vertical" />
-        </ContentWrapper>
-      </DevsiteContentSiteContent>
-      <BackDrop />
-    </React.Fragment>
-  );
+function StartButton() {
+	const router = useRouter();
+	const { add } = useHistory();
+
+	const handleStart = () => {
+		add(window.location.href);
+		router.push("/intro");
+	};
+
+	return <Button onClick={handleStart}>시작하기</Button>;
 }
 
-const AlignCenter = styled.div`
-  display: grid;
-  place-items: center;
-`;
-
-const DevsiteContentSiteContent = styled.div`
-  display: grid;
-  place-items: center;
-  max-width: 800px;
-  height: 100cqh;
-  padding: 5cqh 6cqh;
-  z-index: 12;
-`;
-
-const TextContainer = styled.div`
-  display: grid;
-  place-items: center;
-  overflow-y: scroll;
-  padding: 1rem 1rem;
-`;
-
-const ContentWrapper = styled.div`
-  background: oklch(96.88% 0.015 294.47);
-  text-align: start;
-  height: fit-content;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 36px;
-  z-index: 11;
-`;
-
-const BackDrop = styled.div`
-  position: fixed;
-  background: oklch(3.53% 0 73 / 50%);
-  backdrop-filter: blur(20px);
-  z-index: 11;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-`;
+function InitPage() {
+	return (
+		<React.Fragment>
+			<div className={style.devsiteContentSiteContent}>
+				<div className={style.contentWrapper}>
+					<div className={style.welcomeMessage}>
+						<h1>안녕하세요!</h1>
+					</div>
+					<div className={style.textContainer}>
+						<p>
+							이 홈페이지는 단순한 <b>데모(가짜)</b> 페이지 입니다.
+						</p>
+						<p>
+							시작하시려면 아래의 <b>시작하기</b>를 눌러주세요!
+						</p>
+					</div>
+					<Spacer size={16} axis="vertical" />
+					<StartButton />
+					<Spacer size={32} axis="vertical" />
+				</div>
+			</div>
+			<div className={style.backDrop} />
+		</React.Fragment>
+	);
+}
 
 export default InitPage;
