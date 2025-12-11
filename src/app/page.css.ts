@@ -1,21 +1,21 @@
+import { style } from "@vanilla-extract/css";
 import { flexColumnCenter } from "@/style/Flex.css";
 import { gridCenter } from "@/style/Grid.css";
-import { style } from "@vanilla-extract/css";
 
 export const welcomeMessage = style([
   gridCenter,
   {
     paddingTop: "32px",
-  }
-])
+  },
+]);
 
 export const textContainer = style([
   gridCenter,
   {
     overflowY: "scroll",
     padding: "1rem 1rem",
-  }
-])
+  },
+]);
 
 export const contentWrapper = style([
   flexColumnCenter,
@@ -25,7 +25,7 @@ export const contentWrapper = style([
     height: "fit-content",
     borderRadius: "36px",
     zIndex: 11,
-  }
+  },
 ]);
 
 export const devsiteContentSiteContent = style([
@@ -35,7 +35,7 @@ export const devsiteContentSiteContent = style([
     height: "100cqh",
     padding: "5cqh 6cqh",
     zIndex: 12,
-  }
+  },
 ]);
 
 export const backDrop = style({
