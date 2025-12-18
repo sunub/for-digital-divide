@@ -88,7 +88,7 @@ function Numpad({ keypad }: { keypad: KeypadDetail }) {
     <div className={style.numpadWrapper}>
       {keypad.svgGrid.map((row, i) => (
         <ul key={NUM_PAD_SLOTS[i]} className={style.numpadRow}>
-          {row.map(({ x, y, num }, j) => {
+          {row.map(({ x, y }, j) => {
             const shape = numpadShapeGrid[i][j] as ShapeType;
             const key = `cell-${i}-${j}`;
 
