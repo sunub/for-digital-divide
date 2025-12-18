@@ -35,12 +35,11 @@
     "lucide-react": "^0.514.0",
     "motion": "^12.4.3",
     "nanoid": "^5.1.5",
-    "next": "15.0.5",
+    "next": "15.5.9",
     "ora": "^8.2.0",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "styled-components": "^6.1.8",
-    "zod": "^3.25.67",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "zod": "^4.1.13",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
