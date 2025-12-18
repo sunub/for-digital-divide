@@ -1,14 +1,21 @@
-'use client';
+"use client";
 
-import styled from 'styled-components';
-import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import * as style from "./Tooltip.css";
 
 type TooltipContextValue = {
   isVisible: boolean;
   toggleVisible: () => void;
-  rootContainerRef: React.RefObject<HTMLDivElement | null>;
-  triggerRef: React.RefObject<HTMLDivElement | null>;
-  setTriggerRef: (ref: React.RefObject<HTMLDivElement | null>) => void;
+  rootContainerRef: React.RefObject<HTMLElement | null>;
+  triggerElement: HTMLElement | null;
+  setTriggerElement: (element: HTMLElement | null) => void;
 };
 
 export const TooltipContext = createContext<TooltipContextValue | null>(null);
@@ -16,22 +23,20 @@ export const TooltipContext = createContext<TooltipContextValue | null>(null);
 export const useTooltipContext = () => {
   const context = useContext(TooltipContext);
   if (context === null) {
-    throw new Error('useTooltipContext must be used within a TooltipProvider');
+    throw new Error("useTooltipContext must be used within a TooltipProvider");
   }
   return context;
 };
 
 export function TooltipProvider({ children }: { children: React.ReactNode }) {
   const rootContainerRef = useRef<HTMLDivElement | null>(null);
-  const triggerRef = useRef<HTMLDivElement | null>(null);
+  const [triggerElement, setTriggerElement] = useState<HTMLElement | null>(
+    null,
+  );
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisible = useCallback(() => {
     setIsVisible((prev) => !prev);
-  }, []);
-
-  const setTriggerRef = useCallback((ref: React.RefObject<HTMLDivElement | null>) => {
-    triggerRef.current = ref.current;
   }, []);
 
   const value = useMemo(
@@ -39,20 +44,17 @@ export function TooltipProvider({ children }: { children: React.ReactNode }) {
       isVisible,
       toggleVisible,
       rootContainerRef,
-      triggerRef,
-      setTriggerRef,
+      triggerElement,
+      setTriggerElement,
     }),
-    [isVisible, toggleVisible, setTriggerRef],
+    [isVisible, toggleVisible, triggerElement],
   );
 
   return (
     <TooltipContext.Provider value={value}>
-      <Container ref={rootContainerRef}>{children}</Container>
+      <div ref={rootContainerRef} className={style.tooltipProvider}>
+        {children}
+      </div>
     </TooltipContext.Provider>
   );
 }
-
-const Container = styled.div`
-  position: relative;
-  z-index: 30;
-`;

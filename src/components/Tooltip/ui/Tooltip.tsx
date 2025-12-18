@@ -1,12 +1,9 @@
-import { TooltipContent } from './TooltipContent';
-import { TooltipProvider } from './TooltipProvider';
-import { TooltipTrigger } from './TooltipTrigger';
+import { TooltipContent } from "./TooltipContent";
+import { TooltipProvider } from "./TooltipProvider";
+import { TooltipTrigger } from "./TooltipTrigger";
 
-export function Tooltip({ children }: { children: React.ReactNode }) {
-  return <TooltipProvider>{children}</TooltipProvider>;
-}
-
-Tooltip.displayName = 'Tooltip';
-
-Tooltip.Trigger = TooltipTrigger;
-Tooltip.Content = TooltipContent;
+export const Tooltip = {
+  Provider: TooltipProvider,
+  Trigger: TooltipTrigger,
+  Content: TooltipContent,
+} as const;
