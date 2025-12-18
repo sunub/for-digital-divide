@@ -1,23 +1,30 @@
-import { DeviceContent, DeviceFrame } from '@/shared/layout';
-import { AnimatePresenceContainer } from './ui/AnimatePresenceContainer';
-import { DashboardHeader } from './ui/Dashboard/ui/DashboardHeader';
-import { getUsername } from './ui/Dashboard/utils/getUsername';
-import { DashboardRootContainer } from './ui/Dashboard/style';
+import { Suspense } from "react";
+import { Tooltip } from "@/components/Tooltip";
+import { Device } from "@/shared/layout";
+import * as style from "./layout.css";
+import { TransitionLayout } from "./TransitionLayout";
+import { DashboardHeader } from "./ui/Dashboard/ui/DashboardHeader/DashboardHeader";
 
-export default async function Layout({ children }: { children: React.ReactNode }) {
-  const username = await getUsername();
-
+export default async function RootLayout({
+  children,
+  modal,
+}: {
+  children: React.ReactNode;
+  modal: React.ReactNode;
+}) {
   return (
-    <>
-      <DeviceFrame>
-        <DeviceContent>
-          <DashboardRootContainer>
-            <DashboardHeader username={username} />
-            <AnimatePresenceContainer>{children}</AnimatePresenceContainer>
-          </DashboardRootContainer>
-        </DeviceContent>
-      </DeviceFrame>
+    <Tooltip.Provider>
+      <Device.frame>
+        <Device.content>
+          <div className={style.dashboardRootContainer}>
+            <Suspense fallback={<div>Loading...</div>}>
+              <DashboardHeader />
+            </Suspense>
+            <TransitionLayout modal={modal}>{children}</TransitionLayout>
+          </div>
+        </Device.content>
+      </Device.frame>
       <div id="tooltip-root" />
-    </>
+    </Tooltip.Provider>
   );
 }

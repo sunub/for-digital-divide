@@ -1,31 +1,20 @@
-import dynamic from 'next/dynamic';
-import Dashboard from './ui/Dashboard';
+import { AlertMessage } from "./ui/Dashboard/ui/AlertMessage";
+import { getAccountsData } from "./ui/Dashboard/utils/getAccountsData";
+import { getPinAvailable } from "./ui/Dashboard/utils/getPinAvailable";
+import { DashboardClient } from "./ui/DashboardClient";
+import { MainTitle } from "./ui/MainTitle";
 
-export type PageState = 'initial_prompt' | 'register-pin';
-interface SearchParams {
-  [key: string]: string | PageState | undefined;
-  page: PageState;
-  accountIndex?: string;
-}
-
-const RegisterPinPage = dynamic(() => import('./ui/RegisterPin'));
-export default async function Page({ searchParams }: { searchParams: Promise<SearchParams> }) {
-  const { page, accountIndex } = (await searchParams) ?? { page: 'initial_prompt' };
+export default async function Dashboard() {
+  const [isPinAvailable, accounts] = await Promise.all([
+    getPinAvailable(),
+    getAccountsData(),
+  ]);
 
   return (
     <>
-      {(() => {
-        switch (page) {
-          case 'initial_prompt':
-            return <Dashboard accountIndex={accountIndex} />;
-
-          case 'register-pin':
-            return <RegisterPinPage />;
-
-          default:
-            return <Dashboard accountIndex={accountIndex} />;
-        }
-      })()}
+      <AlertMessage defaultOpen={!isPinAvailable} />
+      <MainTitle />
+      <DashboardClient accounts={accounts} />
     </>
   );
 }
