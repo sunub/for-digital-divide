@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { getSVGGrid, shuffleArray } from '@/utils/keypad';
+import { NextResponse } from "next/server";
+import { getSVGGrid, shuffleArray } from "@/utils/keypad";
 
 const NUMPAD_AXIS = [
   [0, 0, 2],
