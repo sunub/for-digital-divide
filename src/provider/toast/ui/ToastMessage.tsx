@@ -1,10 +1,16 @@
-import { useAtom } from 'jotai';
-import { AngryIcon, FrownIcon, InfoIcon, LaughIcon, PartyPopperIcon } from 'lucide-react';
-import { motion, useAnimation, Variants } from 'motion/react';
-import { useEffect } from 'react';
-import { toastsAtom } from '../atom';
-import { Message, SuccessIconContainer, Text } from '../style';
-import { FlexCenterDiv } from '@/shared/style/component/div';
+import { useAtom } from "jotai";
+import {
+  AngryIcon,
+  FrownIcon,
+  InfoIcon,
+  LaughIcon,
+  PartyPopperIcon,
+} from "lucide-react";
+import { motion, useAnimation, type Variants } from "motion/react";
+import { nanoid } from "nanoid";
+import { useEffect } from "react";
+import { toastsAtom } from "../atom";
+import * as styles from "../style/toast.css";
 
 const toastVariants: Variants = {
   initial: { opacity: 0, y: -50 },
@@ -17,19 +23,19 @@ const toastVariants: Variants = {
 
 function ToastStatus({ type }: { type: string }) {
   switch (type) {
-    case 'success':
+    case "success":
       return (
-        <SuccessIconContainer>
-          <PartyPopperIcon className="icon" />
-          <LaughIcon className="icon" />
-        </SuccessIconContainer>
+        <div className={styles.successIconContainer}>
+          <PartyPopperIcon className={styles.icon} />
+          <LaughIcon className={styles.icon} />
+        </div>
       );
-    case 'error':
-      return <FrownIcon className="icon" />;
-    case 'info':
-      return <InfoIcon className="icon" />;
-    case 'warning':
-      return <AngryIcon className="icon" />;
+    case "error":
+      return <FrownIcon className={styles.icon} />;
+    case "info":
+      return <InfoIcon className={styles.icon} />;
+    case "warning":
+      return <AngryIcon className={styles.icon} />;
     default:
       return null;
   }
@@ -37,11 +43,20 @@ function ToastStatus({ type }: { type: string }) {
 
 function Messages({ message }: { message: string[] }) {
   return (
-    <FlexCenterDiv style={{ flexDirection: 'column' }}>
-      {message.map((msg, index) => (
-        <Text key={index}>{msg}</Text>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      {message.map((msg) => (
+        <p className={styles.text} key={nanoid()}>
+          {msg}
+        </p>
       ))}
-    </FlexCenterDiv>
+    </div>
   );
 }
 
@@ -58,27 +73,30 @@ export function ToastMessage({
   const [, dispatch] = useAtom(toastsAtom);
 
   useEffect(() => {
-    controls.start('animate');
+    controls.start("animate");
     const timer = setTimeout(() => {
-      controls.start('exit').then(() => dispatch({ type: 'remove', payload: { id: toast.id } }));
+      controls
+        .start("exit")
+        .then(() => dispatch({ type: "remove", payload: { id: toast.id } }));
     }, 3000);
     return () => clearTimeout(timer);
-  }, [controls, dispatch, index, length, toast.id]);
+  }, [controls, dispatch, toast.id]);
 
   return (
-    <Message
-      as={motion.div}
+    <motion.div
       custom={{ length, index }}
       variants={toastVariants}
       initial="initial"
       animate={controls}
       exit="exit"
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
       style={{ zIndex: index }}
-      className={`toast ${toast.type}`}
+      className={styles.message({
+        type: toast.type as "success" | "error" | "info" | "warning",
+      })}
     >
       <ToastStatus type={toast.type} />
       <Messages message={toast.message} />
-    </Message>
+    </motion.div>
   );
 }
