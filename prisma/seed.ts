@@ -190,8 +190,6 @@ export async function seedDemoAccountAndTransactionInfo() {
     return;
   }
 
-  console.log();
-
   const transactionChecks = await Promise.all(
     accounts.map((acc) =>
       transactionsService.findByAccountNumber(Number(acc.account_number)),
