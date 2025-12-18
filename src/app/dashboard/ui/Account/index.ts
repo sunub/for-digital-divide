@@ -1,3 +1,3 @@
-import AccountCard from './ui/AccountCard';
+import AccountCard from "./ui/AccountCard";
 
 export default AccountCard;
