@@ -56,5 +56,11 @@
     "@vanilla-extract/sprinkles": "^1.6.5",
     "prisma": "^7.1.0",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "prisma",
+      "sharp"
+    ]
   }
 }
