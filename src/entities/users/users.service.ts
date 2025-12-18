@@ -1,5 +1,5 @@
-import type { Users, UsersId } from './users.model';
-import { usersRepository } from './users.repository';
+import type { Users, UsersId } from "./users.model";
+import { usersRepository } from "./users.repository";
 
 export const userService = {
   async findByUserId(user_id: UsersId) {
@@ -9,8 +9,16 @@ export const userService = {
     return usersRepository.findByEmail(email);
   },
 
-  async upsertSessionByUsernameAndEmail(username: string, email: string, session_id?: string) {
-    return usersRepository.upsertSessionByUsernameAndEmail(username, email, session_id);
+  async upsertSessionByUsernameAndEmail(
+    username: string,
+    email: string,
+    session_id?: string,
+  ) {
+    return usersRepository.upsertSessionByUsernameAndEmail(
+      username,
+      email,
+      session_id,
+    );
   },
 
   async findUserBySessionId(session_id: string) {

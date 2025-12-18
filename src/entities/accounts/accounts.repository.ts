@@ -1,5 +1,5 @@
-import { prisma } from '@root/prisma/prisma';
-import type { AccountType } from './accounts.model';
+import { prisma } from "@root/prisma/prisma";
+import type { AccountType } from "./accounts.model";
 
 export const accountsRepository = {
   async findByUserId(user_id: number) {
@@ -8,7 +8,10 @@ export const accountsRepository = {
     });
   },
 
-  async updateByAccountNumber(account_number: number, data: Partial<AccountType>) {
+  async updateByAccountNumber(
+    account_number: number,
+    data: Partial<AccountType>,
+  ) {
     return prisma.accounts.update({
       where: { account_number },
       data,

@@ -1,30 +1,6 @@
-import crypto from 'crypto';
-import { Base64 } from 'js-base64';
-
-export interface KeypadInfo {
-  uid: string;
-  hashes: [string, number][];
-  keypad: KeypadDetail;
-}
-
-export interface SvgGrid {
-  x: number;
-  y: number;
-  num: string;
-}
-
-export interface KeypadDetail {
-  functionKeys: {
-    symbol: string;
-    rowIndex: number;
-    columnIndex: number;
-  }[];
-  size: {
-    row: number;
-    columns: number;
-  };
-  svgGrid: SvgGrid[][];
-}
+import crypto from "node:crypto";
+import { Base64 } from "js-base64";
+import type { KeypadInfo, SvgGrid } from "@/types/keypad";
 
 export function shuffleArray(array: number[][]): number[][] {
   const copyedArray = Array.from(array);
@@ -46,8 +22,8 @@ export function getSVGGrid(array: number[][]): KeypadInfo {
 
   const hashes = new Map();
   const hashKeys = shuffledNumpadAxis.map(([, , num]) => {
-    const hash = crypto.createHash('sha256').update(num.toString()).digest();
-    const encodedSignature = Base64.encode(hash.toString('binary'));
+    const hash = crypto.createHash("sha256").update(num.toString()).digest();
+    const encodedSignature = Base64.encode(hash.toString("binary"));
     hashes.set(encodedSignature, num);
     return encodedSignature;
   });
@@ -86,12 +62,12 @@ export function getSVGGrid(array: number[][]): KeypadInfo {
   shuffledGrid[3].unshift({
     x: 0,
     y: -150,
-    num: '100',
+    num: "100",
   });
   shuffledGrid[3].push({
     x: -80,
     y: -150,
-    num: '101',
+    num: "101",
   });
 
   return {
@@ -100,12 +76,12 @@ export function getSVGGrid(array: number[][]): KeypadInfo {
     keypad: {
       functionKeys: [
         {
-          symbol: 'BLANK',
+          symbol: "BLANK",
           rowIndex: Math.floor(3 / 4),
           columnIndex: 3 % 4,
         },
         {
-          symbol: 'SHUFFLE',
+          symbol: "SHUFFLE",
           rowIndex: Math.floor(3 / 4),
           columnIndex: 3 % 4,
         },

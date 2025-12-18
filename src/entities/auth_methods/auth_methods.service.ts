@@ -1,17 +1,17 @@
-import type { AuthMethod, AuthMethodCode } from './auth_methods.model';
-import { authMethodsRepository } from './auth_methods.repository';
-import { UsersId } from '../users/users.model';
+import type { UsersId } from "../users/users.model";
+import type { AuthMethod, AuthMethodCode } from "./auth_methods.model";
+import { authMethodsRepository } from "./auth_methods.repository";
 
 export const authMethodsService = {
   async findByUserId(user_id: UsersId) {
     return authMethodsRepository.findByUserId(user_id);
   },
 
-  async findByDeviceId(device_id: string) {
-    return authMethodsRepository.findByDeviceId(device_id);
+  async findByProviderUid(provider_uid: string) {
+    return authMethodsRepository.findByProviderUid(provider_uid);
   },
 
-  async upsertDataByUserId(data: Omit<AuthMethod, 'auth_method_id'>) {
+  async upsertDataByUserId(data: Omit<AuthMethod, "auth_method_id">) {
     return authMethodsRepository.upsertDataByUserId(data);
   },
 

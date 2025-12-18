@@ -1,9 +1,9 @@
-import { z } from 'zod/v4';
+import { z } from "zod/v4";
 
-const AUTH_METHODS_CODE = ['PIN', 'OAUTH', 'PASSWORD'] as const;
+const AUTH_METHODS_CODE = ["PIN", "OAUTH", "PASSWORD"] as const;
 
 const hexIdentifierSchema = z.string().regex(/^[0-9a-f]{32}$/i, {
-  message: '유효하지 않은 32자리 16진수 ID입니다.',
+  message: "유효하지 않은 32자리 16진수 ID입니다.",
 });
 
 export type AuthMethodCode = z.infer<typeof AuthMethodCodeSchema>;

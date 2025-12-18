@@ -1,5 +1,5 @@
-import { z } from 'zod/v4';
-import { ACCOUNT_CODES, ACCOUNT_NAMES } from './constants';
+import { z } from "zod/v4";
+import { ACCOUNT_CODES, ACCOUNT_NAMES } from "./constants";
 
 export type AccountCode = (typeof ACCOUNT_CODES)[number];
 

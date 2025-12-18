@@ -11,5 +11,3 @@ export function singleton<Value>(name: string, factory: () => Value): Value {
   }
   return globalThis.__singleton[name] as Value;
 }
-
-export {};

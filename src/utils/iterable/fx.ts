@@ -1,9 +1,9 @@
-import { isIterable } from './isIterable';
-import { take } from './take';
-import { filter } from './filter';
-import { map } from './map';
-import { chunk } from './chunk';
-import { toAsyncIterable } from './toAsyncIterable';
+import { chunk } from "./chunk";
+import { filter } from "./filter";
+import { isIterable } from "./isIterable";
+import { map } from "./map";
+import { take } from "./take";
+import { toAsyncIterable } from "./toAsyncIterable";
 
 async function fromAsync<T>(asyncIterable: AsyncIterable<T>): Promise<T[]> {
   const result: T[] = [];
@@ -89,6 +89,10 @@ export function fx<T>(iterable: Iterable<T>): FxIterableSync<T>;
 
 export function fx<T>(asyncIterable: AsyncIterable<T>): FxIterableAsync<T>;
 
-export function fx<T>(iterable: Iterable<T> | AsyncIterable<T>): FxIterableSync<T> | FxIterableAsync<T> {
-  return isIterable(iterable) ? new FxIterableSync(iterable) : new FxIterableAsync(iterable);
+export function fx<T>(
+  iterable: Iterable<T> | AsyncIterable<T>,
+): FxIterableSync<T> | FxIterableAsync<T> {
+  return isIterable(iterable)
+    ? new FxIterableSync(iterable)
+    : new FxIterableAsync(iterable);
 }

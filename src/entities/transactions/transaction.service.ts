@@ -1,14 +1,14 @@
-import { Transaction } from './transaction.model';
-import { transactionsRepository } from './transaction.repository';
+import type { Transaction } from "./transaction.model";
+import { transactionsRepository } from "./transaction.repository";
 
 export const transactionsService = {
   async findById(transaction_id: number) {
     return transactionsRepository.findById(transaction_id);
   },
-  async create(data: Omit<Transaction, 'transaction_id'>) {
+  async create(data: Omit<Transaction, "transaction_id">) {
     return transactionsRepository.create(data);
   },
-  async createMany(data: Omit<Transaction, 'transaction_id'>[]) {
+  async createMany(data: Omit<Transaction, "transaction_id">[]) {
     return transactionsRepository.createMany(data);
   },
   async delete(transaction_id: number) {
