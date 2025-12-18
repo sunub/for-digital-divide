@@ -38,6 +38,7 @@
   --color-button: oklch(65.57% 0.19552898037793698 288.17775174927874);
   --color-highlight: oklch(73.96% 0.1963 25.278467161119735);
   --color-confirm: oklch(84.51% 0.162 147.29);
+  --color-invalid: oklch(58.82% 0.182 25.278467161119735);
   --default-shadow: linear-gradient(
     to left,
     oklch(21.25% 0.005 17.53) 0%,
@@ -98,6 +99,11 @@ body {
   font-family: var(--nanum-square-neo), sans-serif;
   font-size: var(--text-size);
   background-color: var(--color-background);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 #_next {
@@ -471,5 +477,114 @@ button {
   }
   100% {
     transform: translateX(0) rotate(-90deg);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes radialPending {
+  from {
+    border-radius: 1rem;
+    background-size: 0% 0%;
+    opacity: 0.5;
+  }
+  to {
+    background-size: 200% 200%;
+    opacity: 0;
+  }
+}
+
+@keyframes showTooltip {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes pending {
+  0%,
+  100% {
+    background-color: oklch(87.45% 0.064 286.931);
+    box-shadow: 0 6px 4px 0 oklch(76.64% 0.13 292.01 / 80%);
+  }
+  50% {
+    background-color: oklch(92.86% 0.036 289.07);
+    box-shadow: 0 4px 4px 0 oklch(76.64% 0.13 292.01 / 20%);
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes upAndDown {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(0.5rem) rotate(0deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes emphasis {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
   }
 }

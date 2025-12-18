@@ -1,38 +1,52 @@
-import './globals.css';
-import React, { Suspense } from 'react';
-import { Gugi } from 'next/font/google';
-import { ReloadButton } from '@/components/ReloadButton';
-import { Stepper } from '@/components/Stepper/ui/Stepper';
-import { JotaiProvider } from '@/provider/JotaiProvider';
-import { ToastContainer } from '@/provider/toast/ui/ToastContainer';
-import StyledComponentsRegistry from '@/components/StyledComponentsRegistry';
+import "./globals.css";
+import { Gugi } from "next/font/google";
+import type React from "react";
+import { Suspense } from "react";
+import { ReloadButton } from "@/components/ReloadButton";
+import { Stepper } from "@/components/Stepper/ui/Stepper";
+import { JotaiProvider } from "@/provider/JotaiProvider";
+import { FlashToastListener } from "@/provider/toast/ui/FlashToastListener";
+import { ToastContainer } from "@/provider/toast/ui/ToastContainer";
 
-const gugi = Gugi({ subsets: ['latin'], weight: '400' });
+const gugi = Gugi({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-gugi",
+});
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="kor" className={gugi.className}>
+    <html lang="ko" className={gugi.className}>
       <head>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet preload" as="style" />
+        <link
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet preload"
+          as="style"
+        />
         <meta charSet="utf-8" />
         <meta httpEquiv="u-ea-compatible" content="IE=edge" />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </head>
       <body id="root">
-        <StyledComponentsRegistry>
-          <JotaiProvider>
-            <div id="_next">
-              <div id="devsite-content">
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Stepper />
-                </Suspense>
-                {children}
-              </div>
-              <ReloadButton />
+        <JotaiProvider>
+          <div id="_next">
+            <div id="devsite-content">
+              <Suspense fallback={<div>Loading...</div>}>
+                <Stepper />
+              </Suspense>
+              {children}
             </div>
-            <ToastContainer />
-          </JotaiProvider>
-        </StyledComponentsRegistry>
+            <ReloadButton />
+          </div>
+          <ToastContainer />
+          <FlashToastListener />
+        </JotaiProvider>
+        <div id="alertDialog-wrapper" />
       </body>
     </html>
   );

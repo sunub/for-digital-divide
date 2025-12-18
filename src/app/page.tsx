@@ -4,7 +4,7 @@ import Link from "next/link";
 import _3DButton from "@/components/3DButton";
 import Spacer from "@/constants/Spacer";
 import { useHistory } from "@/shared/hooks/useHistory";
-import { Box } from "@/shared/ui/Box";
+import { Flex } from "@/shared/ui/Flex";
 import * as style from "./page.css";
 
 function StartButton() {
@@ -24,13 +24,13 @@ function StartButton() {
 function InitPage() {
   return (
     <>
-      <Box display={"flex"} px={1} backgroundColor={"onPrimary"}>
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-      </Box>
-      {/* <div className={style.devsiteContentSiteContent}>
-        <div className={style.contentWrapper}>
+      <div className={style.devsiteContentSiteContent}>
+        <Flex
+          direction={"column"}
+          alignItems={"center"}
+          justifyContent={"center"}
+          className={style.contentWrapper}
+        >
           <div className={style.welcomeMessage}>
             <h1>안녕하세요!</h1>
           </div>
@@ -45,9 +45,9 @@ function InitPage() {
           <Spacer size={16} axis="vertical" />
           <StartButton />
           <Spacer size={32} axis="vertical" />
-        </div>
+        </Flex>
       </div>
-      <div className={style.backDrop} /> */}
+      <div className={style.backDrop} />
     </>
   );
 }

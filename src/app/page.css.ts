@@ -1,5 +1,4 @@
 import { style } from "@vanilla-extract/css";
-import { flexColumnCenter } from "@/style/Flex.css";
 import { gridCenter } from "@/style/Grid.css";
 
 export const welcomeMessage = style([
@@ -18,7 +17,6 @@ export const textContainer = style([
 ]);
 
 export const contentWrapper = style([
-  flexColumnCenter,
   {
     background: "oklch(96.88% 0.015 294.47)",
     textAlign: "start",
