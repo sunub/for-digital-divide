@@ -1,8 +1,28 @@
-import { style, globalStyle, keyframes } from "@vanilla-extract/css";
+import {
+  createVar,
+  fallbackVar,
+  globalStyle,
+  style,
+} from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 import { gridCenter } from "@/style/Grid.css";
-import { vars } from "@/style/theme.css";
 import { fullSize } from "@/style/Size.css";
+import { vars } from "@/style/theme.css";
+
+export const hideScaleVar = createVar();
+export const contentHeightVar = createVar();
+export const drawerHeightVar = createVar();
+export const drawerAnimationVar = createVar();
+export const drawerContainerSizeVar = createVar();
+export const drawerContentDisplayVar = createVar();
+export const drawerContentZVar = createVar();
+export const drawerContentVar = createVar();
+export const drawerOpenerVar = createVar();
+export const translateYValVar = createVar();
+export const drawerBtmRadiusVar = createVar();
+
+export const drawerBorderRadiusVar = createVar();
+const drawerContenPaddingVar = createVar();
 
 export const placeCenter = recipe({
   base: {
@@ -35,14 +55,7 @@ export const contentRootWrapper = style({
 
 export const openr = style({
   vars: {
-    "--hide-scale": "1",
-  },
-  selectors: {
-    "&:has(input#device-content:checked)": {
-      vars: {
-        "--hide-scale": "0",
-      },
-    },
+    [hideScaleVar]: "1",
   },
 });
 
@@ -62,7 +75,7 @@ globalStyle(`${openr}::before`, {
   borderRadius: "50%",
   aspectRatio: "1 / 1",
   cursor: "pointer",
-  transform: "scale(var(--hide-scale))",
+  transform: `scale(${hideScaleVar})`,
   transition: "transform 300ms cubic-bezier(0.17, 1.48, 0.24, 1)",
 });
 
@@ -112,27 +125,33 @@ export const frame = style([
     `,
     transition: "grid 500ms cubic-bezier(0.17, 1.48, 0.24, 1)",
     selectors: {
-      "&:has(label[for='device-content'] > input:checked)": {
+      "&[data-view='content']": {
         vars: {
-          "--drawer-content-display": "none",
-          "--content-height": "20fr",
-          "--drawer-height": "1fr",
+          [drawerContentDisplayVar]: "none",
+          [contentHeightVar]: "20fr",
+          [drawerHeightVar]: "1fr",
         },
       },
-      "&:has(label[for='drawer'] > input:checked)": {
+      "&[data-view='drawer']": {
         vars: {
-          "--content-height": "3fr",
-          "--drawer-height": "4fr",
-          "--drawer-animation": "bounce-drawer-box",
-          "--drawer-container-size": "100%",
+          [contentHeightVar]: "3fr",
+          [drawerHeightVar]: "4fr",
+          [drawerAnimationVar]: "bounce-drawer-box",
+          [drawerContainerSizeVar]: "100%",
         },
       },
     },
   },
 ]);
 
+globalStyle(`${frame}[data-view='content'] ${openr}`, {
+  vars: {
+    [hideScaleVar]: "0",
+  },
+});
+
 globalStyle(`${frame} > div#drawer-container`, {
-  width: "var(--drawer-container-size)",
+  width: drawerContainerSizeVar,
 });
 
 globalStyle(`${frame}::after`, {
@@ -150,11 +169,17 @@ globalStyle(`${frame}::after`, {
 });
 
 export const drawerContent = style({
-  display: "var(--drawer-content-display)",
+  display: drawerContentDisplayVar,
   flexDirection: "column",
   gap: vars.space[9],
   alignItems: "center",
-  zIndex: "var(--drawer-content-z)",
+  zIndex: drawerContentZVar,
+});
+
+globalStyle(`${frame}&[data-view='drawer'] ${drawerContent}`, {
+  vars: {
+    [drawerContentDisplayVar]: "none",
+  },
 });
 
 export const input = style({
@@ -166,24 +191,17 @@ export const input = style({
   visibility: "hidden",
 });
 
-const emphasis = keyframes({
-  "0%": { transform: "scale(1)" },
-  "50%": { transform: "scale(1.1)" },
-  "100%": { transform: "scale(1)" },
-});
-
 export const drawerContainer = style({
   vars: {
-    "--drawer-content": "1px",
-    "--drawer-opener": "1fr",
-    "--translateY-val": "50%",
-    "--drawer-btm-radius": "16px",
-    "--drawer-content-z": "-1",
+    [drawerContentVar]: "1px",
+    [drawerOpenerVar]: "1fr",
+    [translateYValVar]: "50%",
+    [drawerBorderRadiusVar]: "16px",
+    [drawerContentZVar]: "-1",
   },
   gridArea: "drawer-device / 1",
   display: "grid",
-  gridTemplateRows:
-    "[opener] var(--drawer-opener) [drawer-content] var(--drawer-content)",
+  gridTemplateRows: `[opener] ${drawerOpenerVar} [drawer-content] ${drawerContentVar}`,
   width: "100cqw",
   alignItems: "center",
   placeContent: "center",
@@ -192,35 +210,32 @@ export const drawerContainer = style({
   marginLeft: "auto",
   marginRight: "auto",
   backgroundColor: "oklch(86.46% 0.073 293.45)",
-  borderTopLeftRadius: "16px",
-  borderTopRightRadius: "16px",
-  borderBottomLeftRadius: "var(--drawer-btm-radius)",
-  borderBottomRightRadius: "var(--drawer-btm-radius)",
-  selectors: {
-    "&:has(input:checked)": {
-      vars: {
-        "--drawer-content": "10fr",
-        "--drawer-opener": "1fr",
-        "--translateY-val": "0%",
-        "--drawer-btm-radius": "36px",
-        "--drawer-content-z": "0",
-      },
-    },
+  borderRadius: "16px",
+  padding: fallbackVar(drawerContenPaddingVar, "none"),
+});
+
+globalStyle(`${frame}[data-view='drawer'] ${drawerContainer}`, {
+  vars: {
+    [drawerContentVar]: "10fr",
+    [drawerOpenerVar]: "1fr",
+    [translateYValVar]: "0%",
+    [drawerContentZVar]: "0",
+    [drawerContenPaddingVar]: vars.fontSize["1rem"],
   },
 });
 
-globalStyle(`${drawerContainer}:has(input:not(:checked))::before`, {
-  animation: `${emphasis} 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) infinite`,
+globalStyle(`${frame}&[data-view='drawer'] ${drawerContainer}::before`, {
+  animation: `emphasis 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) infinite`,
 });
 
 globalStyle(`${drawerContainer} > div#drawer-content`, {
-  transform: "translateY(var(--translateY-val))",
+  transform: `translateY(var(${translateYValVar}))`,
 });
 
 export const drawerOpener = style({
   position: "relative",
-  width: "100cqw",
   height: "3cqh",
+  width: "100cqw",
   transition: "transform 100ms cubic-bezier(0.39, 0.575, 0.565, 1)",
   outlineOffset: "4px",
   cursor: "pointer",
@@ -352,7 +367,7 @@ export const gestureButton = style([
 globalStyle(`${gestureButton}:hover ${gestureCircle}`, {
   opacity: 1,
   transform: "scale(1.1)",
-  fill: `color-mix(in oklch, ${vars.color.gestureBase}, transparent 50%)`
+  fill: `color-mix(in oklch, ${vars.color.gestureBase}, transparent 50%)`,
 });
 
 globalStyle(`${gestureButton}:active ${gestureCircle}`, {

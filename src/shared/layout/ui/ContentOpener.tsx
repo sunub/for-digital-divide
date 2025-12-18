@@ -1,17 +1,16 @@
+"use client";
+
 import * as styles from "../style/layout.css";
+import { useDevice } from "./DeviceContext";
 
 export function ContentOpener() {
+  const { closeDrawer } = useDevice();
   return (
-    <label htmlFor="device-content" className={styles.openr}>
-      <input
-        type="radio"
-        defaultChecked
-        id="device-content"
-        name="device"
-        value="content"
-        readOnly
-        className={styles.input}
-      />
-    </label>
+    <button
+      type="button"
+      onClick={closeDrawer}
+      className={styles.openr}
+      aria-label="Close drawer and open content"
+    />
   );
 }

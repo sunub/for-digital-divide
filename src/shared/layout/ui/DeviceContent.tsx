@@ -1,3 +1,5 @@
+"use client";
+
 import type { HTMLMotionProps } from "motion/react";
 import { motion } from "motion/react";
 import * as styles from "../style/layout.css";
