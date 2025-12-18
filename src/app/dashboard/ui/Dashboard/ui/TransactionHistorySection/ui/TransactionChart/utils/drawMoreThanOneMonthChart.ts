@@ -1,7 +1,7 @@
-import * as d3 from 'd3';
-import { z } from 'zod/v4';
+import * as d3 from "d3";
+import { z } from "zod/v4";
 
-const TRNASACTION_CODES = ['DEPOSIT', 'WITHDRAWAL', 'PAYMENT'] as const;
+const TRNASACTION_CODES = ["DEPOSIT", "WITHDRAWAL", "PAYMENT"] as const;
 
 export const TransactionSchema = z.object({
   transaction_id: z.number().int(),
@@ -31,7 +31,7 @@ type FilteredData = {
   transaction_id: number;
   account_number: number;
   amount: number;
-  transaction_type: 'DEPOSIT' | 'WITHDRAWAL' | 'PAYMENT';
+  transaction_type: "DEPOSIT" | "WITHDRAWAL" | "PAYMENT";
   counterparty_account_number?: number | undefined;
   description?: string | undefined;
 }[];
@@ -48,19 +48,24 @@ export function drawMoreThanOneMonthChart(
   const allMonthlyAmounts: number[] = [];
 
   for (const type of groupKeys) {
-    const typeTransactions = filteredData.filter((d) => d.transaction_type === type);
+    const typeTransactions = filteredData.filter(
+      (d) => d.transaction_type === type,
+    );
     if (typeTransactions.length === 0) continue;
 
     const summary = d3.rollup(
       typeTransactions,
       (v) => d3.sum(v, (d) => d.amount),
-      (d) => d3.timeFormat('%Y-%m')(d.occurred_at),
+      (d) => d3.timeFormat("%Y-%m")(d.occurred_at),
     );
 
-    const summaries: MonthlySummary[] = Array.from(summary, ([monthStr, totalAmount]) => {
-      allMonthlyAmounts.push(totalAmount);
-      return { month: d3.timeParse('%Y-%m')(monthStr) as Date, totalAmount };
-    }).sort((a, b) => a.month.getTime() - b.month.getTime());
+    const summaries: MonthlySummary[] = Array.from(
+      summary,
+      ([monthStr, totalAmount]) => {
+        allMonthlyAmounts.push(totalAmount);
+        return { month: d3.timeParse("%Y-%m")(monthStr) as Date, totalAmount };
+      },
+    ).sort((a, b) => a.month.getTime() - b.month.getTime());
 
     monthlyData.push({ type, summaries });
   }
@@ -72,23 +77,27 @@ export function drawMoreThanOneMonthChart(
     .nice()
     .range([height, 0]);
 
+  const timeMonthEvery = d3.timeMonth.every(1);
+  if (!timeMonthEvery) {
+    throw new Error("d3.timeMonth.every(1) should not be null");
+  }
   svg
-    .append('g')
-    .attr('transform', `translate(0, ${height})`)
+    .append("g")
+    .attr("transform", `translate(0, ${height})`)
     .call(
       d3
         .axisBottom(x)
-        .ticks(d3.timeMonth.every(1)!)
+        .ticks(timeMonthEvery)
         .tickFormat((domainValue) => {
           const date = domainValue as Date;
-          return d3.timeFormat('%y/%m')(date);
+          return d3.timeFormat("%y/%m")(date);
         }),
     )
-    .selectAll('text')
-    .style('text-anchor', 'end')
-    .attr('dx', '-.8em')
-    .attr('dy', '.15em')
-    .attr('transform', 'rotate(-45)');
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", "rotate(-45)");
 
   const line = d3
     .line<MonthlySummary>()
@@ -98,40 +107,42 @@ export function drawMoreThanOneMonthChart(
 
   monthlyData.forEach((group) => {
     svg
-      .append('path')
+      .append("path")
       .datum(group.summaries)
-      .attr('fill', 'none')
-      .attr('stroke', color(group.type))
-      .attr('stroke-width', 3)
-      .attr('d', line);
+      .attr("fill", "none")
+      .attr("stroke", color(group.type))
+      .attr("stroke-width", 3)
+      .attr("d", line);
     svg
       .selectAll(`.dots-${group.type}`)
       .data(group.summaries)
       .enter()
-      .append('circle')
-      .attr('class', `dots-${group.type}`)
-      .attr('cx', (d) => x(d.month))
-      .attr('cy', (d) => y(d.totalAmount))
-      .attr('r', 5)
-      .attr('fill', color(group.type))
-      .on('mouseover', (event, d) => {
-        d3.select('body').selectAll('.tooltip').remove();
+      .append("circle")
+      .attr("class", `dots-${group.type}`)
+      .attr("cx", (d) => x(d.month))
+      .attr("cy", (d) => y(d.totalAmount))
+      .attr("r", 5)
+      .attr("fill", color(group.type))
+      .on("mouseover", (event, d) => {
+        d3.select("body").selectAll(".tooltip").remove();
         const tooltip = d3
-          .select('body')
-          .append('div')
-          .attr('class', 'tooltip')
-          .style('position', 'absolute')
-          .style('background', 'rgba(0,0,0,0.8)')
-          .style('color', 'white')
-          .style('padding', '8px')
-          .style('border-radius', '4px')
-          .style('pointer-events', 'none')
-          .style('font-size', '12px');
+          .select("body")
+          .append("div")
+          .attr("class", "tooltip")
+          .style("position", "absolute")
+          .style("background", "rgba(0,0,0,0.8)")
+          .style("color", "white")
+          .style("padding", "8px")
+          .style("border-radius", "4px")
+          .style("pointer-events", "none")
+          .style("font-size", "12px");
         tooltip
-          .html(`<b>${d3.timeFormat('%Y년 %m월')(d.month)}</b><br>월 합계: ${d.totalAmount.toLocaleString()}원`)
-          .style('left', `${event.pageX + 15}px`)
-          .style('top', `${event.pageY - 15}px`);
+          .html(
+            `<b>${d3.timeFormat("%Y년 %m월")(d.month)}</b><br>월 합계: ${d.totalAmount.toLocaleString()}원`,
+          )
+          .style("left", `${event.pageX + 15}px`)
+          .style("top", `${event.pageY - 15}px`);
       })
-      .on('mouseout', () => d3.selectAll('.tooltip').remove());
+      .on("mouseout", () => d3.selectAll(".tooltip").remove());
   });
 }

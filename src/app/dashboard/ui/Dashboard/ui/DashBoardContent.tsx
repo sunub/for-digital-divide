@@ -1,11 +1,7 @@
-'use client';
+"use client";
 
-import styled from 'styled-components';
+import * as style from "./DashboardContent.css";
 
 export function DashboardContent({ children }: { children?: React.ReactNode }) {
-  return <DashboardRootContainer>{children}</DashboardRootContainer>;
+  return <div className={style.dashboardRootContainer}>{children}</div>;
 }
-
-const DashboardRootContainer = styled.div`
-  grid-area: dashboard-content / 1;
-`;

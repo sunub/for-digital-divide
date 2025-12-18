@@ -1,22 +1,24 @@
-'use server';
+"use server";
 
-import { transactionsService } from '@/entities/transactions/transaction.service';
-import { TransactionSchema } from '@/entities/transactions/transaction.model';
-import { fx } from '@/utils/iterable/fx';
+import { TransactionSchema } from "@/entities/transactions/transaction.model";
+import { transactionsService } from "@/entities/transactions/transaction.service";
+import { fx } from "@/utils/iterable/fx";
 
 export type TransactionGen = Awaited<ReturnType<typeof getTransactions>>;
 
 function validateTransaction(transaction: unknown) {
   const parsedTransaction = TransactionSchema.safeParse(transaction);
   if (!parsedTransaction.success) {
-    console.error('Invalid transaction data:', parsedTransaction.error);
+    console.error("Invalid transaction data:", parsedTransaction.error);
     return false;
   }
   return true;
 }
 
 export async function getTransactions(accountNumber: number) {
-  const chunkedTransactions = fx(await transactionsService.findByAccountNumber(accountNumber))
+  const chunkedTransactions = fx(
+    await transactionsService.findByAccountNumber(accountNumber),
+  )
     .map((transaction) => ({
       ...transaction,
       account_number: Number(transaction.account_number.toString()),
