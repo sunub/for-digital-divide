@@ -1,21 +1,18 @@
-'use client';
+"use client";
 
-import { useAtom } from 'jotai';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
-import { stepperAtom } from '../store/atom';
+import { useAtom } from "jotai";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useCallback, useEffect } from "react";
+import { stepperAtom } from "../store/atom";
 
 export function useStepper() {
   const [, setStepper] = useAtom(stepperAtom);
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPath = pathname + (searchParams.size !== 0 ? `?${searchParams.toString()}` : '');
+  const currentPath =
+    pathname + (searchParams.size !== 0 ? `?${searchParams.toString()}` : "");
 
-  useEffect(() => {
-    updateStep();
-  }, [pathname, searchParams]);
-
-  const updateStep = () =>
+  const updateStep = useCallback(() => {
     setStepper((prev) => {
       const steps = prev.steps;
       const currentStepIndex = steps.findIndex((s) => {
@@ -29,14 +26,19 @@ export function useStepper() {
         })),
       };
     });
+  }, [currentPath, setStepper]);
 
-  const clearSteps = () => {
+  useEffect(() => {
+    updateStep();
+  }, [updateStep]);
+
+  const clearSteps = useCallback(() => {
     setStepper((prev) => ({
       ...prev,
       currentStep: 0,
       steps: prev.steps.map((step) => ({ ...step, done: false })),
     }));
-  };
+  }, [setStepper]);
 
   return { updateStep, clearSteps };
 }

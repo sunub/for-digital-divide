@@ -1,19 +1,22 @@
-'use client';
+"use client";
 
-import { DeviceFooter } from './DeviceFooter';
-import { Container, Frame } from '../style';
+import { DeviceProvider } from "./DeviceContext";
+import { DeviceFrameInner } from "./DeviceFrameInner";
 
-interface DeviceFrameProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface DeviceFrameProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-export function DeviceFrame({ children, ...props }: DeviceFrameProps) {
+export function DeviceFrame({
+  children,
+  className,
+  ...props
+}: DeviceFrameProps) {
   return (
-    <Container id="device-root">
-      <Frame id="device-wrapper" {...props}>
+    <DeviceProvider>
+      <DeviceFrameInner className={className} {...props}>
         {children}
-        <DeviceFooter />
-      </Frame>
-    </Container>
+      </DeviceFrameInner>
+    </DeviceProvider>
   );
 }

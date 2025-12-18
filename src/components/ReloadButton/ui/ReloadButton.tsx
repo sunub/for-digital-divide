@@ -1,25 +1,24 @@
-'use client';
+"use client";
 
-import { animate, motion, press } from 'motion/react';
-import { memo, useState } from 'react';
+import { animate, motion, press } from "motion/react";
+import { memo, useState } from "react";
+import * as style from "./ReloadButton.css";
 
 function Icon() {
   const [rotation, setRotation] = useState(0);
 
   const handleClick = () => {
-    press('.reload-button', el => {
-      animate(el, { scale: 0.8 }, { type: 'spring', stiffness: 1000 });
-      return () => animate(el, { scale: 1 }, { type: 'spring', stiffness: 500 });
+    press(".reload-button", (el) => {
+      animate(el, { scale: 0.8 }, { type: "spring", stiffness: 1000 });
+      return () =>
+        animate(el, { scale: 1 }, { type: "spring", stiffness: 500 });
     });
-    setRotation(prev => prev + 360);
+    setRotation((prev) => prev + 360);
     window.location.reload();
   };
 
   return (
-    <motion.button
-      onClick={handleClick}
-      className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-600 hover:bg-slate-500 text-gray-100 absolute top-4 right-4 reload-button transition-colors p-2"
-    >
+    <motion.button onClick={handleClick} className={style.reloadButton}>
       <motion.svg
         xmlns="http://www.w3.org/2000/svg"
         width={24}
@@ -32,8 +31,9 @@ function Icon() {
         strokeLinejoin="round"
         className="feather feather-rotate-cw"
         animate={{ rotate: rotation }}
-        transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+        transition={{ type: "spring", stiffness: 260, damping: 20 }}
       >
+        <title>Reload</title>
         <polyline points="23 4 23 10 17 10" />
         <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
       </motion.svg>

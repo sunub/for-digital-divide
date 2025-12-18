@@ -1,9 +1,16 @@
-import { Openr, Input } from '../style';
+"use client";
+
+import * as styles from "../style/layout.css";
+import { useDevice } from "./DeviceContext";
 
 export function ContentOpener() {
+  const { closeDrawer } = useDevice();
   return (
-    <Openr htmlFor="device-content">
-      <Input type="radio" defaultChecked id="device-content" name="device" value="content" readOnly />
-    </Openr>
+    <button
+      type="button"
+      onClick={closeDrawer}
+      className={styles.openr}
+      aria-label="Close drawer and open content"
+    />
   );
 }

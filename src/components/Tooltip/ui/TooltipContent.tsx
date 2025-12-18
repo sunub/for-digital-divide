@@ -1,73 +1,39 @@
-'use client';
+"use client";
 
-import styled, { keyframes } from 'styled-components';
-import { useRef } from 'react';
-import { useTooltipContext } from './TooltipProvider';
-import { createPortal } from 'react-dom';
-import { useTooltipPosition } from '../hooks/useTooltipPosition';
-import { useIsMounted } from '@/shared/hooks/useIsMounted';
+import { assignInlineVars } from "@vanilla-extract/dynamic";
+import { useRef } from "react";
+import { createPortal } from "react-dom";
+import { useIsMounted } from "@/shared/hooks/useIsMounted";
+import { useTooltipPosition } from "../hooks/useTooltipPosition";
+import * as style from "./Tooltip.css";
+import { useTooltipContext } from "./TooltipProvider";
 
 export function TooltipContent({ children }: { children: React.ReactNode }) {
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const { triggerRef, isVisible } = useTooltipContext();
-  const { top, left, triangleTop } = useTooltipPosition(triggerRef);
+  const { triggerElement, isVisible, rootContainerRef } = useTooltipContext();
+  const { top, left, triangleTop } = useTooltipPosition(
+    triggerElement,
+    rootContainerRef.current,
+  );
   const isMounted = useIsMounted();
+  const safeTop = typeof top === "number" && !Number.isNaN(top) ? top : 0;
+  const safeLeft = typeof left === "number" && !Number.isNaN(left) ? left : 0;
+  if (!isMounted) {
+    return null;
+  }
 
-  if (!isMounted) return null;
   return createPortal(
-    <Container
+    <div
       ref={tooltipRef}
-      className="tooltip-content"
-      $isVisible={isVisible}
-      $top={top}
-      $left={left}
-      $triangleTop={triangleTop}
+      className={style.tooltipContent({ isVisible })}
+      style={assignInlineVars({
+        [style.topVar]: `${safeTop}px`,
+        [style.leftVar]: `${safeLeft}px`,
+        [style.triangleTopVar]: `${triangleTop}px`,
+      })}
     >
       {children}
-    </Container>,
-    document.getElementById('tooltip-root') || document.body,
+    </div>,
+    document.getElementById("tooltip-root") || document.body,
   );
 }
-
-const showTooltip = keyframes`
-  0% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-4px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-`;
-
-const Container = styled.div<{ $isVisible: boolean; $top: number; $left: number; $triangleTop: number }>`
-  position: absolute;
-  top: ${({ $top }) => $top}px;
-  left: ${({ $left }) => ($left ? `${$left}px` : '50%')};
-  width: fit-content;
-  padding: 4px 8px;
-  border-radius: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--color-background);
-  font-weight: 500;
-  background-color: var(--color-accent);
-
-  transform: translateX(-50%);
-  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
-  animation: ${({ $isVisible }) => ($isVisible ? showTooltip : 'none')} 0.2s ease-in-out forwards;
-
-  user-select: none;
-  z-index: 100;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: ${({ $triangleTop }) => $triangleTop + 0.5}px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--color-accent);
-    width: var(--tooltip-triangle-width, 16px);
-    height: var(--tooltip-triangle-height, 8px);
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  }
-`;

@@ -1,13 +1,21 @@
-import { Carousel } from '@/components/Carousel';
-import AccountCard from '../../Account';
-import { AccountData } from '../utils/getAccountsData';
+import { Carousel } from "@/components/Carousel";
+import AccountCard from "../../Account";
+import type { AccountData } from "../utils/getAccountsData";
 
-export async function AccountSection({ accounts }: { accounts: AccountData }) {
+export function AccountSection({
+  accounts,
+  onSlideChange,
+}: {
+  accounts: AccountData;
+  onSlideChange?: (index: number) => void;
+}) {
+  console.log(accounts);
   return (
     <Carousel
       options={{
         loop: true,
       }}
+      onSlideChange={onSlideChange}
     >
       {accounts.map((account) => (
         <AccountCard

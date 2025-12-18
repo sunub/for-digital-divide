@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model Pattern {
@@ -91,13 +90,14 @@ model auth_methods {
   auth_method_id Int      @id @default(autoincrement())
   user_id        Int
   method         String   @db.VarChar(50)
-  credential     String   @db.VarChar(255)
+  credential     String   @db.Text
   provider       String?  @db.VarChar(50)
   provider_uid   String?  @db.VarChar(100)
   created_at     DateTime @default(now()) @db.Timestamp(6)
   users          users    @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([user_id, method], map: "auth_methods_user_method_unique")
+  @@index([provider_uid, provider], map: "auth_methods_provider_uid_provider_index")
 }
 
 model transaction_types {
@@ -128,4 +128,8 @@ model users {
   email        String         @unique @db.VarChar(254)
   accounts     accounts[]
   auth_methods auth_methods[]
+
+  @@index([session_id], map: "idx_users_session_id")
+  @@index([email], map: "idx_users_email")
+  @@index([name], map: "idx_users_name")
 }

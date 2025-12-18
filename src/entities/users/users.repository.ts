@@ -1,5 +1,5 @@
-import { prisma } from '@root/prisma/prisma';
-import { Users, UsersId } from './users.model';
+import { prisma } from "@root/prisma/prisma";
+import type { Users, UsersId } from "./users.model";
 
 export const usersRepository = {
   async findByUserId(user_id: UsersId) {
@@ -12,7 +12,11 @@ export const usersRepository = {
       where: { email },
     });
   },
-  async upsertSessionByUsernameAndEmail(username: string, email: string, session_id?: string) {
+  async upsertSessionByUsernameAndEmail(
+    username: string,
+    email: string,
+    session_id?: string,
+  ) {
     return prisma.users.upsert({
       where: { name: username, email },
       update: { session_id },
@@ -55,7 +59,7 @@ export const usersRepository = {
   },
   async findByName(name: string) {
     return prisma.users.findMany({
-      where: { name: { contains: name, mode: 'insensitive' } },
+      where: { name: { contains: name, mode: "insensitive" } },
     });
   },
 };

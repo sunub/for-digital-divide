@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 *,
 *::before,
 *::after {
@@ -19,16 +15,20 @@
 }
 
 @font-face {
-  src: url('/font/NanumSquareNeo-Variable.woff2') format('font-woff2');
-  font-family: 'NanumSquare';
+  src: url("/font/NanumSquareNeo-Variable.woff2") format("font-woff2");
+  font-family: "NanumSquare";
   font-weight: 500;
   font-display: swap;
   font-style: normal;
 }
 :root {
-  --nanum-square-neo: 'NanumSquare';
+  --nanum-square-neo: "NanumSquare";
 
-  --color-accent: color-mix(in oklch, oklch(63.93% 0.206 288.34), var(--color-primary) 20%);
+  --color-accent: color-mix(
+    in oklch,
+    oklch(63.93% 0.206 288.34),
+    var(--color-primary) 20%
+  );
   --color-thumb: oklch(45.42% 0.007 239.95);
   --color-thumb-background: oklch(45.42% 0.007 239.95);
   --color-background: oklch(0.9217 0.0271 294.47);
@@ -38,6 +38,7 @@
   --color-button: oklch(65.57% 0.19552898037793698 288.17775174927874);
   --color-highlight: oklch(73.96% 0.1963 25.278467161119735);
   --color-confirm: oklch(84.51% 0.162 147.29);
+  --color-invalid: oklch(58.82% 0.182 25.278467161119735);
   --default-shadow: linear-gradient(
     to left,
     oklch(21.25% 0.005 17.53) 0%,
@@ -98,6 +99,11 @@ body {
   font-family: var(--nanum-square-neo), sans-serif;
   font-size: var(--text-size);
   background-color: var(--color-background);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 #_next {
@@ -161,7 +167,7 @@ button {
 }
 
 .material-icons {
-  font-family: 'Material Icons';
+  font-family: "Material Icons", sans-serif;
   font-weight: normal;
   font-style: normal;
   font-size: 18px;
@@ -176,7 +182,7 @@ button {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'liga';
+  font-feature-settings: "liga";
 }
 
 #device-page__root-wrapper {
@@ -294,7 +300,11 @@ button {
 ::-webkit-scrollbar {
   width: 8px;
   height: 12px;
-  background-color: color-mix(in oklch, oklch(92.17% 0.039 291.94), transparent);
+  background-color: color-mix(
+    in oklch,
+    oklch(92.17% 0.039 291.94),
+    transparent
+  );
 }
 
 ::-webkit-scrollbar-thumb {
@@ -372,7 +382,9 @@ button {
       border-bottom-left-radius: 16px;
       border-bottom-right-radius: 36px;
 
-      grid-template-columns: [opener] var(--drawer-opener) [drawer-content] var(--drawer-content);
+      grid-template-columns: [opener] var(--drawer-opener) [drawer-content] var(
+          --drawer-content
+        );
       grid-template-rows: 1fr;
     }
 
@@ -456,15 +468,6 @@ button {
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
 @keyframes leftAndRight {
   0% {
     transform: translateX(0) rotate(-90deg);
@@ -474,5 +477,114 @@ button {
   }
   100% {
     transform: translateX(0) rotate(-90deg);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes radialPending {
+  from {
+    border-radius: 1rem;
+    background-size: 0% 0%;
+    opacity: 0.5;
+  }
+  to {
+    background-size: 200% 200%;
+    opacity: 0;
+  }
+}
+
+@keyframes showTooltip {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes pending {
+  0%,
+  100% {
+    background-color: oklch(87.45% 0.064 286.931);
+    box-shadow: 0 6px 4px 0 oklch(76.64% 0.13 292.01 / 80%);
+  }
+  50% {
+    background-color: oklch(92.86% 0.036 289.07);
+    box-shadow: 0 4px 4px 0 oklch(76.64% 0.13 292.01 / 20%);
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes upAndDown {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(0.5rem) rotate(0deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes emphasis {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
   }
 }

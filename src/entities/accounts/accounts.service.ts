@@ -1,12 +1,15 @@
-import type { AccountType } from './accounts.model';
-import { accountsRepository } from './accounts.repository';
+import type { AccountType } from "./accounts.model";
+import { accountsRepository } from "./accounts.repository";
 
 export const accountsService = {
   async findByUserId(user_id: number) {
     return accountsRepository.findByUserId(user_id);
   },
 
-  async updateByAccountNumber(account_number: number, data: Partial<AccountType>) {
+  async updateByAccountNumber(
+    account_number: number,
+    data: Partial<AccountType>,
+  ) {
     return accountsRepository.updateByAccountNumber(account_number, data);
   },
 

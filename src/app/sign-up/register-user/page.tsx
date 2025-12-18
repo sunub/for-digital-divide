@@ -1,39 +1,30 @@
-'use client';
+"use client";
 
-import { Form } from './ui/Form';
-import styled from 'styled-components';
-import { Gugi } from 'next/font/google';
-import { UsernameInput } from './ui/UsernameInput';
-import { FlexCenterDiv } from '@/shared/style/component/div';
-import { EmailAndPasswordField } from './ui/EmailAndPasswordField';
-import { DeviceContent, DeviceFrame } from '@/shared/layout';
-
-const gugi = Gugi({ subsets: ['latin'], weight: '400' });
+import { EmailAndPasswordField } from "@/components/EmailAndPasswordField";
+import { Form } from "@/components/Form/Form";
+import { UsernameInput } from "@/components/UsernameInput/UsernameInput";
+import { Device } from "@/shared/layout";
+import { Flex } from "@/shared/ui/Flex";
+import * as style from "./page.css";
+import { registerUserAction } from "./utils/registerUserAction";
 
 export default function RegisterUserNamePage() {
   return (
-    <DeviceFrame>
-      <DeviceContent>
-        <Container>
-          <Title>회원 가입</Title>
-          <Form>
+    <Device.frame>
+      <Device.content>
+        <Flex
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          gap="2rem"
+        >
+          <h1 className={style.title}>회원 가입</h1>
+          <Form action={registerUserAction}>
             <UsernameInput />
             <EmailAndPasswordField />
           </Form>
-        </Container>
-      </DeviceContent>
-    </DeviceFrame>
+        </Flex>
+      </Device.content>
+    </Device.frame>
   );
 }
-
-const Container = styled(FlexCenterDiv)`
-  flex-direction: column;
-  gap: 2rem;
-`;
-
-const Title = styled.h1`
-  font-size: 3rem;
-  font-weight: 700;
-  font-family: ${gugi.style.fontFamily};
-  color: color-mix(in oklch, oklch(63.93% 0.206 288.34), var(--color-primary) 20%);
-`;

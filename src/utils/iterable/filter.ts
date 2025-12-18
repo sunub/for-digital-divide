@@ -1,6 +1,9 @@
-import { isIterable } from './isIterable';
+import { isIterable } from "./isIterable";
 
-function* filterSync<T>(predicate: (item: T) => Promise<boolean> | boolean, iterable: Iterable<T>): Generator<T> {
+function* filterSync<T>(
+  predicate: (item: T) => Promise<boolean> | boolean,
+  iterable: Iterable<T>,
+): Generator<T> {
   for (const item of iterable) {
     if (predicate(item)) {
       yield item;
@@ -10,7 +13,7 @@ function* filterSync<T>(predicate: (item: T) => Promise<boolean> | boolean, iter
 
 async function* filterAsync<T>(
   predicate: (value: T) => Promise<boolean> | boolean,
-  asyncIterable: AsyncIterable<T>
+  asyncIterable: AsyncIterable<T>,
 ): AsyncIterableIterator<T> {
   const asyncIterator = asyncIterable[Symbol.asyncIterator]();
   while (true) {
@@ -22,16 +25,21 @@ async function* filterAsync<T>(
   }
 }
 
-export function filter<A>(fn: (a: A) => boolean | Promise<boolean>, iterable: Iterable<A>): IterableIterator<A>;
+export function filter<A>(
+  fn: (a: A) => boolean | Promise<boolean>,
+  iterable: Iterable<A>,
+): IterableIterator<A>;
 
 export function filter<A>(
   fn: (a: A) => boolean | Promise<boolean>,
-  iterable: AsyncIterable<A>
+  iterable: AsyncIterable<A>,
 ): AsyncIterableIterator<A>;
 
 export function filter<A>(
   fn: (a: A) => boolean | Promise<boolean>,
-  iterable: Iterable<A> | AsyncIterable<A>
+  iterable: Iterable<A> | AsyncIterable<A>,
 ): IterableIterator<A> | AsyncIterableIterator<A> {
-  return isIterable(iterable) ? filterSync(fn, iterable) : filterAsync(fn, iterable);
+  return isIterable(iterable)
+    ? filterSync(fn, iterable)
+    : filterAsync(fn, iterable);
 }

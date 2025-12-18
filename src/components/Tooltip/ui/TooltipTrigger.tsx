@@ -1,27 +1,29 @@
-import { useRef, useEffect, useState } from 'react';
-import { useTooltipToggle } from '../hooks/useTooltipToggle';
-import { useTooltipContext } from './TooltipProvider';
+"use client";
 
-export function TooltipTrigger({ children }: { children: React.ReactNode }) {
-  const buttonRef = useRef<HTMLDivElement>(null);
+import clsx from "clsx";
+import { useState } from "react";
+import type { ButtonProps } from "@/components/Button";
+import { Button } from "@/components/Button";
+import { useTooltipToggle } from "../hooks/useTooltipToggle";
+import { useTooltipContext } from "./TooltipProvider";
+
+interface TooltipTriggerProps extends ButtonProps {
+  children: React.ReactNode;
+}
+
+export function TooltipTrigger({ children, ...props }: TooltipTriggerProps) {
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
   const { isVisible, handleToggle } = useTooltipToggle();
-  const { setTriggerRef } = useTooltipContext();
-
-  useEffect(() => {
-    if (buttonRef.current) {
-      setTriggerRef(buttonRef);
-    }
-  }, [setTriggerRef]);
+  const { setTriggerElement } = useTooltipContext();
 
   function handleTrigger() {
     handleToggle();
   }
 
   return (
-    <div
-      ref={buttonRef}
-      className="tooltip-trigger"
+    <Button
+      ref={setTriggerElement}
+      className={clsx("tooltip-trigger", props.className)}
       onMouseEnter={() => {
         if (timer) {
           clearTimeout(timer);
@@ -36,8 +38,9 @@ export function TooltipTrigger({ children }: { children: React.ReactNode }) {
           handleTrigger();
         }
       }}
+      {...props}
     >
       {children}
-    </div>
+    </Button>
   );
 }

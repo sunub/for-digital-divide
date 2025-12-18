@@ -1,14 +1,28 @@
-import { memo } from 'react';
-import VisuallyHidden from '@/components/VisuallyHidden';
-import { GestureButton, GestureCircle } from '../../style';
-import Link from 'next/link';
+import Link from "next/link";
+import { memo } from "react";
+import VisuallyHidden from "@/components/VisuallyHidden";
+import * as styles from "../../style/layout.css";
 
 export const HomeButton = memo(({ href }: { href: string }) => {
   return (
-    <GestureButton type="button" aria-label="홈 버튼">
+    <button className={styles.gestureButton} type="button" aria-label="홈 버튼">
       <Link href={href}>
-        <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <GestureCircle cx="34" cy="34" r="30" fill="none" stroke="none" />
+        <svg
+          width="68"
+          height="68"
+          viewBox="0 0 68 68"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <title>홈 버튼</title>
+          <circle
+            className={styles.gestureCircle}
+            cx="34"
+            cy="34"
+            r="30"
+            fill="none"
+            stroke="none"
+          />
           <rect
             x="24.5"
             y="24.5"
@@ -16,11 +30,11 @@ export const HomeButton = memo(({ href }: { href: string }) => {
             height="19"
             rx="3.5"
             stroke="color-mix(in oklch, oklch(42.44% 0.011 17.58), transparent)"
-            strokeWidth={'2'}
+            strokeWidth={"2"}
           />
         </svg>
         <VisuallyHidden>홈 버튼</VisuallyHidden>
       </Link>
-    </GestureButton>
+    </button>
   );
 });

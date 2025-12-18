@@ -1,54 +1,55 @@
 {
-	"compilerOptions": {
-		"target": "es6",
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"module": "CommonJS",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"incremental": true,
-		"plugins": [
-			{
-				"name": "next"
-			}
-		],
-		"paths": {
-			"@/*": ["./src/*"],
-			"@compo/*": ["./src/components/*"],
-			"@icons/*": ["./src/icons/*"],
-			"@hooks/*": ["./src/shared/hooks/*"],
-			"@lib/*": ["./src/lib/*"],
-			"@public/*": ["./public/*"],
-			"@tests/*": ["./tests/*"],
-			"@root/*": ["./*"],
-			"@entities/*": ["./src/entities/*"],
-			"@dashboard/*": ["./src/app/dashboard/*"],
-			"@scripts/*": ["./scripts/*"],
-			"@style/*": ["./src/style/*"],
-		}
-	},
-	"ts-node": {
-		"transpileOnly": true,
-		"files": true,
-		"esm": false
-	},
-	"include": [
-		"next-env.d.ts",
-		"**/*.ts",
-		"**/*.tsx",
-		"**/*.js",
-		"**/*.jsx",
-		".next/types/**/*.ts",
-		"scripts/seed.mjs",
-		"./type.d.ts",
-		"scripts/generateTransactions.mjs",
-		"eslint.config.mjs"
-	],
-	"exclude": ["./node_modules"]
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@compo/*": ["./src/components/*"],
+      "@icons/*": ["./src/icons/*"],
+      "@hooks/*": ["./src/shared/hooks/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@public/*": ["./public/*"],
+      "@tests/*": ["./tests/*"],
+      "@root/*": ["./*"],
+      "@entities/*": ["./src/entities/*"],
+      "@dashboard/*": ["./src/app/dashboard/*"],
+      "@scripts/*": ["./scripts/*"],
+      "@style/*": ["./src/style/*"]
+    }
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "esm": false
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    ".next/types/**/*.ts",
+    "scripts/seed.mjs",
+    "./type.d.ts",
+    "scripts/generateTransactions.mjs",
+    "eslint.config.mjs",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": ["./node_modules"]
 }

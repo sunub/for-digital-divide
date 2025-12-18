@@ -1,0 +1,32 @@
+import { LogOutIcon } from "lucide-react";
+import { Suspense } from "react";
+import { Tooltip } from "@/components/Tooltip";
+import { Flex } from "@/shared/ui/Flex";
+import { logoutAction } from "../../utils/logoutAction";
+import * as style from "./DashboardHeader.css";
+import { Username } from "./Username";
+import { UsernameSection } from "./UsernameSection";
+
+export function DashboardHeader() {
+  return (
+    <div className={style.headerContainer}>
+      <UsernameSection>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Username />
+        </Suspense>
+      </UsernameSection>
+
+      <Flex alignItems="center" justifyContent="center" gap={3}>
+        <Tooltip.Trigger
+          type={"button"}
+          variant={"transparent"}
+          className={style.logOutButton}
+          onClick={logoutAction}
+        >
+          <LogOutIcon size={18} strokeWidth={3} />
+        </Tooltip.Trigger>
+        <Tooltip.Content>로그아웃</Tooltip.Content>
+      </Flex>
+    </div>
+  );
+}

@@ -1,31 +1,38 @@
-import { createStore } from 'zustand';
+import { createStore } from "zustand";
 
-export type Status = 'idle' | 'pending' | 'resolved' | 'rejected';
+export type Status = "idle" | "pending" | "resolved" | "rejected";
+
+export type Axis = {
+  x: number;
+  y: number;
+};
 
 export type NumpadState = {
-  numpad: string[];
+  numpad: Axis[];
   status: Status;
 };
 
 export type NumpadActions = {
   updateStatus: (newStatus: Status) => void;
-  updateNumpad: (newNumpad: string) => void;
+  updateNumpad: (newNumpad: Axis) => void;
   deleteNumpad: () => void;
 };
 
 export type NumpadStore = NumpadState & NumpadActions;
 
 export const defaultInitState: NumpadState = {
-  numpad: Array.from({ length: 4 }, () => ''),
-  status: 'idle',
+  numpad: Array.from({ length: 4 }, () => ({ x: 1000, y: 1000 })),
+  status: "idle",
 };
 
 export const defaultSubmitInitState: NumpadState = {
   numpad: [],
-  status: 'idle',
+  status: "idle",
 };
 
-export const createNumpadStore = (initState: NumpadState = defaultInitState) => {
+export const createNumpadStore = (
+  initState: NumpadState = defaultInitState,
+) => {
   return createStore<NumpadStore>()((set) => ({
     ...initState,
     updateStatus: (newStatus: Status) => {
@@ -38,7 +45,9 @@ export const createNumpadStore = (initState: NumpadState = defaultInitState) => 
     updateNumpad: (numpad) => {
       set((state) => {
         const newNumpad = [...state.numpad];
-        const firstInputIndex = state.numpad.findIndex((v) => v === '');
+        const firstInputIndex = state.numpad.findIndex(
+          (v) => v.x === 1000 && v.y === 1000,
+        );
         if (firstInputIndex === -1) {
           return state;
         }
@@ -48,13 +57,17 @@ export const createNumpadStore = (initState: NumpadState = defaultInitState) => 
     },
     deleteNumpad: () => {
       set(() => {
-        return { numpad: Array.from({ length: 4 }, () => '') };
+        return {
+          numpad: Array.from({ length: 4 }, () => ({ x: 1000, y: 1000 })),
+        };
       });
     },
   }));
 };
 
-export const createSumbitNumpadStore = (initState: NumpadState = defaultSubmitInitState) => {
+export const createSumbitNumpadStore = (
+  initState: NumpadState = defaultSubmitInitState,
+) => {
   return createStore<NumpadStore>()((set) => ({
     ...initState,
     updateStatus: (newStatus: Status) => {

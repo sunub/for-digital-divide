@@ -1,9 +1,9 @@
-'use server';
+"use server";
 
-import { redirect } from 'next/navigation';
-import { deleteSessionCookieStorage } from '@/utils/cookies/sessionCookieStorage';
+import { redirect } from "next/navigation";
+import { deleteSessionCookieStorage } from "@/utils/cookies/sessionCookieStorage";
 
 export async function logoutAction() {
-  await deleteSessionCookieStorage('en_session');
-  redirect('/login');
+  await deleteSessionCookieStorage("en_session");
+  redirect("/login");
 }

@@ -1,61 +1,38 @@
-'use client';
+"use client";
 
-import React from 'react';
-import styled from 'styled-components';
-import useToggle from '@/shared/hooks/use-toggle';
-import { ArrowIcon } from '@/icons';
-import { SmallPhone } from './ui/SmallPhone';
-import { FlexCenterDiv } from '@/shared/style/component/div';
+import { ArrowIcon } from "@/icons";
+import useToggle from "@/shared/hooks/use-toggle";
+import { Flex } from "@/shared/ui/Flex";
+import { phoneContainer, title } from "./page.css";
+import { SmallPhone } from "./ui/SmallPhone";
 
 export default function Home() {
   const [isOpen, toggleOpen] = useToggle(false);
 
   return (
-    <Container>
+    <Flex
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      width={"fullDvw"}
+      height={"fullDvh"}
+    >
       {!isOpen && (
-        <Title>
-          <h1>핸드폰을 클릭해주세요!</h1>
-          <ArrowIcon />
-        </Title>
+        <Flex
+          asChild
+          direction={"column"}
+          alignItems="center"
+          className={title}
+        >
+          <header>
+            <h1>핸드폰을 클릭해주세요!</h1>
+            <ArrowIcon />
+          </header>
+        </Flex>
       )}
-      <PhoneContainer>
+      <div className={phoneContainer}>
         <SmallPhone isOpen={isOpen} toggleOpen={toggleOpen} />
-      </PhoneContainer>
-    </Container>
+      </div>
+    </Flex>
   );
 }
-
-const Container = styled(FlexCenterDiv)`
-  flex-direction: column;
-  width: 100dvw;
-  height: 100dvh;
-
-  background-color: var(--color-background);
-  z-index: 3;
-`;
-
-const PhoneContainer = styled.div`
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: fit-content;
-`;
-
-const Title = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-  font-family: 'Gugi', sans-serif;
-
-  & > h1 {
-    font-weight: 700;
-    font-size: 2rem;
-  }
-
-  & > svg {
-    transform: scale(1.25) rotate(-90deg);
-  }
-`;

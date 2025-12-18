@@ -1,6 +1,6 @@
-import { prisma } from '@root/prisma/prisma';
-import type { AuthMethod, AuthMethodCode } from './auth_methods.model';
-import type { UsersId } from '../users/users.model';
+import { prisma } from "@root/prisma/prisma";
+import type { UsersId } from "../users/users.model";
+import type { AuthMethod, AuthMethodCode } from "./auth_methods.model";
 
 export const authMethodsRepository = {
   async findByUserId(user_id: UsersId) {
@@ -9,18 +9,27 @@ export const authMethodsRepository = {
     });
   },
 
-  async findByDeviceId(device_id: string) {
-    return prisma.auth_methods.findMany({
-      where: { provider_uid: device_id },
+  async findPasswordMethod(userId: number) {
+    return prisma.auth_methods.findFirst({
+      where: {
+        user_id: userId,
+        method: "PASSWORD",
+      },
     });
   },
 
-  async upsertDataByUserId(data: Omit<AuthMethod, 'auth_method_id'>) {
+  async findByProviderUid(provider_uid: string) {
+    return prisma.auth_methods.findMany({
+      where: { provider_uid: provider_uid },
+    });
+  },
+
+  async upsertDataByUserId(data: Omit<AuthMethod, "auth_method_id">) {
     const authMethodExists = await prisma.auth_methods.findFirst({
       where: { user_id: data.user_id, method: data.method },
     });
-    console.log('authMethodExists', authMethodExists);
-    console.log('data', data);
+    console.log("authMethodExists", authMethodExists);
+    console.log("data", data);
 
     return prisma.auth_methods.upsert({
       where: {
@@ -31,7 +40,7 @@ export const authMethodsRepository = {
     });
   },
 
-  async create(data: Omit<AuthMethod, 'auth_method_id'>) {
+  async create(data: Omit<AuthMethod, "auth_method_id">) {
     return prisma.auth_methods.create({
       data,
     });

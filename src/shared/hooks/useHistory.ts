@@ -1,13 +1,13 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
-  currentHistoryItemAtom,
   addHistoryAtom,
-  writeHistoryAtom,
   clearHistoryAtom,
-  nextHistoryAtom,
-  MAX_HISTORY_LENGTH,
+  currentHistoryItemAtom,
   historyAtom,
-} from '@/store/history-store';
+  MAX_HISTORY_LENGTH,
+  nextHistoryAtom,
+  writeHistoryAtom,
+} from "@/store/history-store";
 
 export const useHistory = () => {
   const [history, setHistory] = useAtom(historyAtom);
@@ -32,7 +32,9 @@ export const useHistory = () => {
   };
 
   const canGoPrev = history.index - 1 >= 0;
-  const canGoNext = history.index + 1 < history.historyList.length && history.index + 1 < MAX_HISTORY_LENGTH;
+  const canGoNext =
+    history.index + 1 < history.historyList.length &&
+    history.index + 1 < MAX_HISTORY_LENGTH;
 
   return {
     currentItem,

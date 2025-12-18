@@ -1,25 +1,18 @@
-import { HTMLAttributes } from 'react';
-import LoadingAnimation from './LoadingAnimation';
-import styled from 'styled-components';
-import { GirdCenterDiv } from '@/shared/style/component/div';
-import { fullSize } from '@/shared/style/css/size';
+import clsx from "clsx";
+import type { HTMLAttributes } from "react";
+import { gridCenter } from "@/style/Grid.css";
+import { fullSize } from "@/style/Size.css";
+import { LoadingAnimation } from "./LoadingAnimation";
 
-export function Loading({
-  size = 5,
-  radius = '1rem',
-  ...props
-}: {
+interface LoadingProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
   radius?: string;
-  props?: HTMLAttributes<HTMLDivElement>;
-}) {
-  return (
-    <Container {...props}>
-      <LoadingAnimation size={size} radius={radius} />
-    </Container>
-  );
 }
 
-const Container = styled(GirdCenterDiv)`
-  ${fullSize};
-`;
+export function Loading({ size = 5, radius = "1rem", ...props }: LoadingProps) {
+  return (
+    <div className={clsx(gridCenter, fullSize)} {...props}>
+      <LoadingAnimation size={size} radius={radius} />
+    </div>
+  );
+}

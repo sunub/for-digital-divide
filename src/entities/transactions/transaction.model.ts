@@ -1,5 +1,5 @@
-import { z } from 'zod/v4';
-import { TRNASACTION_CODES } from '@/entities/transaction_types/transaction_types.model';
+import { z } from "zod/v4";
+import { TRNASACTION_CODES } from "@/entities/transaction_types/transaction_types.model";
 
 export type Transaction = z.infer<typeof TransactionSchema>;
 

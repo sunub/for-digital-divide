@@ -1,17 +1,29 @@
-import { HTMLMotionProps } from 'motion/dist/react';
-import { ContentContainer, ContentRootWrapper } from '../style';
+"use client";
 
-interface DeviceContentProps extends HTMLMotionProps<'div'> {
+import type { HTMLMotionProps } from "motion/react";
+import { motion } from "motion/react";
+import * as styles from "../style/layout.css";
+
+interface DeviceContentProps extends HTMLMotionProps<"div"> {
   ref?: React.RefObject<HTMLDivElement>;
   children: React.ReactNode;
 }
 
-export function DeviceContent({ children, ref, ...props }: DeviceContentProps) {
+export function DeviceContent({
+  children,
+  ref,
+  className,
+  ...props
+}: DeviceContentProps) {
   return (
-    <ContentRootWrapper>
-      <ContentContainer {...props} ref={ref} className={props.className}>
+    <div className={styles.contentRootWrapper}>
+      <motion.div
+        {...props}
+        ref={ref}
+        className={`${styles.contentContainer} ${className || ""}`}
+      >
         {children}
-      </ContentContainer>
-    </ContentRootWrapper>
+      </motion.div>
+    </div>
   );
 }

@@ -1,174 +1,125 @@
-import { createVar, style } from "@vanilla-extract/css";
-import { type RecipeVariants, recipe } from "@vanilla-extract/recipes";
+import { createVar, fallbackVar } from "@vanilla-extract/css";
+import { recipe } from "@vanilla-extract/recipes";
+import { vars } from "@/style/theme.css";
 
-const vars = {
-	shadowGradient: createVar(),
-	inputBg: createVar(),
-	borderColor: createVar(),
-};
-
-export const rootClass = style({
-	cursor: "pointer",
-	backgroundColor: "transparent",
-	borderRadius: "0.75rem",
-	border: "none",
-	position: "relative",
-	WebkitTapHighlightColor: "transparent",
-	outlineOffset: "4px",
-	height: "fit-content",
-	fontSize: "1.5rem",
-	transition: "width 100ms cubic-bezier(0.3, 0.7, 0.4, 1)",
-	selectors: {
-		"&:focus:not(:focus-visible)": {
-			outline: "none",
-		},
-	},
-});
-
-export const frontClass = style({
-	position: "relative",
-	display: "inline-flex",
-	padding: "0 1rem",
-	height: "3rem",
-	width: "100%",
-	alignItems: "center",
-	justifyContent: "center",
-	textAlign: "center",
-	fontWeight: 700,
-	borderRadius: "1rem",
-	backgroundColor: vars.inputBg,
-	border: `5px solid ${vars.borderColor}`,
-	userSelect: "none",
-	willChange: "transform",
-	transform: "translateY(-6px)",
-	transition: "all 200ms cubic-bezier(0.3, 0.7, 0.4, 1)",
-	lineHeight: "calc(16px + 24px)",
-	textDecoration: "none",
-
-	selectors: {
-		[`${rootClass}:hover &`]: {
-			filter: "brightness(110%)",
-			transform: "translateY(-12px)",
-		},
-		[`${rootClass}[aria-pressed='true'] &`]: {
-			transform: "translateY(-2px)",
-			transition: "transform 100ms",
-			animation: "none",
-		},
-	},
-});
-
-export const shadowClass = style({
-	pointerEvents: "none",
-	userSelect: "none",
-	display: "block",
-	width: "100%",
-	height: "100%",
-	position: "absolute",
-	left: 0,
-	top: "3px",
-	borderRadius: "1rem",
-	backgroundColor: "oklch(0% 0 14.09 / 25%)",
-	transition: "transform 400ms cubic-bezier(0.3, 0.7, 0.4, 1)",
-	filter: "blur(2px)",
-	transform: "translateY(6px)",
-
-	selectors: {
-		[`${rootClass}:hover:not(:focus) &`]: {
-			transform: "translateY(6px)",
-			transition: "transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1)",
-		},
-
-		[`${rootClass}[aria-pressed='true'] &`]: {
-			transform: "translateY(2px)",
-			transition: "transform 340ms",
-		},
-	},
-});
-
-export const edgeClass = style({
-	pointerEvents: "none",
-	userSelect: "none",
-	display: "block",
-	position: "absolute",
-	left: 0,
-	top: "3px",
-	width: "100%",
-	height: "100%",
-	borderTopLeftRadius: "30px",
-	borderTopRightRadius: "30px",
-	borderBottomRightRadius: "16px",
-	borderBottomLeftRadius: "16px",
-	backgroundImage: vars.shadowGradient,
-});
-
-export const dotClass = recipe({
-	base: {
-		width: "0.25rem",
-		height: "0.25rem",
-		display: "block",
-		borderRadius: "50%",
-		position: "absolute",
-		transformOrigin: "center 2rem",
-		transition: "transform 100ms cubic-bezier(0.3, 0.7, 0.4, 1)",
-	},
-	variants: {
-		status: {
-			pending: {
-				visibility: "visible",
-				opacity: 1,
-				width: "1rem",
-				height: "1rem",
-			},
-			idle: { visibility: "hidden", opacity: 0 },
-		},
-		type: {
-			upper: { backgroundColor: "currentColor" },
-			lower: {
-				backgroundColor: "#334155",
-				mixBlendMode: "exclusion",
-				filter: "blur(2px)",
-			},
-		},
-	},
-});
+export const buttonPaddingVar = createVar();
+export const buttonCursorVar = createVar();
 
 export const buttonRecipe = recipe({
-	base: rootClass,
-
-	variants: {
-		variant: {
-			default: {
-				vars: {
-					[vars.borderColor]: "oklch(65.57% 0.19 288.17)",
-					[vars.inputBg]: "oklch(99.71% 0 66)",
-					[vars.shadowGradient]: `linear-gradient(to left, oklch(65.57% 0.19 288.17) 0%, oklch(75.57% 0.19 288.17) 9%, oklch(75.57% 0.19 288.17) 91%, oklch(35.57% 0.19 288.17) 100%)`,
-				},
-			},
-			confirm: {
-				vars: {
-					[vars.borderColor]: "oklch(60.96% 0.114 146.9)",
-					[vars.inputBg]: "oklch(84.51% 0.162 147.29)",
-					[vars.shadowGradient]: `linear-gradient(to left, oklch(60.96% 0.114 146.9) 0%, oklch(73.59% 0.114 146.9) 9%, oklch(73.59% 0.114 146.9) 91%, oklch(60.96% 0.114 146.9) 100%)`,
-				},
-			},
-			destructive: {
-				vars: {
-					[vars.borderColor]: "oklch(68.88% 0.231 26.47)",
-					[vars.inputBg]: "oklch(68.88% 0.231 26.47)",
-					[vars.shadowGradient]: `linear-gradient(to left, oklch(68.88% 0.231 26.47) 0%, oklch(65.88% 0.231 26.47) 9%, oklch(65.88% 0.231 26.47) 91%, oklch(68.88% 0.231 26.47) 0%)`,
-				},
-			},
-		},
-		status: {
-			pending: { pointerEvents: "none" },
-			idle: { pointerEvents: "auto" },
-		},
-	},
-	defaultVariants: {
-		variant: "default",
-		status: "idle",
-	},
+  base: {
+    position: "relative",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    cursor: fallbackVar(buttonCursorVar, "pointer"),
+    borderRadius: "12px",
+    fontWeight: "500",
+    transitionProperty:
+      "background-color, box-shadow, border-color, color, transform, outline",
+    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    transitionDuration: "150ms",
+    willChange: "transform, box-shadow, opacity",
+    outline: "none",
+    selectors: {
+      "&:focus-visible": {
+        outline: `4px solid oklch(75.57% 0.19 288.17)`,
+      },
+      "&:focus-within": {
+        boxShadow: `0 0 0 2px ${vars.color.background}, 0 0 0 6px ${vars.color.ring}`,
+      },
+      "&:disabled": {
+        pointerEvents: "none",
+        opacity: 0.5,
+      },
+      "&:active": {
+        outline: `4px solid oklch(75.57% 0.19 288.17)`,
+        transform: "scale(1.02)",
+      },
+    },
+  },
+  variants: {
+    variant: {
+      default: {
+        backgroundColor: vars.color.button,
+        selectors: {
+          "&:hover": {
+            color: vars.color.buttonActiveForeground,
+            backgroundColor: vars.color.buttonActive,
+          },
+        },
+      },
+      deep: {
+        backgroundColor: vars.color.buttonDefault,
+        color: vars.color.buttonDefaultForeground,
+        fontSize: "1.125rem",
+        lineHeight: "1.75rem",
+        selectors: {
+          "&:hover": {
+            color: vars.color.buttonActiveForeground,
+            backgroundColor: vars.color.buttonActive,
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.55)",
+          },
+        },
+      },
+      transparent: {
+        boxShadow: "none",
+        backgroundColor: "transparent",
+        color: vars.color.buttonDefaultForeground,
+      },
+      destructive: {
+        backgroundColor: vars.color.buttonDestructive,
+        color: vars.color.buttonDestructiveForeground,
+        selectors: {
+          "&:hover": {
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.55)",
+            backgroundColor: vars.color.destructiveActive,
+            color: vars.color.destructiveActiveForeground,
+          },
+        },
+      },
+    },
+    size: {
+      default: {
+        width: "fit-content",
+        height: "fit-content",
+        padding: fallbackVar(buttonPaddingVar, "0.5rem 1rem"),
+      },
+      wide: {
+        padding: fallbackVar(buttonPaddingVar, "1.25rem 6rem"),
+      },
+      sm: {
+        height: "1.75rem",
+        borderRadius: "0.375rem",
+        padding: fallbackVar(buttonPaddingVar, "0 0.75rem"),
+      },
+      lg: {
+        height: "2.75rem",
+        borderRadius: "0.375rem",
+        padding: fallbackVar(buttonPaddingVar, "0 2rem"),
+      },
+      pill: {
+        padding: fallbackVar(buttonPaddingVar, "0.75rem 3rem"),
+        lineHeight: "0.75rem",
+      },
+      icon: {
+        height: "2.5rem",
+        width: "2.5rem",
+      },
+    },
+    font: {
+      default: { fontSize: "1rem" },
+      xs: { fontSize: "0.75rem" },
+      sm: { fontSize: "0.875rem" },
+      lg: { fontSize: "1.125rem" },
+      xl: { fontSize: "1.25rem" },
+      xxl: { fontSize: "1.5rem" },
+      xxxl: { fontSize: "1.875rem" },
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+  },
 });
-
-export type ButtonVariants = RecipeVariants<typeof buttonRecipe>;

@@ -1,7 +1,10 @@
-import { isIterable } from './isIterable';
-import { take } from './take';
+import { isIterable } from "./isIterable";
+import { take } from "./take";
 
-function* chunkSync<T>(limit: number, iterable: Iterable<T>): IterableIterator<T[]> {
+function* chunkSync<T>(
+  limit: number,
+  iterable: Iterable<T>,
+): IterableIterator<T[]> {
   const iterator = iterable[Symbol.iterator]();
   while (true) {
     const arr = [
@@ -16,7 +19,10 @@ function* chunkSync<T>(limit: number, iterable: Iterable<T>): IterableIterator<T
   }
 }
 
-async function* chunkAsync<T>(limit: number, asyncIterable: AsyncIterable<T>): AsyncIterableIterator<T[]> {
+async function* chunkAsync<T>(
+  limit: number,
+  asyncIterable: AsyncIterable<T>,
+): AsyncIterableIterator<T[]> {
   const asyncIterator = asyncIterable[Symbol.asyncIterator]();
   while (true) {
     const chunks = [];
@@ -32,13 +38,21 @@ async function* chunkAsync<T>(limit: number, asyncIterable: AsyncIterable<T>): A
   }
 }
 
-export function chunk<A>(limit: number, iterable: Iterable<A>): IterableIterator<A[]>;
+export function chunk<A>(
+  limit: number,
+  iterable: Iterable<A>,
+): IterableIterator<A[]>;
 
-export function chunk<A>(limit: number, iterable: AsyncIterable<A>): AsyncIterableIterator<A[]>;
+export function chunk<A>(
+  limit: number,
+  iterable: AsyncIterable<A>,
+): AsyncIterableIterator<A[]>;
 
 export function chunk<A>(
   limit: number,
   iterable: Iterable<A> | AsyncIterable<A>,
 ): IterableIterator<A[]> | AsyncIterableIterator<A[]> {
-  return isIterable(iterable) ? chunkSync(limit, iterable) : chunkAsync(limit, iterable);
+  return isIterable(iterable)
+    ? chunkSync(limit, iterable)
+    : chunkAsync(limit, iterable);
 }

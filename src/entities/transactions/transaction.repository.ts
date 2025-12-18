@@ -1,5 +1,5 @@
-import { prisma } from '@root/prisma/prisma';
-import { Transaction } from './transaction.model';
+import { prisma } from "@root/prisma/prisma";
+import type { Transaction } from "./transaction.model";
 
 export const transactionsRepository = {
   async findById(transaction_id: number) {
@@ -7,12 +7,12 @@ export const transactionsRepository = {
       where: { transaction_id },
     });
   },
-  async create(data: Omit<Transaction, 'transaction_id'>) {
+  async create(data: Omit<Transaction, "transaction_id">) {
     return prisma.transactions.create({
       data,
     });
   },
-  async createMany(data: Omit<Transaction, 'transaction_id'>[]) {
+  async createMany(data: Omit<Transaction, "transaction_id">[]) {
     return prisma.transactions.createMany({
       data,
       skipDuplicates: true,

@@ -1,12 +1,22 @@
-import { DrawerContainer, DrawerContent, DrawerOpener, Input } from '../style';
+"use client";
+
+import * as styles from "../style/layout.css";
+import { useDevice } from "./DeviceContext";
 
 export function DeviceDrawer({ children }: { children: React.ReactNode }) {
+  const { openDrawer } = useDevice();
+
   return (
-    <DrawerContainer id="drawer-container">
-      <DrawerOpener htmlFor="drawer" id="drawer-label">
-        <Input type="radio" id="drawer" name="device" value="drawer" readOnly />
-      </DrawerOpener>
-      <DrawerContent id="drawer-content">{children}</DrawerContent>
-    </DrawerContainer>
+    <div id="drawer-container" className={styles.drawerContainer}>
+      <button
+        type="button"
+        onClick={openDrawer}
+        className={styles.drawerOpener}
+        aria-label="Open drawer and close content"
+      />
+      <div id="drawer-content" className={styles.drawerContent}>
+        {children}
+      </div>
+    </div>
   );
 }

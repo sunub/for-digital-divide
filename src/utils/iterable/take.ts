@@ -1,6 +1,9 @@
-import { isIterable } from './isIterable';
+import { isIterable } from "./isIterable";
 
-function* takeSync<T>(limit: number, iterable: Iterable<T>): IterableIterator<T> {
+function* takeSync<T>(
+  limit: number,
+  iterable: Iterable<T>,
+): IterableIterator<T> {
   const iterator = iterable[Symbol.iterator]();
   while (true) {
     const { done, value } = iterator.next();
@@ -10,7 +13,10 @@ function* takeSync<T>(limit: number, iterable: Iterable<T>): IterableIterator<T>
   }
 }
 
-async function* takeAsync<T>(limit: number, asyncIterable: AsyncIterable<T>): AsyncIterableIterator<T> {
+async function* takeAsync<T>(
+  limit: number,
+  asyncIterable: AsyncIterable<T>,
+): AsyncIterableIterator<T> {
   const asyncIterator = asyncIterable[Symbol.asyncIterator]();
   while (true) {
     const { done, value } = await asyncIterator.next();
@@ -20,13 +26,21 @@ async function* takeAsync<T>(limit: number, asyncIterable: AsyncIterable<T>): As
   }
 }
 
-export function take<T>(limit: number, iterable: Iterable<T>): IterableIterator<T>;
-
-export function take<T>(limit: number, iterable: AsyncIterable<T>): AsyncIterableIterator<T>;
+export function take<T>(
+  limit: number,
+  iterable: Iterable<T>,
+): IterableIterator<T>;
 
 export function take<T>(
   limit: number,
-  iterable: Iterable<T> | AsyncIterable<T>
+  iterable: AsyncIterable<T>,
+): AsyncIterableIterator<T>;
+
+export function take<T>(
+  limit: number,
+  iterable: Iterable<T> | AsyncIterable<T>,
 ): IterableIterator<T> | AsyncIterableIterator<T> {
-  return isIterable(iterable) ? takeSync(limit, iterable) : takeAsync(limit, iterable);
+  return isIterable(iterable)
+    ? takeSync(limit, iterable)
+    : takeAsync(limit, iterable);
 }

@@ -1,5 +1,5 @@
-import { z } from 'zod/v4';
-import { AccountCodeSchema } from '@/entities/account_types/account_types.model';
+import { z } from "zod/v4";
+import { AccountCodeSchema } from "@/entities/account_types/account_types.model";
 
 export type AccountType = z.infer<typeof AccountsSchema>;
 
