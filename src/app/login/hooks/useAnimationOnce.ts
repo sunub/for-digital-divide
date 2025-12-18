@@ -1,7 +1,9 @@
 // useAnimationOnce.ts 수정 제안
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-export function useAnimationOnce(skeletonRef: React.RefObject<HTMLDivElement | null>) {
+export function useAnimationOnce(
+  skeletonRef: React.RefObject<HTMLDivElement | null>,
+) {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
   useEffect(() => {
@@ -13,13 +15,20 @@ export function useAnimationOnce(skeletonRef: React.RefObject<HTMLDivElement | n
       setIsAnimationComplete(true);
     };
 
-    skeletonElement.addEventListener('animationiteration', handleAnimationIteration, { once: true }); // once: true 옵션으로 자동 제거
+    skeletonElement.addEventListener(
+      "animationiteration",
+      handleAnimationIteration,
+      { once: true },
+    ); // once: true 옵션으로 자동 제거
 
     return () => {
       // 컴포넌트 언마운트 시 안전하게 제거
-      skeletonElement.removeEventListener('animationiteration', handleAnimationIteration);
+      skeletonElement.removeEventListener(
+        "animationiteration",
+        handleAnimationIteration,
+      );
     };
-  }, [skeletonRef.current]); // ref의 current 값이 설정되면 이펙트 실행
+  }, [skeletonRef.current, isAnimationComplete]); // ref의 current 값이 설정되면 이펙트 실행
 
   return isAnimationComplete;
 }

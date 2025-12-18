@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { getPermanentCookieStorage } from '@/utils/cookies/permanentCookieStorage';
-import { DeviceIdSchema } from '@/shared/types/cookie';
-import { hasPinAuthMethod } from '../utils/hasPinAuthMethod';
+import { useEffect, useState } from "react";
+import { DeviceIdSchema } from "@/shared/types/cookie";
+import { getPermanentCookieStorage } from "@/utils/cookies/permanentCookieStorage";
+import { hasPinAuthMethod } from "../utils/hasPinAuthMethod";
 
 export function useDeviceId() {
   const [isLoading, setIsLoading] = useState(true);
@@ -10,7 +10,7 @@ export function useDeviceId() {
   useEffect(() => {
     const checkDevice = async () => {
       try {
-        const en_device = await getPermanentCookieStorage('en_device');
+        const en_device = await getPermanentCookieStorage("en_device");
         const parsedEnDevice = DeviceIdSchema.safeParse(en_device);
         if (!parsedEnDevice.success) {
           return;
@@ -21,7 +21,7 @@ export function useDeviceId() {
           setHasDeviceId(true);
         }
       } catch (error) {
-        console.error('Failed to check device ID:', error);
+        console.error("Failed to check device ID:", error);
         setHasDeviceId(false);
       } finally {
         setIsLoading(false);
