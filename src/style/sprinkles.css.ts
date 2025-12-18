@@ -1,24 +1,28 @@
 import { createSprinkles, defineProperties } from "@vanilla-extract/sprinkles";
 import { vars } from "./theme.css";
 
-// 1. 반응형 조건 정의 (모바일, 태블릿, 데스크탑 등)
-const responsiveProperties = defineProperties({
-  conditions: {
-    mobile: { "@media": "screen and (min-width: 360px)" }, // 기본값
-    tablet: { "@media": "screen and (min-width: 900px)" },
-    desktop: { "@media": "screen and (min-width: 1035px)" },
-  },
-  defaultCondition: "desktop",
+const baseStyleProperties = defineProperties({
   properties: {
     display: ["none", "flex", "block", "inline", "grid"],
+    flexWrap: ["nowrap", "wrap", "wrap-reverse"],
     flexDirection: ["row", "column"],
-    alignItems: ["stretch", "flex-start", "center", "flex-end"],
+    alignItems: [
+      "stretch",
+      "flex-start",
+      "center",
+      "flex-end",
+      "space-between",
+      "space-around",
+      "space-evenly",
+    ],
     justifyContent: [
       "stretch",
       "flex-start",
       "center",
       "flex-end",
       "space-between",
+      "space-around",
+      "space-evenly",
     ],
     placeContent: [
       "stretch",
@@ -27,21 +31,30 @@ const responsiveProperties = defineProperties({
       "flex-end",
       "space-between",
     ],
-    size: vars.size,
-    gap: vars.space,
-    padding: vars.space,
-    paddingTop: vars.space,
-    paddingBottom: vars.space,
-    paddingLeft: vars.space,
-    paddingRight: vars.space,
-    margin: vars.space,
-    marginTop: vars.space,
-    marginBottom: vars.space,
-    marginLeft: vars.space,
-    marginRight: vars.space,
+
+    width: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    height: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    maxWidth: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    maxHeight: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    minWidth: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    minHeight: { ...vars.space, ...vars.layout, ...vars.fontSize },
+
+    gap: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    padding: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    paddingTop: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    paddingBottom: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    paddingLeft: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    paddingRight: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    margin: { ...vars.space, ...vars.fontSize, auto: "auto" },
+    marginTop: { ...vars.space, ...vars.fontSize, auto: "auto" },
+    marginBottom: { ...vars.space, ...vars.fontSize, auto: "auto" },
+    marginLeft: { ...vars.space, ...vars.fontSize, auto: "auto" },
+    marginRight: { ...vars.space, ...vars.fontSize, auto: "auto" },
+
     backgroundColor: vars.color,
     color: vars.color,
     borderRadius: vars.borderRadius,
+    fontSize: vars.fontSize,
   },
   shorthands: {
     p: ["padding"],
@@ -51,9 +64,11 @@ const responsiveProperties = defineProperties({
     mx: ["marginLeft", "marginRight"],
     my: ["marginTop", "marginBottom"],
     bg: ["backgroundColor"],
+    placeItems: ["justifyContent", "alignItems"],
+    size: ["width", "height"],
   },
 });
 
-export const sprinkles = createSprinkles(responsiveProperties);
+export const baseStyles = createSprinkles(baseStyleProperties);
 
-export type Sprinkles = Parameters<typeof sprinkles>[0];
+export type BaseStyle = Parameters<typeof baseStyles>[0];
