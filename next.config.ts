@@ -1,3 +1,4 @@
+import path from "node:path";
 import { createVanillaExtractPlugin } from "@vanilla-extract/next-plugin";
 import type { NextConfig } from "next";
 
@@ -8,6 +9,9 @@ const nextConfig: NextConfig = {
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   images: {
     formats: ["image/avif", "image/webp"],
+  },
+  turbopack: {
+    root: path.join(__dirname, ".."),
   },
   compiler: {
     styledComponents: true,
