@@ -52,7 +52,7 @@ export const frontClass = style({
     [`${rootClass}:active &`]: {
       transform: "translateY(-2px)",
     },
-    [`${rootClass}[aria-pressed='true'] &`]: {
+    [`${rootClass}[data-pressed='true'] &`]: {
       transform: "translateY(-2px)",
     },
   },
@@ -79,7 +79,7 @@ export const shadowClass = style({
       transition: "transform 200ms cubic-bezier(0.3, 0.7, 0.4, 1)",
     },
 
-    [`${rootClass}[aria-pressed='true'] &`]: {
+    [`${rootClass}[data-pressed='true'] &`]: {
       transform: "translateY(2px)",
       transition: "transform 340ms",
     },
@@ -123,7 +123,7 @@ export const dotClass = recipe({
       idle: { visibility: "hidden", opacity: 0 },
     },
     type: {
-      upper: { backgroundColor: "currentColor" },
+      upper: { backgroundColor: "var(--color-text)" },
       lower: {
         backgroundColor: "#334155",
         mixBlendMode: "exclusion",

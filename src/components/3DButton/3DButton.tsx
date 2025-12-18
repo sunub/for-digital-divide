@@ -13,7 +13,7 @@ interface ButtonOwnProps<E extends ElementType = "button"> {
   as?: E;
 }
 
-type ButtonProps<E extends ElementType = "button"> = ButtonOwnProps<E> &
+export type ButtonProps<E extends ElementType = "button"> = ButtonOwnProps<E> &
   Omit<ComponentPropsWithoutRef<E>, keyof ButtonOwnProps> &
   MotionProps;
 
@@ -23,6 +23,7 @@ export function _3DButton<T extends ElementType = "button">({
   onClick,
   children,
   as,
+  ref,
   ...props
 }: ButtonProps<T>) {
   const [isClick, toggleClick] = useButtonClick(false);
@@ -47,13 +48,14 @@ export function _3DButton<T extends ElementType = "button">({
 
   return (
     <MotionComponent
+      ref={ref}
       transition={{ duration: 0.1 }}
       type={Component === "button" ? "button" : undefined}
       className={styles.buttonRecipe({
         variant,
         status: status === "pending" ? "pending" : "idle",
       })}
-      aria-pressed={isClick}
+      data-pressed={isClick}
       onClick={handleClick}
       {...props}
     >
@@ -63,15 +65,24 @@ export function _3DButton<T extends ElementType = "button">({
 
         <motion.div ref={ballAnimationScope} className={styles.frontClass}>
           <motion.span
-            id="upper-dot-pending"
             initial={{ y: 0, scale: 1 }}
+            animate={{
+              y: isPending ? [0, -10, 0] : 0,
+              scale: isPending ? [1, 1.4, 1] : 1,
+            }}
+            transition={{
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: 1.2,
+              delay: 0.1,
+              ease: "circInOut",
+            }}
             className={styles.dotClass({
               status: isPending ? "pending" : "idle",
               type: "upper",
             })}
           />
           <motion.span
-            id="lower-dot-pending"
             initial={{ y: 0, scale: 1 }}
             className={styles.dotClass({
               status: isPending ? "pending" : "idle",
