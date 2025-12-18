@@ -1,26 +1,30 @@
-'use client';
+"use client";
 
-import styled from 'styled-components';
-import { useActionState, useState } from 'react';
-import { emailPasswordLoginAction } from '../utils/emailPaswordLoginAction';
-import { useFormActionToast } from '@/shared/hooks/useFormActionToast';
-import { FlexCenterDiv } from '@/shared/style/component/div';
-import { ArrowIcon } from '@/components/LeadingIconInput/ui/ArrowIcon';
-import { SubmitButton } from './SubmitButton';
-import { useSeedingDemoData } from '../hooks/useSeedingDemoData';
-import { SubmittingStatus } from './SubmittingStatus';
-import { useRedirectDashboard } from '../../hooks/useRedirectDashboard';
-
-import type { ActionState } from '../../types';
+import { useActionState, useState } from "react";
+import { SubmitButton } from "@/components/Form/SubmitButton";
+import { ArrowIcon } from "@/icons"; 
+import { useFormActionToast } from "@/shared/hooks/useFormActionToast";
+import { BaseForm } from "@/shared/ui/BaseForm";
+import { Box } from "@/shared/ui/Box";
+import { Flex } from "@/shared/ui/Flex";
+import { useRedirectDashboard } from "../../hooks/useRedirectDashboard";
+import type { ActionState } from "../../types";
+import { useSeedingDemoData } from "../hooks/useSeedingDemoData";
+import { emailPasswordLoginAction } from "../utils/emailPaswordLoginAction";
+import { iconContainer } from "./Form.css";
+import { SubmittingStatus } from "./SubmittingStatus";
 
 export function Form({ children }: { children: React.ReactNode }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSeedingProgress, setIsSeedingProgress] = useState(false);
   const [isSeedingCompleted, setIsSeedingCompleted] = useState(false);
-  const [actionState, formAction, isPending] = useActionState<ActionState, FormData>(emailPasswordLoginAction, {
-    status: 'idle',
-    payload: [''],
-    currentStep: 'login',
+  const [actionState, formAction, isPending] = useActionState<
+    ActionState,
+    FormData
+  >(emailPasswordLoginAction, {
+    status: "idle",
+    payload: [""],
+    currentStep: "login",
   });
 
   useFormActionToast(actionState, () => setIsSeedingProgress(true));
@@ -31,52 +35,43 @@ export function Form({ children }: { children: React.ReactNode }) {
   useRedirectDashboard(isSeedingCompleted);
 
   return (
-    <form id={'init-username-form'} action={formAction} className="flex flex-col place-content-center gap-3" noValidate>
-      <InputContainer>
+    <BaseForm
+      id="init-username-form"
+      action={formAction}
+      noValidate
+      display={"flex"}
+      flexDirection={"column"}
+      placeContent={"center"}
+      gap={3}
+    >
+      <Flex flexDirection="column">
         <ArrowIconIndicator />
         {children}
-      </InputContainer>
+      </Flex>
       <SubmittingStatus
         actionState={actionState}
         isSubmitting={isSubmitting}
         isPending={isPending}
         isSeedingProgress={isSeedingProgress}
       />
-      <SubmitButton onClick={() => setIsSubmitting(true)} isPending={isPending} />
-    </form>
+      <SubmitButton
+        isPending={isPending}
+        onClick={() => setIsSubmitting(true)}
+      />
+    </BaseForm>
   );
 }
 
 function ArrowIconIndicator() {
   return (
-    <IconContainer>
+    <Box
+      display={"flex"}
+      gap={2}
+      color={"button"}
+      paddingBottom={2}
+      className={iconContainer}
+    >
       <ArrowIcon />
-    </IconContainer>
+    </Box>
   );
 }
-
-const IconContainer = styled(FlexCenterDiv)`
-  gap: 0.5rem;
-  color: var(--color-button);
-  transition:
-    transform 0.3s ease-in-out,
-    opacity 0.3s ease-in-out;
-  will-change: transform, opacity;
-  opacity: 0.3;
-  padding-bottom: 0.5rem;
-`;
-
-const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  &:hover ${IconContainer}:not(:hover) {
-    transform: translateY(4px) scale(1.1);
-    opacity: 1;
-  }
-
-  &:focus-within ${IconContainer}:not(:focus) {
-    transform: translateY(4px) scale(1.1);
-    opacity: 1;
-  }
-`;

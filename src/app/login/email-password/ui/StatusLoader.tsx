@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { motion, AnimatePresence } from 'motion/react';
-import { LoaderCircle, BadgeCheckIcon, ShieldBanIcon } from 'lucide-react';
-import styled from 'styled-components';
-import type { ActionState } from '../../types';
+import { BadgeCheckIcon, LoaderCircle, ShieldBanIcon } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { Flex } from "@/shared/ui/Flex";
+import type { ActionState } from "../../types";
+import * as style from "./StatusLoader.css";
 
 interface StatusLoaderProps {
   isPending: boolean;
@@ -17,9 +18,9 @@ function ErrorIcon() {
       key="error"
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+      transition={{ type: "spring", stiffness: 400, damping: 20 }}
     >
-      <ShieldBanIcon size={18} strokeWidth={2.5} color="#e53e3e" />
+      <ShieldBanIcon size={16} strokeWidth={2.5} color="#e53e3e" />
     </motion.div>
   );
 }
@@ -30,78 +31,90 @@ function SuccessIcon() {
       key="done"
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+      transition={{ type: "spring", stiffness: 400, damping: 20 }}
     >
-      <BadgeCheckIcon size={18} strokeWidth={2.5} color="#38a169" />
+      <BadgeCheckIcon size={16} strokeWidth={2.5} color="#38a169" />
     </motion.div>
   );
 }
 
-export function StatusLoader({ isPending, children, actionState }: StatusLoaderProps) {
+function mapStatus(
+  status: ActionState["status"] | undefined,
+  isPending: boolean,
+): "success" | "error" | "default" | undefined {
+  if (isPending) {
+    return "default";
+  }
+  if (status === "success" || status === "continue") {
+    return "success";
+  }
+  if (status === "error") {
+    return "error";
+  }
+  return "default";
+}
+
+export function StatusLoader({
+  isPending,
+  children,
+  actionState,
+}: StatusLoaderProps) {
   return (
-    <LoaderContainer>
-      <IconWrapper>
+    <Flex
+      alignItems={"center"}
+      justifyContent={"flex-start"}
+      minWidth={"quarterCqw"}
+      paddingRight={2}
+      marginLeft={"auto"}
+      marginRight={"auto"}
+    >
+      <Flex
+        width={"2rem"}
+        height={"2rem"}
+        alignItems={"center"}
+        justifyContent={"center"}
+      >
         <AnimatePresence mode="wait">
           {isPending ? (
             <motion.div
               key="pending"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
               animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+              transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
             >
-              <LoaderCircle size={18} strokeWidth={2.5} color="#5a67d8" />
+              <LoaderCircle size={16} strokeWidth={2.5} color="#5a67d8" />
             </motion.div>
+          ) : actionState ? (
+            actionState.status === "continue" ? (
+              <SuccessIcon />
+            ) : (
+              <ErrorIcon />
+            )
           ) : (
-            <>{actionState ? actionState.status === 'continue' ? <SuccessIcon /> : <ErrorIcon /> : <SuccessIcon />}</>
+            <SuccessIcon />
           )}
         </AnimatePresence>
-      </IconWrapper>
+      </Flex>
 
-      <TextWrapper>
+      <div className={style.textWrapper}>
         <AnimatePresence mode="wait">
-          <Text
+          <motion.span
+            className={style.text({
+              status: mapStatus(actionState?.status, isPending),
+            })}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            $actionState={actionState}
           >
             {children}
-          </Text>
+          </motion.span>
         </AnimatePresence>
-      </TextWrapper>
-    </LoaderContainer>
+      </div>
+    </Flex>
   );
 }
-
-const LoaderContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.5rem;
-  min-width: 250px;
-  padding-left: 1rem;
-`;
-
-const IconWrapper = styled.div`
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const TextWrapper = styled.div`
-  font-size: 1rem;
-  font-weight: 600;
-  color: #4a5568;
-  text-align: center;
-`;
-
-const Text = styled(motion.span)<{ $actionState?: ActionState }>`
-  color: ${({ $actionState }) => {
-    if ($actionState?.status === 'success') return '#38a169';
-    if ($actionState?.status === 'error') return '#e53e3e';
-    return '#4a5568';
-  }};
-  transition: color 0.3s ease-in-out;
-`;

@@ -1,15 +1,11 @@
-'use client';
+"use client";
 
-import { z } from 'zod';
-import { useState } from 'react';
+import { useState } from "react";
+import { z } from "zod";
 
-const EMAIL_ERROR_MESSAGE = '이메일 형식이 올바르지 않습니다.';
+const EMAIL_ERROR_MESSAGE = "이메일 형식이 올바르지 않습니다.";
 const EmailSchema = z
-  .string({
-    errorMap: () => ({
-      message: EMAIL_ERROR_MESSAGE,
-    }),
-  })
+  .string({ error: EMAIL_ERROR_MESSAGE })
   .trim()
   .email({
     message: EMAIL_ERROR_MESSAGE,
@@ -19,7 +15,7 @@ function useEmailValidation(): [string | null, (value: unknown) => boolean] {
   const [error, setError] = useState<string | null>(null);
 
   const validateEmail = (value: unknown) => {
-    if (typeof value !== 'string') {
+    if (typeof value !== "string") {
       setError(EMAIL_ERROR_MESSAGE);
       return false;
     }
@@ -34,7 +30,7 @@ function useEmailValidation(): [string | null, (value: unknown) => boolean] {
       return true;
     } catch (e) {
       if (e instanceof z.ZodError) {
-        setError(e.errors[0].message);
+        setError(e.issues[0].message);
       } else {
         setError(EMAIL_ERROR_MESSAGE);
       }
