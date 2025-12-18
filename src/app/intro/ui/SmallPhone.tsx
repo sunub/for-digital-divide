@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useHistory } from "@/shared/hooks/useHistory";
 import { phone } from "./SmallPhone.css";
 import { SmallPhoneLoading } from "./SmallPhoneLoading";
