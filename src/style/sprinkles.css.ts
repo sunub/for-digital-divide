@@ -54,7 +54,9 @@ const baseStyleProperties = defineProperties({
     backgroundColor: vars.color,
     color: vars.color,
     borderRadius: vars.borderRadius,
+
     fontSize: vars.fontSize,
+    fontWeight: vars.fontWeight,
   },
   shorthands: {
     p: ["padding"],

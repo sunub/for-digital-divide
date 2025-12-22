@@ -54,6 +54,19 @@ export const vars = createGlobalTheme(":root", {
     button: "oklch(65.57% 0.19552898037793698 288.17775174927874)",
     highlight: "oklch(73.96% 0.1963 25.278467161119735)",
     confirm: "oklch(84.51% 0.162 147.29)",
+
+    balance: "#3b82f6",
+    income: "#22c55e",
+    expense: "#ef4444",
+    grid: "#e5e7eb",
+    currentLine: "#f43f5e",
+  },
+  fontWeight: {
+    normal: "400",
+    medium: "500",
+    semibold: "600",
+    bold: "700",
+    black: "900",
   },
   space: {
     0: "0px",
@@ -123,6 +136,7 @@ export const vars = createGlobalTheme(":root", {
     quarterCqh: "25cqh",
   },
   borderRadius: {
+    sm: "8px",
     md: "16px",
     lg: "36px",
     xl: "50px",
