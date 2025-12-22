@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import type { RefObject } from "react";
-import type { D3Objects, DailyData, Scales } from "../../types";
+import type { D3Objects, DailyData, Scales } from "../types";
 import { COLORS } from "../constants/colors";
 
 export function drawTotalTransactionChart(

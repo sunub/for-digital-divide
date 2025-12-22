@@ -9,7 +9,6 @@ export function AccountSection({
   accounts: AccountData;
   onSlideChange?: (index: number) => void;
 }) {
-  console.log(accounts);
   return (
     <Carousel
       options={{

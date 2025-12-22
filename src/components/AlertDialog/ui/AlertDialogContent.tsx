@@ -26,7 +26,6 @@ export function AlertDialogContent({
   }, []);
 
   useEffect(() => {
-    console.log("AlertDialogContent open state:", open);
     if (!open || !portalRoot || !contentWrapperRef.current) {
       return;
     }

@@ -3,7 +3,7 @@ import type {
   DailyData,
   TimePeriod,
   Transaction,
-} from "../../types";
+} from "../types";
 
 export function processData(
   transactions: Transaction[],

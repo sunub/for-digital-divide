@@ -28,8 +28,6 @@ export const authMethodsRepository = {
     const authMethodExists = await prisma.auth_methods.findFirst({
       where: { user_id: data.user_id, method: data.method },
     });
-    console.log("authMethodExists", authMethodExists);
-    console.log("data", data);
 
     return prisma.auth_methods.upsert({
       where: {

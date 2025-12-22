@@ -66,7 +66,6 @@ export async function emailPasswordLoginAction(
 
   const userInfo = await userService.findByEmail(parsedFormData.data.email);
   const parsedUserInfo = UsersSchema.safeParse(userInfo);
-  console.log(userInfo, parsedFormData, parsedUserInfo);
   if (!parsedUserInfo.success) {
     return {
       ...prevState,

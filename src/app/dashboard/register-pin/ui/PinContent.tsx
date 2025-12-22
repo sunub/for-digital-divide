@@ -18,8 +18,6 @@ export function PinContent({
   children?: React.ReactNode;
 }) {
   const pin = useNumpadStore((s) => s.numpad);
-  console.log(pin);
-
   return (
     <Flex
       direction={"column"}

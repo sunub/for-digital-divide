@@ -27,8 +27,6 @@ export default function AccountCard({
       return `${digit}${acc}`;
     }, "");
 
-  console.log(isHidden);
-
   return (
     <Card>
       <div className={style.accountHeader}>
