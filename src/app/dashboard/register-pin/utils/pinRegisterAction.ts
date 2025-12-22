@@ -22,7 +22,6 @@ export async function pinRegisterAction(
     device: formData.get("device"),
   };
 
-  console.log("Pin Register Data:", data);
   const parsedFormData = PinNumberFormSchema.safeParse(data, {
     error: (iss) => {
       if (
