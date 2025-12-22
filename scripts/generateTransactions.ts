@@ -6,7 +6,7 @@ import type { Transaction } from "@/entities/transactions/transaction.model";
 import type { Account } from "./generateAccounts";
 
 const isProduction: boolean = process.env.NODE_ENV === "production";
-const NUM_TRANSACTIONS = 50;
+const NUM_TRANSACTIONS = 150;
 
 type TransactionCode = "DEPOSIT" | "WITHDRAWAL" | "PAYMENT";
 type AccountCode = "CHECKING" | "SAVINGS" | "CREDIT" | "LOAN";
@@ -135,6 +135,8 @@ export async function generateTransactions(
     `Transactions generation started for ${accounts.length} accounts`,
   );
 
+  const transactionsPerAccount = NUM_TRANSACTIONS;
+
   if (accounts.length === 0) {
     console.error("계좌 정보가 없습니다. 거래 생성을 중단합니다.");
     return { transactions: [], updatedAccounts: [] };
@@ -148,18 +150,12 @@ export async function generateTransactions(
   const startDate = new Date(now);
   startDate.setMonth(now.getMonth() - 6);
 
-  const totalTransactions = Math.floor(NUM_TRANSACTIONS / accounts.length);
-  const extraTransactions = NUM_TRANSACTIONS % accounts.length;
-
   let transactionId = 1;
-
   for (let i = 0; i < accounts.length; i++) {
     const account = accounts[i];
     const { account_number, account_type } = account;
-    const transactionCount =
-      totalTransactions + (i < extraTransactions ? 1 : 0);
 
-    for (let j = 0; j < transactionCount; j++) {
+    for (let j = 0; j < transactionsPerAccount; j++) {
       const transaction_type = getRandomTransactionType(
         account_type as AccountCode,
       );
