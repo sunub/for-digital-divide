@@ -16,7 +16,9 @@ interface CreateSessionCookieStorageOptions {
 export async function getPermanentCookieStorage(cookieName: string) {
   const cookie = await cookies();
   const token = cookie.get(cookieName);
-  if (!token) return null;
+  if (!token) {
+    return null;
+  }
 
   const secretKey = process.env.JWT_SECRET;
   if (!secretKey) {
