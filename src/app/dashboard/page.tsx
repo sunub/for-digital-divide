@@ -1,7 +1,8 @@
+import { TransactionProvider } from "@/components/TransactionChart/TransactionProvider";
 import { AlertMessage } from "./ui/Dashboard/ui/AlertMessage";
 import { getAccountsData } from "./ui/Dashboard/utils/getAccountsData";
 import { getPinAvailable } from "./ui/Dashboard/utils/getPinAvailable";
-import { DashboardClient } from "./ui/DashboardClient";
+import { DashboardPage } from "./ui/DashboardPage";
 import { MainTitle } from "./ui/MainTitle";
 
 export default async function Dashboard() {
@@ -11,10 +12,10 @@ export default async function Dashboard() {
   ]);
 
   return (
-    <>
+    <TransactionProvider>
       <AlertMessage defaultOpen={!isPinAvailable} />
       <MainTitle />
-      <DashboardClient accounts={accounts} />
-    </>
+      <DashboardPage accounts={accounts} />
+    </TransactionProvider>
   );
 }
