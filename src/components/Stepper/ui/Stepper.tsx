@@ -6,7 +6,9 @@ import { usePathname } from "next/navigation";
 import { Loading } from "@/components/Loading";
 import { useStepper } from "../hooks/useStepper";
 import { stepperAtom } from "../store/atom";
+import * as styles from "./Stepper.css";
 
+const TARGET_PATHS = ["/sign-up/register-user", "/login", "/intro"];
 export const CONFIRM_COLOR = "oklch(0.404 0.2121 288.17775174927874)";
 
 function StepIcon({ done }: { done: boolean }) {
@@ -49,43 +51,6 @@ function StepItem({
     </StepListItem>
   );
 }
-
-export function Stepper() {
-  const pathname = usePathname();
-  const [stepper] = useAtom(stepperAtom);
-
-  useStepper();
-
-  if (pathname === "/dashboard") {
-    return (
-      <Container>
-        <StepListItem done={true} isProgress={false} isChild={false}>
-          <StepIcon done={true} />
-          <span>대쉬보드</span>
-        </StepListItem>
-      </Container>
-    );
-  }
-
-  return (
-    <Container>
-      {stepper.steps.map((step) => {
-        const isCurrent = stepper.currentStep === step.index;
-        const isChild = step.index === 3 || step.index === 4;
-        return (
-          <StepItem
-            key={step.id}
-            step={step}
-            isCurrent={isCurrent}
-            isChild={isChild}
-          />
-        );
-      })}
-    </Container>
-  );
-}
-
-import * as styles from "./Stepper.css";
 
 // 스타일 적용을 위한 헬퍼 함수
 function getStepListItemClass(
@@ -132,3 +97,42 @@ const IconContainer = (props: React.ComponentProps<"div">) => (
 const LoadingContainer = (props: React.ComponentProps<"div">) => (
   <div className={styles.loadingContainer} {...props} />
 );
+
+export function Stepper() {
+  const pathname = usePathname();
+  const [stepper] = useAtom(stepperAtom);
+
+  useStepper();
+
+  if (!TARGET_PATHS.includes(pathname)) {
+    return null;
+  }
+
+  if (pathname === "/dashboard") {
+    return (
+      <Container>
+        <StepListItem done={true} isProgress={false} isChild={false}>
+          <StepIcon done={true} />
+          <span>대쉬보드</span>
+        </StepListItem>
+      </Container>
+    );
+  }
+
+  return (
+    <Container>
+      {stepper.steps.map((step) => {
+        const isCurrent = stepper.currentStep === step.index;
+        const isChild = step.index === 3 || step.index === 4;
+        return (
+          <StepItem
+            key={step.id}
+            step={step}
+            isCurrent={isCurrent}
+            isChild={isChild}
+          />
+        );
+      })}
+    </Container>
+  );
+}
