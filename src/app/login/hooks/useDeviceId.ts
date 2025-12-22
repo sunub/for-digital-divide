@@ -15,6 +15,7 @@ export function useDeviceId() {
         if (!parsedEnDevice.success) {
           return;
         }
+        console.log("Parsed device ID:", parsedEnDevice.data);
 
         const { device_id } = parsedEnDevice.data;
         if (await hasPinAuthMethod(device_id)) {

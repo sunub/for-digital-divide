@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { SubmitButton } from "@/components/Form/SubmitButton";
-import { ArrowIcon } from "@/icons"; 
+import { ArrowIcon } from "@/icons";
 import { useFormActionToast } from "@/shared/hooks/useFormActionToast";
 import { BaseForm } from "@/shared/ui/BaseForm";
 import { Box } from "@/shared/ui/Box";

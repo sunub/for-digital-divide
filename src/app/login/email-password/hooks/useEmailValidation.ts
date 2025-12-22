@@ -4,12 +4,9 @@ import { useState } from "react";
 import { z } from "zod";
 
 const EMAIL_ERROR_MESSAGE = "이메일 형식이 올바르지 않습니다.";
-const EmailSchema = z
-  .string({ error: EMAIL_ERROR_MESSAGE })
-  .trim()
-  .email({
-    message: EMAIL_ERROR_MESSAGE,
-  });
+const EmailSchema = z.string({ error: EMAIL_ERROR_MESSAGE }).trim().email({
+  message: EMAIL_ERROR_MESSAGE,
+});
 
 function useEmailValidation(): [string | null, (value: unknown) => boolean] {
   const [error, setError] = useState<string | null>(null);

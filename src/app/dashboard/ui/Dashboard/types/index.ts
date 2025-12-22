@@ -4,12 +4,11 @@ export type TransactionList = {
   account_number: number;
   transaction_id: number;
   amount: number;
-  transaction_type: typeof TRNASACTION_CODES[number];
+  transaction_type: (typeof TRNASACTION_CODES)[number];
   counterparty_account_number: number | undefined;
   description: string | undefined;
   occurred_at: Date;
 }[];
-
 
 export type AccountType = {
   account_number: number;

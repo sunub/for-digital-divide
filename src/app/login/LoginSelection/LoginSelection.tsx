@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CardContainer } from "@/app/dashboard/ui/Account/ui/CardContainer";
 import { Flex } from "@/shared/ui/Flex";
 import { EmailCard } from "../ui/EmailCard";
 import { PinNumberCard } from "../ui/PinNumberCard";
@@ -16,10 +17,10 @@ export function LoginSelection() {
         <h1 className={style.title}>로그인</h1>
         <p className={style.description}>로그인 방식을 선택해주세요</p>
       </Flex>
-      <div className={style.cardContainer}>
+      <CardContainer className={style.cardContainer}>
         <EmailCard />
         <PinNumberCard />
-      </div>
+      </CardContainer>
       <Flex
         direction={"column"}
         alignItems={"center"}

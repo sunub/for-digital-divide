@@ -15,6 +15,7 @@ export function PinNumberCard() {
   const skeletonRef = useRef<HTMLDivElement>(null);
   const { isLoading: isDataLoading, hasDeviceId } = useDeviceId();
   const isAnimationComplete = useAnimationOnce(skeletonRef);
+  console.log(hasDeviceId);
 
   if (isDataLoading || !isAnimationComplete) {
     return <CardSkeleton skeletonRef={skeletonRef} />;

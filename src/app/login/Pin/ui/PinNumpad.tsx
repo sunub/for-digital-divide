@@ -125,7 +125,7 @@ function Numpad({ keypad }: { keypad: KeypadDetail }) {
                 x={x}
                 y={y}
                 label="보안 키패드 숫자"
-                onClick={() => updateNumpad({x, y})}
+                onClick={() => updateNumpad({ x, y })}
               />
             );
           })}
