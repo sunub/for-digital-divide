@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { DeviceIdSchema } from "@/shared/types/cookie";
-import { deletePermanentCookieStorage, getPermanentCookieStorage } from "@/utils/cookies/permanentCookieStorage";
+import {
+  deletePermanentCookieStorage,
+  getPermanentCookieStorage,
+} from "@/utils/cookies/permanentCookieStorage";
 import { hasPinAuthMethod } from "../utils/hasPinAuthMethod";
 
 export function useDeviceId() {

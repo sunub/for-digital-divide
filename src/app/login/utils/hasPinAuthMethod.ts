@@ -8,5 +8,7 @@ export async function hasPinAuthMethod(provider_uid: string): Promise<boolean> {
   const pinAuthMethod = authMethodInfo?.find(
     (method) => method.method === "PIN",
   );
-  return pinAuthMethod?.provider_uid === provider_uid;
+  return (
+    pinAuthMethod?.provider_uid?.toLowerCase() === provider_uid.toLowerCase()
+  );
 }
