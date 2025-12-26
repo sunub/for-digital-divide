@@ -20,7 +20,12 @@ export const authMethodsRepository = {
 
   async findByProviderUid(provider_uid: string) {
     return prisma.auth_methods.findMany({
-      where: { provider_uid: provider_uid },
+      where: {
+        provider_uid: {
+          equals: provider_uid,
+          mode: "insensitive",
+        },
+      },
     });
   },
 

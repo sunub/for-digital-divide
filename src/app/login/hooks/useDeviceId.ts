@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DeviceIdSchema } from "@/shared/types/cookie";
-import { getPermanentCookieStorage } from "@/utils/cookies/permanentCookieStorage";
+import { deletePermanentCookieStorage, getPermanentCookieStorage } from "@/utils/cookies/permanentCookieStorage";
 import { hasPinAuthMethod } from "../utils/hasPinAuthMethod";
 
 export function useDeviceId() {
@@ -19,6 +19,8 @@ export function useDeviceId() {
         const { device_id } = parsedEnDevice.data;
         if (await hasPinAuthMethod(device_id)) {
           setHasDeviceId(true);
+        } else {
+          await deletePermanentCookieStorage("en_device");
         }
       } catch (error) {
         console.error("Failed to check device ID:", error);

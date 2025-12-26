@@ -24,5 +24,8 @@ export async function getPinAvailable() {
     parsedDeviceId.data.device_id,
   );
   const pinMethod = registeredAuthMethod.find((info) => info.method === "PIN");
-  return pinMethod?.provider_uid === parsedDeviceId.data.device_id;
+  return (
+    pinMethod?.provider_uid?.toLowerCase() ===
+    parsedDeviceId.data.device_id.toLowerCase()
+  );
 }
