@@ -1,5 +1,5 @@
 import { assignInlineVars } from "@vanilla-extract/dynamic";
-import { useTransition } from "react";
+import { ComponentProps, useTransition } from "react";
 import reloadNumpad from "@/app/login/Pin/utils/reload";
 import { useNumpadStore } from "@/context/NumpadContext";
 import type { KeypadDetail } from "@/types/keypad";
@@ -8,7 +8,7 @@ import * as style from "./PinNumpad.css";
 type NumpadData = { x: number; y: number; num: string };
 type ShapeType = "tl" | "tr" | "bl" | "br" | "none";
 
-interface PadButtonProps {
+interface PadButtonProps extends ComponentProps<"button"> {
   shape: ShapeType;
   onClick?: () => void;
   label: string;
@@ -51,6 +51,7 @@ function PadButton({
   label,
   disabled,
   children,
+  ...props
 }: PadButtonProps) {
   return (
     <li className={style.padButtonItem({ shape })}>
@@ -58,8 +59,8 @@ function PadButton({
         type="button"
         className={style.innerButton}
         onClick={onClick}
-        aria-label={label}
         disabled={disabled}
+        {...props}
       >
         {children}
       </button>
@@ -67,7 +68,13 @@ function PadButton({
   );
 }
 
-export function Numpad({ keypad }: { keypad: KeypadDetail }) {
+export function Numpad({
+  keypad,
+  hashes,
+}: {
+  keypad: KeypadDetail;
+  hashes: [string, number][];
+}) {
   const updateNumpad = useNumpadStore((s) => s.updateNumpad);
   const [isPending, startTransition] = useTransition();
 
@@ -105,12 +112,33 @@ export function Numpad({ keypad }: { keypad: KeypadDetail }) {
       return specialSlots[coordinateKey];
     }
 
+    const handleClick = () => {
+      updateNumpad({ x: data.x, y: data.y });
+    };
+
+    const handleFocus = (e: React.FocusEvent<HTMLButtonElement>) => {
+      const target = e.currentTarget;
+      const mapping = new Map(hashes);
+      const realNum = mapping.get(data.num);
+
+      if (realNum !== undefined) {
+        target.setAttribute("aria-label", `${realNum}번 버튼`);
+      }
+    };
+
+    const handleBlur = (e: React.FocusEvent<HTMLButtonElement>) => {
+      const target = e.currentTarget;
+      target.removeAttribute("aria-label");
+    };
+
     return (
       <PadButton
         key={key}
         shape={shape}
         label="보안 키패드 숫자"
-        onClick={() => updateNumpad({ x: data.x, y: data.y })}
+        onClick={handleClick}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       >
         <PadIcon x={data.x} y={data.y} />
       </PadButton>

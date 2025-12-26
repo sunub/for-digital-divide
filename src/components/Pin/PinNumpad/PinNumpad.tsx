@@ -8,11 +8,11 @@ import { PinSubmitButton } from "./PinSubmitButton";
 
 export function PinNumpad({ padInfo }: { padInfo: KeypadInfo }) {
   const status = useFormStatus();
-  const { keypad } = padInfo;
+  const { keypad, hashes } = padInfo;
 
   return (
     <div id="register-pin__numpad-container" className={style.container}>
-      <Numpad keypad={keypad} />
+      <Numpad keypad={keypad} hashes={hashes} />
       <PinSubmitButton status={status} />
     </div>
   );
