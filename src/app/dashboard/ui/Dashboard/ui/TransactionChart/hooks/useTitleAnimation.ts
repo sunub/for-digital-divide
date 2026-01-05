@@ -20,7 +20,7 @@ export function useTitleAnimation(
   chartRef: React.RefObject<HTMLDivElement | null>,
 ) {
   useEffect(() => {
-    if (!chartRef || !chartRef.current) {
+    if (!chartRef || !chartRef.current || TITLE_SVG_DATA.length === 0) {
       return;
     }
 
@@ -38,15 +38,35 @@ export function useTitleAnimation(
       .append("g")
       .attr("transform", `translate(${MARGIN.left}, ${MARGIN.top})`);
 
+    const xExtent = d3.extent(TITLE_SVG_DATA, (d) => d.index) as [number, number];
+    const yMax = d3.max(TITLE_SVG_DATA, (d) => d.value) as number;
+
+    if (
+      xExtent[0] === undefined ||
+      xExtent[1] === undefined ||
+      yMax === undefined ||
+      Number.isNaN(xExtent[0]) ||
+      Number.isNaN(xExtent[1]) ||
+      Number.isNaN(yMax)
+    ) {
+      console.error("Data domain is invalid", { xExtent, yMax });
+      return;
+    }
+
     const xScale = d3
       .scaleLinear()
-      .domain(d3.extent(TITLE_SVG_DATA, (d) => d.index) as [number, number])
+      .domain(xExtent)
       .range([padding, WIDTH - padding]);
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(TITLE_SVG_DATA, (d) => d.value) as number])
+      .domain([0, yMax])
       .range([chartHeight, 0]);
+
+    const lineGenerator = d3
+      .line<{ index: number; value: number }>()
+      .x((d) => xScale(d.index))
+      .y((d) => yScale(d.value));
 
     const path = svg
       .append("path")
@@ -56,23 +76,27 @@ export function useTitleAnimation(
         "stroke",
         "color-mix(in oklch, oklch(63.93% 0.206 288.34) 90%, oklch(0.7 0.1825 239.69) 20%)",
       )
-      .attr("stroke-width", 2)
-      .attr(
-        "d",
-        d3
-          .line<{ index: number; value: number }>()
-          .x((d) => xScale(d.index))
-          .y((d) => yScale(d.value)),
-      );
+      .attr("stroke-width", 2);
 
-    const totalLength = path.node()?.getTotalLength() || 0;
-    path
-      .attr("stroke-dasharray", `${totalLength} ${totalLength}`)
-      .attr("stroke-dashoffset", totalLength)
-      .transition()
-      .duration(duration)
-      .ease(d3.easeLinear)
-      .attr("stroke-dashoffset", 0);
+    const pathData = lineGenerator(TITLE_SVG_DATA);
+    if (!pathData || pathData.includes("NaN")) {
+      console.error("Invalid path data generated:", pathData);
+      return;
+    }
+    
+    path.attr("d", pathData);
+
+    const pathNode = path.node();
+    if (pathNode) {
+      const totalLength = pathNode.getTotalLength() || 0;
+      path
+        .attr("stroke-dasharray", `${totalLength} ${totalLength}`)
+        .attr("stroke-dashoffset", totalLength)
+        .transition()
+        .duration(duration)
+        .ease(d3.easeLinear)
+        .attr("stroke-dashoffset", 0);
+    }
 
     svg
       .append("g")
