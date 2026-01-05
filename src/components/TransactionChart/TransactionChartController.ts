@@ -17,12 +17,15 @@ type ChartConfig = {
 
 export class TransactionChartController {
   private svg: d3.Selection<SVGSVGElement, unknown, null, undefined>;
-  private g: d3.Selection<SVGGElement, unknown, null, undefined>;
   private width: number = 0;
   private height: number = 0;
   private scales: Scales | null = null;
   private data: DailyData[] = [];
   private config: ChartConfig = { viewMode: "ALL" };
+
+  private axisGroup: d3.Selection<SVGGElement, unknown, null, undefined>;
+  private chartGroup: d3.Selection<SVGGElement, unknown, null, undefined>;
+  private gridGroup: d3.Selection<SVGGElement, unknown, null, undefined>;
 
   constructor(container: HTMLElement) {
     this.svg = d3
@@ -35,9 +38,13 @@ export class TransactionChartController {
       .style("left", "0")
       .style("overflow", "visible");
 
-    this.g = this.svg
+    const mainGroup = this.svg
       .append("g")
       .attr("transform", `translate(${CHART_MARGIN.left},${CHART_MARGIN.top})`);
+
+    this.gridGroup = mainGroup.append("g").attr("class", "grid-layer");
+    this.chartGroup = mainGroup.append("g").attr("class", "chart-layer");
+    this.axisGroup = mainGroup.append("g").attr("class", "axis-layer");
   }
 
   public resize(width: number, height: number) {
@@ -51,30 +58,24 @@ export class TransactionChartController {
     this.data = data;
     this.config = config;
 
-    if (this.width === 0 || this.height === 0 || data.length === 0) return;
-
-    this.g.selectAll("*").remove(); // Clear previous render
-    // Note: For better animation performance, we could use D3 join,
-    // but for this specific refactor maintaining parity efficiently, clear-and-redraw is acceptable
-    // and matches the original React useEffect logic, but now encapsulated.
+    if (this.width === 0 || this.height === 0 || data.length === 0) {
+      return;
+    }
 
     const innerWidth = this.width - CHART_MARGIN.left - CHART_MARGIN.right;
     const innerHeight = this.height - CHART_MARGIN.top - CHART_MARGIN.bottom;
 
-    // 1. X Axis
     const xScale = d3
       .scaleTime()
       .domain(d3.extent(data, (d) => d.date) as [Date, Date])
       .range([0, innerWidth]);
 
-    // 2. Y Axis Setup
     if (config.viewMode === "ALL") {
       this.drawAllMode(innerWidth, innerHeight, xScale);
     } else {
       this.drawSingleMode(innerWidth, innerHeight, xScale);
     }
 
-    // 3. X Axis Draw
     const xAxis = d3
       .axisBottom(xScale)
       .ticks(5)
@@ -83,9 +84,13 @@ export class TransactionChartController {
       )
       .tickSize(0)
       .tickPadding(15);
-
-    this.g
-      .append("g")
+    this.axisGroup
+      .selectAll<SVGSVGElement, unknown>(".axis-x")
+      .data([null])
+      .join(
+        (enter) => enter.append("g").attr("class", "axis-x"),
+        (update) => update
+      )
       .attr("transform", `translate(0,${innerHeight})`)
       .call(xAxis)
       .attr("color", "#9ca3af")
@@ -126,15 +131,19 @@ export class TransactionChartController {
       .tickSize(-innerWidth)
       .tickFormat(() => "");
 
-    this.g
-      .append("g")
-      .attr("class", "grid")
-      .call(yAxisGrid)
+    this.gridGroup
+      .selectAll<SVGGElement, unknown>(".grid-y")
+      .data([null])
+      .join(
+        (enter) => enter.append("g")
+          .attr('class', "grid grid-y"),
+        (update) => update
+      )
       .attr("color", "#f3f4f6")
+      .call(yAxisGrid)
       .select(".domain")
       .remove();
 
-    // Line Generators
     const createLine = (
       yScale: d3.ScaleLinear<number, number>,
       accessor: (d: DailyData) => number,
@@ -145,51 +154,67 @@ export class TransactionChartController {
         .y((d) => yScale(accessor(d)))
         .curve(d3.curveMonotoneX);
 
-    this.g
-      .append("path")
-      .datum(this.data)
+    this.chartGroup
+      .selectAll<SVGGElement, unknown>(".line-income")
+      .data([this.data])
+      .join(
+        (enter) => enter.append("path")
+          .attr("class", "line-income")
+          .attr("opacity", 0),
+        (update) => update,
+        (exit) => exit.transition().duration(300).attr('opacity', 0).remove()
+      )
       .attr("fill", "none")
       .attr("stroke", COLORS.income)
       .attr("stroke-width", 1.5)
       .attr("stroke-opacity", 0.6)
+      .transition().duration(750)
       .attr(
         "d",
         createLine(yScaleFlow, (d) => d.income),
-      );
+      )
+      .attr("opacity", 1);
 
-    this.g
-      .append("path")
-      .datum(this.data)
+    this.chartGroup
+      .selectAll(".line-expense")
+      .data([this.data])
+      .join(
+        (enter) => enter.append("path").attr("class", "line-expense").attr("opacity", 0),
+        (update) => update,
+        (exit) => exit.transition().duration(300).attr("opacity", 0).remove()
+      )
       .attr("fill", "none")
       .attr("stroke", COLORS.expense)
       .attr("stroke-width", 1.5)
       .attr("stroke-opacity", 0.6)
-      .attr(
-        "d",
-        createLine(yScaleFlow, (d) => d.expense),
-      );
+      .transition().duration(750)
+      .attr("d", createLine(yScaleFlow, (d) => d.expense))
+      .attr("opacity", 1);
 
-    const defs = this.svg.append("defs");
     const gradientId = "balance-gradient-all";
-    this.svg.selectAll(`#${gradientId}`).remove();
+    if (this.svg.select(`#${gradientId}`).empty()) {
+      const defs = this.svg.append("defs").empty()
+        ? this.svg.append("defs")
+        : this.svg.select("defs")
 
-    const gradient = defs
-      .append("linearGradient")
-      .attr("id", gradientId)
-      .attr("x1", "0%")
-      .attr("y1", "0%")
-      .attr("x2", "0%")
-      .attr("y2", "100%");
-    gradient
-      .append("stop")
-      .attr("offset", "0%")
-      .attr("stop-color", COLORS.balance)
-      .attr("stop-opacity", 0.1);
-    gradient
-      .append("stop")
-      .attr("offset", "100%")
-      .attr("stop-color", COLORS.balance)
-      .attr("stop-opacity", 0.0);
+      const gradient = defs
+        .append("linearGradient")
+        .attr("id", gradientId)
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "0%")
+        .attr("y2", "100%");
+      gradient
+        .append("stop")
+        .attr("offset", "0%")
+        .attr("stop-color", COLORS.balance)
+        .attr("stop-opacity", 0.1);
+      gradient
+        .append("stop")
+        .attr("offset", "100%")
+        .attr("stop-color", COLORS.balance)
+        .attr("stop-opacity", 0.0);
+    }
 
     const balanceArea = d3
       .area<DailyData>()
@@ -198,46 +223,74 @@ export class TransactionChartController {
       .y1((d) => yScaleBalance(d.balance))
       .curve(d3.curveMonotoneX);
 
-    this.g
-      .append("path")
-      .datum(this.data)
+    this.chartGroup
+      .selectAll(".area-balance")
+      .data([this.data])
+      .join(
+        (enter) => enter.append("path").attr("class", "area-balance").attr("opacity", 0),
+        (update) => update,
+        (exit) => exit.transition().duration(300).attr("opacity", 0).remove()
+      )
       .attr("fill", `url(#${gradientId})`)
-      .attr("d", balanceArea);
+      .transition().duration(750)
+      .attr("d", balanceArea)
+      .attr("opacity", 1);
 
-    this.g
-      .append("path")
-      .datum(this.data)
+    this.chartGroup
+      .selectAll(".line-balance")
+      .data([this.data])
+      .join(
+        (enter) => enter.append("path").attr("class", "line-balance").attr("opacity", 0),
+        (update) => update,
+        (exit) => exit.transition().duration(300).attr("opacity", 0).remove()
+      )
       .attr("fill", "none")
       .attr("stroke", COLORS.balance)
       .attr("stroke-width", 2.5)
-      .attr(
-        "d",
-        createLine(yScaleBalance, (d) => d.balance),
-      );
+      .transition().duration(750)
+      .attr("d", createLine(yScaleBalance, (d) => d.balance))
+      .attr("opacity", 1);
 
     const currentY = yScaleBalance(this.data[this.data.length - 1].balance);
-    this.g
-      .append("line")
+
+    this.chartGroup
+      .selectAll(".current-line")
+      .data([currentY])
+      .join(
+        (enter) => enter.append("line").attr("class", "current-line").attr("opacity", 0),
+        (update) => update,
+        (exit) => exit.remove()
+      )
       .attr("x1", 0)
       .attr("x2", innerWidth)
-      .attr("y1", currentY)
-      .attr("y2", currentY)
       .attr("stroke", COLORS.currentLine)
       .attr("stroke-width", 1)
       .attr("stroke-dasharray", "4 4")
+      .transition().duration(750)
+      .attr("y1", currentY)
+      .attr("y2", currentY)
       .attr("opacity", 0.8);
-
-    this.g
-      .append("text")
+    this.chartGroup
+      .selectAll(".current-text")
+      .data([currentY])
+      .join(
+        (enter) => enter.append("text").attr("class", "current-text").attr("opacity", 0).text("현재"),
+        (update) => update,
+        (exit) => exit.remove()
+      )
       .attr("x", innerWidth + 5)
-      .attr("y", currentY + 4)
-      .text("현재")
       .attr("fill", COLORS.currentLine)
       .attr("font-size", "10px")
-      .attr("font-weight", "bold");
+      .attr("font-weight", "bold")
+      .transition().duration(750)
+      .attr("y", currentY + 4)
+      .attr("opacity", 1);
+
+    this.chartGroup.selectAll(".area-single").data([]).join("path").remove();
+    this.chartGroup.selectAll(".line-single").data([]).join("path").remove();
   }
 
-  private drawSingleMode(
+    private drawSingleMode(
     innerWidth: number,
     innerHeight: number,
     xScale: d3.ScaleTime<number, number>,
@@ -269,17 +322,21 @@ export class TransactionChartController {
     const yScale = d3.scaleLinear().domain(domain).range([innerHeight, 0]);
     this.scales = { x: xScale, yMain: yScale };
 
-    // Grid
     const yAxisGrid = d3
       .axisLeft(yScale)
       .ticks(5)
       .tickSize(-innerWidth)
       .tickFormat(() => "");
-    this.g
-      .append("g")
-      .attr("class", "grid")
-      .call(yAxisGrid)
+
+    this.gridGroup
+      .selectAll<SVGSVGElement, unknown>(".grid-y")
+      .data([null])
+      .join(
+        (enter) => enter.append("g").attr("class", "grid grid-y"),
+        (update) => update
+      )
       .attr("color", "#f3f4f6")
+      .call(yAxisGrid)
       .select(".domain")
       .remove();
 
@@ -296,43 +353,60 @@ export class TransactionChartController {
       .y1((d) => yScale(dataAccessor(d)))
       .curve(d3.curveMonotoneX);
 
-    const defs = this.svg.select("defs").empty()
-      ? this.svg.append("defs")
-      : this.svg.select("defs");
     const gradientId = `gradient-${this.config.viewMode}`;
-    this.svg.selectAll(`#${gradientId}`).remove();
+    if (this.svg.select(`#${gradientId}`).empty()) {
+       const defs = this.svg.select("defs").empty() ? this.svg.append("defs") : this.svg.select("defs");
+       const gradient = defs
+        .append("linearGradient")
+        .attr("id", gradientId)
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "0%")
+        .attr("y2", "100%");
+        
+       gradient.selectAll("stop").remove();
+       gradient.append("stop").attr("offset", "0%").attr("stop-color", color).attr("stop-opacity", 0.2);
+       gradient.append("stop").attr("offset", "100%").attr("stop-color", color).attr("stop-opacity", 0.0);
+    } else {
+       const gradient = this.svg.select(`#${gradientId}`);
+       gradient.select("stop:first-child").attr("stop-color", color);
+       gradient.select("stop:last-child").attr("stop-color", color);
+    }
 
-    const gradient = defs
-      .append("linearGradient")
-      .attr("id", gradientId)
-      .attr("x1", "0%")
-      .attr("y1", "0%")
-      .attr("x2", "0%")
-      .attr("y2", "100%");
-    gradient
-      .append("stop")
-      .attr("offset", "0%")
-      .attr("stop-color", color)
-      .attr("stop-opacity", 0.2);
-    gradient
-      .append("stop")
-      .attr("offset", "100%")
-      .attr("stop-color", color)
-      .attr("stop-opacity", 0.0);
-
-    this.g
-      .append("path")
-      .datum(this.data)
+    this.chartGroup
+      .selectAll(".area-single")
+      .data([this.data])
+      .join(
+        (enter) => enter.append("path").attr("class", "area-single").attr("opacity", 0),
+        (update) => update,
+        (exit) => exit.transition().duration(300).attr("opacity", 0).remove()
+      )
       .attr("fill", `url(#${gradientId})`)
-      .attr("d", area);
+      .transition().duration(750)
+      .attr("d", area)
+      .attr("opacity", 1);
 
-    this.g
-      .append("path")
-      .datum(this.data)
+    this.chartGroup
+      .selectAll(".line-single")
+      .data([this.data])
+      .join(
+       (enter) => enter.append("path").attr("class", "line-single").attr("opacity", 0),
+       (update) => update,
+       (exit) => exit.transition().duration(300).attr("opacity", 0).remove()
+      )
       .attr("fill", "none")
       .attr("stroke", color)
       .attr("stroke-width", 2)
-      .attr("d", line);
+      .transition().duration(750)
+      .attr("d", line)
+      .attr("opacity", 1);
+
+    this.chartGroup.selectAll(".line-income").data([]).join("path").remove();
+    this.chartGroup.selectAll(".line-expense").data([]).join("path").remove();
+    this.chartGroup.selectAll(".line-balance").data([]).join("path").remove();
+    this.chartGroup.selectAll(".area-balance").data([]).join("path").remove();
+    this.chartGroup.selectAll(".current-line").data([]).join("path").remove();
+    this.chartGroup.selectAll(".current-text").data([]).join("text").remove();
   }
 
   public getInteractionData(mouseX: number) {
