@@ -38,7 +38,10 @@ export function useTitleAnimation(
       .append("g")
       .attr("transform", `translate(${MARGIN.left}, ${MARGIN.top})`);
 
-    const xExtent = d3.extent(TITLE_SVG_DATA, (d) => d.index) as [number, number];
+    const xExtent = d3.extent(TITLE_SVG_DATA, (d) => d.index) as [
+      number,
+      number,
+    ];
     const yMax = d3.max(TITLE_SVG_DATA, (d) => d.value) as number;
 
     if (
@@ -58,10 +61,7 @@ export function useTitleAnimation(
       .domain(xExtent)
       .range([padding, WIDTH - padding]);
 
-    const yScale = d3
-      .scaleLinear()
-      .domain([0, yMax])
-      .range([chartHeight, 0]);
+    const yScale = d3.scaleLinear().domain([0, yMax]).range([chartHeight, 0]);
 
     const lineGenerator = d3
       .line<{ index: number; value: number }>()
@@ -83,7 +83,7 @@ export function useTitleAnimation(
       console.error("Invalid path data generated:", pathData);
       return;
     }
-    
+
     path.attr("d", pathData);
 
     const pathNode = path.node();
