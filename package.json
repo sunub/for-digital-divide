@@ -9,6 +9,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "pnpm exec biome lint --write",
+    "ci": "pnpm exec biome ci",
     "postinstall": "prisma generate",
     "format": "pnpm exec biome format --write",
     "check": "pnpm exec biome check --write"
