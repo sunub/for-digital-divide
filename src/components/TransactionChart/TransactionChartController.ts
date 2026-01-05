@@ -89,7 +89,7 @@ export class TransactionChartController {
       .data([null])
       .join(
         (enter) => enter.append("g").attr("class", "axis-x"),
-        (update) => update
+        (update) => update,
       )
       .attr("transform", `translate(0,${innerHeight})`)
       .call(xAxis)
@@ -135,9 +135,8 @@ export class TransactionChartController {
       .selectAll<SVGGElement, unknown>(".grid-y")
       .data([null])
       .join(
-        (enter) => enter.append("g")
-          .attr('class', "grid grid-y"),
-        (update) => update
+        (enter) => enter.append("g").attr("class", "grid grid-y"),
+        (update) => update,
       )
       .attr("color", "#f3f4f6")
       .call(yAxisGrid)
@@ -158,17 +157,17 @@ export class TransactionChartController {
       .selectAll<SVGGElement, unknown>(".line-income")
       .data([this.data])
       .join(
-        (enter) => enter.append("path")
-          .attr("class", "line-income")
-          .attr("opacity", 0),
+        (enter) =>
+          enter.append("path").attr("class", "line-income").attr("opacity", 0),
         (update) => update,
-        (exit) => exit.transition().duration(300).attr('opacity', 0).remove()
+        (exit) => exit.transition().duration(300).attr("opacity", 0).remove(),
       )
       .attr("fill", "none")
       .attr("stroke", COLORS.income)
       .attr("stroke-width", 1.5)
       .attr("stroke-opacity", 0.6)
-      .transition().duration(750)
+      .transition()
+      .duration(750)
       .attr(
         "d",
         createLine(yScaleFlow, (d) => d.income),
@@ -179,23 +178,28 @@ export class TransactionChartController {
       .selectAll(".line-expense")
       .data([this.data])
       .join(
-        (enter) => enter.append("path").attr("class", "line-expense").attr("opacity", 0),
+        (enter) =>
+          enter.append("path").attr("class", "line-expense").attr("opacity", 0),
         (update) => update,
-        (exit) => exit.transition().duration(300).attr("opacity", 0).remove()
+        (exit) => exit.transition().duration(300).attr("opacity", 0).remove(),
       )
       .attr("fill", "none")
       .attr("stroke", COLORS.expense)
       .attr("stroke-width", 1.5)
       .attr("stroke-opacity", 0.6)
-      .transition().duration(750)
-      .attr("d", createLine(yScaleFlow, (d) => d.expense))
+      .transition()
+      .duration(750)
+      .attr(
+        "d",
+        createLine(yScaleFlow, (d) => d.expense),
+      )
       .attr("opacity", 1);
 
     const gradientId = "balance-gradient-all";
     if (this.svg.select(`#${gradientId}`).empty()) {
       const defs = this.svg.append("defs").empty()
         ? this.svg.append("defs")
-        : this.svg.select("defs")
+        : this.svg.select("defs");
 
       const gradient = defs
         .append("linearGradient")
@@ -227,12 +231,14 @@ export class TransactionChartController {
       .selectAll(".area-balance")
       .data([this.data])
       .join(
-        (enter) => enter.append("path").attr("class", "area-balance").attr("opacity", 0),
+        (enter) =>
+          enter.append("path").attr("class", "area-balance").attr("opacity", 0),
         (update) => update,
-        (exit) => exit.transition().duration(300).attr("opacity", 0).remove()
+        (exit) => exit.transition().duration(300).attr("opacity", 0).remove(),
       )
       .attr("fill", `url(#${gradientId})`)
-      .transition().duration(750)
+      .transition()
+      .duration(750)
       .attr("d", balanceArea)
       .attr("opacity", 1);
 
@@ -240,15 +246,20 @@ export class TransactionChartController {
       .selectAll(".line-balance")
       .data([this.data])
       .join(
-        (enter) => enter.append("path").attr("class", "line-balance").attr("opacity", 0),
+        (enter) =>
+          enter.append("path").attr("class", "line-balance").attr("opacity", 0),
         (update) => update,
-        (exit) => exit.transition().duration(300).attr("opacity", 0).remove()
+        (exit) => exit.transition().duration(300).attr("opacity", 0).remove(),
       )
       .attr("fill", "none")
       .attr("stroke", COLORS.balance)
       .attr("stroke-width", 2.5)
-      .transition().duration(750)
-      .attr("d", createLine(yScaleBalance, (d) => d.balance))
+      .transition()
+      .duration(750)
+      .attr(
+        "d",
+        createLine(yScaleBalance, (d) => d.balance),
+      )
       .attr("opacity", 1);
 
     const currentY = yScaleBalance(this.data[this.data.length - 1].balance);
@@ -257,16 +268,18 @@ export class TransactionChartController {
       .selectAll(".current-line")
       .data([currentY])
       .join(
-        (enter) => enter.append("line").attr("class", "current-line").attr("opacity", 0),
+        (enter) =>
+          enter.append("line").attr("class", "current-line").attr("opacity", 0),
         (update) => update,
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       )
       .attr("x1", 0)
       .attr("x2", innerWidth)
       .attr("stroke", COLORS.currentLine)
       .attr("stroke-width", 1)
       .attr("stroke-dasharray", "4 4")
-      .transition().duration(750)
+      .transition()
+      .duration(750)
       .attr("y1", currentY)
       .attr("y2", currentY)
       .attr("opacity", 0.8);
@@ -274,15 +287,21 @@ export class TransactionChartController {
       .selectAll(".current-text")
       .data([currentY])
       .join(
-        (enter) => enter.append("text").attr("class", "current-text").attr("opacity", 0).text("현재"),
+        (enter) =>
+          enter
+            .append("text")
+            .attr("class", "current-text")
+            .attr("opacity", 0)
+            .text("현재"),
         (update) => update,
-        (exit) => exit.remove()
+        (exit) => exit.remove(),
       )
       .attr("x", innerWidth + 5)
       .attr("fill", COLORS.currentLine)
       .attr("font-size", "10px")
       .attr("font-weight", "bold")
-      .transition().duration(750)
+      .transition()
+      .duration(750)
       .attr("y", currentY + 4)
       .attr("opacity", 1);
 
@@ -290,7 +309,7 @@ export class TransactionChartController {
     this.chartGroup.selectAll(".line-single").data([]).join("path").remove();
   }
 
-    private drawSingleMode(
+  private drawSingleMode(
     innerWidth: number,
     innerHeight: number,
     xScale: d3.ScaleTime<number, number>,
@@ -333,7 +352,7 @@ export class TransactionChartController {
       .data([null])
       .join(
         (enter) => enter.append("g").attr("class", "grid grid-y"),
-        (update) => update
+        (update) => update,
       )
       .attr("color", "#f3f4f6")
       .call(yAxisGrid)
@@ -355,34 +374,46 @@ export class TransactionChartController {
 
     const gradientId = `gradient-${this.config.viewMode}`;
     if (this.svg.select(`#${gradientId}`).empty()) {
-       const defs = this.svg.select("defs").empty() ? this.svg.append("defs") : this.svg.select("defs");
-       const gradient = defs
+      const defs = this.svg.select("defs").empty()
+        ? this.svg.append("defs")
+        : this.svg.select("defs");
+      const gradient = defs
         .append("linearGradient")
         .attr("id", gradientId)
         .attr("x1", "0%")
         .attr("y1", "0%")
         .attr("x2", "0%")
         .attr("y2", "100%");
-        
-       gradient.selectAll("stop").remove();
-       gradient.append("stop").attr("offset", "0%").attr("stop-color", color).attr("stop-opacity", 0.2);
-       gradient.append("stop").attr("offset", "100%").attr("stop-color", color).attr("stop-opacity", 0.0);
+
+      gradient.selectAll("stop").remove();
+      gradient
+        .append("stop")
+        .attr("offset", "0%")
+        .attr("stop-color", color)
+        .attr("stop-opacity", 0.2);
+      gradient
+        .append("stop")
+        .attr("offset", "100%")
+        .attr("stop-color", color)
+        .attr("stop-opacity", 0.0);
     } else {
-       const gradient = this.svg.select(`#${gradientId}`);
-       gradient.select("stop:first-child").attr("stop-color", color);
-       gradient.select("stop:last-child").attr("stop-color", color);
+      const gradient = this.svg.select(`#${gradientId}`);
+      gradient.select("stop:first-child").attr("stop-color", color);
+      gradient.select("stop:last-child").attr("stop-color", color);
     }
 
     this.chartGroup
       .selectAll(".area-single")
       .data([this.data])
       .join(
-        (enter) => enter.append("path").attr("class", "area-single").attr("opacity", 0),
+        (enter) =>
+          enter.append("path").attr("class", "area-single").attr("opacity", 0),
         (update) => update,
-        (exit) => exit.transition().duration(300).attr("opacity", 0).remove()
+        (exit) => exit.transition().duration(300).attr("opacity", 0).remove(),
       )
       .attr("fill", `url(#${gradientId})`)
-      .transition().duration(750)
+      .transition()
+      .duration(750)
       .attr("d", area)
       .attr("opacity", 1);
 
@@ -390,14 +421,16 @@ export class TransactionChartController {
       .selectAll(".line-single")
       .data([this.data])
       .join(
-       (enter) => enter.append("path").attr("class", "line-single").attr("opacity", 0),
-       (update) => update,
-       (exit) => exit.transition().duration(300).attr("opacity", 0).remove()
+        (enter) =>
+          enter.append("path").attr("class", "line-single").attr("opacity", 0),
+        (update) => update,
+        (exit) => exit.transition().duration(300).attr("opacity", 0).remove(),
       )
       .attr("fill", "none")
       .attr("stroke", color)
       .attr("stroke-width", 2)
-      .transition().duration(750)
+      .transition()
+      .duration(750)
       .attr("d", line)
       .attr("opacity", 1);
 
