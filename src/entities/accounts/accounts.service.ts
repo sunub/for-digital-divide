@@ -24,4 +24,12 @@ export const accountsService = {
   async findByAccountNumber(account_number: number) {
     return accountsRepository.findByAccountNumber(account_number);
   },
+
+  async findManyByAccountNumbers(account_numbers: number[]) {
+    return accountsRepository.findManyByAccountNumbers(account_numbers);
+  },
+
+  async createManyAndReturn(data: AccountType[]) {
+    return accountsRepository.createManyAndReturn(data);
+  },
 };

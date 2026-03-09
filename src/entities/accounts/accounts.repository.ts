@@ -35,4 +35,19 @@ export const accountsRepository = {
       where: { account_number },
     });
   },
+
+  async findManyByAccountNumbers(account_numbers: number[]) {
+    return prisma.accounts.findMany({
+      where: {
+        account_number: { in: account_numbers },
+      },
+    });
+  },
+
+  async createManyAndReturn(data: AccountType[]) {
+    return prisma.accounts.createManyAndReturn({
+      data,
+      skipDuplicates: true,
+    });
+  },
 };

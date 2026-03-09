@@ -36,34 +36,51 @@ async function seedAccounts(userId: number) {
   const accounts = generateAccounts(userId, 4);
 
   const updateAccountsOra = ora("🔄 계정 데이터 검증 및 업데이트 중").start();
-  const createdAccounts = [];
 
-  for (const account of accounts) {
-    const parsedAccount = AccountsSchema.safeParse({
-      account_number: Number(account.account_number),
-      user_id: Number(account.user_id),
-      account_type: account.account_type,
-      balance: Number(account.balance),
-      created_at: new Date(account.created_at),
-    });
-    if (!parsedAccount.success) {
-      updateAccountsOra.fail("❌ 잘못된 계정 데이터");
-      console.error(parsedAccount.error);
-      accountsOra.fail();
-      return [];
-    }
+  const parsedAccounts = accounts
+    .map((account) =>
+      AccountsSchema.safeParse({
+        account_number: Number(account.account_number),
+        user_id: Number(account.user_id),
+        account_type: account.account_type,
+        balance: Number(account.balance),
+        created_at: new Date(account.created_at),
+      }),
+    )
+    .filter((parsed) => {
+      if (!parsed.success) {
+        console.error(parsed.error);
+      }
+      return parsed.success;
+    })
+    .map((parsed) => parsed.data);
 
-    const existingAccount = await accountsService.findByAccountNumber(
-      parsedAccount.data.account_number,
-    );
-    if (existingAccount) {
-      createdAccounts.push(existingAccount);
-      continue;
-    }
-
-    const newAccount = await accountsService.create(parsedAccount.data);
-    createdAccounts.push(newAccount);
+  if (parsedAccounts.length !== accounts.length) {
+    updateAccountsOra.fail("❌ 일부 계정 데이터가 잘못되었습니다.");
+    accountsOra.fail();
+    return [];
   }
+
+  const accountNumbers = parsedAccounts.map((a) => a.account_number);
+  const existingAccounts =
+    await accountsService.findManyByAccountNumbers(accountNumbers);
+
+  const existingAccountNumbers = new Set(
+    existingAccounts.map((a) => Number(a.account_number)),
+  );
+
+  const accountsToCreate = parsedAccounts.filter(
+    (a) => !existingAccountNumbers.has(a.account_number),
+  );
+
+  let newAccounts: AccountType[] = [];
+  if (accountsToCreate.length > 0) {
+    newAccounts = (await accountsService.createManyAndReturn(
+      accountsToCreate,
+    )) as unknown as unknown as AccountType[];
+  }
+
+  const createdAccounts = [...existingAccounts, ...newAccounts];
   updateAccountsOra.succeed("✅ 계정 데이터 검증 및 업데이트 성공");
   accountsOra.succeed("🎉 계정 시딩 성공");
   return createdAccounts;
