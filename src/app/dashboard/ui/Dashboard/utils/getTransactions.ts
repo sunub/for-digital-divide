@@ -16,7 +16,7 @@ function validateTransaction(transaction: unknown) {
 }
 
 export async function getTransactions(accountNumber: number) {
-  const chunkedTransactions = fx(
+  const transactions = fx(
     await transactionsService.findByAccountNumber(accountNumber),
   )
     .map((transaction) => ({
@@ -29,7 +29,7 @@ export async function getTransactions(accountNumber: number) {
         : undefined,
     }))
     .filter(validateTransaction)
-    .chunk(100);
+    .toArray();
 
-  return chunkedTransactions.toIterator();
+  return transactions;
 }
