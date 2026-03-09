@@ -62,11 +62,17 @@ async function seedAccounts(userId: number) {
   }
 
   const accountNumbers = parsedAccounts.map((a) => a.account_number);
-  const existingAccounts =
+  const rawExistingAccounts =
     await accountsService.findManyByAccountNumbers(accountNumbers);
 
+  const existingAccounts: AccountType[] = rawExistingAccounts.map((acc) => ({
+    ...acc,
+    account_number: Number(acc.account_number),
+    balance: Number(acc.balance),
+  })) as AccountType[];
+
   const existingAccountNumbers = new Set(
-    existingAccounts.map((a) => Number(a.account_number)),
+    existingAccounts.map((a) => a.account_number),
   );
 
   const accountsToCreate = parsedAccounts.filter(
@@ -75,9 +81,8 @@ async function seedAccounts(userId: number) {
 
   let newAccounts: AccountType[] = [];
   if (accountsToCreate.length > 0) {
-    const createdResults = await accountsService.createManyAndReturn(
-      accountsToCreate,
-    );
+    const createdResults =
+      await accountsService.createManyAndReturn(accountsToCreate);
     newAccounts = createdResults.map((acc) => ({
       ...acc,
       account_number: Number(acc.account_number),
@@ -187,9 +192,15 @@ export async function seedDemoAccountAndTransactionInfo() {
     return;
   }
 
-  const existingAccounts = await accountsService.findByUserId(
+  const rawExistingAccounts = await accountsService.findByUserId(
     sessionCookie.user_id,
   );
+  const existingAccounts: AccountType[] = rawExistingAccounts.map((acc) => ({
+    ...acc,
+    account_number: Number(acc.account_number),
+    balance: Number(acc.balance),
+  })) as AccountType[];
+
   let accounts = existingAccounts;
 
   if (existingAccounts.length === 0) {
@@ -232,18 +243,7 @@ export async function seedDemoAccountAndTransactionInfo() {
   }
 
   console.time(chalk.cyan("거래내역 시딩 소요 시간"));
-  const transformedAccounts = accounts.map((account) => ({
-    account_number: Number(account.account_number),
-    user_id: account.user_id,
-    account_type: account.account_type as
-      | "CHECKING"
-      | "SAVINGS"
-      | "CREDIT"
-      | "LOAN",
-    balance: Number(account.balance),
-    created_at: account.created_at,
-  }));
-  await seedTransactions(transformedAccounts);
+  await seedTransactions(accounts);
   console.timeEnd(chalk.cyan("거래내역 시딩 소요 시간"));
   logMemoryUsage("거래내역 시딩 후");
 
