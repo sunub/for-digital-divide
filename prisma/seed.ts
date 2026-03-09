@@ -116,12 +116,14 @@ async function seedTransactions(accounts: Account[]) {
 
   console.log(`💰 ${updatedAccounts.length}개 계정의 잔액을 업데이트합니다`);
 
-  for (const account_info of updatedAccounts as AccountType[]) {
-    await accountsService.updateByAccountNumber(account_info.account_number, {
-      ...account_info,
-      balance: account_info.balance,
-    });
-  }
+  await Promise.all(
+    (updatedAccounts as AccountType[]).map((account_info) =>
+      accountsService.updateByAccountNumber(account_info.account_number, {
+        ...account_info,
+        balance: account_info.balance,
+      }),
+    ),
+  );
 
   processOra.text = "🔄 거래 처리 및 검증 중...";
   console.log(`📋 ${transactions.length}개의 거래를 처리 중입니다`);
