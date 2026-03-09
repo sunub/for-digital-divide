@@ -47,7 +47,7 @@ async function seedAccounts(userId: number) {
         created_at: new Date(account.created_at),
       }),
     )
-    .filter((parsed) => {
+    .filter((parsed): parsed is Extract<typeof parsed, { success: true }> => {
       if (!parsed.success) {
         console.error(parsed.error);
       }
@@ -75,9 +75,14 @@ async function seedAccounts(userId: number) {
 
   let newAccounts: AccountType[] = [];
   if (accountsToCreate.length > 0) {
-    newAccounts = (await accountsService.createManyAndReturn(
+    const createdResults = await accountsService.createManyAndReturn(
       accountsToCreate,
-    )) as unknown as unknown as AccountType[];
+    );
+    newAccounts = createdResults.map((acc) => ({
+      ...acc,
+      account_number: Number(acc.account_number),
+      balance: Number(acc.balance),
+    })) as AccountType[];
   }
 
   const createdAccounts = [...existingAccounts, ...newAccounts];

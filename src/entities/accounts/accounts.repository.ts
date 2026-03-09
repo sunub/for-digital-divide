@@ -47,7 +47,6 @@ export const accountsRepository = {
   async createManyAndReturn(data: AccountType[]) {
     return prisma.accounts.createManyAndReturn({
       data,
-      skipDuplicates: true,
     });
   },
 };

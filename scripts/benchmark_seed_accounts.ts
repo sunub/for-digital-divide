@@ -1,7 +1,6 @@
-import { accountsService } from "../src/entities/accounts/accounts.service";
-import { AccountsSchema, type AccountType } from "../src/entities/accounts/accounts.model";
-import { generateAccounts } from "./generateAccounts";
 import chalk from "chalk";
+import { AccountsSchema } from "../src/entities/accounts/accounts.model";
+import { generateAccounts } from "./generateAccounts";
 
 async function benchmark() {
   const userId = 1;
@@ -12,7 +11,7 @@ async function benchmark() {
   // --- Baseline (Old Logic) ---
   console.log(chalk.yellow("\nRunning Baseline (N+1 approach)..."));
   const baselineStart = performance.now();
-  const baselineCreated = [];
+  const _baselineCreated = [];
 
   // Note: This is a simulation since we can't actually run it without a DB
   // In a real run, this would loop and await
@@ -30,7 +29,11 @@ async function benchmark() {
     }
   }
   const baselineEnd = performance.now();
-  console.log(chalk.green(`Baseline simulated time: ${(baselineEnd - baselineStart).toFixed(2)}ms`));
+  console.log(
+    chalk.green(
+      `Baseline simulated time: ${(baselineEnd - baselineStart).toFixed(2)}ms`,
+    ),
+  );
 
   // --- Optimized Logic ---
   console.log(chalk.yellow("\nRunning Optimized (Bulk approach)..."));
@@ -49,14 +52,22 @@ async function benchmark() {
     .filter((parsed) => parsed.success)
     .map((parsed) => parsed.data);
 
-  const accountNumbers = parsedAccounts.map((a) => a.account_number);
+  const _accountNumbers = parsedAccounts.map((a) => a.account_number);
   // simulate await accountsService.findManyByAccountNumbers(accountNumbers);
   // simulate await accountsService.createManyAndReturn(accountsToCreate);
 
   const optEnd = performance.now();
-  console.log(chalk.green(`Optimized simulated time: ${(optEnd - optStart).toFixed(2)}ms`));
+  console.log(
+    chalk.green(
+      `Optimized simulated time: ${(optEnd - optStart).toFixed(2)}ms`,
+    ),
+  );
 
-  console.log(chalk.cyan(`\nTheoretical improvement: Reduced database round trips from ${accounts.length * 2} to 2.`));
+  console.log(
+    chalk.cyan(
+      `\nTheoretical improvement: Reduced database round trips from ${accounts.length * 2} to 2.`,
+    ),
+  );
 }
 
 benchmark().catch(console.error);
