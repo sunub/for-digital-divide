@@ -190,14 +190,16 @@ export async function seedDemoAccountAndTransactionInfo() {
     return;
   }
 
-  const transactionChecks = await Promise.all(
-    accounts.map((acc) =>
-      transactionsService.findByAccountNumber(Number(acc.account_number)),
-    ),
+  const accountNumbers = accounts.map((acc) => Number(acc.account_number));
+  const existingTransactions =
+    await transactionsService.findByAccountNumbers(accountNumbers);
+
+  const seededAccountNumbers = new Set(
+    existingTransactions.map((t) => Number(t.account_number)),
   );
 
-  const allAccountsSeeded = transactionChecks.every(
-    (transactions) => transactions.length > 0,
+  const allAccountsSeeded = accountNumbers.every((accNum) =>
+    seededAccountNumbers.has(accNum),
   );
 
   if (allAccountsSeeded) {

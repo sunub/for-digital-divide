@@ -31,4 +31,10 @@ export const transactionsRepository = {
       where: { account_number: account_number },
     });
   },
+  async findByAccountNumbers(account_numbers: number[]) {
+    return prisma.transactions.findMany({
+      where: { account_number: { in: account_numbers } },
+      select: { account_number: true },
+    });
+  },
 };
