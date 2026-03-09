@@ -56,12 +56,11 @@ export async function pinRegisterAction(
 
   const { keypad } = await getKeypadData();
   const registerdShuffledKeypad = keypad.svgGrid;
+  const flattenedKeypad = registerdShuffledKeypad.flat();
 
   const inputOriginPinNumber = pinnumbers.map((pos) => {
     const [x, y] = pos.split(",").map(Number);
-    const foundKey = registerdShuffledKeypad
-      .flat()
-      .find((key) => key.x === x && key.y === y);
+    const foundKey = flattenedKeypad.find((key) => key.x === x && key.y === y);
     if (!foundKey) {
       throw new Error("유효하지 않은 핀번호 위치입니다.");
     }
