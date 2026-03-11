@@ -1,5 +1,5 @@
-import { style } from "@vanilla-extract/css";
 import { vars } from "@for-digital-divide/design-system/styles";
+import { style } from "@vanilla-extract/css";
 
 export const accountHeader = style({
   userSelect: "none",

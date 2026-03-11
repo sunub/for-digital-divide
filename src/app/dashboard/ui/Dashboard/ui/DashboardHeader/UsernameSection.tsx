@@ -1,9 +1,9 @@
 "use client";
 
+import { Box, Flex } from "@for-digital-divide/design-system";
 import { HandIcon, SmileIcon } from "lucide-react";
 import { motion, useAnimate } from "motion/react";
 import { useCallback } from "react";
-import { Box, Flex } from "@for-digital-divide/design-system";
 import * as style from "./DashboardHeader.css";
 
 export function UsernameSection({ children }: { children: React.ReactNode }) {

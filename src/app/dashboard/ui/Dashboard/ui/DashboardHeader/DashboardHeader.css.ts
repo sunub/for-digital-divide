@@ -1,5 +1,5 @@
-import { globalStyle, style } from "@vanilla-extract/css";
 import { vars } from "@for-digital-divide/design-system/styles";
+import { globalStyle, style } from "@vanilla-extract/css";
 
 export const headerContainer = style({
   gridArea: "dashboard-header / 1",

@@ -1,8 +1,8 @@
 "use client";
 
+import { Flex, Text } from "@for-digital-divide/design-system";
 import { motion, useSpring } from "motion/react";
 import { memo, useEffect } from "react";
-import { Flex, Text } from "@for-digital-divide/design-system";
 import * as style from "./MainTitle.css";
 
 export const MainTitle = memo(() => {

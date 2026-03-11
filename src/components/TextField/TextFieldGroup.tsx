@@ -1,6 +1,6 @@
+import { type BaseStyle, Box } from "@for-digital-divide/design-system";
 import clsx from "clsx";
 import type { ComponentPropsWithoutRef } from "react";
-import { Box, type BaseStyle } from "@for-digital-divide/design-system";
 import { textFieldGroup } from "./TextFieldGroup.css";
 
 type TextFielProps = Omit<ComponentPropsWithoutRef<"div">, keyof BaseStyle>;

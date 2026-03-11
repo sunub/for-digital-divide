@@ -1,6 +1,6 @@
+import { gridCenter } from "@for-digital-divide/design-system";
 import clsx from "clsx";
 import type { HTMLAttributes } from "react";
-import { gridCenter } from "@for-digital-divide/design-system";
 import { fullSize } from "@/style/Size.css";
 import { LoadingAnimation } from "./LoadingAnimation";
 

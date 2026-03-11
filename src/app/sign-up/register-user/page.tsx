@@ -1,10 +1,10 @@
 "use client";
 
+import { Flex } from "@for-digital-divide/design-system";
 import { EmailAndPasswordField } from "@/components/EmailAndPasswordField";
 import { Form } from "@/components/Form/Form";
 import { UsernameInput } from "@/components/UsernameInput/UsernameInput";
 import { Device } from "@/shared/layout";
-import { Flex } from "@for-digital-divide/design-system";
 import * as style from "./page.css";
 import { registerUserAction } from "./utils/registerUserAction";
 

@@ -1,8 +1,8 @@
 "use client";
 
+import { Flex } from "@for-digital-divide/design-system";
 import type { MotionNodeAnimationOptions } from "motion/react";
 import { motion } from "motion/react";
-import { Flex } from "@for-digital-divide/design-system";
 import { ToastMessage } from "../ui/ToastMessage";
 
 interface LoginContentContainerProps {

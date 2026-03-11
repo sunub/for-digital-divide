@@ -1,8 +1,8 @@
+import { Button } from "@for-digital-divide/design-system";
 import Link from "next/link";
 import { memo } from "react";
 import VisuallyHidden from "@/components/VisuallyHidden";
 import * as styles from "../../style/layout.css";
-import { Button } from "@for-digital-divide/design-system";
 
 export const HomeButton = memo(({ href }: { href: string }) => {
   return (

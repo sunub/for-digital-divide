@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
 import { Button, Flex, Text } from "@for-digital-divide/design-system";
+import { useRef } from "react";
 import { useTitleAnimation } from "../hooks/useTitleAnimation";
 import * as style from "./TransactionChartTitle.css";
 

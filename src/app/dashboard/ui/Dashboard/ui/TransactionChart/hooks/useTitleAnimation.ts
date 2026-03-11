@@ -1,6 +1,6 @@
+import { vars } from "@for-digital-divide/design-system";
 import * as d3 from "d3";
 import { useEffect } from "react";
-import { vars } from "@for-digital-divide/design-system";
 
 const WIDTH = 100;
 const HEIGHT = 38;

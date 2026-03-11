@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { useHistory } from "@/shared/hooks/useHistory";
 import {
   Backdrop,
   Box,
@@ -11,6 +9,8 @@ import {
   Text,
   ThreeDButton,
 } from "@for-digital-divide/design-system";
+import Link from "next/link";
+import { useHistory } from "@/shared/hooks/useHistory";
 
 function StartButton() {
   const { add } = useHistory();

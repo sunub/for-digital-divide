@@ -1,8 +1,8 @@
 "use client";
 
+import { Button, Flex, Text } from "@for-digital-divide/design-system";
 import Link from "next/link";
 import { AlertDialog, AlertDialogContent } from "@/components/AlertDialog";
-import { Button, Flex, Text } from "@for-digital-divide/design-system";
 import { AlertCloseButton } from "../../Alert/AlertCloseButton";
 
 export function AlertMessage({ defaultOpen }: { defaultOpen: boolean }) {

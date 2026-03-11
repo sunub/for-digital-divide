@@ -1,10 +1,10 @@
+import { Grid } from "@for-digital-divide/design-system";
 import { Suspense } from "react";
 import { Tooltip } from "@/components/Tooltip";
 import { Device } from "@/shared/layout";
 import * as style from "./layout.css";
 import { TransitionLayout } from "./TransitionLayout";
 import { DashboardHeader } from "./ui/Dashboard/ui/DashboardHeader/DashboardHeader";
-import { Grid } from "@for-digital-divide/design-system";
 
 export default async function RootLayout({
   children,

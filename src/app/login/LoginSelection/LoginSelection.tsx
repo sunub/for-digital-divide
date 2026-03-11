@@ -1,5 +1,5 @@
-import { CardContainer } from "@/app/dashboard/ui/Account/ui/CardContainer";
 import { AppLink, Flex, Text } from "@for-digital-divide/design-system";
+import { CardContainer } from "@/app/dashboard/ui/Account/ui/CardContainer";
 import { EmailCard } from "../ui/EmailCard";
 import { PinNumberCard } from "../ui/PinNumberCard";
 import * as style from "./LoginSelection.css";

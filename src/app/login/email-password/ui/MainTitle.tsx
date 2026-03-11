@@ -1,9 +1,9 @@
 "use client";
 
+import { Text } from "@for-digital-divide/design-system";
 import { motion, useSpring } from "motion/react";
 import { memo, useEffect, useState } from "react";
 import * as style from "./MainTitle.css";
-import { Text } from "@for-digital-divide/design-system";
 
 const TITLE_SLOT = Array.from({ length: 3 }, (_, i) => i);
 

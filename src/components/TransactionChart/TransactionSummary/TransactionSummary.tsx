@@ -1,19 +1,18 @@
+import { ButtonGroup, Flex } from "@for-digital-divide/design-system";
 import { useShallow } from "zustand/react/shallow";
 import Spacer from "@/constants/Spacer";
-import { ButtonGroup } from "@for-digital-divide/design-system";
-import { Flex } from "@for-digital-divide/design-system";
 import { CHART_VIEW_MODES } from "../constants/chartViewMode";
 import { TIME_PERIODS } from "../constants/timePeriod";
 import { useInteractionStore } from "../store/InteractionStore";
 import type { ChartSummary, ChartViewMode } from "../types";
 import { getDisplayInfo } from "../utils/getDisplayInfo";
+import { useRenderCounter } from "../utils/transactionChartMetrics";
 import { ViewSelectButton } from "../ViewSelectButton";
 import { PeriodSelectorButton } from "./PeriodSelectorButton";
 import { SummaryHeader } from "./SummaryHeader";
 import { TransactionLegend } from "./TransactionLengend";
 import * as style from "./TransactionSummary.css";
 import { TrendIndicator } from "./TrendIndicator";
-import { useRenderCounter } from "../utils/transactionChartMetrics";
 
 interface TransactionSummaryProps {
   viewMode: ChartViewMode;

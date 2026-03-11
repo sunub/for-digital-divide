@@ -1,10 +1,10 @@
+import { gridCenter, vars } from "@for-digital-divide/design-system/styles";
 import {
   createVar,
   fallbackVar,
   globalStyle,
   style,
 } from "@vanilla-extract/css";
-import { gridCenter, vars } from "@for-digital-divide/design-system/styles";
 import { recipe } from "@vanilla-extract/recipes";
 import { fullSize } from "@/style/Size.css";
 

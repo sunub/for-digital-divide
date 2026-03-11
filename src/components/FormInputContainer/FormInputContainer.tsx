@@ -1,5 +1,5 @@
-import { ArrowIcon } from "@/icons";
 import { Flex } from "@for-digital-divide/design-system";
+import { ArrowIcon } from "@/icons";
 import * as style from "./FormInputContainer.css";
 
 function ArrowIconIndicator() {

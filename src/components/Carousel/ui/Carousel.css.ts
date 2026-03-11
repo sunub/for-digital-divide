@@ -1,5 +1,5 @@
-import { createVar, style } from "@vanilla-extract/css";
 import { vars } from "@for-digital-divide/design-system/styles";
+import { createVar, style } from "@vanilla-extract/css";
 
 const slideHeightVar = createVar();
 const slideSpacingVar = createVar();

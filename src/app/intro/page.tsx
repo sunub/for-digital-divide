@@ -1,12 +1,12 @@
 "use client";
 
-import { ArrowIcon } from "@/icons";
-import useToggle from "@/shared/hooks/use-toggle";
 import {
+  Grid,
   PageFlexSection,
   Stack,
-  Grid,
 } from "@for-digital-divide/design-system";
+import { ArrowIcon } from "@/icons";
+import useToggle from "@/shared/hooks/use-toggle";
 import { title } from "./page.css";
 import { SmallPhone } from "./ui/SmallPhone";
 

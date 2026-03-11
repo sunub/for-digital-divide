@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useInteractionStore } from "../store/InteractionStore";
 import { TransactionChartController } from "../TransactionChartController";
-import { chartMetrics } from "../utils/transactionChartMetrics";
 import type { ChartViewMode, DailyData } from "../types";
+import { chartMetrics } from "../utils/transactionChartMetrics";
 
 interface UseTransactionChartProps {
   data: DailyData[];

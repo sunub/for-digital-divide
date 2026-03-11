@@ -1,6 +1,6 @@
+import { vars } from "@for-digital-divide/design-system/styles";
 import { createVar, style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
-import { vars } from "@for-digital-divide/design-system/styles";
 
 export const xVar = createVar();
 export const yVar = createVar();
