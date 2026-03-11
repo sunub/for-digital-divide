@@ -8,8 +8,8 @@ export {
 } from "./Backdrop";
 export {
   Button,
-  type ButtonStatus,
   type ButtonProps,
+  type ButtonStatus,
   type NativeButtonProps,
   type SlottableButtonProps,
 } from "./Button";
