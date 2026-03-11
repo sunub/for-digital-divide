@@ -1,0 +1,80 @@
+import { createSprinkles, defineProperties } from "@vanilla-extract/sprinkles";
+import { vars } from "../tokens/theme.css";
+
+const baseStyleProperties = defineProperties({
+  properties: {
+    display: ["none", "flex", "block", "inline", "grid"],
+    flexWrap: ["nowrap", "wrap", "wrap-reverse"],
+    flexDirection: ["row", "column"],
+    alignItems: [
+      "stretch",
+      "flex-start",
+      "center",
+      "flex-end",
+      "space-between",
+      "space-around",
+      "space-evenly",
+    ],
+    justifyContent: [
+      "stretch",
+      "flex-start",
+      "center",
+      "flex-end",
+      "space-between",
+      "space-around",
+      "space-evenly",
+    ],
+    placeContent: [
+      "stretch",
+      "flex-start",
+      "center",
+      "flex-end",
+      "space-between",
+    ],
+    width: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    height: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    maxWidth: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    maxHeight: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    minWidth: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    minHeight: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    gap: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    padding: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    paddingTop: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    paddingBottom: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    paddingLeft: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    paddingRight: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    margin: { ...vars.space, ...vars.fontSize, auto: "auto" },
+    marginTop: { ...vars.space, ...vars.fontSize, auto: "auto" },
+    marginBottom: { ...vars.space, ...vars.fontSize, auto: "auto" },
+    marginLeft: { ...vars.space, ...vars.fontSize, auto: "auto" },
+    marginRight: { ...vars.space, ...vars.fontSize, auto: "auto" },
+    backgroundColor: vars.color,
+    color: vars.color,
+    borderRadius: vars.borderRadius,
+    fontSize: vars.fontSize,
+    fontWeight: vars.fontWeight,
+    zIndex: vars.zIndex,
+    top: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    left: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    right: { ...vars.space, ...vars.layout, ...vars.fontSize },
+    bottom: { ...vars.space, ...vars.layout, ...vars.fontSize },
+
+    position: ["static", "relative", "absolute", "fixed", "sticky"],
+    textAlign: ["left", "center", "right", "justify"],
+  },
+  shorthands: {
+    p: ["padding"],
+    px: ["paddingLeft", "paddingRight"],
+    py: ["paddingTop", "paddingBottom"],
+    m: ["margin"],
+    mx: ["marginLeft", "marginRight"],
+    my: ["marginTop", "marginBottom"],
+    bg: ["backgroundColor"],
+    placeItems: ["justifyContent", "alignItems"],
+    size: ["width", "height"],
+  },
+});
+
+export const baseStyles = createSprinkles(baseStyleProperties);
+
+export type BaseStyle = Parameters<typeof baseStyles>[0];
