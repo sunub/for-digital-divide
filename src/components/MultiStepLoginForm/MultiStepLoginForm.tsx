@@ -3,7 +3,7 @@
 import { SubmittingStatus } from "@/app/login/email-password/ui/SubmittingStatus";
 import type { ActionState } from "@/app/login/types";
 import { useDemoLoginFlow } from "@/shared/hooks/useDemoLoginFlow";
-import { BaseForm } from "@/shared/ui/BaseForm";
+import { BaseForm } from "@for-digital-divide/design-system";
 import { SubmitButton } from "../Form/SubmitButton";
 import { FormInputContainer } from "../FormInputContainer";
 

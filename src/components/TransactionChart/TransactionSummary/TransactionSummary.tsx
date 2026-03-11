@@ -1,7 +1,7 @@
 import { useShallow } from "zustand/react/shallow";
 import Spacer from "@/constants/Spacer";
-import { ButtonGroup } from "@/shared/ui/ButtonGroup";
-import { Flex } from "@/shared/ui/Flex";
+import { ButtonGroup } from "@for-digital-divide/design-system";
+import { Flex } from "@for-digital-divide/design-system";
 import { CHART_VIEW_MODES } from "../constants/chartViewMode";
 import { TIME_PERIODS } from "../constants/timePeriod";
 import { useInteractionStore } from "../store/InteractionStore";
@@ -13,6 +13,7 @@ import { SummaryHeader } from "./SummaryHeader";
 import { TransactionLegend } from "./TransactionLengend";
 import * as style from "./TransactionSummary.css";
 import { TrendIndicator } from "./TrendIndicator";
+import { useRenderCounter } from "../utils/transactionChartMetrics";
 
 interface TransactionSummaryProps {
   viewMode: ChartViewMode;
@@ -24,6 +25,13 @@ export function TransactionSummary({
   viewMode,
   summary,
 }: TransactionSummaryProps) {
+  useRenderCounter("TransactionSummary", {
+    viewMode,
+    summaryBalance: summary.currentBalance,
+    expenseTotal: summary.totalExpense,
+    incomeTotal: summary.totalIncome,
+  });
+
   const { hoverData } = useInteractionStore(
     useShallow((state) => ({
       hoverData: state.hoverData,

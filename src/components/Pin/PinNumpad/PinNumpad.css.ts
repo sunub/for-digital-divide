@@ -1,6 +1,6 @@
 import { createVar, style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
-import { vars } from "@/style/theme.css";
+import { vars } from "@for-digital-divide/design-system/styles";
 
 export const bgPosX = createVar();
 export const bgPosY = createVar();

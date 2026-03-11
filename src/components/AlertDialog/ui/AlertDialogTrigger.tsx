@@ -1,14 +1,14 @@
 "use client";
 
-import type { ButtonProps } from "@/components/Button";
-import { Button } from "@/components/Button";
+import { Button } from "@for-digital-divide/design-system";
+import type { NativeButtonProps } from "@for-digital-divide/design-system";
 import { useAlertDialogContext } from "../hooks/useAlertDialogContext";
 import * as style from "./Alert.css";
 
 export const AlertDialogTrigger = ({
   ref,
   ...props
-}: ButtonProps & { ref: React.Ref<HTMLButtonElement> }) => {
+}: NativeButtonProps & { ref: React.Ref<HTMLButtonElement> }) => {
   const context = useAlertDialogContext();
 
   return (

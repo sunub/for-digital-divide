@@ -7,8 +7,7 @@ import { PinContent } from "@/app/login/Pin/ui/PinContent";
 import type { ActionState } from "@/app/login/types";
 import { useNumpadStore } from "@/context/NumpadContext";
 import { ContentOpener } from "@/shared/layout/ui/ContentOpener";
-import type { FormProps } from "@/shared/ui/BaseForm";
-import { BaseForm } from "@/shared/ui/BaseForm";
+import { BaseForm, type FormProps } from "@for-digital-divide/design-system";
 import * as style from "../PinForm/PinForm.css";
 import { useRegisterPinFlow } from "./hooks/useRegisterPinFlow";
 

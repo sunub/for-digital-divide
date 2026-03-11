@@ -1,24 +1,27 @@
 "use client";
 
-import type { ButtonProps } from "@/components/3DButton";
-import { _3DButton } from "@/components/3DButton";
-import { Flex } from "@/shared/ui/Flex";
+import {
+  Flex,
+  ThreeDButton,
+  type ThreeDButtonProps,
+} from "@for-digital-divide/design-system";
 
-interface SubmitButtonProps extends Omit<ButtonProps, "children" | "type"> {
+interface SubmitButtonProps
+  extends Omit<ThreeDButtonProps, "children" | "type"> {
   isPending: boolean;
 }
 
 export function SubmitButton({ isPending, ...props }: SubmitButtonProps) {
   return (
     <Flex placeItems={"center"}>
-      <_3DButton
+      <ThreeDButton
         type="submit"
         status={isPending ? "pending" : "idle"}
         disabled={isPending}
         {...props}
       >
         확인
-      </_3DButton>
+      </ThreeDButton>
     </Flex>
   );
 }

@@ -4,7 +4,7 @@ import { AtSignIcon, KeySquare } from "lucide-react";
 import { useState } from "react";
 import { TextField } from "@/components/TextField/TextField";
 import { TextFieldGroup } from "@/components/TextField/TextFieldGroup";
-import { Flex } from "@/shared/ui/Flex";
+import { Flex } from "@for-digital-divide/design-system";
 import * as style from "./EmailAndPasswordField.css";
 import { useEmailValidation } from "./hooks/useEmailValidation";
 import { usePasswordValidation } from "./hooks/usePasswordValidation";

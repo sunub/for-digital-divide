@@ -2,12 +2,12 @@
 
 import clsx from "clsx";
 import { useState } from "react";
-import type { ButtonProps } from "@/components/Button";
-import { Button } from "@/components/Button";
 import { useTooltipToggle } from "../hooks/useTooltipToggle";
 import { useTooltipContext } from "./TooltipProvider";
+import { Button } from "@for-digital-divide/design-system";
+import type { NativeButtonProps } from "@for-digital-divide/design-system";
 
-interface TooltipTriggerProps extends ButtonProps {
+interface TooltipTriggerProps extends NativeButtonProps {
   children: React.ReactNode;
 }
 

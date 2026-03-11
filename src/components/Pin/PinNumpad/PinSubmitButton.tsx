@@ -1,5 +1,5 @@
 import type { FormStatus } from "react-dom";
-import { Button } from "@/components/Button";
+import { Button } from "@for-digital-divide/design-system";
 import { StatusButton } from "@/components/StautsButton";
 import { useNumpadStore } from "@/context/NumpadContext";
 import * as style from "./PinNumpad.css";

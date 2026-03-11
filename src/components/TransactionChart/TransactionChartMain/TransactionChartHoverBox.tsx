@@ -1,6 +1,6 @@
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { clsx } from "clsx";
-import { COLORS } from "../constants/colors";
+import { Box, Flex, Text } from "@for-digital-divide/design-system";
 import { useInteractionStore } from "../store/InteractionStore";
 import type { ChartViewMode } from "../types";
 import * as style from "./TransactionChartHoverBox.css";
@@ -28,62 +28,68 @@ export function TransactionChartHoverBox({
           : "balance";
 
   return (
-    <div
+    <Box
       className={style.container}
       style={assignInlineVars({
         [style.xVar]: `${hoverPos.x}px`,
         [style.yVar]: `${hoverPos.y}px`,
       })}
     >
-      {/* Cursor Line */}
-      <div className={style.cursorLine} />
+      <Box aria-hidden="true" className={style.cursorLine} />
 
-      {/* Point */}
-      <div className={style.point({ variant })} />
+      <Box aria-hidden="true" className={style.point({ variant })} />
 
-      {/* Tooltip */}
-      <div
+      <Box
         className={clsx(
           style.tooltipContainer,
           isRightSide ? style.tooltipRight : style.tooltipLeft,
         )}
       >
-        <div className={style.tooltipDate}>
+        <Text as="p" variant="description" className={style.tooltipDate}>
           {hoverData.date.toLocaleDateString()}
-        </div>
+        </Text>
 
-        <div className={style.tooltipRow}>
-          <span
+        <Flex justifyContent="space-between" alignItems="center" gap={3}>
+          <Text
+            as="span"
+            variant="body"
             className={style.tooltipLabel}
-            style={{ color: COLORS.expense }}
+            color="expense"
           >
             지출
-          </span>
-          <span className={style.tooltipValue}>
+          </Text>
+          <Text as="span" variant="bodyStrong" className={style.tooltipValue}>
             {hoverData.expense.toLocaleString()}원
-          </span>
-        </div>
-        <div className={style.tooltipRow}>
-          <span className={style.tooltipLabel} style={{ color: COLORS.income }}>
-            수입
-          </span>
-          <span className={style.tooltipValue}>
-            {hoverData.income.toLocaleString()}원
-          </span>
-        </div>
-        <hr style={{ margin: "6px 0", borderTop: "1px solid #eee" }} />
-        <div className={style.tooltipRow}>
-          <span
+          </Text>
+        </Flex>
+        <Flex justifyContent="space-between" alignItems="center" gap={3}>
+          <Text
+            as="span"
+            variant="body"
             className={style.tooltipLabel}
-            style={{ fontWeight: "bold", color: COLORS.balance }}
+            color="income"
+          >
+            수입
+          </Text>
+          <Text as="span" variant="bodyStrong" className={style.tooltipValue}>
+            {hoverData.income.toLocaleString()}원
+          </Text>
+        </Flex>
+        <Box aria-hidden="true" className={style.separator} />
+        <Flex justifyContent="space-between" alignItems="center" gap={3}>
+          <Text
+            as="span"
+            variant="bodyStrong"
+            className={style.tooltipLabel}
+            color="balance"
           >
             잔액
-          </span>
-          <span className={style.tooltipValue}>
+          </Text>
+          <Text as="span" variant="bodyStrong" className={style.tooltipValue}>
             {hoverData.balance.toLocaleString()}원
-          </span>
-        </div>
-      </div>
-    </div>
+          </Text>
+        </Flex>
+      </Box>
+    </Box>
   );
 }

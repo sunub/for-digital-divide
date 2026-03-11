@@ -8,6 +8,7 @@ import { useTransactionContext } from "./TransactionProvider";
 import { TransactionSummary } from "./TransactionSummary/TransactionSummary";
 import type { Transaction } from "./types";
 import { processData } from "./utils/processData";
+import { useRenderCounter } from "./utils/transactionChartMetrics";
 
 export function TransactionChart({
   transactionData,
@@ -17,6 +18,13 @@ export function TransactionChart({
   currentBalance?: number;
 }) {
   const { viewMode, selectedPeriod } = useTransactionContext();
+
+  useRenderCounter("TransactionChart", {
+    viewMode,
+    selectedPeriod,
+    txCount: transactionData.length,
+  });
+
   const { dailyData, summary } = useMemo(() => {
     return processData(transactionData, selectedPeriod, currentBalance);
   }, [transactionData, selectedPeriod, currentBalance]);

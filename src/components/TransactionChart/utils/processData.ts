@@ -4,12 +4,16 @@ import type {
   TimePeriod,
   Transaction,
 } from "../types";
+import { chartMetrics } from "./transactionChartMetrics";
 
 export function processData(
   transactions: Transaction[],
   period: TimePeriod,
   currentBalance: number,
 ): { dailyData: DailyData[]; summary: ChartSummary } {
+  const startAt =
+    typeof performance === "undefined" ? Date.now() : performance.now();
+
   const now = new Date();
   const startDate = new Date();
 
@@ -110,6 +114,26 @@ export function processData(
 
     return prevSum === 0 ? 0 : ((currentSum - prevSum) / prevSum) * 100;
   };
+
+  const metricPayload = {
+    period,
+    inputCount: transactions.length,
+    outputCount: dailyData.length,
+    hasData: dailyData.length > 0,
+    currentBalance,
+  };
+
+  chartMetrics.record(
+    "processData",
+    {
+      ...metricPayload,
+      timestamp: Date.now(),
+    },
+    (typeof performance === "undefined" ? Date.now() : performance.now()) -
+      startAt,
+  );
+
+  chartMetrics.collectMemorySnapshot("processData");
 
   return {
     dailyData,

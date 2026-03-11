@@ -1,7 +1,9 @@
+import { Box, Text } from "@for-digital-divide/design-system";
 import { useTransactionChart } from "../hooks/useTransactionChart";
 import type { ChartViewMode, DailyData } from "../types";
 import { TransactionChartHoverBox } from "./TransactionChartHoverBox";
 import * as style from "./TransactionChartMain.css";
+import { useRenderCounter } from "../utils/transactionChartMetrics";
 
 interface TransactionChartMainProps {
   viewMode: ChartViewMode;
@@ -12,11 +14,17 @@ export function TransactionChartMain({
   viewMode,
   dailyData,
 }: TransactionChartMainProps) {
+  useRenderCounter("TransactionChartMain", {
+    viewMode,
+    dataLength: dailyData.length,
+  });
+
   const { containerRef, handleMouseMove, handleMouseLeave } =
     useTransactionChart({ viewMode, data: dailyData });
 
   return (
-    <section
+    <Box
+      as="section"
       aria-label="메인 차트 영역"
       className={style.chartGraphWrapper}
       ref={containerRef}
@@ -26,9 +34,17 @@ export function TransactionChartMain({
       {dailyData.length > 0 ? (
         <TransactionChartHoverBox viewMode={viewMode} />
       ) : (
-        <div className={style.emptyState}>데이터가 부족합니다.</div>
+        <Text
+          as="p"
+          variant="description"
+          alignItems="center"
+          justifyContent="center"
+          className={style.emptyState}
+        >
+          데이터가 부족합니다.
+        </Text>
       )}
       <div id={"transaction-chart-main-bottom"} />
-    </section>
+    </Box>
   );
 }

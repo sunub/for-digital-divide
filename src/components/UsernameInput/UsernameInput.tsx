@@ -3,7 +3,7 @@
 import { UserIcon } from "lucide-react";
 import { useState } from "react";
 import { TextField } from "@/components/TextField/TextField";
-import { Flex } from "@/shared/ui/Flex";
+import { Flex } from "@for-digital-divide/design-system";
 import { errorText } from "../EmailAndPasswordField/EmailAndPasswordField.css";
 import { useUsernameValidation } from "./hooks/useUsernameValidation";
 

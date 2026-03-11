@@ -1,4 +1,4 @@
-import { Flex } from "@/shared/ui/Flex";
+import { Flex } from "@for-digital-divide/design-system";
 import * as style from "./TransactionLengend.css";
 
 export function TransactionLegend() {
