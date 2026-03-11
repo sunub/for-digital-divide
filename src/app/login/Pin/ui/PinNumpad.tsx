@@ -4,7 +4,7 @@ import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { useTransition } from "react";
 import { type FormStatus, useFormStatus } from "react-dom";
 
-import { Button } from "@/components/Button";
+import { Button } from "@for-digital-divide/design-system";
 import { StatusButton } from "@/components/StautsButton";
 import { useNumpadStore } from "@/context/NumpadContext";
 import type { KeypadDetail, KeypadInfo } from "@/types/keypad";

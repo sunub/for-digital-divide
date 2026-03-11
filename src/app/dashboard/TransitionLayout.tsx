@@ -3,7 +3,7 @@
 import type { MotionNodeAnimationOptions } from "motion/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useSelectedLayoutSegment } from "next/navigation";
-import { Flex } from "@/shared/ui/Flex";
+import { Flex } from "@for-digital-divide/design-system";
 
 export const pageVariants: MotionNodeAnimationOptions["variants"] = {
   initial: { opacity: 0, x: "100%", z: -1 },

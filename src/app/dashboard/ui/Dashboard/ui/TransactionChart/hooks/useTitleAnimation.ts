@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import { useEffect } from "react";
+import { vars } from "@for-digital-divide/design-system";
 
 const WIDTH = 100;
 const HEIGHT = 38;
@@ -72,10 +73,7 @@ export function useTitleAnimation(
       .append("path")
       .datum(TITLE_SVG_DATA)
       .attr("fill", "none")
-      .attr(
-        "stroke",
-        "color-mix(in oklch, oklch(63.93% 0.206 288.34) 90%, oklch(0.7 0.1825 239.69) 20%)",
-      )
+      .attr("stroke", vars.surface.interactiveCard.foreground)
       .attr("stroke-width", 2);
 
     const pathData = lineGenerator(TITLE_SVG_DATA);
@@ -107,10 +105,7 @@ export function useTitleAnimation(
       .attr("cy", (d) => yScale(d.value))
       .attr("r", 3)
       .attr("fill", "white")
-      .attr(
-        "stroke",
-        "color-mix(in oklch, oklch(63.93% 0.206 288.34) 90%, oklch(0.7 0.1825 239.69) 20%)",
-      )
+      .attr("stroke", vars.surface.interactiveCard.foreground)
       .attr("stroke-width", 1.75)
       .attr("opacity", 0)
       .transition()

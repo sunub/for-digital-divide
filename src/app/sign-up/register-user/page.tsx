@@ -4,14 +4,14 @@ import { EmailAndPasswordField } from "@/components/EmailAndPasswordField";
 import { Form } from "@/components/Form/Form";
 import { UsernameInput } from "@/components/UsernameInput/UsernameInput";
 import { Device } from "@/shared/layout";
-import { Flex } from "@/shared/ui/Flex";
+import { Flex } from "@for-digital-divide/design-system";
 import * as style from "./page.css";
 import { registerUserAction } from "./utils/registerUserAction";
 
 export default function RegisterUserNamePage() {
   return (
-    <Device.frame>
-      <Device.content>
+    <Device.Frame>
+      <Device.Content>
         <Flex
           direction="column"
           alignItems="center"
@@ -24,7 +24,7 @@ export default function RegisterUserNamePage() {
             <EmailAndPasswordField />
           </Form>
         </Flex>
-      </Device.content>
-    </Device.frame>
+      </Device.Content>
+    </Device.Frame>
   );
 }

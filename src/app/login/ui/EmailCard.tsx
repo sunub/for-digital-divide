@@ -1,24 +1,23 @@
 "use client";
 
 import { CircleUserIcon } from "lucide-react";
-import { useState } from "react";
+import { useHistory } from "@/shared/hooks/useHistory";
 import { CardContent } from "./Card/CardContent";
 import { CardLayout } from "./Card/CardLayout";
 import { SmallCard } from "./Card/SmallCard";
 import { HoveringTextField } from "./HoveringTextField";
 
 export function EmailCard() {
-  const [isHover, setIsHover] = useState(false);
+  const { add } = useHistory();
 
   return (
-    <CardLayout href={"/login?method=email"}>
-      <CardContent
-        setIsHovering={setIsHover}
-        header={<CircleUserIcon />}
-        footer="로그인"
-      />
+    <CardLayout
+      href={"/login?method=email"}
+      onPress={() => add(new URL("/login", window.location.href).toString())}
+    >
+      <CardContent header={<CircleUserIcon />} footer="로그인" />
       <SmallCard />
-      <HoveringTextField isHovering={isHover} />
+      <HoveringTextField />
     </CardLayout>
   );
 }

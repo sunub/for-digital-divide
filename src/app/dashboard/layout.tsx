@@ -4,6 +4,7 @@ import { Device } from "@/shared/layout";
 import * as style from "./layout.css";
 import { TransitionLayout } from "./TransitionLayout";
 import { DashboardHeader } from "./ui/Dashboard/ui/DashboardHeader/DashboardHeader";
+import { Grid } from "@for-digital-divide/design-system";
 
 export default async function RootLayout({
   children,
@@ -14,16 +15,20 @@ export default async function RootLayout({
 }) {
   return (
     <Tooltip.Provider>
-      <Device.frame>
-        <Device.content>
-          <div className={style.dashboardRootContainer}>
+      <Device.Frame>
+        <Device.Content>
+          <Grid
+            width={"full"}
+            height={"full"}
+            className={style.dashboardRootContainer}
+          >
             <Suspense fallback={<div>Loading...</div>}>
               <DashboardHeader />
             </Suspense>
             <TransitionLayout modal={modal}>{children}</TransitionLayout>
-          </div>
-        </Device.content>
-      </Device.frame>
+          </Grid>
+        </Device.Content>
+      </Device.Frame>
       <div id="tooltip-root" />
     </Tooltip.Provider>
   );

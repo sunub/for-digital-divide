@@ -1,3 +1,4 @@
+import { globalStyle } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const hoveringText = recipe({
@@ -15,12 +16,9 @@ export const hoveringText = recipe({
     height: "4px",
     background: "transparent",
     opacity: 0,
+    pointerEvents: "none",
   },
   variants: {
-    isHovering: {
-      true: { opacity: 1 },
-      false: { opacity: 0 },
-    },
     hasDeviceId: {
       true: {
         background:
@@ -33,7 +31,10 @@ export const hoveringText = recipe({
     },
   },
   defaultVariants: {
-    isHovering: false,
     hasDeviceId: false,
   },
+});
+
+globalStyle(`.card-link-wrapper:hover ${hoveringText.classNames.base}`, {
+  opacity: 1,
 });

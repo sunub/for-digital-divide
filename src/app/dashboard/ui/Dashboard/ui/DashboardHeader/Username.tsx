@@ -1,11 +1,13 @@
+import { Text } from "@for-digital-divide/design-system";
 import { getUsername } from "../../utils/getUsername";
-import * as style from "./DashboardHeader.css";
 
 export async function Username() {
   const username = await getUsername();
   return (
     <p>
-      <span className={style.username}>{username}</span>
+      <Text as={"span"} variant={"bodyStrong"}>
+        {username}
+      </Text>
     </p>
   );
 }

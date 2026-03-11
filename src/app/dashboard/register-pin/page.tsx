@@ -16,10 +16,10 @@ export default async function RegisterPinPage() {
         className={style.registerPinForm}
         description="등록된 핀 번호가 존재하지 않아 핀 번호를 새롭게 등록 해야 합니다"
       >
-        <Device.drawerIndicator />
-        <Device.drawer>
+        <Device.DrawerIndicator />
+        <Device.Drawer>
           <Pin.numpad padInfo={registerPadInfo} />
-        </Device.drawer>
+        </Device.Drawer>
       </Pin.registerForm>
     </NumpadProvider>
   );

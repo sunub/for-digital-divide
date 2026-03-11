@@ -3,6 +3,7 @@
 import { motion, useSpring } from "motion/react";
 import { memo, useEffect, useState } from "react";
 import * as style from "./MainTitle.css";
+import { Text } from "@for-digital-divide/design-system";
 
 const TITLE_SLOT = Array.from({ length: 3 }, (_, i) => i);
 
@@ -53,9 +54,18 @@ export const MainTitle = memo(() => {
           </motion.span>
         ))}
       </motion.h1>
-      <p className={style.description}>
+      <Text variant={"description"}>
         이메일과 비밀번호를 사용해 로그인 해주세요
-      </p>
+      </Text>
+      <p className={style.description}></p>
     </div>
   );
 });
+
+// export const description = style({
+//   color:
+//     "color-mix(in oklch, oklch(63.93% 0.206 288.34), var(--color-primary) 20%)",
+//   fontSize: "1rem",
+//   marginTop: "0.5rem",
+//   fontWeight: 400,
+// });

@@ -1,7 +1,7 @@
 "use client";
 
 import { assignInlineVars } from "@vanilla-extract/dynamic";
-import { Grid } from "@/shared/ui/Grid";
+import { Grid } from "@for-digital-divide/design-system";
 import * as style from "./CardContainer.css";
 
 const GRID_USES_TYPE = ["chart", "default"];

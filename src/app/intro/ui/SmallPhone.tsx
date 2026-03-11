@@ -27,16 +27,10 @@ const SmallPhone: React.FC<SmallPhoneProps> = ({ isOpen, toggleOpen }) => {
   }, [router]);
 
   const handleClick = () => {
-    if (isOpen) return; // 이미 열려있으면 중복 클릭 방지
-
-    // 애니메이션 시작 (상태 변경)
+    if (isOpen) return;
     toggleOpen();
-
-    // 히스토리 추가
     add(new URL("/intro", window.location.href).toString());
 
-    // [핵심] 페이지 이동 요청을 즉시 시작
-    // Next.js가 데이터를 가져오는(loading) 시간 동안 애니메이션(open)이 재생됨
     router.push("/login");
   };
 

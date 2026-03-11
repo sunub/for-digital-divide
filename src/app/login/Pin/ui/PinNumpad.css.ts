@@ -1,7 +1,7 @@
 // src/components/PinNumpad/numpad.css.ts
 import { createVar, style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
-import { vars } from "@/style/theme.css"; // 프로젝트의 테마 파일 경로에 맞게 수정해주세요
+import { vars } from "@for-digital-divide/design-system/styles";
 
 export const bgPosX = createVar();
 export const bgPosY = createVar();

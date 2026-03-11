@@ -2,7 +2,7 @@
 
 import { BadgeCheckIcon, LoaderCircle, ShieldBanIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { Flex } from "@/shared/ui/Flex";
+import { Flex } from "@for-digital-divide/design-system";
 import type { ActionState } from "../../types";
 import * as style from "./StatusLoader.css";
 

@@ -12,15 +12,15 @@ export default async function Page({
   const { method = "default", reason } = (await searchParams) || {};
 
   return (
-    <Device.frame>
-      <Device.content>
+    <Device.Frame>
+      <Device.Content>
         <LoginContentContainer
           searchParams={{ method, reason }}
           defaultMethodNode={<LoginSelection />}
           emailMethodNode={<EmailPasswordLogin />}
           pinMethodNode={<LoginPinPage />}
         />
-      </Device.content>
-    </Device.frame>
+      </Device.Content>
+    </Device.Frame>
   );
 }

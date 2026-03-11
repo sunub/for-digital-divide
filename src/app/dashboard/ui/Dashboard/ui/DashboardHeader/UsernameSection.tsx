@@ -3,7 +3,7 @@
 import { HandIcon, SmileIcon } from "lucide-react";
 import { motion, useAnimate } from "motion/react";
 import { useCallback } from "react";
-import { Flex } from "@/shared/ui/Flex";
+import { Box, Flex } from "@for-digital-divide/design-system";
 import * as style from "./DashboardHeader.css";
 
 export function UsernameSection({ children }: { children: React.ReactNode }) {
@@ -31,7 +31,7 @@ export function UsernameSection({ children }: { children: React.ReactNode }) {
       onMouseEnter={enterAnimation}
       onMouseLeave={exitAnimation}
     >
-      <div className={style.headerIconContainer}>
+      <Box position="relative">
         <motion.div
           className={style.handIconContainer}
           ref={scope}
@@ -45,7 +45,8 @@ export function UsernameSection({ children }: { children: React.ReactNode }) {
           <HandIcon size={18} strokeWidth={3} fill="white" />
         </motion.div>
         <SmileIcon size={18} strokeWidth={3} fill="white" />
-      </div>
+      </Box>
+
       {children}
     </Flex>
   );

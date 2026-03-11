@@ -3,30 +3,39 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import * as style from "./style/CardLayout.css";
 
-interface CardLayoutProps extends React.ComponentPropsWithoutRef<typeof Link> {
+interface CardLayoutProps {
   children: ReactNode;
-  hasDeviceId?: boolean;
+  href?: React.ComponentPropsWithoutRef<typeof Link>["href"];
+  onPress?: () => void;
+  prefetch?: boolean;
+  disabled?: boolean;
 }
 
 function CardLayout({
   children,
   href,
-  hasDeviceId = true,
-  ...props
+  onPress,
+  prefetch = true,
+  disabled = false,
 }: CardLayoutProps) {
-  if (!hasDeviceId) {
+  if (disabled || !href) {
     return (
-      <div className={clsx(style.rootContainer, "card-link-wrapper")}>
+      <button
+        type="button"
+        onClick={onPress}
+        className={clsx(style.rootContainer, "card-link-wrapper")}
+        aria-disabled={disabled}
+      >
         {children}
-      </div>
+      </button>
     );
   }
 
   return (
     <Link
-      {...props}
+      onClick={onPress}
       href={href}
-      prefetch={true}
+      prefetch={prefetch}
       className={clsx(style.linkRootContainer, "card-link-wrapper")}
       tabIndex={0}
     >

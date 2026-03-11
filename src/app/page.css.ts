@@ -1,11 +1,12 @@
 import { style } from "@vanilla-extract/css";
-import { gridCenter } from "@/style/Grid.css";
+import {
+  gridCenter,
+  baseStyles,
+} from "@for-digital-divide/design-system/styles";
 
 export const welcomeMessage = style([
   gridCenter,
-  {
-    paddingTop: "32px",
-  },
+  baseStyles({ paddingTop: 8 }),
 ]);
 
 export const textContainer = style([
@@ -37,12 +38,5 @@ export const devsiteContentSiteContent = style([
 ]);
 
 export const backDrop = style({
-  position: "fixed",
-  background: "oklch(3.53% 0 73 / 50%)",
   backdropFilter: "blur(20px)",
-  zIndex: 11,
-  top: "0px",
-  left: "0px",
-  width: "100%",
-  height: "100%",
 });

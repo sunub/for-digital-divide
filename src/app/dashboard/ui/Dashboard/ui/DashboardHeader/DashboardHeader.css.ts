@@ -1,39 +1,17 @@
 import { globalStyle, style } from "@vanilla-extract/css";
+import { vars } from "@for-digital-divide/design-system/styles";
 
 export const headerContainer = style({
   gridArea: "dashboard-header / 1",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  width: "100%",
-  height: "100%",
-  position: "sticky",
-  top: 0,
-  zIndex: 10,
-  color: "color-mix(in oklch, var(--color-accent), oklch(0.4002 0.206 288.34))",
-  backgroundColor: "color-mix(in oklch, var(--color-primary), transparent)",
-  backdropFilter: "blur(5px)",
-  borderTopLeftRadius: "2.5rem",
-  borderTopRightRadius: "2.5rem",
 
-  padding: "0 1.5rem",
-});
+  zIndex: vars.zIndex.drawer,
+  color: vars.surface.header.foreground,
+  backgroundColor: vars.surface.header.background,
+  backdropFilter: `blur(${vars.surface.header.backdropBlur})`,
+  borderTopLeftRadius: vars.surface.header.radius,
+  borderTopRightRadius: vars.surface.header.radius,
 
-export const headerSideContainer = style({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: "0.75rem",
-});
-
-export const username = style({
-  fontWeight: "bold",
-  fontSize: "1.125rem",
-  userSelect: "none",
-});
-
-export const headerIconContainer = style({
-  position: "relative",
+  padding: `0 ${vars.space[6]}`,
 });
 
 export const handIconContainer = style({
@@ -42,27 +20,21 @@ export const handIconContainer = style({
   left: 12,
 });
 
-export const emptyHeaderContainer = style({
-  gridArea: "dashboard-header / 1",
-  width: "100%",
-  height: "100%",
-});
-
 export const logOutButton = style({
   selectors: {
     "&:hover": {
-      backgroundColor: "var(--color-button-hover)",
-      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+      backgroundColor: vars.button.primary.hoverBackground,
+      boxShadow: vars.buttonPrimitive.shadow.hover,
     },
   },
 });
 
 globalStyle(`${logOutButton} > svg`, {
-  color: "var(--color-text)",
+  color: vars.color.text,
   transition: "color 200ms ease-in-out",
 });
 
 export const logOutButtonSvg = style({
-  color: "var(--color-text)",
+  color: vars.color.text,
   transition: "color 200ms ease-in-out",
 });

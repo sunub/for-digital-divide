@@ -1,11 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import _3DButton from "@/components/3DButton";
-import Spacer from "@/constants/Spacer";
 import { useHistory } from "@/shared/hooks/useHistory";
-import { Flex } from "@/shared/ui/Flex";
-import * as style from "./page.css";
+import {
+  Backdrop,
+  Box,
+  PageGridSection,
+  Stack,
+  Surface,
+  Text,
+  ThreeDButton,
+} from "@for-digital-divide/design-system";
 
 function StartButton() {
   const { add } = useHistory();
@@ -15,39 +20,38 @@ function StartButton() {
   };
 
   return (
-    <_3DButton as={Link} onClick={handleStart} href={"/intro"}>
+    <ThreeDButton as={Link} onClick={handleStart} href={"/intro"}>
       시작하기
-    </_3DButton>
+    </ThreeDButton>
   );
 }
 
 function InitPage() {
   return (
     <>
-      <div className={style.devsiteContentSiteContent}>
-        <Flex
-          direction={"column"}
-          alignItems={"center"}
-          justifyContent={"center"}
-          className={style.contentWrapper}
-        >
-          <div className={style.welcomeMessage}>
-            <h1>안녕하세요!</h1>
-          </div>
-          <div className={style.textContainer}>
-            <p>
-              이 홈페이지는 단순한 <b>데모(가짜)</b> 페이지 입니다.
-            </p>
-            <p>
-              시작하시려면 아래의 <b>시작하기</b>를 눌러주세요!
-            </p>
-          </div>
-          <Spacer size={16} axis="vertical" />
-          <StartButton />
-          <Spacer size={32} axis="vertical" />
-        </Flex>
-      </div>
-      <div className={style.backDrop} />
+      <PageGridSection>
+        <Surface elevation="raised" textAlign="center">
+          <Stack space={8} alignItems="center">
+            <Stack space={4} alignItems="center">
+              <Text as="h1" variant="hero">
+                안녕하세요!
+              </Text>
+              <Stack space={2} alignItems="center">
+                <Text as="p" variant="body" color={"text"}>
+                  이 홈페이지는 단순한 <Box as="strong">데모(가짜)</Box>{" "}
+                  페이지입니다.
+                </Text>
+                <Text as="p" variant="body" color={"text"}>
+                  시작하시려면 아래의 <Box as="strong">시작하기</Box>를
+                  눌러주세요!
+                </Text>
+              </Stack>
+            </Stack>
+            <StartButton />
+          </Stack>
+        </Surface>
+      </PageGridSection>
+      <Backdrop />
     </>
   );
 }

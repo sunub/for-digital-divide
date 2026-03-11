@@ -1,6 +1,6 @@
 import { createVar, keyframes, style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
-import { gridCenter } from "@/style/Grid.css";
+import { gridCenter } from "@for-digital-divide/design-system/styles";
 import { fullSize } from "@/style/Size.css";
 
 export const layerColorsVar = createVar();

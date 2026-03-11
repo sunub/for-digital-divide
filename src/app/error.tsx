@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/components/3DButton";
+import { ThreeDButton } from "@for-digital-divide/design-system";
 import { goToHome } from "@/utils/revalidate";
 import * as styles from "./error.css";
 
@@ -23,10 +23,10 @@ export default function ErrorPage({
             <p>{error.digest}</p>
           </div>
           <div className={styles.buttonGroup}>
-            <Button variant={"destructive"} onClick={() => goToHome()}>
+            <ThreeDButton variant={"destructive"} onClick={() => goToHome()}>
               홈으로 돌아가기
-            </Button>
-            <Button onClick={reset}>다시 시도해주세요</Button>
+            </ThreeDButton>
+            <ThreeDButton onClick={reset}>다시 시도해주세요</ThreeDButton>
           </div>
         </div>
       </div>

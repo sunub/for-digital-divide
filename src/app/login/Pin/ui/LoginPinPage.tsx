@@ -14,10 +14,10 @@ export async function LoginPinPage() {
         title="핀 번호 로그인"
         description="4자리 핀 번호를 입력해 로그인 해주세요."
       >
-        <Device.drawerIndicator />
-        <Device.drawer>
+        <Device.DrawerIndicator />
+        <Device.Drawer>
           <Pin.numpad padInfo={registerPadInfo} />
-        </Device.drawer>
+        </Device.Drawer>
       </Pin.form>
     </NumpadProvider>
   );

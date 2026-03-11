@@ -2,7 +2,7 @@
 
 import type { MotionNodeAnimationOptions } from "motion/react";
 import { motion } from "motion/react";
-import { Flex } from "@/shared/ui/Flex";
+import { Flex } from "@for-digital-divide/design-system";
 import { ToastMessage } from "../ui/ToastMessage";
 
 interface LoginContentContainerProps {

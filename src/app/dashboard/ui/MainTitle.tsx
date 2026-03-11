@@ -2,6 +2,7 @@
 
 import { motion, useSpring } from "motion/react";
 import { memo, useEffect } from "react";
+import { Flex, Text } from "@for-digital-divide/design-system";
 import * as style from "./MainTitle.css";
 
 export const MainTitle = memo(() => {
@@ -12,9 +13,21 @@ export const MainTitle = memo(() => {
   }, [width]);
 
   return (
-    <div className={style.rootContainer}>
-      <div className={style.titleContainer}>
-        <span>디지털</span>
+    <Flex
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      width="full"
+      color={"standOut"}
+      paddingTop={10}
+      paddingBottom={8}
+      className={style.brandTitle}
+      fontSize={"2rem"}
+    >
+      <Flex alignItems="center" justifyContent="center" width="full">
+        <Text as="span" fontWeight="semibold" className={style.brandTitle}>
+          디지털
+        </Text>
         <motion.svg
           className={style.svg}
           key={"divide-line"}
@@ -25,9 +38,13 @@ export const MainTitle = memo(() => {
           <title>Divide line</title>
           <motion.rect style={{ width }} height={"2px"} />
         </motion.svg>
-        <span>격차</span>
-      </div>
-      <span>좁히기</span>
-    </div>
+        <Text as="span" fontWeight="semibold" className={style.brandTitle}>
+          격차
+        </Text>
+      </Flex>
+      <Text as="span" fontWeight="semibold" className={style.brandTitle}>
+        좁히기
+      </Text>
+    </Flex>
   );
 });
