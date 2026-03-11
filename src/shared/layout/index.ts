@@ -5,11 +5,27 @@ import { DeviceFooter } from "./ui/DeviceFooter";
 import { DeviceFrame } from "./ui/DeviceFrame";
 import { DrawerIndicator } from "./ui/DrawerIndicator";
 
-export const Device = Object.freeze({
-  content: DeviceContent,
-  drawer: DeviceDrawer,
-  footer: DeviceFooter,
-  frame: DeviceFrame,
-  contentOpener: ContentOpener,
-  drawerIndicator: DrawerIndicator,
-});
+export {
+  ContentOpener,
+  DeviceContent,
+  DeviceDrawer,
+  DeviceFooter,
+  DeviceFrame,
+  DrawerIndicator,
+};
+
+type DeviceCompoundComponent = typeof DeviceFrame & {
+  Frame: typeof DeviceFrame;
+  Content: typeof DeviceContent;
+  Drawer: typeof DeviceDrawer;
+  ContentOpener: typeof ContentOpener;
+  DrawerIndicator: typeof DrawerIndicator;
+};
+
+export const Device = Object.assign(DeviceFrame, {
+  Frame: DeviceFrame,
+  Content: DeviceContent,
+  Drawer: DeviceDrawer,
+  ContentOpener: ContentOpener,
+  DrawerIndicator: DrawerIndicator,
+}) as DeviceCompoundComponent;

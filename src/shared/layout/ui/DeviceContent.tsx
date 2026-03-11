@@ -3,6 +3,7 @@
 import type { HTMLMotionProps } from "motion/react";
 import { motion } from "motion/react";
 import * as styles from "../style/layout.css";
+import { useEnsureDeviceContext } from "./DeviceContext";
 
 interface DeviceContentProps extends HTMLMotionProps<"div"> {
   ref?: React.RefObject<HTMLDivElement>;
@@ -15,6 +16,8 @@ export function DeviceContent({
   className,
   ...props
 }: DeviceContentProps) {
+  useEnsureDeviceContext();
+
   return (
     <div className={styles.contentRootWrapper}>
       <motion.div

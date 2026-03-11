@@ -4,10 +4,9 @@ import {
   globalStyle,
   style,
 } from "@vanilla-extract/css";
+import { gridCenter, vars } from "@for-digital-divide/design-system/styles";
 import { recipe } from "@vanilla-extract/recipes";
-import { gridCenter } from "@/style/Grid.css";
 import { fullSize } from "@/style/Size.css";
-import { vars } from "@/style/theme.css";
 
 export const hideScaleVar = createVar();
 export const contentHeightVar = createVar();
@@ -165,20 +164,20 @@ globalStyle(`${frame}::after`, {
   background: `color-mix(in oklch, ${vars.color.emphasis}, transparent)`,
   backdropFilter: `blur(${vars.space[2]})`,
   borderRadius: vars.borderRadius.full,
-  zIndex: vars.zIndex.drawer,
+  zIndex: vars.zIndex.popover,
 });
 
 export const drawerContent = style({
-  display: drawerContentDisplayVar,
+  display: fallbackVar(drawerContentDisplayVar, "none"),
   flexDirection: "column",
   gap: vars.space[9],
   alignItems: "center",
   zIndex: drawerContentZVar,
 });
 
-globalStyle(`${frame}&[data-view='drawer'] ${drawerContent}`, {
+globalStyle(`${frame}[data-view='drawer'] ${drawerContent}`, {
   vars: {
-    [drawerContentDisplayVar]: "none",
+    [drawerContentDisplayVar]: "flex",
   },
 });
 
@@ -224,7 +223,7 @@ globalStyle(`${frame}[data-view='drawer'] ${drawerContainer}`, {
   },
 });
 
-globalStyle(`${frame}&[data-view='drawer'] ${drawerContainer}::before`, {
+globalStyle(`${frame}[data-view='drawer'] ${drawerContainer}::before`, {
   animation: `emphasis 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) infinite`,
 });
 

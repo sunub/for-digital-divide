@@ -5,24 +5,29 @@ import { memo } from "react";
 import VisuallyHidden from "@/components/VisuallyHidden";
 import { useHistory } from "@/shared/hooks/useHistory";
 import * as styles from "../../style/layout.css";
+import { Button } from "@for-digital-divide/design-system";
 
 export const BackButton = memo(() => {
   const router = useRouter();
   const { goBack, canGoPrev, currentItem } = useHistory();
 
+  const onClick = () => {
+    if (!canGoPrev) {
+      return;
+    }
+    const prevHistory = goBack();
+    if (prevHistory) {
+      router.push(currentItem ? currentItem : prevHistory);
+    }
+  };
+
   return (
-    <button
+    <Button
       className={styles.gestureButton}
-      type="button"
+      type={"button"}
+      variant={"transparent"}
       aria-label="뒤로가기 버튼"
-      onClick={() => {
-        if (canGoPrev) {
-          const prevHistory = goBack();
-          if (prevHistory) {
-            router.push(currentItem ? currentItem : prevHistory);
-          }
-        }
-      }}
+      onClick={onClick}
     >
       <svg
         width="68"
@@ -48,6 +53,6 @@ export const BackButton = memo(() => {
         />
       </svg>
       <VisuallyHidden>뒤로가기 버튼</VisuallyHidden>
-    </button>
+    </Button>
   );
 });

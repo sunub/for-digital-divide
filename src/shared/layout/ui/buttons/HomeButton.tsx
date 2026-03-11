@@ -2,10 +2,11 @@ import Link from "next/link";
 import { memo } from "react";
 import VisuallyHidden from "@/components/VisuallyHidden";
 import * as styles from "../../style/layout.css";
+import { Button } from "@for-digital-divide/design-system";
 
 export const HomeButton = memo(({ href }: { href: string }) => {
   return (
-    <button className={styles.gestureButton} type="button" aria-label="홈 버튼">
+    <Button asChild className={styles.gestureButton} variant={"transparent"}>
       <Link href={href}>
         <svg
           width="68"
@@ -35,6 +36,6 @@ export const HomeButton = memo(({ href }: { href: string }) => {
         </svg>
         <VisuallyHidden>홈 버튼</VisuallyHidden>
       </Link>
-    </button>
+    </Button>
   );
 });

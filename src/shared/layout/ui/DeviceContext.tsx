@@ -51,3 +51,7 @@ export const useDevice = () => {
   }
   return context;
 };
+
+export const useEnsureDeviceContext = () => {
+  useDevice();
+};
