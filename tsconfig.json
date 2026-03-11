@@ -20,6 +20,19 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "@storybook/react": ["./node_modules/@storybook/react/dist/index"],
+      "@for-digital-divide/design-system": [
+        "./packages/design-system/src/index.ts"
+      ],
+      "@for-digital-divide/design-system/button-group-styles": [
+        "./packages/design-system/src/components/ButtonGroup.css.ts"
+      ],
+      "@for-digital-divide/design-system/button-styles": [
+        "./packages/design-system/src/components/Button.css.ts"
+      ],
+      "@for-digital-divide/design-system/styles": [
+        "./packages/design-system/src/styles/index.ts"
+      ],
       "@compo/*": ["./src/components/*"],
       "@icons/*": ["./src/icons/*"],
       "@hooks/*": ["./src/shared/hooks/*"],
@@ -51,5 +64,5 @@
     "eslint.config.mjs",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["./node_modules"]
+  "exclude": ["./node_modules", "storybook-static"]
 }
