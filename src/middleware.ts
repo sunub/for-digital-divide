@@ -1,17 +1,10 @@
-import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { getPermanentCookieStorage } from "./utils/cookies/permanentCookieStorage";
-import { getSessionCookieStorage } from "./utils/cookies/sessionCookieStorage";
+import { REDIRECT_REASONS } from "@/shared/constants";
+import { getPermanentCookieStorage } from "@/utils/cookies/permanentCookieStorage";
+import { getSessionCookieStorage } from "@/utils/cookies/sessionCookieStorage";
 
 const NEED_TO_AUTHENTICATE_PATHS = ["/dashboard"];
-
-const REDIRECT_REASONS = {
-  ALREADY_REGISTERED: "already-registered",
-  EXIST_DEVICE_ID: "exist-device-id",
-  EMAIL_NOT_VERIFIED: "email-not-verified",
-  PIN_NOT_VERIFIED: "pin-not-verified",
-} as const;
 
 const isMobile = (userAgent: string | null) => {
   return (
@@ -25,6 +18,8 @@ const isMobile = (userAgent: string | null) => {
 export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const userAgent = req.headers.get("user-agent");
+  const sessionCookie = await getSessionCookieStorage("en_session");
+  const deviceCookie = await getPermanentCookieStorage("en_device");
 
   if (isMobile(userAgent)) {
     const url = req.nextUrl.clone();
@@ -32,42 +27,38 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (
-    pathname === "/sign-up/register-user" ||
-    (pathname === "/login" &&
-      req.nextUrl.searchParams.get("method") === "pin") ||
-    (pathname === "/login" &&
-      req.nextUrl.searchParams.get("method") === "email")
-  ) {
-    const sessionCookie = await getSessionCookieStorage("en_session");
-    const deviceCookie = await getPermanentCookieStorage("en_device");
-
+  if (pathname === "/sign-up/register-user" && req.method === "GET") {
     if (sessionCookie?.user_id) {
-      if (req.method === "GET") {
-        const url = new URL("/dashboard", req.url);
-        return NextResponse.redirect(url);
-      }
+      const url = req.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
+  }
+
+  if (pathname === "/login") {
+    const method = req.nextUrl.searchParams.get("method");
+    const isDefaultMethod =
+      method === null || method === "default" || method === "";
+
+    if (method === "pin" && !deviceCookie?.device_id) {
+      const url = req.nextUrl.clone();
+      url.searchParams.delete("method");
+      url.searchParams.set("reason", REDIRECT_REASONS.PIN_NOT_VERIFIED);
+      return NextResponse.redirect(url);
     }
 
-    if (
-      deviceCookie?.device_id &&
-      req.nextUrl.searchParams.get("method") !== "pin"
-    ) {
-      if (req.method === "GET") {
-        const url = req.nextUrl.clone();
-        url.pathname = "/login";
-        url.searchParams.set("reason", REDIRECT_REASONS.EXIST_DEVICE_ID);
-        url.searchParams.set("method", "pin");
-        return NextResponse.redirect(url);
-      }
+    if (isDefaultMethod && deviceCookie?.device_id && req.method === "GET") {
+      const url = req.nextUrl.clone();
+      url.searchParams.set("reason", REDIRECT_REASONS.EXIST_DEVICE_ID);
+      url.searchParams.set("method", "pin");
+      return NextResponse.redirect(url);
     }
   }
 
   if (NEED_TO_AUTHENTICATE_PATHS.includes(pathname)) {
-    const sessionCookie = (await cookies()).get("en_session");
     if (!sessionCookie) {
       const url = req.nextUrl.clone();
-      url.pathname = "/";
+      url.pathname = "/login";
       return NextResponse.redirect(url);
     }
   }
