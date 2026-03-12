@@ -36,7 +36,7 @@ async function seedAccounts(userId: number) {
   const accounts = generateAccounts(userId, 4);
 
   const updateAccountsOra = ora("🔄 계정 데이터 검증 및 업데이트 중").start();
-  const createdAccounts = [];
+  const validatedAccounts: AccountType[] = [];
 
   for (const account of accounts) {
     const parsedAccount = AccountsSchema.safeParse({
@@ -53,20 +53,24 @@ async function seedAccounts(userId: number) {
       return [];
     }
 
-    const existingAccount = await accountsService.findByAccountNumber(
-      parsedAccount.data.account_number,
-    );
-    if (existingAccount) {
-      createdAccounts.push(existingAccount);
-      continue;
-    }
-
-    const newAccount = await accountsService.create(parsedAccount.data);
-    createdAccounts.push(newAccount);
+    validatedAccounts.push(parsedAccount.data);
   }
+
+  const existingAccounts = await accountsService.findByUserId(userId);
+  const existingAccountNumbers = new Set(
+    existingAccounts.map((account) => Number(account.account_number)),
+  );
+  const newAccounts = validatedAccounts.filter(
+    (account) => !existingAccountNumbers.has(account.account_number),
+  );
+
+  if (newAccounts.length > 0) {
+    await accountsService.createMany(newAccounts);
+  }
+
   updateAccountsOra.succeed("✅ 계정 데이터 검증 및 업데이트 성공");
   accountsOra.succeed("🎉 계정 시딩 성공");
-  return createdAccounts;
+  return accountsService.findByUserId(userId);
 }
 
 interface GeneratedTransaction {
@@ -116,11 +120,10 @@ async function seedTransactions(accounts: Account[]) {
 
   console.log(`💰 ${updatedAccounts.length}개 계정의 잔액을 업데이트합니다`);
 
-  for (const account_info of updatedAccounts as AccountType[]) {
-    await accountsService.updateByAccountNumber(account_info.account_number, {
-      ...account_info,
-      balance: account_info.balance,
-    });
+  if (updatedAccounts.length > 0) {
+    await accountsService.updateManyByAccountNumbers(
+      updatedAccounts as AccountType[],
+    );
   }
 
   processOra.text = "🔄 거래 처리 및 검증 중...";
@@ -190,14 +193,15 @@ export async function seedDemoAccountAndTransactionInfo() {
     return;
   }
 
-  const transactionChecks = await Promise.all(
-    accounts.map((acc) =>
-      transactionsService.findByAccountNumber(Number(acc.account_number)),
-    ),
+  const seededAccountNumbers = new Set(
+    (
+      await transactionsService.findSeededAccountNumbers(
+        accounts.map((account) => Number(account.account_number)),
+      )
+    ).map((transaction) => Number(transaction.account_number)),
   );
-
-  const allAccountsSeeded = transactionChecks.every(
-    (transactions) => transactions.length > 0,
+  const allAccountsSeeded = accounts.every((account) =>
+    seededAccountNumbers.has(Number(account.account_number)),
   );
 
   if (allAccountsSeeded) {
