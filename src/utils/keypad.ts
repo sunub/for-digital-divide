@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { Base64 } from "js-base64";
-import type { KeypadInfo, SvgGrid } from "@/types/keypad";
+import type { KeypadInfo, SvgGrid } from "@/entities/keypad/keypad.model";
 
 export function shuffleArray(array: number[][]): number[][] {
   const copyedArray = Array.from(array);

@@ -2,7 +2,7 @@
 
 import { EncryptJWT, jwtDecrypt } from "jose";
 import { cookies } from "next/headers";
-import { SessionCookieSchema } from "@/shared/types/cookie";
+import { SessionCookieSchema } from "@/entities/cookies/cookies.model";
 
 interface CreateSessionCookieStorageOptions {
   name: string;

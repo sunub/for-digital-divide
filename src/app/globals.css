@@ -15,14 +15,17 @@
 }
 
 @font-face {
-  src: url("/font/NanumSquareNeo-Variable.woff2") format("font-woff2");
+  src: url("/font/NanumSquareNeo-Variable.woff2") format("woff2");
   font-family: "NanumSquare";
-  font-weight: 500;
+  font-weight: 100 900;
   font-display: swap;
   font-style: normal;
 }
+
 :root {
   --nanum-square-neo: "NanumSquare";
+  --gugi-font-family: "Gugi", var(--nanum-square-neo), system-ui, -apple-system,
+    sans-serif;
 
   --color-accent: color-mix(
     in oklch,
@@ -97,7 +100,7 @@ html,
 body {
   --text-size: 18px;
   height: 100%;
-  font-family: var(--nanum-square-neo), sans-serif;
+  font-family: var(--nanum-square-neo), system-ui, -apple-system, sans-serif;
   font-size: var(--text-size);
   background-color: var(--color-background);
 }
@@ -108,8 +111,25 @@ a {
 }
 
 #_next {
+  font-family: inherit;
   isolation: isolate;
   height: 100%;
+}
+
+#devsite-wrapper,
+#site-wrapper,
+#devsite-content,
+#devsite-content__site-main,
+#device-page__root-wrapper,
+#device-wrapper,
+main,
+section,
+article,
+aside,
+nav,
+header,
+footer {
+  font-family: inherit;
 }
 
 #site-wrapper {

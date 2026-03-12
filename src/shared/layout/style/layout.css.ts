@@ -50,6 +50,9 @@ export const contentRootWrapper = style({
   position: "relative",
   width: "100%",
   height: "100%",
+  minWidth: 0,
+  minHeight: 0,
+  overflow: "hidden",
 });
 
 export const openr = style({
@@ -84,7 +87,14 @@ export const contentContainer = style({
   justifyContent: "center",
   alignItems: "center",
   flexDirection: "column",
+  width: "100%",
+  minWidth: 0,
   height: "100%",
+  minHeight: 0,
+  overflowX: "hidden",
+  overflowY: "auto",
+  overscrollBehavior: "contain",
+  WebkitOverflowScrolling: "touch",
 });
 
 export const container = style({
@@ -94,6 +104,8 @@ export const container = style({
   justifyContent: "center",
   width: "45cqw",
   height: "75cqh",
+  minWidth: 0,
+  minHeight: 0,
   borderRadius: "50px",
   overflow: "hidden",
   zIndex: 100,
@@ -109,6 +121,9 @@ export const frame = style([
       [device-main-footer] 68px
     `,
     position: "relative",
+    minWidth: 0,
+    minHeight: 0,
+    overflow: "hidden",
     backgroundColor: vars.color.background,
     border: `6px solid ${vars.color.border}`,
     borderRadius: vars.borderRadius.xl,
