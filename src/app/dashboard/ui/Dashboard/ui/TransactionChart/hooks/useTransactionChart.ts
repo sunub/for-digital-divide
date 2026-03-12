@@ -2,37 +2,15 @@
 
 import * as d3 from "d3";
 import { useEffect } from "react";
-import { z } from "zod/v4";
 import { addAxisLabels } from "../utils/addAxisLabels";
 import { drawMoreThanOneMonthChart } from "../utils/drawMoreThanOneMonthChart";
-import { drawOneMonthChart } from "../utils/drawOneMonthChart";
-
-const TRNASACTION_CODES = ["DEPOSIT", "WITHDRAWAL", "PAYMENT"] as const;
-
-export const TransactionSchema = z.object({
-  transaction_id: z.number().int(),
-  account_number: z.number().int(),
-  amount: z.number().min(0),
-  transaction_type: z.enum(TRNASACTION_CODES),
-  counterparty_account_number: z.number().int().optional(),
-  description: z.string().max(255).optional(),
-  occurred_at: z.union([z.string(), z.date()]),
-});
-
-export type Transaction = z.infer<typeof TransactionSchema>;
-export type TransactionList = Transaction[];
+import {
+  drawOneMonthChart,
+  type FilteredData,
+  type Transaction,
+} from "../utils/drawOneMonthChart";
 
 type TimePeriod = "1month" | "3months" | "6months";
-
-type FilteredData = {
-  occurred_at: Date;
-  transaction_id: number;
-  account_number: number;
-  amount: number;
-  transaction_type: "DEPOSIT" | "WITHDRAWAL" | "PAYMENT";
-  counterparty_account_number?: number | undefined;
-  description?: string | undefined;
-}[];
 
 export function useTransactionChart(
   filteredData: FilteredData,

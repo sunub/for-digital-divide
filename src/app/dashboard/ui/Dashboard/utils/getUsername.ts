@@ -1,8 +1,8 @@
 import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { z } from "zod/v4";
+import { getAuthState } from "@/entities/auth/session.server";
 import { userService } from "@/entities/users/users.service";
-import { getSessionCookieStorage } from "@/utils/cookies/sessionCookieStorage";
 
 const serial = z.number().int().positive().optional();
 const CachedUserInfoSchema = z.object({
@@ -25,13 +25,13 @@ const getCachedUserInfo = unstable_cache(
 );
 
 export const getUsername = cache(async () => {
-  const sessionCookie = await getSessionCookieStorage("en_session");
+  const { session } = await getAuthState();
 
-  if (!sessionCookie) {
+  if (!session) {
     return null;
   }
 
-  const userInfo = await getCachedUserInfo(sessionCookie.user_id);
+  const userInfo = await getCachedUserInfo(session.user_id);
   const parsedUserInfo = CachedUserInfoSchema.safeParse(userInfo);
   if (!parsedUserInfo.success) {
     console.error("Invalid user info:", parsedUserInfo.error);

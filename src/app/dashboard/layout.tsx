@@ -1,6 +1,7 @@
 import { Grid } from "@for-digital-divide/design-system";
 import { Suspense } from "react";
 import { Tooltip } from "@/components/Tooltip";
+import { requireAuthSession } from "@/entities/auth/session.server";
 import { Device } from "@/shared/layout";
 import * as style from "./layout.css";
 import { TransitionLayout } from "./TransitionLayout";
@@ -13,6 +14,8 @@ export default async function RootLayout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }) {
+  await requireAuthSession();
+
   return (
     <Tooltip.Provider>
       <Device.Frame>

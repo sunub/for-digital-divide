@@ -3,7 +3,7 @@
 import { unstable_cache } from "next/cache";
 import { AccountsSchema } from "@/entities/accounts/accounts.model";
 import { accountsService } from "@/entities/accounts/accounts.service";
-import { getSessionCookieStorage } from "@/utils/cookies/sessionCookieStorage";
+import { requireAuthSession } from "@/entities/auth/session.server";
 import { fx } from "@/utils/iterable/fx";
 
 export type AccountData = Awaited<ReturnType<typeof getAccountsData>>;
@@ -23,11 +23,7 @@ const getCachedAccounts = unstable_cache(
 );
 
 export async function getAccountsData() {
-  const sessionCookie = await getSessionCookieStorage("en_session");
-  if (!sessionCookie) {
-    throw new Error("Session cookie not found");
-  }
-  const { user_id } = sessionCookie;
+  const { user_id } = await requireAuthSession();
   try {
     const accounts = fx(await getCachedAccounts(user_id))
       .toAsync()

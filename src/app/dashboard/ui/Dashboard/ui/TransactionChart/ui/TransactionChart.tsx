@@ -3,11 +3,9 @@
 import clsx from "clsx";
 import * as d3 from "d3";
 import { useMemo, useState } from "react";
-import { z } from "zod";
+import type { Transaction as EntityTransaction } from "@/entities/transactions/transaction.model";
 import { useTransactionChart } from "../hooks/useTransactionChart";
 import * as style from "./TransactionChart.css";
-
-const TRNASACTION_CODES = ["DEPOSIT", "WITHDRAWAL", "PAYMENT"] as const;
 
 const MARGIN = { top: 60, right: 140, bottom: 80, left: 80 };
 const WIDTH = 1000 - MARGIN.left - MARGIN.right;
@@ -20,17 +18,9 @@ const PERIOD_LABELS = {
   "6months": "최근 6개월",
 };
 
-export const TransactionSchema = z.object({
-  transaction_id: z.number().int(),
-  account_number: z.number().int(),
-  amount: z.number().min(0),
-  transaction_type: z.enum(TRNASACTION_CODES),
-  counterparty_account_number: z.number().int().optional(),
-  description: z.string().max(255).optional(),
-  occurred_at: z.union([z.string(), z.date()]),
-});
-
-export type Transaction = z.infer<typeof TransactionSchema>;
+export type Transaction = Omit<EntityTransaction, "occurred_at"> & {
+  occurred_at: Date | string;
+};
 export type TransactionList = Transaction[];
 
 type TimePeriod = "1month" | "3months" | "6months";

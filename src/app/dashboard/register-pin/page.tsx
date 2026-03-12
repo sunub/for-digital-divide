@@ -1,11 +1,19 @@
+import { redirect } from "next/navigation";
 import { Pin } from "@/components/Pin";
 import { NumpadProvider } from "@/context/NumpadContext";
+import { getAuthState } from "@/entities/auth/session.server";
 import { Device } from "@/shared/layout";
 import { getKeypadData } from "@/shared/utils/getKeypadData";
 import * as style from "./page.css";
 import { pinRegisterAction } from "./utils/pinRegisterAction";
 
 export default async function RegisterPinPage() {
+  const { session } = await getAuthState();
+
+  if (!session) {
+    redirect("/login");
+  }
+
   const registerPadInfo = await getKeypadData();
 
   return (

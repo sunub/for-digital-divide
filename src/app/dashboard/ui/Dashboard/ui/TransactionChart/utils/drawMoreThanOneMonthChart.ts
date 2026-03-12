@@ -1,20 +1,9 @@
 import * as d3 from "d3";
-import { z } from "zod/v4";
-
-const TRNASACTION_CODES = ["DEPOSIT", "WITHDRAWAL", "PAYMENT"] as const;
-
-export const TransactionSchema = z.object({
-  transaction_id: z.number().int(),
-  account_number: z.number().int(),
-  amount: z.number().min(0),
-  transaction_type: z.enum(TRNASACTION_CODES),
-  counterparty_account_number: z.number().int().optional(),
-  description: z.string().max(255).optional(),
-  occurred_at: z.union([z.string(), z.date()]),
-});
-
-export type Transaction = z.infer<typeof TransactionSchema>;
-export type TransactionList = Transaction[];
+import type { Transaction as EntityTransaction } from "@/entities/transactions/transaction.model";
+export type Transaction = Omit<EntityTransaction, "occurred_at"> & {
+  occurred_at: Date;
+};
+export type FilteredData = Transaction[];
 
 type MonthlySummary = {
   month: Date;
@@ -22,24 +11,14 @@ type MonthlySummary = {
 };
 
 type GroupedMonthlySummary = {
-  type: (typeof TRNASACTION_CODES)[number];
+  type: Transaction["transaction_type"];
   summaries: MonthlySummary[];
 };
-
-type FilteredData = {
-  occurred_at: Date;
-  transaction_id: number;
-  account_number: number;
-  amount: number;
-  transaction_type: "DEPOSIT" | "WITHDRAWAL" | "PAYMENT";
-  counterparty_account_number?: number | undefined;
-  description?: string | undefined;
-}[];
 
 export function drawMoreThanOneMonthChart(
   filteredData: FilteredData,
   svg: d3.Selection<SVGGElement, unknown, HTMLElement, unknown>,
-  groupKeys: (typeof TRNASACTION_CODES)[number][],
+  groupKeys: Transaction["transaction_type"][],
   height: number,
   x: d3.ScaleTime<number, number>,
   color: d3.ScaleOrdinal<string, string>,

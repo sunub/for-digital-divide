@@ -1,32 +1,40 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
 import { TransactionChart } from "@/components/TransactionChart/TransactionChart";
-import { getTransactionsAction } from "../../../../actions/getTransactionsAction";
-import type { TransactionList } from "../../types";
+import * as chartStyle from "@/components/TransactionChart/TransactionChart.css";
+import { TransactionChartErrorState } from "@/components/TransactionChart/TransactionChartErrorState";
+import { TransactionChartSkeleton } from "@/components/TransactionChart/TransactionChartSkeleton";
+import { useTransactions } from "@/entities/transactions/useTransactions";
 import type { AccountData } from "../../utils/getAccountsData";
 
 type Account = AccountData[number];
 
 export function TransactionHistory({ account }: { account: Account }) {
-  const [transactions, setTransactions] = useState<TransactionList>([]);
-  const [_, startTransition] = useTransition();
+  const transactionQuery = useTransactions(account.account_number);
+  const hasResolvedData = transactionQuery.data !== undefined;
 
-  useEffect(() => {
-    startTransition(async () => {
-      const data = await getTransactionsAction(account.account_number);
+  if (transactionQuery.isPending && !hasResolvedData) {
+    return <TransactionChartSkeleton />;
+  }
 
-      const mapped = data.map((tx) => ({
-        ...tx,
-        transaction_type: tx.transaction_type,
-        occurred_at: new Date(tx.occurred_at),
-        counterparty_account_number:
-          tx.counterparty_account_number ?? undefined,
-        description: tx.description ?? undefined,
-      }));
-      setTransactions(mapped);
-    });
-  }, [account.account_number]);
+  if (transactionQuery.isFetching && transactionQuery.isPlaceholderData) {
+    return <TransactionChartSkeleton mode="refreshing" />;
+  }
 
-  return <TransactionChart transactionData={transactions} />;
+  if (transactionQuery.error && !hasResolvedData) {
+    return (
+      <TransactionChartErrorState onRetry={() => transactionQuery.refetch()} />
+    );
+  }
+
+  return (
+    <div className={chartStyle.statusContainer}>
+      {transactionQuery.error ? (
+        <div className={chartStyle.statusErrorBadge}>
+          최신 거래내역 반영에 실패했습니다.
+        </div>
+      ) : null}
+      <TransactionChart transactionData={transactionQuery.data || []} />
+    </div>
+  );
 }

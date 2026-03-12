@@ -1,7 +1,7 @@
 import { style } from "@vanilla-extract/css";
 
 export const brandTitle = style({
-  fontFamily: "Gugi, cursive",
+  fontFamily: "var(--gugi-font-family)",
 });
 
 export const svg = style({

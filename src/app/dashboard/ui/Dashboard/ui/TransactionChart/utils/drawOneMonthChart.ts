@@ -1,40 +1,19 @@
 import * as d3 from "d3";
-import { z } from "zod/v4";
-
-const TRNASACTION_CODES = ["DEPOSIT", "WITHDRAWAL", "PAYMENT"] as const;
-
-export const TransactionSchema = z.object({
-  transaction_id: z.number().int(),
-  account_number: z.number().int(),
-  amount: z.number().min(0),
-  transaction_type: z.enum(TRNASACTION_CODES),
-  counterparty_account_number: z.number().int().optional(),
-  description: z.string().max(255).optional(),
-  occurred_at: z.union([z.string(), z.date()]),
-});
-
-export type Transaction = z.infer<typeof TransactionSchema>;
-export type TransactionList = Transaction[];
+import type { Transaction as EntityTransaction } from "@/entities/transactions/transaction.model";
+export type Transaction = Omit<EntityTransaction, "occurred_at"> & {
+  occurred_at: Date;
+};
+export type FilteredData = Transaction[];
 
 type GroupedTransaction = {
-  type: (typeof TRNASACTION_CODES)[number];
+  type: Transaction["transaction_type"];
   transactions: Transaction[];
 };
-
-type FilteredData = {
-  occurred_at: Date;
-  transaction_id: number;
-  account_number: number;
-  amount: number;
-  transaction_type: "DEPOSIT" | "WITHDRAWAL" | "PAYMENT";
-  counterparty_account_number?: number | undefined;
-  description?: string | undefined;
-}[];
 
 export function drawOneMonthChart(
   filteredData: FilteredData,
   svg: d3.Selection<SVGGElement, unknown, HTMLElement, unknown>,
-  groupKeys: (typeof TRNASACTION_CODES)[number][],
+  groupKeys: Transaction["transaction_type"][],
   height: number,
   x: d3.ScaleTime<number, number>,
   color: d3.ScaleOrdinal<string, string>,
@@ -94,7 +73,7 @@ export function drawOneMonthChart(
 
   const line = d3
     .line<Transaction>()
-    .x((d) => x(d.occurred_at as Date))
+    .x((d) => x(d.occurred_at))
     .y((d) => y(d.amount))
     .curve(d3.curveMonotoneX);
 
@@ -116,7 +95,7 @@ export function drawOneMonthChart(
       .enter()
       .append("circle")
       .attr("class", `dots-${groupData.type}`)
-      .attr("cx", (d) => x(d.occurred_at as Date))
+      .attr("cx", (d) => x(d.occurred_at))
       .attr("cy", (d) => y(d.amount))
       .attr("r", 4)
       .attr("fill", color(groupData.type))
@@ -146,10 +125,10 @@ export function drawOneMonthChart(
 
         tooltip
           .html(
-            `<b>날짜:</b> ${d3.timeFormat("%Y년 %m월 %d일")(d.occurred_at as Date)}<br><b>시간:</b> ${d3.timeFormat(
+            `<b>날짜:</b> ${d3.timeFormat("%Y년 %m월 %d일")(d.occurred_at)}<br><b>시간:</b> ${d3.timeFormat(
               "%H시 %M분",
             )(
-              d.occurred_at as Date,
+              d.occurred_at,
             )}<br><b>금액:</b> ${d.amount.toLocaleString()}원<br><b>유형:</b> ${typeLabel}<br><b>내용:</b> ${
               d.description || "N/A"
             }`,
