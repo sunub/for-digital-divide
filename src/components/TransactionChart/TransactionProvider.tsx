@@ -9,20 +9,25 @@ import {
 } from "react";
 import type { ChartViewMode, TimePeriod } from "./types";
 
-interface TransactionContextType {
+interface TransactionSelectedPeriodContextType {
   selectedPeriod: TimePeriod;
+  setSelectedPeriod: (period: TimePeriod) => void;
+}
+
+interface TransactionViewModeContextType {
   viewMode: ChartViewMode;
   setViewMode: (mode: ChartViewMode) => void;
-  setSelectedPeriod: (period: TimePeriod) => void;
 }
 
 interface TransactionProviderProps {
   children: React.ReactNode;
 }
 
-export const TransactionContext = createContext<TransactionContextType | null>(
-  null,
-);
+export const TransactionSelectedPeriodContext =
+  createContext<TransactionSelectedPeriodContextType | null>(null);
+
+export const TransactionViewModeContext =
+  createContext<TransactionViewModeContextType | null>(null);
 
 export function TransactionProvider({ children }: TransactionProviderProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>("3months");
@@ -36,29 +41,57 @@ export function TransactionProvider({ children }: TransactionProviderProps) {
     setSelectedPeriod(period);
   }, []);
 
-  const value = useMemo(
+  const selectedPeriodValue = useMemo(
     () => ({
       selectedPeriod,
-      viewMode,
-      setViewMode: setViewModeCallback,
       setSelectedPeriod: setSelectedPeriodCallback,
     }),
-    [selectedPeriod, viewMode, setViewModeCallback, setSelectedPeriodCallback],
+    [selectedPeriod, setSelectedPeriodCallback],
+  );
+
+  const viewModeValue = useMemo(
+    () => ({
+      viewMode,
+      setViewMode: setViewModeCallback,
+    }),
+    [viewMode, setViewModeCallback],
   );
 
   return (
-    <TransactionContext.Provider value={value}>
-      {children}
-    </TransactionContext.Provider>
+    <TransactionSelectedPeriodContext.Provider value={selectedPeriodValue}>
+      <TransactionViewModeContext.Provider value={viewModeValue}>
+        {children}
+      </TransactionViewModeContext.Provider>
+    </TransactionSelectedPeriodContext.Provider>
   );
 }
 
-export const useTransactionContext = () => {
-  const context = useContext(TransactionContext);
+export const useTransactionSelectedPeriod = () => {
+  const context = useContext(TransactionSelectedPeriodContext);
   if (!context) {
     throw new Error(
-      "useTransactionContext must be used within a TransactionProvider",
+      "useTransactionSelectedPeriod must be used within a TransactionProvider",
     );
   }
   return context;
+};
+
+export const useTransactionViewMode = () => {
+  const context = useContext(TransactionViewModeContext);
+  if (!context) {
+    throw new Error(
+      "useTransactionViewMode must be used within a TransactionProvider",
+    );
+  }
+  return context;
+};
+
+export const useTransactionContext = () => {
+  const selectedPeriodContext = useTransactionSelectedPeriod();
+  const viewModeContext = useTransactionViewMode();
+
+  return {
+    ...selectedPeriodContext,
+    ...viewModeContext,
+  };
 };

@@ -38,6 +38,48 @@ type RawMemoryStat = {
   jsHeapSizeLimit: number | null;
 };
 
+type MetricDurationSummary = {
+  kind: ChartMetricKind;
+  count: number;
+  avgDurationMs: number;
+  minDurationMs: number;
+  maxDurationMs: number;
+  lastDurationMs: number;
+  totalDurationMs: number;
+};
+
+type ResumeDurationRow = {
+  kind: ChartMetricKind;
+  count: number;
+  avgMs: number;
+  maxMs: number;
+  minMs: number;
+  totalMs: number;
+};
+
+type ResumeRenderRow = {
+  component: string;
+  renderCount: number;
+};
+
+type ResumeProcessPeriodRow = {
+  period: string;
+  count: number;
+  avgMs: number;
+  maxMs: number;
+  minMs: number;
+};
+
+type ResumeReport = {
+  generatedAt: string;
+  measurementWindowMs: number;
+  eventCount: number;
+  durationSummary: ResumeDurationRow[];
+  renderSummary: ResumeRenderRow[];
+  processDataByPeriod: ResumeProcessPeriodRow[];
+  latestMemory: RawMemoryStat | null;
+};
+
 const MAX_EVENTS = 8000;
 const MAX_MEMORY_EVENTS = 240;
 
@@ -185,16 +227,18 @@ class TransactionChartMetricCollector {
   public getSummary() {
     const summary: Record<
       string,
-      Omit<MetricAggregate, "totalDurationMs"> & { avgDurationMs: number }
+      MetricDurationSummary
     > = {};
 
     this.aggregates.forEach((value, key) => {
       summary[key] = {
+        kind: key,
         count: value.count,
         minDurationMs: value.minDurationMs,
         maxDurationMs: value.maxDurationMs,
         lastDurationMs: value.lastDurationMs,
         avgDurationMs: value.totalDurationMs / Math.max(value.count, 1),
+        totalDurationMs: value.totalDurationMs,
       };
     });
 
@@ -220,6 +264,137 @@ class TransactionChartMetricCollector {
     return {
       events: [...this.events],
     };
+  }
+
+  public getResumeReport(): ResumeReport {
+    const processDataEvents = this.events.filter(
+      (event) =>
+        event.kind === "processData" && typeof event.durationMs === "number",
+    );
+    const byPeriod = new Map<
+      string,
+      { count: number; totalMs: number; maxMs: number; minMs: number }
+    >();
+
+    for (const event of processDataEvents) {
+      const period =
+        typeof event.payload.period === "string" ? event.payload.period : "ALL";
+      const durationMs = event.durationMs ?? 0;
+      const current = byPeriod.get(period);
+
+      if (!current) {
+        byPeriod.set(period, {
+          count: 1,
+          totalMs: durationMs,
+          maxMs: durationMs,
+          minMs: durationMs,
+        });
+        continue;
+      }
+
+      current.count += 1;
+      current.totalMs += durationMs;
+      current.maxMs = Math.max(current.maxMs, durationMs);
+      current.minMs = Math.min(current.minMs, durationMs);
+    }
+
+    const durationSummary = Array.from(this.aggregates.entries())
+      .map(([kind, aggregate]) => ({
+        kind,
+        count: aggregate.count,
+        avgMs: aggregate.totalDurationMs / Math.max(aggregate.count, 1),
+        maxMs: aggregate.maxDurationMs,
+        minMs: aggregate.minDurationMs,
+        totalMs: aggregate.totalDurationMs,
+      }))
+      .sort((left, right) => right.totalMs - left.totalMs);
+
+    const renderSummary = Array.from(this.renderCounts.entries())
+      .map(([component, renderCount]) => ({ component, renderCount }))
+      .sort((left, right) => right.renderCount - left.renderCount);
+
+    const processDataByPeriod = Array.from(byPeriod.entries())
+      .map(([period, aggregate]) => ({
+        period,
+        count: aggregate.count,
+        avgMs: aggregate.totalMs / Math.max(aggregate.count, 1),
+        maxMs: aggregate.maxMs,
+        minMs: aggregate.minMs,
+      }))
+      .sort((left, right) => right.count - left.count);
+
+    const firstTs = this.events[0]?.ts ?? Date.now();
+    const lastTs = this.events.at(-1)?.ts ?? firstTs;
+
+    return {
+      generatedAt: new Date().toISOString(),
+      measurementWindowMs: lastTs - firstTs,
+      eventCount: this.events.length,
+      durationSummary,
+      renderSummary,
+      processDataByPeriod,
+      latestMemory: this.memorySnapshots.at(-1) ?? null,
+    };
+  }
+
+  public printResumeReport() {
+    const report = this.getResumeReport();
+
+    if (!this.enabled) {
+      console.info(
+        "[TransactionChartMetrics] Metrics are disabled outside the browser development environment.",
+      );
+      return report;
+    }
+
+    const round = (value: number) => Number(value.toFixed(3));
+    const measurementWindowSec = round(report.measurementWindowMs / 1000);
+
+    console.group("[TransactionChartMetrics] Resume Report");
+    console.log({
+      generatedAt: report.generatedAt,
+      measurementWindowSec,
+      eventCount: report.eventCount,
+      latestMemory: report.latestMemory,
+    });
+    console.table(
+      report.durationSummary.map((row) => ({
+        kind: row.kind,
+        count: row.count,
+        avgMs: round(row.avgMs),
+        maxMs: round(row.maxMs),
+        minMs: round(row.minMs),
+        totalMs: round(row.totalMs),
+      })),
+    );
+
+    if (report.renderSummary.length > 0) {
+      console.table(report.renderSummary);
+    }
+
+    if (report.processDataByPeriod.length > 0) {
+      console.table(
+        report.processDataByPeriod.map((row) => ({
+          period: row.period,
+          count: row.count,
+          avgMs: round(row.avgMs),
+          maxMs: round(row.maxMs),
+          minMs: round(row.minMs),
+        })),
+      );
+    }
+
+    console.log(
+      [
+        "Usage:",
+        "1. window.__TC_CHART_METRICS__.reset()",
+        "2. Reproduce one chart scenario (period change / hover / resize / account switch)",
+        "3. window.__TC_CHART_METRICS__.printResumeReport()",
+      ].join("\n"),
+    );
+    console.groupEnd();
+
+    return report;
   }
 
   public reset() {
@@ -257,7 +432,10 @@ export function useRenderCounter(
 
 if (isBrowser) {
   (
-    window as { __TC_CHART_METRICS__?: Record<string, unknown> }
+    window as {
+      __TC_CHART_METRICS__?: Record<string, unknown>;
+      __TC_CHART_METRICS_HELP__?: string;
+    }
   ).__TC_CHART_METRICS__ = {
     record: (
       kind: ChartMetricKind,
@@ -266,6 +444,8 @@ if (isBrowser) {
     ) => chartMetrics.record(kind, payload, durationMs),
     summary: () => chartMetrics.getSummary(),
     raw: () => chartMetrics.getRaw(),
+    resumeReport: () => chartMetrics.getResumeReport(),
+    printResumeReport: () => chartMetrics.printResumeReport(),
     reset: () => chartMetrics.reset(),
     measureSync: <T>(
       kind: ChartMetricKind,
@@ -275,4 +455,11 @@ if (isBrowser) {
     collectMemory: (context: string) =>
       chartMetrics.collectMemorySnapshot(context),
   };
+  (
+    window as {
+      __TC_CHART_METRICS__?: Record<string, unknown>;
+      __TC_CHART_METRICS_HELP__?: string;
+    }
+  ).__TC_CHART_METRICS_HELP__ =
+    "Run window.__TC_CHART_METRICS__.reset(), reproduce one chart scenario, then run window.__TC_CHART_METRICS__.printResumeReport().";
 }

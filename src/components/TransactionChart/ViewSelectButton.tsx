@@ -1,6 +1,6 @@
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { CHART_VIEW_MODES_MAP } from "./constants/chartViewMode";
-import { useTransactionContext } from "./TransactionProvider";
+import { useTransactionViewMode } from "./TransactionProvider";
 import type { ChartViewMode } from "./types";
 import * as style from "./ViewSelectedButton.css";
 
@@ -9,7 +9,7 @@ interface ViewSelectButtonProps {
 }
 
 export function ViewSelectButton({ currentMode }: ViewSelectButtonProps) {
-  const { viewMode, setViewMode } = useTransactionContext();
+  const { viewMode, setViewMode } = useTransactionViewMode();
 
   const handleClick = () => {
     setViewMode(currentMode);

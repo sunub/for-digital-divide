@@ -1,19 +1,18 @@
 import { Box, Text } from "@for-digital-divide/design-system";
 import { useTransactionChart } from "../hooks/useTransactionChart";
-import type { ChartViewMode, DailyData } from "../types";
+import { useTransactionViewMode } from "../TransactionProvider";
+import type { DailyData } from "../types";
 import { useRenderCounter } from "../utils/transactionChartMetrics";
 import { TransactionChartHoverBox } from "./TransactionChartHoverBox";
 import * as style from "./TransactionChartMain.css";
 
 interface TransactionChartMainProps {
-  viewMode: ChartViewMode;
   dailyData: DailyData[];
 }
 
-export function TransactionChartMain({
-  viewMode,
-  dailyData,
-}: TransactionChartMainProps) {
+export function TransactionChartMain({ dailyData }: TransactionChartMainProps) {
+  const { viewMode } = useTransactionViewMode();
+
   useRenderCounter("TransactionChartMain", {
     viewMode,
     dataLength: dailyData.length,

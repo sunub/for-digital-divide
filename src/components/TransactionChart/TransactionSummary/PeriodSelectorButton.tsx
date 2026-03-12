@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { type ComponentProps, type MouseEvent, useCallback } from "react";
-import { useTransactionContext } from "../TransactionProvider";
+import { useTransactionSelectedPeriod } from "../TransactionProvider";
 import type { TimePeriod } from "../types";
 import * as style from "./PeriodSelectorButton.css";
 
@@ -9,7 +9,7 @@ interface PeriodSelectorButtonProps extends ComponentProps<"button"> {
 }
 
 export function PeriodSelectorButton({ period }: PeriodSelectorButtonProps) {
-  const { selectedPeriod, setSelectedPeriod } = useTransactionContext();
+  const { selectedPeriod, setSelectedPeriod } = useTransactionSelectedPeriod();
   const periodMap: Record<TimePeriod, string> = {
     "1month": "1M",
     "3months": "3M",

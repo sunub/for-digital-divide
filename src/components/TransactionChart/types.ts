@@ -1,12 +1,11 @@
-export type TransactionType = "DEPOSIT" | "WITHDRAWAL" | "PAYMENT";
+import type { TransactionTypeCode } from "@/entities/transaction_types/transaction_types.model";
+import type { Transaction as EntityTransaction } from "@/entities/transactions/transaction.model";
 
-export interface Transaction {
-  transaction_id: number;
-  amount: number;
-  transaction_type: TransactionType;
+export type TransactionType = TransactionTypeCode;
+
+export type Transaction = Omit<EntityTransaction, "occurred_at"> & {
   occurred_at: Date | string;
-  description?: string;
-}
+};
 
 export type ChartViewMode = "ALL" | "EXPENSE" | "INCOME" | "BALANCE";
 export type TimePeriod = "1month" | "3months" | "6months";
@@ -21,15 +20,6 @@ export type D3Objects = {
   g: d3.Selection<SVGGElement, unknown, null, undefined>;
   xScale: d3.ScaleTime<number, number>;
 };
-
-export interface Transaction {
-  transaction_id: number;
-  amount: number;
-  transaction_type: TransactionType;
-  occurred_at: Date | string;
-  description?: string;
-  counterparty_account_number?: number;
-}
 
 export interface DailyData {
   date: Date;

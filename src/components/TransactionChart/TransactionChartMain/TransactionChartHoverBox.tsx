@@ -1,6 +1,7 @@
 import { Box, Flex, Text } from "@for-digital-divide/design-system";
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { clsx } from "clsx";
+import { useShallow } from "zustand/react/shallow";
 import { useInteractionStore } from "../store/InteractionStore";
 import type { ChartViewMode } from "../types";
 import * as style from "./TransactionChartHoverBox.css";
@@ -12,7 +13,12 @@ interface TransactionChartHoverBoxProps {
 export function TransactionChartHoverBox({
   viewMode,
 }: TransactionChartHoverBoxProps) {
-  const { hoverData, hoverPos } = useInteractionStore();
+  const { hoverData, hoverPos } = useInteractionStore(
+    useShallow((state) => ({
+      hoverData: state.hoverData,
+      hoverPos: state.hoverPos,
+    })),
+  );
 
   if (!hoverData || !hoverPos) return null;
 

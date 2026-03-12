@@ -15,6 +15,10 @@ type ChartConfig = {
   viewMode: ChartViewMode;
 };
 
+type UpdateOptions = {
+  animate?: boolean;
+};
+
 export class TransactionChartController {
   private svg: d3.Selection<SVGSVGElement, unknown, null, undefined>;
   private width: number = 0;
@@ -48,15 +52,24 @@ export class TransactionChartController {
   }
 
   public resize(width: number, height: number) {
+    if (this.width === width && this.height === height) {
+      return;
+    }
+
     this.width = width;
     this.height = height;
     this.svg.attr("width", width).attr("height", height);
-    this.update(this.data, this.config);
+    this.update(this.data, this.config, { animate: false });
   }
 
-  public update(data: DailyData[], config: ChartConfig) {
+  public update(
+    data: DailyData[],
+    config: ChartConfig,
+    options: UpdateOptions = {},
+  ) {
     this.data = data;
     this.config = config;
+    const animate = options.animate ?? true;
 
     if (this.width === 0 || this.height === 0 || data.length === 0) {
       return;
@@ -71,9 +84,9 @@ export class TransactionChartController {
       .range([0, innerWidth]);
 
     if (config.viewMode === "ALL") {
-      this.drawAllMode(innerWidth, innerHeight, xScale);
+      this.drawAllMode(innerWidth, innerHeight, xScale, animate);
     } else {
-      this.drawSingleMode(innerWidth, innerHeight, xScale);
+      this.drawSingleMode(innerWidth, innerHeight, xScale, animate);
     }
 
     const xAxis = d3
@@ -102,6 +115,7 @@ export class TransactionChartController {
     innerWidth: number,
     innerHeight: number,
     xScale: d3.ScaleTime<number, number>,
+    animate: boolean,
   ) {
     const balanceExtent = d3.extent(this.data, (d) => d.balance) as [
       number,
@@ -153,7 +167,7 @@ export class TransactionChartController {
         .y((d) => yScale(accessor(d)))
         .curve(d3.curveMonotoneX);
 
-    this.chartGroup
+    const incomeLine = this.chartGroup
       .selectAll<SVGGElement, unknown>(".line-income")
       .data([this.data])
       .join(
@@ -165,16 +179,22 @@ export class TransactionChartController {
       .attr("fill", "none")
       .attr("stroke", COLORS.income)
       .attr("stroke-width", 1.5)
-      .attr("stroke-opacity", 0.6)
-      .transition()
-      .duration(750)
-      .attr(
-        "d",
-        createLine(yScaleFlow, (d) => d.income),
-      )
-      .attr("opacity", 1);
+      .attr("stroke-opacity", 0.6);
 
-    this.chartGroup
+    if (animate) {
+      incomeLine
+        .transition()
+        .duration(750)
+        .attr("d", createLine(yScaleFlow, (d) => d.income))
+        .attr("opacity", 1);
+    } else {
+      incomeLine.attr("d", createLine(yScaleFlow, (d) => d.income)).attr(
+        "opacity",
+        1,
+      );
+    }
+
+    const expenseLine = this.chartGroup
       .selectAll(".line-expense")
       .data([this.data])
       .join(
@@ -186,14 +206,20 @@ export class TransactionChartController {
       .attr("fill", "none")
       .attr("stroke", COLORS.expense)
       .attr("stroke-width", 1.5)
-      .attr("stroke-opacity", 0.6)
-      .transition()
-      .duration(750)
-      .attr(
-        "d",
-        createLine(yScaleFlow, (d) => d.expense),
-      )
-      .attr("opacity", 1);
+      .attr("stroke-opacity", 0.6);
+
+    if (animate) {
+      expenseLine
+        .transition()
+        .duration(750)
+        .attr("d", createLine(yScaleFlow, (d) => d.expense))
+        .attr("opacity", 1);
+    } else {
+      expenseLine.attr("d", createLine(yScaleFlow, (d) => d.expense)).attr(
+        "opacity",
+        1,
+      );
+    }
 
     const gradientId = "balance-gradient-all";
     if (this.svg.select(`#${gradientId}`).empty()) {
@@ -227,7 +253,7 @@ export class TransactionChartController {
       .y1((d) => yScaleBalance(d.balance))
       .curve(d3.curveMonotoneX);
 
-    this.chartGroup
+    const balanceAreaPath = this.chartGroup
       .selectAll(".area-balance")
       .data([this.data])
       .join(
@@ -236,13 +262,19 @@ export class TransactionChartController {
         (update) => update,
         (exit) => exit.transition().duration(300).attr("opacity", 0).remove(),
       )
-      .attr("fill", `url(#${gradientId})`)
-      .transition()
-      .duration(750)
-      .attr("d", balanceArea)
-      .attr("opacity", 1);
+      .attr("fill", `url(#${gradientId})`);
 
-    this.chartGroup
+    if (animate) {
+      balanceAreaPath
+        .transition()
+        .duration(750)
+        .attr("d", balanceArea)
+        .attr("opacity", 1);
+    } else {
+      balanceAreaPath.attr("d", balanceArea).attr("opacity", 1);
+    }
+
+    const balanceLine = this.chartGroup
       .selectAll(".line-balance")
       .data([this.data])
       .join(
@@ -253,18 +285,24 @@ export class TransactionChartController {
       )
       .attr("fill", "none")
       .attr("stroke", COLORS.balance)
-      .attr("stroke-width", 2.5)
-      .transition()
-      .duration(750)
-      .attr(
-        "d",
-        createLine(yScaleBalance, (d) => d.balance),
-      )
-      .attr("opacity", 1);
+      .attr("stroke-width", 2.5);
+
+    if (animate) {
+      balanceLine
+        .transition()
+        .duration(750)
+        .attr("d", createLine(yScaleBalance, (d) => d.balance))
+        .attr("opacity", 1);
+    } else {
+      balanceLine.attr("d", createLine(yScaleBalance, (d) => d.balance)).attr(
+        "opacity",
+        1,
+      );
+    }
 
     const currentY = yScaleBalance(this.data[this.data.length - 1].balance);
 
-    this.chartGroup
+    const currentLine = this.chartGroup
       .selectAll(".current-line")
       .data([currentY])
       .join(
@@ -277,13 +315,23 @@ export class TransactionChartController {
       .attr("x2", innerWidth)
       .attr("stroke", COLORS.currentLine)
       .attr("stroke-width", 1)
-      .attr("stroke-dasharray", "4 4")
-      .transition()
-      .duration(750)
-      .attr("y1", currentY)
-      .attr("y2", currentY)
-      .attr("opacity", 0.8);
-    this.chartGroup
+      .attr("stroke-dasharray", "4 4");
+
+    if (animate) {
+      currentLine
+        .transition()
+        .duration(750)
+        .attr("y1", currentY)
+        .attr("y2", currentY)
+        .attr("opacity", 0.8);
+    } else {
+      currentLine
+        .attr("y1", currentY)
+        .attr("y2", currentY)
+        .attr("opacity", 0.8);
+    }
+
+    const currentText = this.chartGroup
       .selectAll(".current-text")
       .data([currentY])
       .join(
@@ -299,11 +347,17 @@ export class TransactionChartController {
       .attr("x", innerWidth + 5)
       .attr("fill", COLORS.currentLine)
       .attr("font-size", "10px")
-      .attr("font-weight", "bold")
-      .transition()
-      .duration(750)
-      .attr("y", currentY + 4)
-      .attr("opacity", 1);
+      .attr("font-weight", "bold");
+
+    if (animate) {
+      currentText
+        .transition()
+        .duration(750)
+        .attr("y", currentY + 4)
+        .attr("opacity", 1);
+    } else {
+      currentText.attr("y", currentY + 4).attr("opacity", 1);
+    }
 
     this.chartGroup.selectAll(".area-single").data([]).join("path").remove();
     this.chartGroup.selectAll(".line-single").data([]).join("path").remove();
@@ -313,6 +367,7 @@ export class TransactionChartController {
     innerWidth: number,
     innerHeight: number,
     xScale: d3.ScaleTime<number, number>,
+    animate: boolean,
   ) {
     let dataAccessor: (d: DailyData) => number;
     let color: string;
@@ -402,7 +457,7 @@ export class TransactionChartController {
       gradient.select("stop:last-child").attr("stop-color", color);
     }
 
-    this.chartGroup
+    const singleArea = this.chartGroup
       .selectAll(".area-single")
       .data([this.data])
       .join(
@@ -411,13 +466,19 @@ export class TransactionChartController {
         (update) => update,
         (exit) => exit.transition().duration(300).attr("opacity", 0).remove(),
       )
-      .attr("fill", `url(#${gradientId})`)
-      .transition()
-      .duration(750)
-      .attr("d", area)
-      .attr("opacity", 1);
+      .attr("fill", `url(#${gradientId})`);
 
-    this.chartGroup
+    if (animate) {
+      singleArea
+        .transition()
+        .duration(750)
+        .attr("d", area)
+        .attr("opacity", 1);
+    } else {
+      singleArea.attr("d", area).attr("opacity", 1);
+    }
+
+    const singleLine = this.chartGroup
       .selectAll(".line-single")
       .data([this.data])
       .join(
@@ -428,11 +489,17 @@ export class TransactionChartController {
       )
       .attr("fill", "none")
       .attr("stroke", color)
-      .attr("stroke-width", 2)
-      .transition()
-      .duration(750)
-      .attr("d", line)
-      .attr("opacity", 1);
+      .attr("stroke-width", 2);
+
+    if (animate) {
+      singleLine
+        .transition()
+        .duration(750)
+        .attr("d", line)
+        .attr("opacity", 1);
+    } else {
+      singleLine.attr("d", line).attr("opacity", 1);
+    }
 
     this.chartGroup.selectAll(".line-income").data([]).join("path").remove();
     this.chartGroup.selectAll(".line-expense").data([]).join("path").remove();

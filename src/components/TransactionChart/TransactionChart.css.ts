@@ -1,4 +1,14 @@
-import { style } from "@vanilla-extract/css";
+import { vars } from "@for-digital-divide/design-system/styles";
+import { keyframes, style } from "@vanilla-extract/css";
+
+const shimmer = keyframes({
+  "0%": {
+    transform: "translateX(-100%)",
+  },
+  "100%": {
+    transform: "translateX(100%)",
+  },
+});
 
 export const chartRootContainer = style({
   display: "flex",
@@ -174,4 +184,261 @@ export const cursorLine = style({
   pointerEvents: "none",
   borderRight: "1px dashed #999",
   zIndex: 5,
+});
+
+export const statusContainer = style({
+  position: "relative",
+  width: "100%",
+  height: "100%",
+});
+
+export const statusBadge = style({
+  position: "absolute",
+  top: "20px",
+  right: "20px",
+  zIndex: 3,
+  padding: "6px 10px",
+  borderRadius: "999px",
+  backgroundColor:
+    "color-mix(in oklch, var(--color-background) 92%, transparent)",
+  border: `1px solid color-mix(in oklch, ${vars.color.border}, transparent 32%)`,
+  color: vars.color.descriptionText,
+  fontSize: vars.fontSize["0.75rem"],
+  fontWeight: vars.fontWeight.semibold,
+  boxShadow: `0 10px 30px color-mix(in oklch, ${vars.color.shadowOutline}, transparent 70%)`,
+  backdropFilter: "blur(12px)",
+});
+
+export const statusErrorBadge = style([
+  statusBadge,
+  {
+    left: "20px",
+    right: "auto",
+    color: vars.color.destructive,
+    backgroundColor:
+      "color-mix(in oklch, var(--color-destructive) 14%, var(--color-background))",
+    border: `1px solid color-mix(in oklch, ${vars.color.destructive}, transparent 70%)`,
+  },
+]);
+
+export const statePanel = style({
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
+  height: "100%",
+  minHeight: "300px",
+  gap: "20px",
+  padding: "20px",
+  boxSizing: "border-box",
+});
+
+export const skeletonStatusRow = style({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  width: "100%",
+  maxWidth: "80cqw",
+  marginLeft: "auto",
+  marginRight: "auto",
+  gap: "12px",
+  flexWrap: "wrap",
+});
+
+export const skeletonStatusBadge = style({
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  padding: "6px 12px",
+  borderRadius: "999px",
+  backgroundColor:
+    "color-mix(in oklch, var(--color-background) 88%, var(--color-emphasis))",
+  border: `1px solid color-mix(in oklch, ${vars.color.border}, transparent 34%)`,
+  color: vars.color.foreground,
+  fontSize: vars.fontSize["0.75rem"],
+  fontWeight: vars.fontWeight.semibold,
+});
+
+export const skeletonStatusDescription = style({
+  margin: 0,
+  color: vars.color.descriptionText,
+});
+
+export const stateSummaryPanel = style({
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
+  maxWidth: "80cqw",
+  marginLeft: "auto",
+  marginRight: "auto",
+  gap: "14px",
+});
+
+export const skeletonRow = style({
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "8px",
+});
+
+export const skeletonCard = style({
+  position: "relative",
+  overflow: "hidden",
+  borderRadius: "18px",
+  background: `linear-gradient(180deg,
+    color-mix(in oklch, ${vars.color.device} 78%, white) 0%,
+    color-mix(in oklch, ${vars.color.background} 64%, ${vars.color.emphasis}) 100%)`,
+});
+
+export const skeletonBlock = style([
+  skeletonCard,
+  {
+    selectors: {
+      "&::after": {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        background:
+          "linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.62) 50%, transparent 100%)",
+        animation: `${shimmer} 1.8s ease-in-out infinite`,
+      },
+    },
+  },
+]);
+
+export const skeletonToggle = style([
+  skeletonBlock,
+  {
+    width: "88px",
+    height: "36px",
+    borderRadius: "999px",
+  },
+]);
+
+export const skeletonLabel = style([
+  skeletonBlock,
+  {
+    width: "132px",
+    height: "14px",
+  },
+]);
+
+export const skeletonAmount = style([
+  skeletonBlock,
+  {
+    width: "220px",
+    maxWidth: "100%",
+    height: "40px",
+  },
+]);
+
+export const skeletonTrend = style([
+  skeletonBlock,
+  {
+    width: "168px",
+    maxWidth: "100%",
+    height: "16px",
+  },
+]);
+
+export const skeletonPeriod = style([
+  skeletonBlock,
+  {
+    width: "92px",
+    height: "32px",
+    borderRadius: "999px",
+  },
+]);
+
+export const skeletonChartSurface = style([
+  skeletonCard,
+  {
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    width: "100%",
+    maxWidth: "80cqw",
+    minHeight: "326px",
+    height: "100%",
+    marginLeft: "auto",
+    marginRight: "auto",
+    padding: "28px 28px 24px",
+    gap: "12px",
+    selectors: {
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        background: `repeating-linear-gradient(180deg,
+          color-mix(in oklch, ${vars.color.grid}, transparent 74%) 0px,
+          color-mix(in oklch, ${vars.color.grid}, transparent 74%) 1px,
+          transparent 1px,
+          transparent 64px)`,
+      },
+      "&::after": {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        background:
+          "linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.58) 50%, transparent 100%)",
+        animation: `${shimmer} 2.1s ease-in-out infinite`,
+      },
+    },
+  },
+]);
+
+export const skeletonChartBar = style({
+  position: "relative",
+  zIndex: 1,
+  flex: 1,
+  minWidth: "18px",
+  borderRadius: "999px 999px 16px 16px",
+  background: `linear-gradient(180deg,
+    color-mix(in oklch, ${vars.color.emphasis}, white 34%) 0%,
+    color-mix(in oklch, ${vars.color.primary}, ${vars.color.thumb} 28%) 100%)`,
+});
+
+export const errorPanel = style([
+  skeletonCard,
+  {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    maxWidth: "80cqw",
+    minHeight: "326px",
+    height: "100%",
+    marginLeft: "auto",
+    marginRight: "auto",
+    padding: "32px",
+    gap: "12px",
+    textAlign: "center",
+    background: `linear-gradient(180deg,
+      color-mix(in oklch, ${vars.color.background} 94%, white) 0%,
+      color-mix(in oklch, ${vars.color.destructive} 10%, ${vars.color.background}) 100%)`,
+    border: `1px solid color-mix(in oklch, ${vars.color.destructive}, transparent 68%)`,
+    boxShadow: `0 16px 40px color-mix(in oklch, ${vars.color.destructive}, transparent 88%)`,
+  },
+]);
+
+export const errorTitle = style({
+  margin: 0,
+  fontSize: vars.fontSize["1.25rem"],
+  fontWeight: vars.fontWeight.black,
+  color: vars.color.foreground,
+});
+
+export const errorDescription = style({
+  margin: 0,
+  color: vars.color.descriptionText,
+  lineHeight: 1.5,
+});
+
+export const errorAccent = style({
+  width: "52px",
+  height: "52px",
+  borderRadius: "999px",
+  background: `radial-gradient(circle at 30% 30%,
+    color-mix(in oklch, ${vars.color.destructiveForeground}, white 10%) 0%,
+    ${vars.color.destructive} 100%)`,
+  boxShadow: `0 16px 36px color-mix(in oklch, ${vars.color.destructive}, transparent 76%)`,
 });

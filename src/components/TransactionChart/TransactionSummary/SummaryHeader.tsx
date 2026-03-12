@@ -1,9 +1,9 @@
-import { useTransactionContext } from "../TransactionProvider";
+import { useTransactionViewMode } from "../TransactionProvider";
+import { useInteractionStore } from "../store/InteractionStore";
 import type { ChartViewMode, DailyData, DisplayInfo } from "../types";
 import * as style from "./SummaryHeader.css";
 
 interface SummaryHeaderProps {
-  hoverData: DailyData | null;
   displayInfo: DisplayInfo;
 }
 
@@ -19,8 +19,9 @@ const classifyHoverData = (viewMode: ChartViewMode, hoverData: DailyData) => {
   ).toLocaleString();
 };
 
-export function SummaryHeader({ hoverData, displayInfo }: SummaryHeaderProps) {
-  const { viewMode } = useTransactionContext();
+export function SummaryHeader({ displayInfo }: SummaryHeaderProps) {
+  const { viewMode } = useTransactionViewMode();
+  const hoverData = useInteractionStore((state) => state.hoverData);
 
   return (
     <div className={style.summaryHeader}>

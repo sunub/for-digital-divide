@@ -1,10 +1,10 @@
 import { ButtonGroup, Flex } from "@for-digital-divide/design-system";
-import { useShallow } from "zustand/react/shallow";
 import Spacer from "@/constants/Spacer";
 import { CHART_VIEW_MODES } from "../constants/chartViewMode";
 import { TIME_PERIODS } from "../constants/timePeriod";
 import { useInteractionStore } from "../store/InteractionStore";
-import type { ChartSummary, ChartViewMode } from "../types";
+import { useTransactionViewMode } from "../TransactionProvider";
+import type { ChartSummary } from "../types";
 import { getDisplayInfo } from "../utils/getDisplayInfo";
 import { useRenderCounter } from "../utils/transactionChartMetrics";
 import { ViewSelectButton } from "../ViewSelectButton";
@@ -15,15 +15,12 @@ import * as style from "./TransactionSummary.css";
 import { TrendIndicator } from "./TrendIndicator";
 
 interface TransactionSummaryProps {
-  viewMode: ChartViewMode;
   summary: ChartSummary;
-  selectableViewModes?: ChartViewMode[];
 }
 
-export function TransactionSummary({
-  viewMode,
-  summary,
-}: TransactionSummaryProps) {
+export function TransactionSummary({ summary }: TransactionSummaryProps) {
+  const { viewMode } = useTransactionViewMode();
+
   useRenderCounter("TransactionSummary", {
     viewMode,
     summaryBalance: summary.currentBalance,
@@ -31,11 +28,7 @@ export function TransactionSummary({
     incomeTotal: summary.totalIncome,
   });
 
-  const { hoverData } = useInteractionStore(
-    useShallow((state) => ({
-      hoverData: state.hoverData,
-    })),
-  );
+  const hasHoverData = useInteractionStore((state) => state.hoverData !== null);
   const displayInfo = getDisplayInfo(viewMode, summary);
   return (
     <Flex
@@ -62,9 +55,9 @@ export function TransactionSummary({
         alignItems="center"
         gap={4}
       >
-        <SummaryHeader hoverData={hoverData} displayInfo={displayInfo} />
+        <SummaryHeader displayInfo={displayInfo} />
         <div className={style.trendIndicatorContainer}>
-          {!hoverData ? (
+          {!hasHoverData ? (
             <TrendIndicator displayInfo={displayInfo} />
           ) : (
             <Spacer axis={"vertical"} size={30} />

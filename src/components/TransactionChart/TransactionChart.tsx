@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { useMemo } from "react";
 import * as style from "./TransactionChart.css";
 import { TransactionChartMain } from "./TransactionChartMain/TransactionChartMain";
-import { useTransactionContext } from "./TransactionProvider";
+import { useTransactionSelectedPeriod } from "./TransactionProvider";
 import { TransactionSummary } from "./TransactionSummary/TransactionSummary";
 import type { Transaction } from "./types";
 import { processData } from "./utils/processData";
@@ -17,10 +17,9 @@ export function TransactionChart({
   transactionData: Transaction[];
   currentBalance?: number;
 }) {
-  const { viewMode, selectedPeriod } = useTransactionContext();
+  const { selectedPeriod } = useTransactionSelectedPeriod();
 
   useRenderCounter("TransactionChart", {
-    viewMode,
     selectedPeriod,
     txCount: transactionData.length,
   });
@@ -33,8 +32,8 @@ export function TransactionChart({
     <div
       className={clsx("transaction-chart-container", style.chartRootContainer)}
     >
-      <TransactionSummary viewMode={viewMode} summary={summary} />
-      <TransactionChartMain viewMode={viewMode} dailyData={dailyData} />
+      <TransactionSummary summary={summary} />
+      <TransactionChartMain dailyData={dailyData} />
     </div>
   );
 }

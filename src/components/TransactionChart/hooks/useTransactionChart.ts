@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { useInteractionStore } from "../store/InteractionStore";
+import { useCallback, useEffect, useRef } from "react";
 import { TransactionChartController } from "../TransactionChartController";
+import { useInteractionStore } from "../store/InteractionStore";
 import type { ChartViewMode, DailyData } from "../types";
 import { chartMetrics } from "../utils/transactionChartMetrics";
 
@@ -16,11 +16,17 @@ export function useTransactionChart({
   const containerRef = useRef<HTMLDivElement>(null);
   const controllerRef = useRef<TransactionChartController | null>(null);
   const lastHoverSampleAtRef = useRef(0);
+  const lastHoverKeyRef = useRef<string | null>(null);
+  const latestDataLengthRef = useRef(data.length);
+  const latestViewModeRef = useRef(viewMode);
 
-  const { setHoverData, setHoverPos } = useInteractionStore((state) => ({
-    setHoverData: state.setHoverData,
-    setHoverPos: state.setHoverPos,
-  }));
+  latestDataLengthRef.current = data.length;
+  latestViewModeRef.current = viewMode;
+
+  const clearHoverState = useCallback(() => {
+    lastHoverKeyRef.current = null;
+    useInteractionStore.getState().clearHoverState();
+  }, []);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -42,8 +48,8 @@ export function useTransactionChart({
         reason: "init",
         width,
         height,
-        dataLength: data.length,
-        viewMode,
+        dataLength: latestDataLengthRef.current,
+        viewMode: latestViewModeRef.current,
       },
       initDuration,
     );
@@ -64,8 +70,8 @@ export function useTransactionChart({
             reason: "observer",
             width,
             height,
-            dataLength: data.length,
-            viewMode,
+            dataLength: latestDataLengthRef.current,
+            viewMode: latestViewModeRef.current,
           },
           end - start,
         );
@@ -81,10 +87,13 @@ export function useTransactionChart({
       resizeObserver.disconnect();
       controllerRef.current?.destroy();
       controllerRef.current = null;
+      clearHoverState();
     };
-  }, [data.length, viewMode]);
+  }, [clearHoverState]);
 
   useEffect(() => {
+    clearHoverState();
+
     if (controllerRef.current) {
       const start =
         typeof performance === "undefined" ? Date.now() : performance.now();
@@ -108,7 +117,7 @@ export function useTransactionChart({
       );
       chartMetrics.collectMemorySnapshot("chartUpdate");
     }
-  }, [data, viewMode]);
+  }, [clearHoverState, data, viewMode]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!controllerRef.current || !containerRef.current) return;
@@ -125,8 +134,21 @@ export function useTransactionChart({
       start;
 
     if (result) {
-      setHoverData(result.data);
-      setHoverPos({ x: result.x, y: result.y });
+      const nextHoverKey = [
+        result.data.date.getTime(),
+        Math.round(result.x),
+        Math.round(result.y),
+        viewMode,
+      ].join(":");
+
+      if (lastHoverKeyRef.current !== nextHoverKey) {
+        lastHoverKeyRef.current = nextHoverKey;
+        useInteractionStore
+          .getState()
+          .setHoverState(result.data, { x: result.x, y: result.y });
+      }
+    } else {
+      clearHoverState();
     }
 
     const now =
@@ -147,8 +169,7 @@ export function useTransactionChart({
   };
 
   const handleMouseLeave = () => {
-    setHoverData(null);
-    setHoverPos(null);
+    clearHoverState();
   };
 
   return {
