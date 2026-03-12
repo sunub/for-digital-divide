@@ -12,6 +12,12 @@ export interface BoxProps extends BaseStyle, BoxNativeProps {
   asChild?: boolean;
 }
 
+function normalizeClassName(...parts: Array<string | undefined>) {
+  return Array.from(new Set(clsx(parts).split(/\s+/).filter(Boolean)))
+    .sort()
+    .join(" ");
+}
+
 export function Box({
   as: Tag = "div",
   asChild,
@@ -25,7 +31,7 @@ export function Box({
   return (
     <Component
       ref={ref}
-      className={clsx(baseStyles(atomProps), className)}
+      className={normalizeClassName(baseStyles(atomProps), className)}
       {...nativeProps}
     />
   );

@@ -19,6 +19,10 @@ export const surfaceTone = styleVariants({
     backgroundColor: vars.color.emphasis,
     color: vars.color.text,
   },
+  destructive: {
+    backgroundColor: vars.color.destructive,
+    color: vars.color.text,
+  },
 });
 
 export const surfaceElevation = styleVariants({

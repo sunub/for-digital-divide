@@ -18,7 +18,13 @@ export function ButtonGroup({
       as={as}
       data-slot="button-group"
       data-orientation={orientation}
-      className={clsx(styles.buttonGroup({ orientation }), className)}
+      className={clsx(
+        styles.buttonGroup,
+        orientation === "vertical"
+          ? styles.verticalGroup
+          : styles.horizontalGroup,
+        className,
+      )}
       {...props}
     />
   );

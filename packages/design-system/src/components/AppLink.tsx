@@ -24,7 +24,7 @@ export function AppLink({
   standoutColor = vars.color.standOut,
   standoutUnderlineColor = vars.color.standOut,
   style,
-  variant = "inline",
+  variant = "standout",
   ...props
 }: AppLinkProps) {
   const isStandout = variant === "standout";
