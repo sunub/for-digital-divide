@@ -24,11 +24,36 @@ export const transactionsRepository = {
     });
   },
   async findAll() {
-    return prisma.transactions.findMany();
+    return prisma.transactions.findMany({
+      orderBy: { occurred_at: "desc" },
+    });
   },
   async findByAccountNumber(account_number: number) {
     return prisma.transactions.findMany({
-      where: { account_number: account_number },
+      where: { account_number },
+      orderBy: { occurred_at: "asc" },
+      select: {
+        transaction_id: true,
+        account_number: true,
+        amount: true,
+        transaction_type: true,
+        description: true,
+        occurred_at: true,
+        counterparty_account_number: true,
+      },
+    });
+  },
+  async findSeededAccountNumbers(account_numbers: number[]) {
+    return prisma.transactions.findMany({
+      where: {
+        account_number: {
+          in: account_numbers,
+        },
+      },
+      select: {
+        account_number: true,
+      },
+      distinct: ["account_number"],
     });
   },
 };

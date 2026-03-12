@@ -20,4 +20,7 @@ export const transactionsService = {
   async findByAccountNumber(account_number: number) {
     return transactionsRepository.findByAccountNumber(account_number);
   },
+  async findSeededAccountNumbers(account_numbers: number[]) {
+    return transactionsRepository.findSeededAccountNumbers(account_numbers);
+  },
 };
