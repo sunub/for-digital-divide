@@ -7,8 +7,22 @@ export const authMethodsService = {
     return authMethodsRepository.findByUserId(user_id);
   },
 
+  async findPasswordMethod(user_id: number) {
+    return authMethodsRepository.findPasswordMethod(user_id);
+  },
+
   async findByProviderUid(provider_uid: string) {
     return authMethodsRepository.findByProviderUid(provider_uid);
+  },
+
+  async findByProviderUidAndMethod(
+    provider_uid: string,
+    method: AuthMethodCode,
+  ) {
+    return authMethodsRepository.findByProviderUidAndMethod(
+      provider_uid,
+      method,
+    );
   },
 
   async upsertDataByUserId(data: Omit<AuthMethod, "auth_method_id">) {

@@ -9,11 +9,20 @@ export const authMethodsRepository = {
     });
   },
 
-  async findPasswordMethod(userId: number) {
+  async findPasswordMethod(user_id: number) {
     return prisma.auth_methods.findFirst({
       where: {
-        user_id: userId,
+        user_id,
         method: "PASSWORD",
+      },
+      select: {
+        auth_method_id: true,
+        user_id: true,
+        method: true,
+        credential: true,
+        provider: true,
+        provider_uid: true,
+        created_at: true,
       },
     });
   },
@@ -29,14 +38,37 @@ export const authMethodsRepository = {
     });
   },
 
-  async upsertDataByUserId(data: Omit<AuthMethod, "auth_method_id">) {
-    const authMethodExists = await prisma.auth_methods.findFirst({
-      where: { user_id: data.user_id, method: data.method },
+  async findByProviderUidAndMethod(
+    provider_uid: string,
+    method: AuthMethodCode,
+  ) {
+    return prisma.auth_methods.findFirst({
+      where: {
+        method,
+        provider_uid: {
+          equals: provider_uid,
+          mode: "insensitive",
+        },
+      },
+      select: {
+        auth_method_id: true,
+        user_id: true,
+        method: true,
+        credential: true,
+        provider: true,
+        provider_uid: true,
+        created_at: true,
+      },
     });
+  },
 
+  async upsertDataByUserId(data: Omit<AuthMethod, "auth_method_id">) {
     return prisma.auth_methods.upsert({
       where: {
-        auth_method_id: authMethodExists?.auth_method_id || 0,
+        user_id_method: {
+          user_id: data.user_id,
+          method: data.method,
+        },
       },
       update: data,
       create: data,
@@ -60,7 +92,7 @@ export const authMethodsRepository = {
   },
 
   async findAuthMethodByUserId(user_id: UsersId, authMethod: AuthMethodCode) {
-    return prisma.auth_methods.findMany({
+    return prisma.auth_methods.findFirst({
       where: {
         user_id,
         method: authMethod,

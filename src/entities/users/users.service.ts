@@ -33,7 +33,7 @@ export const userService = {
     return usersRepository.delete(user_id);
   },
 
-  async updateSessionIdByUserId(user_id: UsersId, session_id: string) {
+  async updateSessionIdByUserId(user_id: UsersId, session_id: string | null) {
     return usersRepository.updateSessionIdByUserId(user_id, session_id);
   },
 

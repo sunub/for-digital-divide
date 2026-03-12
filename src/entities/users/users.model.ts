@@ -1,8 +1,9 @@
 import { z } from "zod/v4";
 
 const serial = z.number().int().positive().optional();
+const serialId = z.number().int().positive();
 
-export const UsersIdSchema = serial;
+export const UsersIdSchema = serialId;
 
 export const UsersSchema = z.object({
   user_id: serial,

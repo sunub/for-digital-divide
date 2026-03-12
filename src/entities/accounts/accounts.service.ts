@@ -6,11 +6,19 @@ export const accountsService = {
     return accountsRepository.findByUserId(user_id);
   },
 
+  async createMany(data: AccountType[]) {
+    return accountsRepository.createMany(data);
+  },
+
   async updateByAccountNumber(
     account_number: number,
     data: Partial<AccountType>,
   ) {
     return accountsRepository.updateByAccountNumber(account_number, data);
+  },
+
+  async updateManyByAccountNumbers(accounts: AccountType[]) {
+    return accountsRepository.updateManyByAccountNumbers(accounts);
   },
 
   async create(data: AccountType) {
@@ -23,5 +31,9 @@ export const accountsService = {
 
   async findByAccountNumber(account_number: number) {
     return accountsRepository.findByAccountNumber(account_number);
+  },
+
+  async findByAccountNumbers(account_numbers: number[]) {
+    return accountsRepository.findByAccountNumbers(account_numbers);
   },
 };

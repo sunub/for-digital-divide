@@ -18,9 +18,16 @@ export const usersRepository = {
     session_id?: string,
   ) {
     return prisma.users.upsert({
-      where: { name: username, email },
-      update: { session_id },
-      create: { name: username, email, session_id },
+      where: { email },
+      update: {
+        name: username,
+        session_id,
+      },
+      create: {
+        name: username,
+        email,
+        session_id,
+      },
     });
   },
   async findByUsernameAndEmail(username: string, email: string) {
@@ -43,7 +50,7 @@ export const usersRepository = {
       skipDuplicates: true,
     });
   },
-  async updateSessionIdByUserId(user_id: UsersId, session_id: string) {
+  async updateSessionIdByUserId(user_id: UsersId, session_id: string | null) {
     return prisma.users.update({
       where: { user_id },
       data: { session_id },
