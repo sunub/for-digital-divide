@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
-import { TransactionChartController } from "../TransactionChartController";
 import { useInteractionStore } from "../store/InteractionStore";
+import { TransactionChartController } from "../TransactionChartController";
 import type { ChartViewMode, DailyData } from "../types";
 import { chartMetrics } from "../utils/transactionChartMetrics";
 

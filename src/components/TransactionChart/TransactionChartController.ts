@@ -185,13 +185,18 @@ export class TransactionChartController {
       incomeLine
         .transition()
         .duration(750)
-        .attr("d", createLine(yScaleFlow, (d) => d.income))
+        .attr(
+          "d",
+          createLine(yScaleFlow, (d) => d.income),
+        )
         .attr("opacity", 1);
     } else {
-      incomeLine.attr("d", createLine(yScaleFlow, (d) => d.income)).attr(
-        "opacity",
-        1,
-      );
+      incomeLine
+        .attr(
+          "d",
+          createLine(yScaleFlow, (d) => d.income),
+        )
+        .attr("opacity", 1);
     }
 
     const expenseLine = this.chartGroup
@@ -212,13 +217,18 @@ export class TransactionChartController {
       expenseLine
         .transition()
         .duration(750)
-        .attr("d", createLine(yScaleFlow, (d) => d.expense))
+        .attr(
+          "d",
+          createLine(yScaleFlow, (d) => d.expense),
+        )
         .attr("opacity", 1);
     } else {
-      expenseLine.attr("d", createLine(yScaleFlow, (d) => d.expense)).attr(
-        "opacity",
-        1,
-      );
+      expenseLine
+        .attr(
+          "d",
+          createLine(yScaleFlow, (d) => d.expense),
+        )
+        .attr("opacity", 1);
     }
 
     const gradientId = "balance-gradient-all";
@@ -291,13 +301,18 @@ export class TransactionChartController {
       balanceLine
         .transition()
         .duration(750)
-        .attr("d", createLine(yScaleBalance, (d) => d.balance))
+        .attr(
+          "d",
+          createLine(yScaleBalance, (d) => d.balance),
+        )
         .attr("opacity", 1);
     } else {
-      balanceLine.attr("d", createLine(yScaleBalance, (d) => d.balance)).attr(
-        "opacity",
-        1,
-      );
+      balanceLine
+        .attr(
+          "d",
+          createLine(yScaleBalance, (d) => d.balance),
+        )
+        .attr("opacity", 1);
     }
 
     const currentY = yScaleBalance(this.data[this.data.length - 1].balance);
@@ -469,11 +484,7 @@ export class TransactionChartController {
       .attr("fill", `url(#${gradientId})`);
 
     if (animate) {
-      singleArea
-        .transition()
-        .duration(750)
-        .attr("d", area)
-        .attr("opacity", 1);
+      singleArea.transition().duration(750).attr("d", area).attr("opacity", 1);
     } else {
       singleArea.attr("d", area).attr("opacity", 1);
     }
@@ -492,11 +503,7 @@ export class TransactionChartController {
       .attr("stroke-width", 2);
 
     if (animate) {
-      singleLine
-        .transition()
-        .duration(750)
-        .attr("d", line)
-        .attr("opacity", 1);
+      singleLine.transition().duration(750).attr("d", line).attr("opacity", 1);
     } else {
       singleLine.attr("d", line).attr("opacity", 1);
     }

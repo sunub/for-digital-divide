@@ -225,10 +225,7 @@ class TransactionChartMetricCollector {
   }
 
   public getSummary() {
-    const summary: Record<
-      string,
-      MetricDurationSummary
-    > = {};
+    const summary: Record<string, MetricDurationSummary> = {};
 
     this.aggregates.forEach((value, key) => {
       summary[key] = {

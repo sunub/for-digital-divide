@@ -44,7 +44,9 @@ export const getAuthState = cache(async (): Promise<AuthState> => {
   let session: AuthSession | null = null;
   const parsedSessionCookie = SessionCookieSchema.safeParse(sessionCookie);
   if (parsedSessionCookie.success && parsedSessionCookie.data.user_id > 0) {
-    const userInfo = await userService.findByUserId(parsedSessionCookie.data.user_id);
+    const userInfo = await userService.findByUserId(
+      parsedSessionCookie.data.user_id,
+    );
     const parsedUserInfo = SessionUserSchema.safeParse(userInfo);
 
     if (

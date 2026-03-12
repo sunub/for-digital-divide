@@ -24,8 +24,8 @@
 
 :root {
   --nanum-square-neo: "NanumSquare";
-  --gugi-font-family: "Gugi", var(--nanum-square-neo), system-ui, -apple-system,
-    sans-serif;
+  --gugi-font-family:
+    "Gugi", var(--nanum-square-neo), system-ui, -apple-system, sans-serif;
 
   --color-accent: color-mix(
     in oklch,
