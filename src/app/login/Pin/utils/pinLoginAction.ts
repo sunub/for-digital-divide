@@ -2,8 +2,9 @@
 
 import { AuthMethodSchema } from "@/entities/auth_methods/auth_methods.model";
 import { authMethodsService } from "@/entities/auth_methods/auth_methods.service";
-import { DeviceIdSchema } from "@/shared/types/cookie";
-import { PinNumberFormSchema } from "@/shared/types/form";
+import { DeviceIdSchema } from "@/entities/cookies/cookies.model";
+import { PinNumberFormSchema } from "@/entities/keypad/keypad.model";
+import { userService } from "@/entities/users/users.service";
 import { getKeypadData } from "@/shared/utils/getKeypadData";
 import { getPermanentCookieStorage } from "@/utils/cookies/permanentCookieStorage";
 import { createSessionCookieStorage } from "@/utils/cookies/sessionCookieStorage";
@@ -48,10 +49,9 @@ export async function pinLoginAction(
     };
   }
   const { device_id } = parsedDeviceId.data;
-  const registerdAuthInfo =
-    await authMethodsService.findByProviderUid(device_id);
-  const registerdPinInfo = registerdAuthInfo.find(
-    (auth) => auth.method === "PIN",
+  const registerdPinInfo = await authMethodsService.findByProviderUidAndMethod(
+    device_id,
+    "PIN",
   );
 
   const parsedRegisterdPinInfo = AuthMethodSchema.safeParse(registerdPinInfo);
@@ -89,11 +89,13 @@ export async function pinLoginAction(
   }
 
   try {
+    await userService.updateSessionIdByUserId(user_id, device_id);
     await createSessionCookieStorage({
       user_id,
       session_id: device_id,
     });
   } catch (error) {
+    await userService.updateSessionIdByUserId(user_id, null);
     console.error("세션 쿠키 생성 중 오류 발생:", error);
     return {
       ...prevState,

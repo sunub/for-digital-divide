@@ -5,21 +5,19 @@ import { useRef } from "react";
 import { useToast } from "@/provider/toast/hooks/useToast";
 import { useHistory } from "@/shared/hooks/useHistory";
 import { useAnimationOnce } from "../hooks/useAnimationOnce";
-import { useDeviceId } from "../hooks/useDeviceId";
 import { CardContent } from "./Card/CardContent";
 import { CardLayout } from "./Card/CardLayout";
 import { CardSkeleton } from "./Card/CardSkeleton";
 import { SmallCard } from "./Card/SmallCard";
 import { HoveringTextField } from "./HoveringTextField";
 
-export function PinNumberCard() {
+export function PinNumberCard({ hasDeviceId }: { hasDeviceId: boolean }) {
   const skeletonRef = useRef<HTMLDivElement>(null);
-  const { isLoading: isDataLoading, hasDeviceId } = useDeviceId();
   const isAnimationComplete = useAnimationOnce(skeletonRef);
   const { add } = useHistory();
   const showToast = useToast();
 
-  if (isDataLoading || !isAnimationComplete) {
+  if (!isAnimationComplete) {
     return <CardSkeleton skeletonRef={skeletonRef} />;
   }
 

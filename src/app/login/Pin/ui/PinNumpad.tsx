@@ -6,7 +6,7 @@ import { useTransition } from "react";
 import { type FormStatus, useFormStatus } from "react-dom";
 import { StatusButton } from "@/components/StautsButton";
 import { useNumpadStore } from "@/context/NumpadContext";
-import type { KeypadDetail, KeypadInfo } from "@/types/keypad";
+import type { KeypadDetail, KeypadInfo } from "@/entities/keypad/keypad.model";
 import reloadNumpad from "../utils/reload";
 import * as style from "./PinNumpad.css";
 

@@ -1,7 +1,7 @@
 import { globalStyle, style } from "@vanilla-extract/css";
 
 export const title = style({
-  fontFamily: "'Gugi', sans-serif",
+  fontFamily: "var(--gugi-font-family)",
   willChange: "transform",
 });
 

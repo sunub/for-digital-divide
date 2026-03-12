@@ -5,7 +5,7 @@ export const container = style({
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
-  fontFamily: "'Gugi', sans-serif",
+  fontFamily: "var(--gugi-font-family)",
 });
 
 export const title = style({

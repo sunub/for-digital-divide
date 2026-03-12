@@ -12,6 +12,7 @@ import type { ActionState } from "../../types";
 const EMAIL_ERROR_MESSAGE = "이메일 형식이 올바르지 않습니다.";
 const PASSWORD_ERROR_MESSAGE = "비밀번호 형식이 올바르지 않습니다.";
 const PASSWORD_REGEXES = [/[A-Z]/, /[a-z]/, /[0-9]/, /[^A-Za-z0-9]/];
+const UserIdSchema = UsersSchema.shape.user_id.nonoptional();
 
 const formSchema = z.object({
   email: z
@@ -74,12 +75,19 @@ export async function emailPasswordLoginAction(
     };
   }
 
-  const { user_id } = parsedUserInfo.data;
+  const parsedUserId = UserIdSchema.safeParse(parsedUserInfo.data.user_id);
+  if (!parsedUserId.success) {
+    return {
+      ...prevState,
+      status: "error",
+      payload: ["사용자 식별 정보가 올바르지 않습니다."],
+    };
+  }
 
-  const usersAuthMethods = await authMethodsService.findByUserId(user_id);
-  const passwordAuthMethod = usersAuthMethods.find(
-    (method) => method.method === "PASSWORD",
-  );
+  const user_id = parsedUserId.data;
+
+  const passwordAuthMethod =
+    await authMethodsService.findPasswordMethod(user_id);
   if (!passwordAuthMethod) {
     return {
       ...prevState,
@@ -100,10 +108,22 @@ export async function emailPasswordLoginAction(
   }
 
   const session_id = crypto.randomBytes(16).toString("hex");
-  await createSessionCookieStorage({
-    user_id,
-    session_id,
-  });
+  await userService.updateSessionIdByUserId(user_id, session_id);
+
+  try {
+    await createSessionCookieStorage({
+      user_id,
+      session_id,
+    });
+  } catch (error) {
+    await userService.updateSessionIdByUserId(user_id, null);
+    console.error("세션 쿠키 생성 중 오류 발생:", error);
+    return {
+      ...prevState,
+      status: "error",
+      payload: ["세션을 생성하는 중 오류가 발생했습니다."],
+    };
+  }
 
   return {
     ...prevState,

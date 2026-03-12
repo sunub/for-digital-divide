@@ -3,7 +3,7 @@ import { style } from "@vanilla-extract/css";
 export const title = style({
   fontSize: "3rem",
   fontWeight: 600,
-  fontFamily: "Gugi, cursive",
+  fontFamily: "var(--gugi-font-family)",
   color: "oklch(63.93% 0.206 288.34)",
 });
 

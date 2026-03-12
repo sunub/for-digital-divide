@@ -4,7 +4,11 @@ import { EmailCard } from "../ui/EmailCard";
 import { PinNumberCard } from "../ui/PinNumberCard";
 import * as style from "./LoginSelection.css";
 
-export function LoginSelection() {
+export function LoginSelection({
+  hasPinLoginAvailable = false,
+}: {
+  hasPinLoginAvailable?: boolean;
+}) {
   return (
     <>
       <Flex
@@ -18,7 +22,7 @@ export function LoginSelection() {
       </Flex>
       <CardContainer className={style.cardContainer}>
         <EmailCard />
-        <PinNumberCard />
+        <PinNumberCard hasDeviceId={hasPinLoginAvailable} />
       </CardContainer>
       <Flex
         direction={"column"}
