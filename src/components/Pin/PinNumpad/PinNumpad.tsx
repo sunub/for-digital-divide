@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import type { KeypadInfo } from "@/types/keypad";
+import type { KeypadInfo } from "@/entities/keypad/keypad.model";
 import { Numpad } from "./Numpad";
 import * as style from "./PinNumpad.css";
 import { PinSubmitButton } from "./PinSubmitButton";

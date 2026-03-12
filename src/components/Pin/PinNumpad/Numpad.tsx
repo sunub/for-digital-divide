@@ -2,7 +2,7 @@ import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { type ComponentProps, useTransition } from "react";
 import reloadNumpad from "@/app/login/Pin/utils/reload";
 import { useNumpadStore } from "@/context/NumpadContext";
-import type { KeypadDetail } from "@/types/keypad";
+import type { KeypadDetail } from "@/entities/keypad/keypad.model";
 import * as style from "./PinNumpad.css";
 
 type NumpadData = { x: number; y: number; num: string };
