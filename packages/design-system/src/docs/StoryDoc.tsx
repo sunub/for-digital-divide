@@ -1,5 +1,74 @@
 import type { CSSProperties, ReactNode } from "react";
+import { isValidElement } from "react";
 import { vars } from "../tokens/theme.css";
+
+type KeyedEntry<T> = {
+  content: T;
+  key: string;
+};
+
+function getElementTypeLabel(type: unknown) {
+  if (typeof type === "string") {
+    return type;
+  }
+
+  if (typeof type === "function") {
+    return type.displayName ?? type.name ?? "component";
+  }
+
+  if (typeof type === "symbol") {
+    return type.description ?? "symbol";
+  }
+
+  return "element";
+}
+
+function getNodeSignature(node: ReactNode): string {
+  if (node == null || typeof node === "boolean") {
+    return "";
+  }
+
+  if (
+    typeof node === "string" ||
+    typeof node === "number" ||
+    typeof node === "bigint"
+  ) {
+    return String(node);
+  }
+
+  if (Array.isArray(node)) {
+    return node.map(getNodeSignature).join("|");
+  }
+
+  if (isValidElement(node)) {
+    if (node.key != null) {
+      return `key:${String(node.key)}`;
+    }
+
+    return `${getElementTypeLabel(node.type)}:${getNodeSignature(node.props.children)}`;
+  }
+
+  return String(node);
+}
+
+function createKeyedEntries<T>(
+  items: readonly T[],
+  getSignature: (item: T) => string,
+): KeyedEntry<T>[] {
+  const signatureCount = new Map<string, number>();
+
+  return items.map((content) => {
+    const baseKey = getSignature(content) || "item";
+    const nextCount = (signatureCount.get(baseKey) ?? 0) + 1;
+
+    signatureCount.set(baseKey, nextCount);
+
+    return {
+      content,
+      key: nextCount === 1 ? baseKey : `${baseKey}:${nextCount}`,
+    };
+  });
+}
 
 const styles = {
   article: {
@@ -120,11 +189,13 @@ export function StoryDocParagraph({ children }: { children: ReactNode }) {
 }
 
 export function StoryDocList({ items }: { items: ReactNode[] }) {
+  const keyedItems = createKeyedEntries(items, getNodeSignature);
+
   return (
     <ul style={styles.list}>
-      {items.map((item, index) => (
-        <li key={index} style={styles.listItem}>
-          {item}
+      {keyedItems.map(({ content, key }) => (
+        <li key={key} style={styles.listItem}>
+          {content}
         </li>
       ))}
     </ul>
@@ -142,6 +213,18 @@ export function StoryDocTable({
   columns: string[];
   rows: ReactNode[][];
 }) {
+  const keyedRows = createKeyedEntries(rows, (row) =>
+    row.map(getNodeSignature).join("||"),
+  ).map(({ content, key }) => ({
+    cells: createKeyedEntries(content, getNodeSignature).map(
+      ({ content: cell, key: cellKey }) => ({
+        content: cell,
+        key: `${key}:${cellKey}`,
+      }),
+    ),
+    key,
+  }));
+
   return (
     <div style={styles.tableWrap}>
       <table style={styles.table}>
@@ -155,11 +238,11 @@ export function StoryDocTable({
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {row.map((cell, cellIndex) => (
-                <td key={cellIndex} style={styles.tableCell}>
-                  {cell}
+          {keyedRows.map(({ cells, key }) => (
+            <tr key={key}>
+              {cells.map(({ content, key: cellKey }) => (
+                <td key={cellKey} style={styles.tableCell}>
+                  {content}
                 </td>
               ))}
             </tr>
@@ -177,4 +260,3 @@ export function StoryDocCode({ code }: { code: string }) {
     </pre>
   );
 }
-
