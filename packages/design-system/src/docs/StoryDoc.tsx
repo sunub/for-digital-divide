@@ -7,13 +7,20 @@ type KeyedEntry<T> = {
   key: string;
 };
 
+type ElementTypeWithName = {
+  displayName?: string;
+  name?: string;
+};
+
 function getElementTypeLabel(type: unknown) {
   if (typeof type === "string") {
     return type;
   }
 
   if (typeof type === "function") {
-    return type.displayName ?? type.name ?? "component";
+    const namedType = type as ElementTypeWithName;
+
+    return namedType.displayName ?? namedType.name ?? "component";
   }
 
   if (typeof type === "symbol") {
@@ -40,7 +47,7 @@ function getNodeSignature(node: ReactNode): string {
     return node.map(getNodeSignature).join("|");
   }
 
-  if (isValidElement(node)) {
+  if (isValidElement<{ children?: ReactNode }>(node)) {
     if (node.key != null) {
       return `key:${String(node.key)}`;
     }
