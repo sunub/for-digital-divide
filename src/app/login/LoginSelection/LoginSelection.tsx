@@ -1,8 +1,14 @@
-import { AppLink, Flex, Text } from "@for-digital-divide/design-system";
-import { CardContainer } from "@/app/dashboard/ui/Account/ui/CardContainer";
+import { AppLink, Flex, Grid, Text } from "@for-digital-divide/design-system";
 import { EmailCard } from "../ui/EmailCard";
 import { PinNumberCard } from "../ui/PinNumberCard";
-import * as style from "./LoginSelection.css";
+
+const titleStyle = {
+  fontFamily: "var(--gugi-font-family)",
+} as const;
+
+const loginMethodGridStyle = {
+  gridTemplateColumns: "repeat(2, 1fr)",
+} as const;
 
 export function LoginSelection({
   hasPinLoginAvailable = false,
@@ -12,31 +18,42 @@ export function LoginSelection({
   return (
     <>
       <Flex
-        direction={"column"}
-        alignItems={"center"}
-        justifyContent={"center"}
-        gap={"3rem"}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        gap="3rem"
       >
-        <h1 className={style.title}>로그인</h1>
-        <p className={style.description}>로그인 방식을 선택해주세요</p>
+        <Text
+          as="h1"
+          fontSize="3rem"
+          fontWeight="semibold"
+          color="button"
+          style={titleStyle}
+        >
+          로그인
+        </Text>
+        <Text as="p" color="standOut">
+          로그인 방식을 선택해주세요
+        </Text>
       </Flex>
-      <CardContainer className={style.cardContainer}>
+
+      <Grid gap={8} padding={8} style={loginMethodGridStyle}>
         <EmailCard />
         <PinNumberCard hasDeviceId={hasPinLoginAvailable} />
-      </CardContainer>
+      </Grid>
+
       <Flex
-        direction={"column"}
-        alignItems={"center"}
-        justifyContent={"center"}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
         gap={2}
       >
         <AppLink href="/sign-up/register-user" variant="standout">
           회원가입
         </AppLink>
-        <Text color={"standOut"} variant={"description"}>
+        <Text color="standOut" variant="description">
           회원가입을 하지 않으셨다면 회원가입을 해주세요.
         </Text>
-        <div className={style.signInformation}></div>
       </Flex>
     </>
   );

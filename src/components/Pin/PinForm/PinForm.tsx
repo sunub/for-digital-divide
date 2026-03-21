@@ -4,11 +4,11 @@ import { BaseForm, type FormProps } from "@for-digital-divide/design-system";
 import clsx from "clsx";
 import type { Ref } from "react";
 import { SubmittingStatus } from "@/app/login/email-password/ui/SubmittingStatus";
-import { PinContent } from "@/app/login/Pin/ui/PinContent";
 import type { ActionState } from "@/app/login/types";
 import { useNumpadStore } from "@/context/NumpadContext";
 import { useDemoLoginFlow } from "@/shared/hooks/useDemoLoginFlow";
 import { ContentOpener } from "@/shared/layout/ui/ContentOpener";
+import { PinContent } from "../PinContent/PinContent";
 import * as style from "./PinForm.css";
 
 type PinFormProps = Omit<FormProps, "action"> & {

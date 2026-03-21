@@ -11,7 +11,6 @@ const pointerPlaceholderVar = createVar();
 
 export const rootContainer = style({
   gridArea: "content-device / 1",
-  gap: "1rem",
 });
 
 export const headerContainer = style({
@@ -19,27 +18,15 @@ export const headerContainer = style({
 });
 
 export const title = style({
-  fontSize: "1.75rem",
-  fontWeight: 900,
   wordWrap: "break-word",
   color:
     "color-mix(in oklch, oklch(63.93% 0.206 288.34), var(--color-primary) 0%)",
 });
 
 export const description = style({
-  fontSize: "1rem",
-  fontWeight: 700,
   wordWrap: "break-word",
-  marginTop: "0.25rem",
   color:
     "color-mix(in oklch, oklch(63.93% 0.206 288.34) 50%, var(--color-primary) 0%)",
-});
-
-export const pointerWrapper = style({
-  display: "inline-flex",
-  alignItems: "center",
-  flexDirection: "row",
-  gap: "8px",
 });
 
 export const pointer = style({
@@ -59,7 +46,6 @@ export const pointer = style({
       borderRadius: "5px",
       background: "oklch(99.88% 0.015 294.47)",
       visibility: fallbackVar(pointerCursorVar, "hidden"),
-
       position: "absolute",
       bottom: "10%",
       left: "calc(50% - 15px)",
@@ -69,11 +55,9 @@ export const pointer = style({
       content: "''",
       width: "15px",
       height: "15px",
-
       position: "absolute",
       top: "calc(50% - 7.5px)",
       left: "calc(50% - 7.5px)",
-
       background: "oklch(99.88% 0.015 294.47)",
       borderRadius: "50%",
       aspectRatio: "1 / 1",
