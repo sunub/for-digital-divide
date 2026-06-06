@@ -1,7 +1,7 @@
 "use client";
 
-import { useToastStore } from "../store/toast-store";
 import { AnimatePresence } from "motion/react";
+import { useToastStore } from "../store/toast-store";
 import { container } from "../style/toast.css";
 import { ToastMessage } from "./ToastMessage";
 

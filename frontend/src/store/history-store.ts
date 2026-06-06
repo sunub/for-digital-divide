@@ -1,6 +1,6 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
 import { z } from "zod/v4";
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 const HistoryUrlSchema = z.url({ message: "유효한 URL 형식이어야 합니다." });
 const HistoryStoreSchema = z.object({
@@ -56,7 +56,7 @@ const customStorage = {
       const validated = HistoryStoreSchema.safeParse(parsed.state);
       if (!validated.success) return;
       sessionStorage.setItem(name, value);
-    } catch { }
+    } catch {}
   },
   removeItem: (name: string) => {
     sessionStorage.removeItem(name);

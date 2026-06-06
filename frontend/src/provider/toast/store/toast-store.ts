@@ -27,7 +27,11 @@ export const useToastStore = create<ToastStore>((set) => ({
         case "warning":
           return { toasts: [...state.toasts, action.payload] };
         case "remove":
-          return { toasts: state.toasts.filter((toast) => toast.id !== action.payload.id) };
+          return {
+            toasts: state.toasts.filter(
+              (toast) => toast.id !== action.payload.id,
+            ),
+          };
         default:
           return state;
       }

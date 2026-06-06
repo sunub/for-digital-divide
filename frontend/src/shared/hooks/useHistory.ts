@@ -1,4 +1,4 @@
-import { useHistoryStore, MAX_HISTORY_LENGTH } from "@/store/history-store";
+import { MAX_HISTORY_LENGTH, useHistoryStore } from "@/store/history-store";
 
 export const useHistory = () => {
   const historyList = useHistoryStore((state) => state.historyList);
@@ -20,8 +20,7 @@ export const useHistory = () => {
 
   const canGoPrev = index - 1 >= 0;
   const canGoNext =
-    index + 1 < historyList.length &&
-    index + 1 < MAX_HISTORY_LENGTH;
+    index + 1 < historyList.length && index + 1 < MAX_HISTORY_LENGTH;
 
   const goBack = () => {
     if (!canGoPrev) {

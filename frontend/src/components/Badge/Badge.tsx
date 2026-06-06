@@ -3,9 +3,9 @@
 import { Box } from "@for-digital-divide/design-system";
 import clsx from "clsx";
 import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
-import * as styles from "./Badge.css";
 import { GoRocket } from "react-icons/go";
 import { MdCheckCircle, MdError, MdInfo, MdWarning } from "react-icons/md";
+import * as styles from "./Badge.css";
 
 const ICON_PRESETS = {
   info: MdInfo,

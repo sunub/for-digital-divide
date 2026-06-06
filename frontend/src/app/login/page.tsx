@@ -1,16 +1,16 @@
 import { Grid, Text } from "@for-digital-divide/design-system";
+import {
+  MdAccountBalance,
+  MdDevices,
+  MdLockPerson,
+  MdSecurity,
+  MdVerifiedUser,
+} from "react-icons/md";
+import { Instruction } from "@/components/Instruction";
 import { getAuthState } from "@/entities/auth/session.server";
 import { Device } from "@/shared/layout";
 import { LoginContentContainer } from "./LoginContentContainer";
 import * as style from "./page.css";
-import { Instruction } from "@/components/Instruction";
-import {
-  MdVerifiedUser,
-  MdLockPerson,
-  MdDevices,
-  MdSecurity,
-  MdAccountBalance,
-} from "react-icons/md";
 
 function LoginGuide({ step }: { step?: string }) {
   if (step === "email-input") {
@@ -39,7 +39,9 @@ function LoginGuide({ step }: { step?: string }) {
           }
         >
           <Text as="p" variant="body" color={"text"}>
-            타인에게 비밀번호를 절대 공유하지 마시고, 도용이 의심된다면 즉시 비밀번호를 변경해 주세요. 공용 기기에서 사용하신 후에는 개인정보 보호를 위해 꼭 로그아웃해 주시기 바랍니다.
+            타인에게 비밀번호를 절대 공유하지 마시고, 도용이 의심된다면 즉시
+            비밀번호를 변경해 주세요. 공용 기기에서 사용하신 후에는 개인정보
+            보호를 위해 꼭 로그아웃해 주시기 바랍니다.
           </Text>
         </Instruction.InfoBox>
       </Instruction.Panel>
@@ -51,7 +53,10 @@ function LoginGuide({ step }: { step?: string }) {
       <Instruction.Panel>
         <Instruction.Badge
           icon={
-            <MdVerifiedUser size={18} style={{ color: "var(--color-button)" }} />
+            <MdVerifiedUser
+              size={18}
+              style={{ color: "var(--color-button)" }}
+            />
           }
         >
           간편 PIN 로그인
@@ -61,8 +66,7 @@ function LoginGuide({ step }: { step?: string }) {
           style={{ fontSize: "2rem", lineHeight: "1.2", margin: "1rem 0" }}
         >
           6자리 비밀번호로
-          <br />
-          더 쉽고 빠르게
+          <br />더 쉽고 빠르게
         </Instruction.Title>
 
         <Instruction.InfoBox
@@ -72,7 +76,9 @@ function LoginGuide({ step }: { step?: string }) {
           }
         >
           <Text as="p" variant="body" color={"text"}>
-            등록된 기기에서만 6자리 간편 비밀번호 로그인이 제공되어 해킹 및 도용 위험을 원천 차단합니다. 5회 이상 입력 오류 시 계정 보호를 위해 이메일 본인 확인이 필요합니다.
+            등록된 기기에서만 6자리 간편 비밀번호 로그인이 제공되어 해킹 및 도용
+            위험을 원천 차단합니다. 5회 이상 입력 오류 시 계정 보호를 위해
+            이메일 본인 확인이 필요합니다.
           </Text>
         </Instruction.InfoBox>
       </Instruction.Panel>
@@ -83,9 +89,7 @@ function LoginGuide({ step }: { step?: string }) {
   return (
     <Instruction.Panel>
       <Instruction.Badge
-        icon={
-          <MdDevices size={18} style={{ color: "var(--color-button)" }} />
-        }
+        icon={<MdDevices size={18} style={{ color: "var(--color-button)" }} />}
       >
         쉬운 금융 로그인
       </Instruction.Badge>
@@ -108,7 +112,9 @@ function LoginGuide({ step }: { step?: string }) {
         }
       >
         <Text as="p" variant="body" color={"text"}>
-          자주 사용하시는 기기라면 6자리 <strong>PIN 로그인</strong>을 등록하여 더 편리하게 거래하실 수 있습니다. 처음 접속하셨거나 다른 기기라면 <strong>이메일 로그인</strong>을 이용해 주세요.
+          자주 사용하시는 기기라면 6자리 <strong>PIN 로그인</strong>을 등록하여
+          더 편리하게 거래하실 수 있습니다. 처음 접속하셨거나 다른 기기라면{" "}
+          <strong>이메일 로그인</strong>을 이용해 주세요.
         </Text>
       </Instruction.InfoBox>
     </Instruction.Panel>

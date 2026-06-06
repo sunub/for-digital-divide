@@ -39,8 +39,6 @@ export default async function middleware(req: NextRequest) {
     return redirectResponse(url);
   }
 
-
-
   if (pathname === "/login") {
     const method = req.nextUrl.searchParams.get("method");
     const isDefaultMethod =

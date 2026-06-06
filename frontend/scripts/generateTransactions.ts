@@ -71,7 +71,7 @@ export async function generateTransactions(
 ): Promise<GenerationResult> {
   console.log(`\n▶️  실행 환경: ${isProduction ? "Production" : "Development"}`);
   console.log(
-    `Transactions generation started for ${accounts.length} accounts using cyclical model`
+    `Transactions generation started for ${accounts.length} accounts using cyclical model`,
   );
 
   if (accounts.length === 0) {

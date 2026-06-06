@@ -1,7 +1,7 @@
 "use client";
 
-import { useToastStore } from "../store/toast-store";
 import { nanoid } from "nanoid";
+import { useToastStore } from "../store/toast-store";
 import type { ToastType } from "../types";
 
 export function useToast() {

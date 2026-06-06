@@ -1,5 +1,5 @@
-import { globalStyle, keyframes, style } from "@vanilla-extract/css";
 import { vars } from "@for-digital-divide/design-system/styles";
+import { globalStyle, keyframes, style } from "@vanilla-extract/css";
 
 export const title = style({
   fontFamily: "var(--gugi-font-family)",

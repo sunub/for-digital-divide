@@ -1,28 +1,27 @@
 "use client";
 
-import { memo, useCallback } from "react";
 import {
   Flex,
   Grid,
   gridLayout,
   Text,
-  ThreeDButton,
 } from "@for-digital-divide/design-system";
 import { useRouter } from "next/navigation";
+import { memo, useCallback } from "react";
+import {
+  MdAccountBalance,
+  MdArrowForwardIos,
+  MdBadge,
+  MdDevices,
+  MdLockPerson,
+  MdSecurity,
+  MdVerified,
+  MdVerifiedUser,
+  MdWorkspacePremium,
+} from "react-icons/md";
 import { Instruction } from "@/components/Instruction";
 import { useHistory } from "@/shared/hooks/useHistory";
 import { Device } from "@/shared/layout";
-import {
-  MdVerifiedUser,
-  MdAccountBalance,
-  MdSecurity,
-  MdWorkspacePremium,
-  MdVerified,
-  MdLockPerson,
-  MdDevices,
-  MdArrowForwardIos,
-  MdBadge,
-} from "react-icons/md";
 import * as styles from "./page.css";
 
 const InformationGuide = memo(function InformationGuide() {

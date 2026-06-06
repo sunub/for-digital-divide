@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "motion/react";
-import Link from "next/link";
 import { phone } from "./SmallPhone.css";
 import { SmallPhoneLoading } from "./SmallPhoneLoading";
 import { SmallPhoneSvg } from "./SmallPhoneSvg";

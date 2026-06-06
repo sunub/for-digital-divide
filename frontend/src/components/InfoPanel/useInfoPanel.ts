@@ -3,6 +3,6 @@ interface UseInfoPanelProps {
 }
 
 export function useInfoPanel({ contents }: UseInfoPanelProps) {
-  for (const content of contents) {
+  for (const _content of contents) {
   }
 }

@@ -1,10 +1,10 @@
 "use client";
 
-import { useStepperStore } from "../store/stepper-store";
 import { CheckIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Loading } from "@/components/Loading";
 import { useStepper } from "../hooks/useStepper";
+import { useStepperStore } from "../store/stepper-store";
 import * as styles from "./Stepper.css";
 
 const TARGET_PATHS = ["/sign-up/register-user", "/login", "/intro"];

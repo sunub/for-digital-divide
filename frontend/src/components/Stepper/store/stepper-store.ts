@@ -1,8 +1,8 @@
 "use client";
 
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
 import { z } from "zod";
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 const StepperSchema = z.object({
   currentStep: z.number(),
@@ -51,7 +51,9 @@ const INITIAL_STEP = {
 };
 
 interface StepperStoreActions {
-  setStepper: (stepper: StepperType | ((prev: StepperType) => StepperType)) => void;
+  setStepper: (
+    stepper: StepperType | ((prev: StepperType) => StepperType),
+  ) => void;
 }
 
 const customStorage = {
@@ -66,7 +68,10 @@ const customStorage = {
     try {
       const parsedItem = StepperSchema.safeParse(JSON.parse(item));
       if (!parsedItem.success) {
-        console.error(`Invalid data in sessionStorage for key "${key}":`, parsedItem.error);
+        console.error(
+          `Invalid data in sessionStorage for key "${key}":`,
+          parsedItem.error,
+        );
         return JSON.stringify({ state: INITIAL_STEP });
       }
       if (parsedItem.data.steps.length !== STEPPERS_MAP.length) {
@@ -75,7 +80,10 @@ const customStorage = {
       }
       return JSON.stringify({ state: parsedItem.data });
     } catch (error) {
-      console.error(`Error parsing JSON from sessionStorage for key "${key}":`, error);
+      console.error(
+        `Error parsing JSON from sessionStorage for key "${key}":`,
+        error,
+      );
       return JSON.stringify({ state: INITIAL_STEP });
     }
   },
@@ -85,11 +93,16 @@ const customStorage = {
       const parsed = JSON.parse(value);
       const parsedValue = StepperSchema.safeParse(parsed.state);
       if (!parsedValue.success) {
-        throw TypeError(`Invalid value for stepperAtom: ${parsedValue.error.message}`);
+        throw TypeError(
+          `Invalid value for stepperAtom: ${parsedValue.error.message}`,
+        );
       }
       window.sessionStorage.setItem(key, JSON.stringify(parsedValue.data));
     } catch (error) {
-      console.error(`Error setting item in sessionStorage for key "${key}":`, error);
+      console.error(
+        `Error setting item in sessionStorage for key "${key}":`,
+        error,
+      );
     }
   },
   removeItem: (key: string) => {
@@ -97,7 +110,10 @@ const customStorage = {
     try {
       window.sessionStorage.removeItem(key);
     } catch (error) {
-      console.error(`Error removing item from sessionStorage for key "${key}":`, error);
+      console.error(
+        `Error removing item from sessionStorage for key "${key}":`,
+        error,
+      );
     }
   },
 };
@@ -125,7 +141,10 @@ export const useStepperStore = create<StepperType & StepperStoreActions>()(
   ),
 );
 
-if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
+if (
+  typeof window !== "undefined" &&
+  typeof window.addEventListener === "function"
+) {
   window.addEventListener("storage", (e: StorageEvent) => {
     if (e.storageArea === sessionStorage && e.key === "stepper") {
       let newValue: StepperType;

@@ -1,8 +1,8 @@
 "use client";
 
-import { useStepperStore } from "../store/stepper-store";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
+import { useStepperStore } from "../store/stepper-store";
 
 export function useStepper() {
   const setStepper = useStepperStore((state) => state.setStepper);

@@ -3,13 +3,13 @@
 import { Flex } from "@for-digital-divide/design-system";
 import type { MotionNodeAnimationOptions } from "motion/react";
 import { motion } from "motion/react";
-import { ToastMessage } from "../ui/ToastMessage";
-import { useFunnel } from "@/shared/hooks/useFunnel/useFunnel";
-import { LOGIN_FUNNEL_STEPS, type LoginFunnelData } from "../funnelConfig";
 import { useSearchParams } from "next/navigation";
-import { LoginSelection } from "../LoginSelection";
+import { useFunnel } from "@/shared/hooks/useFunnel/useFunnel";
 import EmailPasswordLogin from "../email-password/page";
+import { LOGIN_FUNNEL_STEPS, type LoginFunnelData } from "../funnelConfig";
+import { LoginSelection } from "../LoginSelection";
 import { LoginPinPage } from "../Pin";
+import { ToastMessage } from "../ui/ToastMessage";
 
 interface LoginContentContainerProps {
   hasPinLoginAvailable: boolean;

@@ -1,4 +1,3 @@
-import { useToastStore } from "../store/toast-store";
 import {
   AngryIcon,
   FrownIcon,
@@ -9,6 +8,7 @@ import {
 import { motion, useAnimation, type Variants } from "motion/react";
 import { nanoid } from "nanoid";
 import { useEffect } from "react";
+import { useToastStore } from "../store/toast-store";
 import * as styles from "../style/toast.css";
 
 const toastVariants: Variants = {

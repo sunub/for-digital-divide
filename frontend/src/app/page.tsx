@@ -1,6 +1,5 @@
 "use client";
 
-import { memo, useCallback } from "react";
 import {
   Flex,
   Grid,
@@ -9,10 +8,11 @@ import {
   ThreeDButton,
 } from "@for-digital-divide/design-system";
 import Link from "next/link";
-import { useHistory } from "@/shared/hooks/useHistory";
+import { memo, useCallback } from "react";
 import { Instruction } from "@/components/Instruction";
-import { SmallPhone } from "./intro/ui/SmallPhone";
 import useToggle from "@/shared/hooks/use-toggle";
+import { useHistory } from "@/shared/hooks/useHistory";
+import { SmallPhone } from "./intro/ui/SmallPhone";
 
 interface StartButtonProps {
   handleHover: () => void;
@@ -98,7 +98,7 @@ function InitPage() {
     toggleOpen();
   }, [toggleOpen]);
 
-  const handleClick = useCallback(() => {
+  const _handleClick = useCallback(() => {
     if (isOpen) return;
     toggleOpen();
     add(new URL("/intro", window.location.href).toString());
