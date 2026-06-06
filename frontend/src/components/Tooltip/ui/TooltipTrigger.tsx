@@ -1,6 +1,9 @@
 "use client";
 
-import { Button, type NativeButtonProps } from "@for-digital-divide/design-system";
+import {
+  Button,
+  type NativeButtonProps,
+} from "@for-digital-divide/design-system";
 import clsx from "clsx";
 import { useState } from "react";
 import { useTooltipToggle } from "../hooks/useTooltipToggle";
