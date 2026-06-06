@@ -1,14 +1,12 @@
 "use client";
 
-import { Button } from "@for-digital-divide/design-system";
+import { Button, type NativeButtonProps } from "@for-digital-divide/design-system";
 import clsx from "clsx";
-import { type ComponentPropsWithoutRef, type ReactNode, useState } from "react";
+import { useState } from "react";
 import { useTooltipToggle } from "../hooks/useTooltipToggle";
 import { useTooltipContext } from "./TooltipProvider";
 
-interface TooltipTriggerProps extends ComponentPropsWithoutRef<typeof Button> {
-  children: ReactNode;
-}
+export type TooltipTriggerProps = NativeButtonProps;
 
 export function TooltipTrigger({ children, ...props }: TooltipTriggerProps) {
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
