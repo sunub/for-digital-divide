@@ -1,0 +1,33 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "SUNUB_POSTGRES_URL",
+    "SUNUB_POSTGRES_URL_NON_POOLING",
+    "SUNUB_POSTGRES_PRISMA_URL",
+    "SUNUB_POSTGRES_USER",
+    "SUNUB_POSTGRES_PASSWORD",
+    "SUNUB_POSTGRES_HOST",
+    "SUNUB_POSTGRES_DATABASE",
+    "DATABASE_URL",
+    "JWT_SECRET",
+    "ENABLE_COREPACK"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "dist/**"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "ci": {},
+    "format": {}
+  }
+}

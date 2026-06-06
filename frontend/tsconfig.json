@@ -1,0 +1,74 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@storybook/react": ["./node_modules/@storybook/react/dist/index"],
+      "@for-digital-divide/design-system": [
+        "./packages/design-system/src/index.ts"
+      ],
+      "@for-digital-divide/design-system/button-group-styles": [
+        "./packages/design-system/src/components/ButtonGroup.css.ts"
+      ],
+      "@for-digital-divide/design-system/button-styles": [
+        "./packages/design-system/src/components/Button.css.ts"
+      ],
+      "@for-digital-divide/design-system/styles": [
+        "./packages/design-system/src/styles/index.ts"
+      ],
+      "@compo/*": ["./src/components/*"],
+      "@icons/*": ["./src/icons/*"],
+      "@hooks/*": ["./src/shared/hooks/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@public/*": ["./public/*"],
+      "@tests/*": ["./tests/*"],
+      "@root/prisma/*": ["./prisma/*"],
+      "@root/*": ["./*"],
+      "@entities/*": ["./src/entities/*"],
+      "@dashboard/*": ["./src/app/dashboard/*"],
+      "@scripts/*": ["./scripts/*"],
+      "@style/*": ["./src/style/*"]
+    }
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "esm": false
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    ".next/types/**/*.ts",
+    "scripts/seed.mjs",
+    "./type.d.ts",
+    "scripts/generateTransactions.mjs",
+    "eslint.config.mjs",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "./node_modules",
+    "storybook-static",
+    "**/*.stories.ts",
+    "**/*.stories.tsx"
+  ]
+}

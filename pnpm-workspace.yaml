@@ -1,2 +1,13 @@
 packages:
+  - "frontend"
+  - "backend"
   - "packages/*"
+allowBuilds:
+  "@nestjs/core": true
+  "@prisma/engines": true
+  "@swc/core": true
+  core-js-pure: true
+  esbuild: true
+  prisma: true
+  sharp: true
+  "unrs-resolver": true
