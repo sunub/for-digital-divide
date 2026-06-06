@@ -1,0 +1,25 @@
+"use client";
+
+import { useToastStore } from "../store/toast-store";
+import { AnimatePresence } from "motion/react";
+import { container } from "../style/toast.css";
+import { ToastMessage } from "./ToastMessage";
+
+export function ToastContainer() {
+  const toasts = useToastStore((state) => state.toasts);
+
+  return (
+    <div className={container}>
+      <AnimatePresence>
+        {toasts.map((toast, i) => (
+          <ToastMessage
+            key={toast.id}
+            toast={toast}
+            index={i}
+            length={toasts.length}
+          />
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+}

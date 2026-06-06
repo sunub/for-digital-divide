@@ -1,40 +1,56 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Workspace-wide Dependencies & Caches
+node_modules/
+.pnpm-store/
 
-# dependencies
-node_modules
-/.pnp
-.pnp.js
-.yarn/install-state.gz
+# Turborepo Build Cache
+.turbo/
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+# OS Metadata Files
 .DS_Store
-*.pem
+Thumbs.db
+*.ico
 
-# debug
+# Global Build Directory Patterns (Backup check)
+**/dist/
+**/build/
+**/.next/
+**/out/
+**/storybook-static/
+**/tsconfig.tsbuildinfo
+
+# IDEs & Editor Configuration
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment Configuration (Strictly avoid committing secrets)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Debug & Error Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
-# local env files
-.env
-.env*.local
+# Testing & Coverage Outputs
+**/coverage/
+**/test-results/
+**/playwright-report/
+**/.nyc_output
 
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-storybook-static
-./prisma/data/
+# Exclude empty backend directory from monorepo commits
+backend/

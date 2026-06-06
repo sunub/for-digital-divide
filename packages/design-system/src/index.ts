@@ -16,20 +16,8 @@ export {
   Grid,
   type GridProps,
 } from "./primitives/Grid";
-export {
-  flexAlignEnd,
-  flexAlignStart,
-  flexCenter,
-  flexColumnAlignEnd,
-  flexColumnAlignStart,
-  flexColumnCenter,
-  flexColumnSpaceBetween,
-  flexSpaceBetween,
-} from "./styles/Flex.css";
-export {
-  gridCenter,
-  gridFlexStart,
-} from "./styles/Grid.css";
+export * from "./styles/Flex.css";
+export * from "./styles/Grid.css";
 export {
   splitProps,
   sprinklePropNames,
