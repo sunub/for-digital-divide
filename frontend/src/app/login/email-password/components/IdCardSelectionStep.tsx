@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { Button, Text, ThreeDButton } from "@internal/design-system/components";
+import { Text, ThreeDButton } from "@internal/design-system/components";
 import { Flex } from "@internal/design-system/primitives";
 import { useOnboardingStore } from "@/store/onboarding-store";
 import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from "@/components/AlertDialog";
