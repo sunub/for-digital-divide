@@ -62,4 +62,10 @@ export const alertDialogTrigger = recipe({
       },
     },
   },
+  variants: {
+    state: {
+      open: {},
+      closed: {},
+    },
+  },
 });
