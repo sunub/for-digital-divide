@@ -17,10 +17,8 @@ Compress the context by writing the code structure and the purpose of the curren
       - **Core Domains**: Business steps, main route entries (e.g. `Pin`, `VerifyStep`, `email-password`).
       - **Auxiliary Domains**: Folders containing `hooks`, `utils`, `types`, `ui`, `style`, `components`.
     
-    <HARD-GATE>
     - For **Core Domains**: Recursively call the `research` skill inside those subdirectories (up to Max Depth 2) to ensure they have their own `context.md` files first.
     - For **Auxiliary Domains**: Do NOT generate separate `context.md` files inside them. Instead, read the exported functions, custom hooks, and type signatures from the source files and inline them directly in the parent/root `context.md` under a dedicated "공유 헬퍼 및 자산" section.
-    </HARD-GATE>
     
     - Infer the purpose and role of the current directory from the bottom up using only these two pieces of information (structure + sub-context / signatures), and write a new, condensed context.md.
 
@@ -36,7 +34,7 @@ Simply listing files or using inefficient commands undermines the core purpose o
 - Reason: Internally traverses deep subdirectories causing severe resource waste.
 - Solution: Use optimized tools (like rg --files --glob "*context.md") that behave closer to a Breadth-First Search (BFS).
 
-1. Blind Overwrite
+2. Blind Overwrite
 - Symptom: Completely overwriting the existing context.md with a new snapshot without reading its history.
 - Solution: Always read the existing file first, and incrementally update missing contents based on the difference (diff).
 
@@ -62,7 +60,8 @@ You must create tasks for each of the following items and complete them in order
 
 <HARD-GATE>
 **Recursion Depth Limit**
-- The maximum recursion depth is 2 (Depth 2). Do NOT recurse deeper. If structures are nested beyond Depth 2, recommend architecture refactoring to the user.
+- The maximum recursion depth for executing the research skill recursively is 2 (Depth 2). Do NOT recurse deeper. If structures are nested beyond Depth 2, recommend architecture refactoring to the user.
+- Note: This is distinct from the directory tree visualization depth in the generated `context.md` (which can be up to Depth 3).
 </HARD-GATE>
 
 <HARD-GATE>
