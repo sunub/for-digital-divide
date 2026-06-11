@@ -66,5 +66,5 @@ When executing a large/structural update, the subagent is triggered with:
 
 <CONSTRAINT>
 **Manual Note Preservation**
-- Even when updating context via a subagent, any developer notes written under `## 개발자 참고 사항 (Manual Notes)` must be preserved at the top of the file.
+- Even when updating context via a subagent, any developer notes written under `## Manual Notes` must be preserved at the top of the file.
 </CONSTRAINT>
