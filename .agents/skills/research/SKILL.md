@@ -17,7 +17,7 @@ Compress the context by writing the code structure and the purpose of the curren
       - **Core Domains**: Business steps, main route entries (e.g. `Pin`, `VerifyStep`, `email-password`).
       - **Auxiliary Domains**: Folders containing `hooks`, `utils`, `types`, `ui`, `style`, `components`.
     
-    - For **Core Domains**: Parallelly delegate research tasks to specialized subagents.
+    - For **Core Domains**: Delegate research tasks in parallel to specialized subagents.
       - Queue all Depth-1 Core Domain directories.
       - Run up to **3 parallel subagents** concurrently using the `invoke_subagent` tool.
       - As each subagent completes, pull the next target domain from the queue until all Core Domains are researched.
@@ -54,7 +54,7 @@ When executing a large/structural update, parallel subagents are triggered with:
 
 <HARD-GATE>
 **Subagent Constraints & Filtering**
-- **Target Filtering**: Subagents MUST consult [filtering-rules.md](file:///Users/sunub/workspace/for-digital-divide/frontend/../.agents/skills/research/references/filtering-rules.md) for patterns to include/exclude. Do NOT read style files (`*.css`, `*.css.ts`) or stateless visual-only UI components.
+- **Target Filtering**: Subagents MUST consult [filtering-rules.md](./references/filtering-rules.md) for patterns to include/exclude. Do NOT read style files (`*.css`, `*.css.ts`) or stateless visual-only UI components.
 - **Step Cap**: Subagents must halt and report `DONE_WITH_CONCERNS` if they hit a hard limit of **15 steps**.
 - **Execution Isolation**: Subagents MUST restrict their file reads and modifications strictly to their assigned `TargetDirectory` and its subdirectories.
 </HARD-GATE>
