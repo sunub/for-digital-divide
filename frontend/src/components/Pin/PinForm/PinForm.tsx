@@ -1,6 +1,6 @@
 "use client";
 
-import { BaseForm, type FormProps } from "@for-digital-divide/design-system";
+import { BaseForm, type FormProps } from "@internal/design-system/primitives";
 import clsx from "clsx";
 import type { Ref } from "react";
 import { SubmittingStatus } from "@/app/login/email-password/ui/SubmittingStatus";

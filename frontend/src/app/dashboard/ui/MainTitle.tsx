@@ -1,6 +1,7 @@
 "use client";
 
-import { Flex, Text } from "@for-digital-divide/design-system";
+import { Flex } from "@internal/design-system/primitives";
+import { Text } from "@internal/design-system/components";
 import { motion, useSpring } from "motion/react";
 import { memo, useEffect } from "react";
 import * as style from "./MainTitle.css";

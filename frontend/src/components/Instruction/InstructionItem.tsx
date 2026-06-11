@@ -1,7 +1,7 @@
 "use client";
 
-import { Box } from "@for-digital-divide/design-system";
-import { vars } from "@for-digital-divide/design-system/styles";
+import { Flex, Box } from "@internal/design-system/primitives";
+import { vars } from "@internal/design-system/style";
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import clsx from "clsx";
 import type { ComponentPropsWithoutRef, Ref } from "react";
@@ -10,7 +10,7 @@ import { InstructionListContext } from "./InstructionContext";
 import * as styles from "./InstructionItem.css";
 
 export interface InstructionItemProps
-  extends ComponentPropsWithoutRef<typeof Box> {
+  extends ComponentPropsWithoutRef<typeof Flex> {
   step: number;
   isActive?: boolean;
 }
@@ -40,9 +40,10 @@ export function InstructionItem({
   const inactiveTextColor = vars.color.descriptionText;
 
   return (
-    <Box
+    <Flex
       ref={ref}
       as="li"
+      alignItems="flex-start"
       className={clsx(styles.instructionItem, className)}
       style={{
         ...style,
@@ -56,8 +57,16 @@ export function InstructionItem({
       }}
       {...props}
     >
-      <div className={styles.stepIndicator}>{step}</div>
-      <span className={styles.stepText}>{children}</span>
-    </Box>
+      <Flex
+        alignItems="center"
+        justifyContent="center"
+        className={styles.stepIndicator}
+      >
+        {step}
+      </Flex>
+      <Box as="span" className={styles.stepText}>
+        {children}
+      </Box>
+    </Flex>
   );
 }

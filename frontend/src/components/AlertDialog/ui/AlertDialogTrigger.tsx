@@ -1,7 +1,7 @@
 "use client";
 
-import type { NativeButtonProps } from "@for-digital-divide/design-system";
-import { Button } from "@for-digital-divide/design-system";
+import { NativeButtonProps } from "@internal/design-system/components";
+import { Button } from "@internal/design-system/components";
 import { useAlertDialogContext } from "../hooks/useAlertDialogContext";
 import * as style from "./Alert.css";
 

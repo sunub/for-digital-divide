@@ -1,4 +1,4 @@
-import { Flex } from "@for-digital-divide/design-system";
+import { Flex } from "@internal/design-system/primitives";
 import clsx from "clsx";
 import { EyeClosedIcon, EyeIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";

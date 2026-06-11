@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex } from "@for-digital-divide/design-system";
+import { Flex } from "@internal/design-system/primitives";
 import { BadgeCheckIcon, LoaderCircle, ShieldBanIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import type { ActionState } from "../../types";

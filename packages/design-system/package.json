@@ -1,19 +1,47 @@
 {
-  "name": "@for-digital-divide/design-system",
+  "name": "@internal/design-system",
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "scripts": {
+    "build": "tsup"
+  },
   "sideEffects": [
-    "**/*.css.ts"
+    "**/*.css.ts",
+    "**/*.css",
+    "./dist/**/*.css"
   ],
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
-  "types": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./button-group-styles": "./src/components/ButtonGroup.css.ts",
-    "./button-styles": "./src/components/Button.css.ts",
-    "./styles": "./src/styles/index.ts"
+    ".": {
+      "types": "./dist/patterns/index.d.ts",
+      "import": "./dist/patterns/index.js",
+      "require": "./dist/patterns/index.cjs"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js",
+      "require": "./dist/components/index.cjs"
+    },
+    "./patterns": {
+      "types": "./dist/patterns/index.d.ts",
+      "import": "./dist/patterns/index.js",
+      "require": "./dist/patterns/index.cjs"
+    },
+    "./primitives": {
+      "types": "./dist/primitives/index.d.ts",
+      "import": "./dist/primitives/index.js",
+      "require": "./dist/primitives/index.cjs"
+    },
+    "./styles": {
+      "types": "./dist/styles/index.d.ts",
+      "import": "./dist/styles/index.js",
+      "require": "./dist/styles/index.cjs"
+    },
+    "./tokens": {
+      "types": "./dist/tokens/index.d.ts",
+      "import": "./dist/tokens/index.js",
+      "require": "./dist/tokens/index.cjs"
+    }
   },
   "peerDependencies": {
     "next": "^15.0.0",
@@ -21,12 +49,16 @@
     "react-dom": "^19.0.0"
   },
   "dependencies": {
-    "motion": "^12.4.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@vanilla-extract/css": "^1.17.5",
     "@vanilla-extract/dynamic": "^2.1.5",
     "@vanilla-extract/recipes": "^0.5.7",
     "@vanilla-extract/sprinkles": "^1.6.5",
-    "clsx": "^2.1.1"
+    "clsx": "^2.1.1",
+    "motion": "^12.4.3"
+  },
+  "devDependencies": {
+    "@vanilla-extract/esbuild-plugin": "^2.3.22",
+    "tsup": "^8.5.1"
   }
 }

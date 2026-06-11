@@ -1,4 +1,4 @@
-import { gridCenter, vars } from "@for-digital-divide/design-system/styles";
+import { gridCenter, vars } from "@internal/design-system/style";
 import {
   createVar,
   fallbackVar,

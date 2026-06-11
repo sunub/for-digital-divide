@@ -1,4 +1,4 @@
-import { Flex } from "@for-digital-divide/design-system";
+import { Flex } from "@internal/design-system/primitives";
 import { ArrowIcon } from "@/icons";
 import * as style from "./FormInputContainer.css";
 

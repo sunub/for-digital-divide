@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@for-digital-divide/design-system";
+import { Button } from "@internal/design-system/components";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
 import VisuallyHidden from "@/components/VisuallyHidden";

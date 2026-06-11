@@ -1,4 +1,5 @@
-import { Flex, PageFlexSection } from "@for-digital-divide/design-system";
+import { Flex } from "@internal/design-system/primitives";
+import { PageFlexSection } from "@internal/design-system/patterns";
 import { LogOutIcon } from "lucide-react";
 import { Suspense } from "react";
 import { Tooltip } from "@/components/Tooltip";

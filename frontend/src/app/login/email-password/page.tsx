@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex } from "@for-digital-divide/design-system";
+import { Flex } from "@internal/design-system/primitives";
 import { EmailAndPasswordField } from "@/components/EmailAndPasswordField";
 import { MultiStepLoginForm } from "@/components/MultiStepLoginForm/MultiStepLoginForm";
 import { MainTitle } from "./ui/MainTitle";

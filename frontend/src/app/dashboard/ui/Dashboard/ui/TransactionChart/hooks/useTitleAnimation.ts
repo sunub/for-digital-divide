@@ -1,4 +1,4 @@
-import { vars } from "@for-digital-divide/design-system";
+import { vars } from "@internal/design-system/style";
 import * as d3 from "d3";
 import { useEffect } from "react";
 

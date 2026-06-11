@@ -1,6 +1,6 @@
 "use client";
 
-import { BaseForm, Box, Flex } from "@for-digital-divide/design-system";
+import { BaseForm, Box, Flex } from "@internal/design-system/primitives";
 import { useActionState, useState } from "react";
 import { SubmitButton } from "@/components/Form/SubmitButton";
 import { ArrowIcon } from "@/icons";

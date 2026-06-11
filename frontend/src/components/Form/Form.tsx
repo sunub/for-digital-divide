@@ -1,6 +1,6 @@
 "use client";
 
-import { BaseForm, type FormProps } from "@for-digital-divide/design-system";
+import { BaseForm, type FormProps } from "@internal/design-system/primitives";
 import type { Ref } from "react";
 import { useActionState } from "react";
 import type { ActionState } from "@/app/login/types";

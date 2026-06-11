@@ -1,4 +1,4 @@
-import { Button } from "@for-digital-divide/design-system";
+import { Button } from "@internal/design-system/components";
 import Link from "next/link";
 import { memo } from "react";
 import VisuallyHidden from "@/components/VisuallyHidden";

@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  Button,
-  Flex,
-  InteractiveCard,
-  Text,
-} from "@for-digital-divide/design-system";
+import { Button, InteractiveCard, Text } from "@internal/design-system/components";
+import { Flex } from "@internal/design-system/primitives";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useState } from "react";
 import { RollingNumberList } from "../../Dashboard/ui/RollingNumberList";

@@ -1,4 +1,4 @@
-import { Text } from "@for-digital-divide/design-system";
+import { Text } from "@internal/design-system/components";
 import { getUsername } from "../../utils/getUsername";
 
 export async function Username() {

@@ -1,4 +1,5 @@
-import { Button, Flex, Surface, Text } from "@for-digital-divide/design-system";
+import { Button, Surface, Text } from "@internal/design-system/components";
+import { Flex } from "@internal/design-system/primitives";
 import * as style from "./TransactionChart.css";
 
 interface TransactionChartErrorStateProps {

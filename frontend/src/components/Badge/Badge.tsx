@@ -1,6 +1,6 @@
 "use client";
 
-import { Box } from "@for-digital-divide/design-system";
+import { Box } from "@internal/design-system/primitives";
 import clsx from "clsx";
 import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
 import { GoRocket } from "react-icons/go";

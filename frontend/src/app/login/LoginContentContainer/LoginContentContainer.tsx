@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex } from "@for-digital-divide/design-system";
+import { Flex } from "@internal/design-system/primitives";
 import type { MotionNodeAnimationOptions } from "motion/react";
 import { motion } from "motion/react";
 import { useSearchParams } from "next/navigation";
@@ -57,7 +57,6 @@ export function LoginContentContainer({
   const searchParams = useSearchParams();
   const step = searchParams.get("step") || "";
 
-  // Map step to method logic for the funnel state
   const method: LoginFunnelData["method"] =
     step === "email-input" ? "email" : step === "pin-input" ? "pin" : "default";
 

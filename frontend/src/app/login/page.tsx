@@ -1,4 +1,5 @@
-import { Grid, Text } from "@for-digital-divide/design-system";
+import { Grid } from "@internal/design-system/primitives";
+import { Text } from "@internal/design-system/components";
 import {
   MdAccountBalance,
   MdDevices,

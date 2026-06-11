@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid } from "@for-digital-divide/design-system";
+import { Grid } from "@internal/design-system/primitives";
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import * as style from "./CardContainer.css";
 

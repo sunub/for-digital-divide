@@ -1,4 +1,4 @@
-import { Button } from "@for-digital-divide/design-system";
+import { Button } from "@internal/design-system/components";
 import type { FormStatus } from "react-dom";
 import { StatusButton } from "@/components/StautsButton";
 import { useNumpadStore } from "@/context/NumpadContext";

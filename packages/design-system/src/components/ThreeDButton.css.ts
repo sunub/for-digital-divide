@@ -1,4 +1,4 @@
-import { createVar, style } from "@vanilla-extract/css";
+import { createVar, style, keyframes } from "@vanilla-extract/css";
 import { type RecipeVariants, recipe } from "@vanilla-extract/recipes";
 import { vars } from "../tokens/theme.css";
 
@@ -195,3 +195,76 @@ export const buttonRecipe = recipe({
 });
 
 export type ThreeDButtonVariants = RecipeVariants<typeof buttonRecipe>;
+
+export const waveKeyframes = keyframes({
+  "0%": {
+    transform: "scale(0.95)",
+    opacity: 0.3,
+    filter: "blur(2px) brightness(1)",
+  },
+  "50%": {
+    transform: "scale(1.22)",
+    opacity: 0.95,
+    filter: "blur(3px) brightness(1.6) saturate(1.3)",
+    boxShadow: `0 0 22px 6px color-mix(in srgb, ${toneVars.border} 90%, transparent),
+                0 0 35px 12px color-mix(in srgb, ${toneVars.border} 50%, transparent)`,
+  },
+  "100%": {
+    transform: "scale(1.4)",
+    opacity: 0,
+    filter: "blur(6px) brightness(1)",
+  },
+});
+
+export const buttonBorder = style({
+  display: "grid",
+  gridTemplateColumns: "1fr",
+  gridTemplateRows: "1fr",
+  justifyItems: "center",
+  alignItems: "center",
+  position: "absolute",
+  left: 0,
+  top: 0,
+  width: "100%",
+  height: "100%",
+  zIndex: -1,
+  transform: "translateY(-0.5px)",
+  boxSizing: "border-box",
+});
+
+export const wave = recipe({
+  base: {
+    gridArea: "1 / 1 / 2 / 2",
+    width: "calc(100% + 20px)",
+    height: "calc(100% + 20px)",
+    borderRadius: "30px",
+    border: "6px dotted transparent",
+    backgroundImage: `linear-gradient(
+      90deg,
+      color-mix(in srgb, ${toneVars.border} 60%, white) 0%,
+      color-mix(in srgb, ${toneVars.border} 80%, white) 22%,
+      color-mix(in srgb, ${toneVars.border} 95%, white) 33%,
+      color-mix(in srgb, ${toneVars.border} 100%, white) 50%,
+      color-mix(in srgb, ${toneVars.border} 95%, white) 67%,
+      color-mix(in srgb, ${toneVars.border} 80%, white) 78%,
+      color-mix(in srgb, ${toneVars.border} 60%, white) 100%
+    )`,
+    backgroundOrigin: "border-box",
+    backgroundClip: "content-box, border-box",
+    opacity: 0,
+    transition: "opacity 0.3s ease",
+    boxSizing: "border-box",
+  },
+  variants: {
+    highlighting: {
+      true: {
+        opacity: 1,
+        animation: `${waveKeyframes} 1.7s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite`,
+      },
+      false: {},
+    },
+  },
+  defaultVariants: {
+    highlighting: false,
+  },
+});

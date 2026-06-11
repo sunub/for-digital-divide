@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex } from "@for-digital-divide/design-system";
+import { Flex } from "@internal/design-system/primitives";
 import type { MotionNodeAnimationOptions } from "motion/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useSelectedLayoutSegment } from "next/navigation";

@@ -1,4 +1,4 @@
-import { gridCenter } from "@for-digital-divide/design-system";
+import { gridCenter } from "@internal/design-system/style";
 import clsx from "clsx";
 import type { HTMLAttributes } from "react";
 import { fullSize } from "@/style/Size.css";

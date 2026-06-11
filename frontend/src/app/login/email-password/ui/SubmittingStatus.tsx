@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex } from "@for-digital-divide/design-system";
+import { Flex } from "@internal/design-system/primitives";
 import type { ActionState } from "../../types";
 import { StatusLoader } from "./StatusLoader";
 

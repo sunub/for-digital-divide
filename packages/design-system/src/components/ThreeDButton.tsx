@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import type { ComponentPropsWithoutRef, ElementType } from "react";
 import { memo, useEffect, useMemo, useState } from "react";
 import * as styles from "./ThreeDButton.css";
+import clsx from "clsx";
 
 export type ThreeDButtonStatus = "idle" | "pending" | "resolved" | "rejected";
 
@@ -12,21 +13,24 @@ interface ThreeDButtonOwnProps<E extends ElementType = "button"> {
   variant?: "default" | "confirm" | "destructive";
   status?: ThreeDButtonStatus;
   as?: E;
+  highlighting?: boolean;
 }
 
 export type ThreeDButtonProps<E extends ElementType = "button"> =
   ThreeDButtonOwnProps<E> &
-    Omit<ComponentPropsWithoutRef<E>, keyof ThreeDButtonOwnProps> &
-    MotionProps;
+  Omit<ComponentPropsWithoutRef<E>, keyof ThreeDButtonOwnProps> &
+  MotionProps;
 
 function ThreeDButtonInner<T extends ElementType = "button">({
   variant = "default",
   status = "idle",
+  highlighting = false,
   onClick,
   children,
   as,
   ref,
   disabled,
+  className,
   ...props
 }: ThreeDButtonProps<T>) {
   const [isPressed, setIsPressed] = useState(false);
@@ -73,7 +77,7 @@ function ThreeDButtonInner<T extends ElementType = "button">({
     >
       <div className={styles.shellClass}>
         <span className={styles.edgeClass} />
-        <span className={styles.shadowClass} />
+        <span className={clsx(styles.shadowClass, className)} />
 
         <motion.div className={styles.frontClass}>
           <motion.span
@@ -108,6 +112,10 @@ function ThreeDButtonInner<T extends ElementType = "button">({
             {children}
           </motion.div>
         </motion.div>
+      </div>
+
+      <div className={styles.buttonBorder}>
+        <div className={styles.wave({ highlighting })} />
       </div>
     </MotionComponent>
   );

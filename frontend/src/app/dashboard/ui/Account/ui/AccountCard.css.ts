@@ -1,4 +1,4 @@
-import { vars } from "@for-digital-divide/design-system/styles";
+import { vars } from "@internal/design-system/style";
 import { style } from "@vanilla-extract/css";
 
 export const accountHeader = style({

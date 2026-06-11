@@ -19,7 +19,7 @@
     "benchmark:transaction-chart": "pnpm exec tsx scripts/benchmark-transaction-chart.ts"
   },
   "dependencies": {
-    "@for-digital-divide/design-system": "workspace:*",
+    "@internal/design-system": "workspace:*",
     "@prisma/adapter-pg": "^7.1.0",
     "@prisma/client": "^7.1.0",
     "@radix-ui/react-slot": "^1.0.2",

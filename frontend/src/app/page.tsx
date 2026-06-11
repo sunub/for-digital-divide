@@ -1,18 +1,15 @@
 "use client";
 
-import {
-  Flex,
-  Grid,
-  gridLayout,
-  Text,
-  ThreeDButton,
-} from "@for-digital-divide/design-system";
+import { Text, ThreeDButton } from "@internal/design-system/components";
+import { Flex, Grid } from "@internal/design-system/primitives";
+import { actionNextStepGlow } from "@internal/design-system/style";
 import Link from "next/link";
 import { memo, useCallback } from "react";
 import { Instruction } from "@/components/Instruction";
 import useToggle from "@/shared/hooks/use-toggle";
 import { useHistory } from "@/shared/hooks/useHistory";
 import { SmallPhone } from "./intro/ui/SmallPhone";
+import { gridLayout } from "@internal/design-system/style/Grid.css";
 
 interface StartButtonProps {
   handleHover: () => void;
@@ -34,6 +31,7 @@ const StartButton = memo(function StartButton({
         onClick={handleStart}
         onHoverStart={handleHover}
         onMouseLeave={handleHover}
+        highlighting={true}
         href={"/intro"}
       >
         시작하기

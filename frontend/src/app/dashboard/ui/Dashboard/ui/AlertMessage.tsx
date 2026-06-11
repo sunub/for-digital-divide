@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Flex, Text } from "@for-digital-divide/design-system";
+import { Button, Text } from "@internal/design-system/components";
+import { Flex } from "@internal/design-system/primitives";
 import Link from "next/link";
 import { AlertDialog, AlertDialogContent } from "@/components/AlertDialog";
 import { AlertCloseButton } from "../../Alert/AlertCloseButton";

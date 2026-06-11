@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex } from "@for-digital-divide/design-system";
+import { Flex } from "@internal/design-system/primitives";
 import { UserIcon } from "lucide-react";
 import { useState } from "react";
 import { TextField } from "@/components/TextField/TextField";

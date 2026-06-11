@@ -1,4 +1,4 @@
-import { Grid } from "@for-digital-divide/design-system";
+import { Grid } from "@internal/design-system/primitives";
 import { Suspense } from "react";
 import { Tooltip } from "@/components/Tooltip";
 import { requireAuthSession } from "@/entities/auth/session.server";

@@ -1,6 +1,6 @@
 "use client";
 
-import { BaseForm } from "@for-digital-divide/design-system";
+import { BaseForm } from "@internal/design-system/primitives";
 import { SubmittingStatus } from "@/app/login/email-password/ui/SubmittingStatus";
 import type { ActionState } from "@/app/login/types";
 import { useDemoLoginFlow } from "@/shared/hooks/useDemoLoginFlow";

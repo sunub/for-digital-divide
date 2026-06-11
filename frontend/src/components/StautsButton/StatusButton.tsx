@@ -1,8 +1,5 @@
-import type {
-  ButtonStatus,
-  NativeButtonProps,
-} from "@for-digital-divide/design-system";
-import { Button } from "@for-digital-divide/design-system";
+import { ButtonStatus, NativeButtonProps } from "@internal/design-system/components";
+import { Button } from "@internal/design-system/components";
 import * as React from "react";
 
 interface StatusButtonProps extends Omit<NativeButtonProps, "status"> {

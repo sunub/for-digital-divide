@@ -1,4 +1,5 @@
-import { AppLink, Flex, Grid, Text } from "@for-digital-divide/design-system";
+import { AppLink, Text } from "@internal/design-system/components";
+import { Flex, Grid } from "@internal/design-system/primitives";
 import { EmailCard } from "../ui/EmailCard";
 import { PinNumberCard } from "../ui/PinNumberCard";
 
