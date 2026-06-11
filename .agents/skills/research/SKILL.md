@@ -17,7 +17,11 @@ Compress the context by writing the code structure and the purpose of the curren
       - **Core Domains**: Business steps, main route entries (e.g. `Pin`, `VerifyStep`, `email-password`).
       - **Auxiliary Domains**: Folders containing `hooks`, `utils`, `types`, `ui`, `style`, `components`.
     
-    - For **Core Domains**: Recursively call the `research` skill inside those subdirectories (up to Max Depth 2) to ensure they have their own `context.md` files first.
+    - For **Core Domains**: Parallelly delegate research tasks to specialized subagents.
+      - Queue all Depth-1 Core Domain directories.
+      - Run up to **3 parallel subagents** concurrently using the `invoke_subagent` tool.
+      - As each subagent completes, pull the next target domain from the queue until all Core Domains are researched.
+      - Subagents must write local `context.md` files in their respective subfolders.
     - For **Auxiliary Domains**: Do NOT generate separate `context.md` files inside them. Instead, read the exported functions, custom hooks, and type signatures from the source files and inline them directly in the parent/root `context.md` under a dedicated "Shared Assets & Helpers" section.
     
     - Infer the purpose and role of the current directory from the bottom up using only these two pieces of information (structure + sub-context / signatures), and write a new, condensed context.md.
@@ -35,18 +39,25 @@ When entering a domain or after code modifications, the agent calculates a **Cha
 ### Execution Branching Rules
 - **Score = 0**: Use cached `context.md` directly. No tools or tokens spent.
 - **0 < Score <= 3**: **Inline Patch**: Main agent parses local `git diff` and applies minor text edits to existing `context.md` in the current session. No subagent spawned.
-- **Score > 3**: **Subagent Delegation**: Show token/time estimate to the user and request approval. If approved, delegate recursive research to a specialized subagent.
+- **Score > 3**: **Subagent Delegation**: Show token/time estimate to the user and request approval. If approved, delegate recursive research to parallelized specialized subagents.
 
 ## Subagent Delegation Interface
 
-When executing a large/structural update, the subagent is triggered with:
+When executing a large/structural update, parallel subagents are triggered with:
 - **TypeName**: `self` (inheriting file read/write and execution permissions)
 - **Role**: `Recursive Domain Researcher`
 - **Workspace**: `inherit` (sharing uncommitted workspace modifications)
 
 ### Subagent Prompt Metadata
-- **TargetDirectory**: Relative path to target domain (e.g. `frontend/src/app/login`)
+- **TargetDirectory**: Relative path to target domain (e.g. `frontend/src/app/login/Pin`)
 - **PreviousHash**: Git reference point before the changes
+
+<HARD-GATE>
+**Subagent Constraints & Filtering**
+- **Target Filtering**: Subagents MUST consult [filtering-rules.md](file:///Users/sunub/workspace/for-digital-divide/frontend/../.agents/skills/research/references/filtering-rules.md) for patterns to include/exclude. Do NOT read style files (`*.css`, `*.css.ts`) or stateless visual-only UI components.
+- **Step Cap**: Subagents must halt and report `DONE_WITH_CONCERNS` if they hit a hard limit of **15 steps**.
+- **Execution Isolation**: Subagents MUST restrict their file reads and modifications strictly to their assigned `TargetDirectory` and its subdirectories.
+</HARD-GATE>
 
 ## Anti-Pattern: "Common Mistakes in Search and Context Compression"
 
@@ -54,7 +65,7 @@ Simply listing files or using inefficient commands undermines the core purpose o
 
 1. Indiscriminate Full Tree Traversal (The "DFS" Trap)
 - Symptom: Using commands like find . -name "*context.md" to locate all files.
-- Reason: Internally traverses deep subdirectories causing severe resource waste.
+- Reason: Internally traverses deep subdirectories causing resource waste.
 - Solution: Use optimized tools (like rg --files --glob "*context.md") that behave closer to a Breadth-First Search (BFS).
 
 2. Blind Overwrite
@@ -66,49 +77,13 @@ Simply listing files or using inefficient commands undermines the core purpose o
 You must create tasks for each of the following items and complete them in order:
 
 1. Calculate Severity Score — Determine change severity based on file modification metrics.
-2. Execute Branching Logic — Route to Cache, Inline Patch, or Subagent Delegation.
+2. Execute Branching Logic — Route to Cache, Inline Patch, or Parallel Subagent Delegation.
 3. Prompt User for Cost (If Score > 3) — Disclose estimated token/time cost and await approval.
-4. Dispatch Subagent — Invoke `Recursive Domain Researcher` subagent with TargetDirectory.
-5. Assemble Bottom-up Context — Subagent performs core recursion and auxiliary signature extraction.
-6. Apply & Save context.md — Update context.md while preserving developer notes.
-7. Stage and Commit — Add context.md to staging and commit.
-
-## The Process
-
-<HARD-GATE>
-**Source Code Exploration Limits**
-- Do NOT read the entire contents of files inside auxiliary directories if they exceed 10KB or 100 lines.
-- Only parse exported signatures and JSDoc blocks.
-</HARD-GATE>
-
-<HARD-GATE>
-**Recursion Depth Limit**
-- The maximum recursion depth is 2 (Depth 2). Do NOT recurse deeper. If structures are nested beyond Depth 2, recommend architecture refactoring to the user. (This is distinct from the 3-level tree layout visualization in the document template).
-</HARD-GATE>
-
-<HARD-GATE>
-**Excluded Folders**
-- Always exclude `.git`, `node_modules`, `dist`, `.next`, `build`, `.gemini`, and `.gitignore` patterns.
-</HARD-GATE>
-
-<HARD-GATE>
-**Execution Isolation**
-- The subagent MUST restrict its file reads and modifications strictly to the specified `TargetDirectory` and its subdirectories.
-</HARD-GATE>
-
-<HARD-GATE>
-**Standard Reporting Protocol**
-- The subagent must report back using the following exact format upon completion:
-  - **Status**: DONE | DONE_WITH_CONCERNS | BLOCKED
-  - **Estimated Tokens Used**: [Calculated token estimate]
-  - **Files Updated**: [List of absolute paths to updated context.md files]
-  - **Summary**: [3-line summary of major domain changes]
-</HARD-GATE>
-
-<CONSTRAINT>
-**Manual Note Preservation**
-- Always preserve manually written notes in `context.md` under a `## Manual Notes` section at the top of the file.
-</CONSTRAINT>
+4. Dispatch Parallel Subagents — Invoke up to 3 concurrent `Recursive Domain Researcher` subagents.
+5. Manage Queue — As subagents complete, spawn new ones for remaining Core Domains.
+6. Assemble Bottom-up Context — Aggregate sub-contexts and extract auxiliary signatures.
+7. Apply & Save root context.md — Save while preserving developer notes.
+8. Stage and Commit — Add context.md files to staging and commit.
 
 ## Document Structure Template
 
