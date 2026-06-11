@@ -1,5 +1,5 @@
-import { style } from "@vanilla-extract/css";
 import { vars } from "@internal/design-system/style";
+import { style } from "@vanilla-extract/css";
 
 export const phoneContentLayout = style({
   display: "flex",

@@ -1,5 +1,5 @@
-import { Flex } from "@internal/design-system/primitives";
 import { PageFlexSection } from "@internal/design-system/patterns";
+import { Flex } from "@internal/design-system/primitives";
 import { LogOutIcon } from "lucide-react";
 import { Suspense } from "react";
 import { Tooltip } from "@/components/Tooltip";

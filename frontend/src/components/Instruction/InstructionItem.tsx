@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Box } from "@internal/design-system/primitives";
+import { Box, Flex } from "@internal/design-system/primitives";
 import { vars } from "@internal/design-system/style";
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import clsx from "clsx";

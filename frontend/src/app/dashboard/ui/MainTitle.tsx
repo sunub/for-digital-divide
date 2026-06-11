@@ -1,7 +1,7 @@
 "use client";
 
-import { Flex } from "@internal/design-system/primitives";
 import { Text } from "@internal/design-system/components";
+import { Flex } from "@internal/design-system/primitives";
 import { motion, useSpring } from "motion/react";
 import { memo, useEffect } from "react";
 import * as style from "./MainTitle.css";

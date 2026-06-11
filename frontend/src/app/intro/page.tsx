@@ -1,8 +1,10 @@
 "use client";
 
-import { Flex, Grid } from "@internal/design-system/primitives";
-import { gridLayout } from "@internal/design-system/style/Grid.css";
 import { Button, Text } from "@internal/design-system/components";
+import { Flex, Grid } from "@internal/design-system/primitives";
+import { actionNextStepGlow } from "@internal/design-system/style";
+import { gridLayout } from "@internal/design-system/style/Grid.css";
+import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { memo, useCallback } from "react";
 import {
@@ -20,8 +22,6 @@ import { Instruction } from "@/components/Instruction";
 import { useHistory } from "@/shared/hooks/useHistory";
 import { Device } from "@/shared/layout";
 import * as styles from "./page.css";
-import clsx from "clsx";
-import { actionNextStepGlow } from "@internal/design-system/style";
 
 const InformationGuide = memo(function InformationGuide() {
   return (

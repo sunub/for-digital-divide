@@ -1,5 +1,5 @@
-import { type BaseStyle } from "@internal/design-system/style";
 import { Box } from "@internal/design-system/primitives";
+import type { BaseStyle } from "@internal/design-system/style";
 import clsx from "clsx";
 import type { ComponentPropsWithoutRef } from "react";
 import { textFieldGroup } from "./TextFieldGroup.css";

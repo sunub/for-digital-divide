@@ -1,8 +1,8 @@
 "use client";
 
+import { ThreeDButton } from "@internal/design-system/components";
 import { goToHome } from "@/utils/revalidate";
 import * as styles from "./error.css";
-import { ThreeDButton } from "@internal/design-system/components";
 
 export default function ErrorPage({
   error,

@@ -1,6 +1,9 @@
 "use client";
 
-import { Button, type NativeButtonProps } from "@internal/design-system/components";
+import {
+  Button,
+  type NativeButtonProps,
+} from "@internal/design-system/components";
 import clsx from "clsx";
 import { useState } from "react";
 import { useTooltipToggle } from "../hooks/useTooltipToggle";

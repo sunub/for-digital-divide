@@ -88,8 +88,8 @@
   --pad-button-height: 65px;
   --pad-button-radius: 8px;
   --pad-button-scale: 1;
-  --device-width: 437.5px;
-  --device-height: 875px;
+  --device-width: 370px;
+  --device-height: 781px;
   --intro-phone-height: calc(var(--device-height) / 2.5);
 }
 

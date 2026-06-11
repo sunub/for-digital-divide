@@ -1,5 +1,5 @@
-import { Box } from "@internal/design-system/primitives";
 import { Text } from "@internal/design-system/components";
+import { Box } from "@internal/design-system/primitives";
 import { useTransactionChart } from "../hooks/useTransactionChart";
 import { useTransactionViewMode } from "../TransactionProvider";
 import type { DailyData } from "../types";

@@ -1,6 +1,10 @@
 "use client";
 
-import { Button, InteractiveCard, Text } from "@internal/design-system/components";
+import {
+  Button,
+  InteractiveCard,
+  Text,
+} from "@internal/design-system/components";
 import { Flex } from "@internal/design-system/primitives";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useState } from "react";

@@ -9,8 +9,8 @@ import EmailPasswordLogin from "../email-password/page";
 import { LOGIN_FUNNEL_STEPS, type LoginFunnelData } from "../funnelConfig";
 import { LoginSelection } from "../LoginSelection";
 import { LoginPinPage } from "../Pin";
-import { VerifyStep } from "../VerifyStep/VerifyStep";
 import { ToastMessage } from "../ui/ToastMessage";
+import { VerifyStep } from "../VerifyStep/VerifyStep";
 
 interface LoginContentContainerProps {
   hasPinLoginAvailable: boolean;
@@ -62,10 +62,10 @@ export function LoginContentContainer({
     step === "email-input"
       ? "email"
       : step === "pin-input"
-      ? "pin"
-      : step === "verify" || !step
-      ? "verify"
-      : "default";
+        ? "pin"
+        : step === "verify" || !step
+          ? "verify"
+          : "default";
 
   const formData: LoginFunnelData = {
     method,

@@ -2,7 +2,6 @@ import clsx from "clsx";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import * as style from "./style/CardLayout.css";
-import { actionNextStepGlow } from "@internal/design-system/style";
 
 interface CardLayoutProps {
   children: ReactNode;

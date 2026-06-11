@@ -6,7 +6,7 @@ import type { ComponentPropsWithoutRef, Ref } from "react";
 import * as styles from "./InstructionPanel.css";
 
 export interface InstructionPanelProps
-  extends ComponentPropsWithoutRef<typeof Flex> { }
+  extends ComponentPropsWithoutRef<typeof Flex> {}
 
 export function InstructionPanel({
   className,

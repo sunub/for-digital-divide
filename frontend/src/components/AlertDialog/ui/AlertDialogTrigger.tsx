@@ -1,7 +1,9 @@
 "use client";
 
-import { NativeButtonProps } from "@internal/design-system/components";
-import { Button } from "@internal/design-system/components";
+import {
+  Button,
+  type NativeButtonProps,
+} from "@internal/design-system/components";
 import { useAlertDialogContext } from "../hooks/useAlertDialogContext";
 import * as style from "./Alert.css";
 
