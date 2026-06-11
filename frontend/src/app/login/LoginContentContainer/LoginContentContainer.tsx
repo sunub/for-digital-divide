@@ -3,17 +3,27 @@
 import { Flex } from "@internal/design-system/primitives";
 import type { MotionNodeAnimationOptions } from "motion/react";
 import { motion } from "motion/react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useFunnel } from "@/shared/hooks/useFunnel/useFunnel";
-import EmailPasswordLogin from "../email-password/page";
-import { LOGIN_FUNNEL_STEPS, type LoginFunnelData } from "../funnelConfig";
-import { LoginSelection } from "../LoginSelection";
-import { LoginPinPage } from "../Pin";
+import { ONBOARDING_STEPS } from "../funnelConfig";
+import { useOnboardingStore } from "@/store/onboarding-store";
+import { useIsMounted } from "@/shared/hooks/useIsMounted";
 import { ToastMessage } from "../ui/ToastMessage";
-import { VerifyStep } from "../VerifyStep/VerifyStep";
+
+// 10개 단계별 컴포넌트 임포트
+import IntroStep from "../components/IntroStep";
+import VerifySelectionStep from "../components/VerifySelectionStep";
+import VerifyInfoStep from "../components/VerifyInfoStep";
+import VerifyOtpStep from "../components/VerifyOtpStep";
+import TermsStep from "../components/TermsStep";
+import IdCardSelectionStep from "../components/IdCardSelectionStep";
+import IdCardInfoStep from "../components/IdCardInfoStep";
+import AccountStep from "../components/AccountStep";
+import SuccessStep from "../components/SuccessStep";
+import PinRegisterStep from "../components/PinRegisterStep";
 
 interface LoginContentContainerProps {
-  hasPinLoginAvailable: boolean;
+  hasPinLoginAvailable: boolean; // 기존 프롭 유지
   reason?: string;
 }
 
@@ -52,31 +62,36 @@ export function AnimationPresenceWrapper({
 }
 
 export function LoginContentContainer({
-  hasPinLoginAvailable,
   reason,
 }: LoginContentContainerProps) {
-  const searchParams = useSearchParams();
-  const step = searchParams.get("step") || "";
+  const isMounted = useIsMounted();
+  const state = useOnboardingStore();
+  const router = useRouter();
 
-  const method: LoginFunnelData["method"] =
-    step === "email-input"
-      ? "email"
-      : step === "pin-input"
-        ? "pin"
-        : step === "verify" || !step
-          ? "verify"
-          : "default";
+  const funnel = useFunnel(isMounted ? ONBOARDING_STEPS : [], state);
 
-  const formData: LoginFunnelData = {
-    method,
-    hasPinLoginAvailable,
-    isSeedingComplete: false,
+  if (!isMounted) {
+    return (
+      <Flex
+        direction={"column"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        style={{
+          width: "100%",
+          minHeight: "450px", // CLS 방지를 위한 고정 최소 높이 설정
+        }}
+      >
+        로딩 중...
+      </Flex>
+    );
+  }
+
+  const currentStepId = funnel.currentStepId;
+
+  const handleCompleteOnboarding = () => {
+    state.resetOnboarding(); // 스토어 초기화
+    router.replace("/dashboard");
   };
-
-  const { currentStepId } = useFunnel<LoginFunnelData>(
-    LOGIN_FUNNEL_STEPS,
-    formData,
-  );
 
   return (
     <Flex
@@ -84,18 +99,23 @@ export function LoginContentContainer({
       alignItems={"center"}
       justifyContent={"center"}
       gap={"3rem"}
+      style={{
+        width: "100%",
+        minHeight: "450px", // CLS 방지를 위한 고정 최소 높이 설정
+      }}
     >
       {reason && <ToastMessage reason={reason} />}
       <AnimationPresenceWrapper animationKey={currentStepId}>
-        {currentStepId === "verify" && <VerifyStep />}
-
-        {currentStepId === "selection" && (
-          <LoginSelection hasPinLoginAvailable={hasPinLoginAvailable} />
-        )}
-
-        {currentStepId === "email-input" && <EmailPasswordLogin />}
-
-        {currentStepId === "pin-input" && <LoginPinPage />}
+        {currentStepId === "intro" && <IntroStep onNext={funnel.next} />}
+        {currentStepId === "verify-selection" && <VerifySelectionStep onNext={funnel.next} />}
+        {currentStepId === "verify-info" && <VerifyInfoStep onNext={funnel.next} />}
+        {currentStepId === "verify-otp" && <VerifyOtpStep onNext={funnel.next} />}
+        {currentStepId === "terms" && <TermsStep onNext={funnel.next} />}
+        {currentStepId === "id-card-selection" && <IdCardSelectionStep onNext={funnel.next} />}
+        {currentStepId === "id-card-info" && <IdCardInfoStep onNext={funnel.next} />}
+        {currentStepId === "account" && <AccountStep onNext={funnel.next} />}
+        {currentStepId === "success" && <SuccessStep onNext={funnel.next} />}
+        {currentStepId === "pin-register" && <PinRegisterStep onComplete={handleCompleteOnboarding} />}
       </AnimationPresenceWrapper>
     </Flex>
   );
