@@ -372,14 +372,9 @@ button {
 }
 
 @container devsite-content (height < 1035px) {
-  :root {
+  * {
     --device-width: 312.5px;
     --device-height: 625px;
-  }
-}
-
-@container devsite-content (height < 1035px) {
-  * {
     --pad-button-text-size: 2rem;
     --pad-button-radius: 8px;
     --pad-button-scale: 0.8;
