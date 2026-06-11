@@ -16,3 +16,7 @@ VerifyStep/
 ├── VerifyStep.css.ts
 └── VerifyStep.tsx
 ```
+
+### File Links
+- [VerifyStep.tsx](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/VerifyStep/VerifyStep.tsx)
+- [VerifyStep.css.ts](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/VerifyStep/VerifyStep.css.ts)

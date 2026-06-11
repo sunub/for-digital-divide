@@ -9,8 +9,8 @@
 
 ## 3. Shared Assets & Helpers
 ### Hooks (hooks/)
-- `useEmailValidation() => [string | null, (value: unknown) => boolean]`: Client-side validation hook using a Zod email schema.
-- `usePasswordValidation() => [string | null, (value: unknown) => boolean]`: Client-side validation hook checking password length and complexity.
+- `useEmailValidation() => [string | null, (value: unknown) => boolean]`: Client-side validation hook using a Zod email schema (`EmailSchema`).
+- `usePasswordValidation() => [string | null, (value: unknown) => boolean]`: Client-side validation hook checking password length and complexity constraints via `PasswordSchema`.
 - `useSeedingDemoData(isSeedingProgress: boolean, onSeedingComplete: (completed: boolean) => void) => void`: Triggers database seeding of mock account and transaction data for new logins.
 
 ### Components (ui/)
@@ -20,7 +20,7 @@
 - `SubmittingStatus({ actionState, isSubmitting, isPending, isSeedingProgress }) => JSX.Element`: Evaluates form submission and seeding states to render appropriate status loaders.
 
 ### Utilities (utils/)
-- `emailPasswordLoginAction(prevState: ActionState, formData: FormData) => Promise<ActionState>`: Server action to validate credentials, authenticate the user, update the database session ID, and write the session cookie.
+- `emailPasswordLoginAction(prevState: ActionState, formData: FormData) => Promise<ActionState>`: Server action to validate credentials, authenticate the user, update the database session ID, and write the session cookie. Defined in `utils/emailPaswordLoginAction.ts`.
 - `verifySessionCookie() => Promise<void>`: Server action that checks for an active session and redirects to `/dashboard` if already authenticated.
 
 ## 4. Directory Structure (Max Depth 3)

@@ -7,7 +7,7 @@
 
 ## 2. Core Sub-domains
 - [[LoginContentContainer](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/LoginContentContainer/context.md)]: Manages the client-side rendering of the multi-step onboarding/funnel steps and transitions.
-- [[LoginGuide](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/LoginGuide/context.md)]: Displays guides on the left panel (Email login guide, PIN login guide, identity verification steps, selection guide).
+- [[LoginGuide](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/LoginGuide/context.md)]: Dynamically renders educational guides/instructions corresponding to the current login step (`step` parameter from search parameters).
 - [[LoginSelection](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/LoginSelection/context.md)]: Entry selection layout allowing users to pick between Email/Password or PIN login.
 - [[Pin](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/Pin/context.md)]: Handles 4-digit PIN authentication using a secure random numpad.
 - [[VerifyStep](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/VerifyStep/context.md)]: Identity verification route prompting choices like 휴대폰인증 (SMS validation) or certificates.
@@ -44,6 +44,7 @@
 - `CardLayout(props) => JSX.Element`: Flex/Link container structure for selecting login methods.
 - `CardContent(props) => JSX.Element`: Inner headers, body, and footers for the method cards.
 - `CardSkeleton({ skeletonRef }) => JSX.Element`: Renders the placeholder card before mount animations finalize.
+- `SmallCard(props) => JSX.Element`: A compact representation card component.
 
 ## 4. Directory Structure (Max Depth 3)
 ```
