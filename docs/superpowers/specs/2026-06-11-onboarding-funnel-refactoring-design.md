@@ -1,60 +1,57 @@
-# Onboarding Funnel Zustand Refactoring Design
+# 온보딩 퍼널 Zustand 리팩토링 설계 (Onboarding Funnel Zustand Refactoring Design)
 
-This document details the refactoring design for replacing the temporary local page navigation/atoms in the login and signup flow with a unified **Zustand** store and Next.js query-parameter-based **useFunnel** hook.
+본 문서는 로그인 및 회원가입 온보딩 플로우를 기존의 개별 Atoms/로컬 상태 방식에서 **Zustand** 스토어 및 Next.js 쿼리 파라미터 기반의 **useFunnel** 훅을 사용하는 구조로 전환하기 위한 상세 리팩토링 설계를 담고 있습니다.
 
-## Purpose
+## 목표 (Purpose)
 
-The user flows from `intro` -> `verify` -> `verify-form` -> `약관 동의` -> `신분증 인증` -> `계좌 인증` -> `성공` -> `핀번호 등록` -> `대쉬보드로 이동` need to be unified into a sequential, robust, multi-step funnel. We are replacing the scattered state management with a unified Zustand store persisted in `sessionStorage` (preventing state loss on page refresh) and utilizing the `useFunnel` hook to manage query-string-based page transitions and step-guards.
+사용자 흐름(`intro` -> `verify` -> `verify-form` -> `약관 동의` -> `신분증 인증` -> `계좌 인증` -> `성공` -> `핀번호 등록` -> `대쉬보드로 이동`)을 유기적이고 안전한 다단계 퍼널(Funnel)로 통합합니다. 
+기존 프로젝트의 Jotai Atoms 등의 상태 관리를 `sessionStorage`에 데이터를 보관하는 단일 Zustand 스토어로 대체하여 페이지 새로고침 시에도 작성 데이터가 손실되지 않도록 방지하고, `useFunnel` 훅과 스텝 가드(Step Guard)를 통해 비정상적인 단계 진입을 차단합니다.
 
-## User Review Required
+## 사용자 검토 필요 사항 (User Review Required)
 
 > [!NOTE]
-> All intermediate onboarding states (phone verification, terms agreement, ID verification, account verification, and PIN code) will be persisted in `sessionStorage` under the key `"onboarding-storage"`. This is cleared automatically only when the user completes the final step (navigating to the dashboard).
+> 본인인증 정보, 약관 동의 여부, 신분증 정보, 계좌 인증 상태, 임시 PIN 번호 등 모든 중간 단계 온보딩 상태는 `sessionStorage` 내 `"onboarding-storage"` 키로 보관됩니다. 이 상태는 사용자가 모든 온보딩을 마치고 대시보드로 최종 이동하는 시점에 한꺼번에 리셋 처리됩니다.
 
-## Open Questions
-
-None at this stage. The flow and transition logic have been aligned and approved by the user.
-
-## Architecture & Data Flow
+## 아키텍처 및 데이터 흐름 (Architecture & Data Flow)
 
 ```mermaid
 graph TD
-    A[intro] -->|Click Next| B[verify]
-    B -->|Select Mobile Authentication| C[verify-form]
-    C -->|Submit SMS OTP & Verify| D[terms]
-    D -->|Agree to Terms| E[id-card]
-    E -->|Upload ID & Verify| F[account]
-    F -->|1 Won Transfer Verify| G[success]
-    G -->|Click Next| H[pin-register]
-    H -->|Register 6-digit PIN| I[Clear Store & Redirect to Dashboard]
+    A[intro] -->|다음 단계 클릭| B[verify]
+    B -->|휴대폰 본인인증 선택| C[verify-form]
+    C -->|SMS OTP 제출 및 인증| D[약관 동의]
+    D -->|동의 완료| E[신분증 인증]
+    E -->|신분증 업로드 및 인증| F[계좌 인증]
+    F -->|1원 송금 검증 완료| G[성공]
+    G -->|다음 단계 클릭| H[핀번호 등록]
+    H -->|6자리 간편비밀번호 설정| I[스토어 리셋 및 대시보드로 이동]
 ```
 
-Each step's access is protected by step-guards (`shouldRender`) defined in the funnel configuration, verifying that the prerequisite state in the Zustand store is present and valid.
+각 단계로의 진입 권한은 퍼널 설정에 정의된 `shouldRender` 스텝 가드 검증 조건에 의해 보호되며, 이전 단계의 필수 정보가 Zustand 스토어에 올바르게 존재하는지 점검하여 허용되지 않은 직접 링크 진입을 자동 리다이렉트 처리합니다.
 
-## Proposed Changes
+## 변경 제안 사항 (Proposed Changes)
 
-### Zustand Store Configuration
-A new Zustand store will be created to manage onboarding/sign-up state.
+### Zustand 스토어 설정
+온보딩 및 회원가입 전반의 상태를 담당하는 전용 Zustand 스토어를 생성합니다.
 
 #### [NEW] [onboarding-store.ts](file:///Users/sunub/workspace/for-digital-divide/frontend/src/store/onboarding-store.ts)
-- Defines the `OnboardingState` and `OnboardingActions`.
-- Uses `persist` middleware with `createJSONStorage(() => sessionStorage)`.
+- `OnboardingState` 및 `OnboardingActions` 정의.
+- `persist` 미들웨어와 `createJSONStorage(() => sessionStorage)`를 통한 새로고침 복구 기능 제공.
 
-### Onboarding Funnel Page
-Refactor `/login/email-password/page.tsx` or create a unified funnel component that coordinates steps.
+### 온보딩 퍼널 페이지 리팩토링
+`/login/email-password/page.tsx` 또는 독립된 퍼널 컨트롤러 페이지를 구현하여 각 하위 단계를 통합 제어합니다.
 
 #### [MODIFY] [page.tsx](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/email-password/page.tsx)
-- Unified entry point for the onboarding funnel.
-- Renders step components conditionally based on `funnel.currentStepId`.
+- 온보딩 퍼널의 단일 진입점 역할을 하도록 리팩토링.
+- `funnel.currentStepId` 값에 따라 개별 단계 컴포넌트(`IntroStep`, `VerifyStep`, `TermsStep`, `IdCardStep`, `AccountStep` 등)를 조건부 렌더링.
 
 #### [NEW] [funnelConfig.ts](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/email-password/funnelConfig.ts)
-- Contains step definitions (`ONBOARDING_STEPS`) and their corresponding `shouldRender` predicates.
+- 퍼널 단계 정의(`ONBOARDING_STEPS`) 및 각 단계별 필수 상태 요구 사항 조건(`shouldRender`) 설정.
 
-## Verification Plan
+## 검증 계획 (Verification Plan)
 
-### Manual Verification
-1. Navigate to the onboarding start step.
-2. Complete each step in order (`intro` -> `verify` -> `verify-form` -> `terms` -> `id-card` -> `account` -> `success` -> `pin-register`).
-3. Refresh the page at any step (e.g. `id-card` or `account`) and verify that the user remains on the same step and no entered data is lost.
-4. Try to navigate to `account` directly via url `?step=account` without completing previous steps, and verify that the step-guard redirects the user back to the first incomplete step.
-5. Finish the onboarding flow and verify that the session storage is cleared and the user is redirected to the `/dashboard`.
+### 수동 검증 (Manual Verification)
+1. 온보딩 시작 단계(`intro`)로 접근합니다.
+2. `intro` -> `verify` -> `verify-form` -> `약관 동의` -> `신분증 인증` -> `계좌 인증` -> `성공` -> `핀번호 등록` 순서대로 단계들을 완료합니다.
+3. 중간 단계(예: 신분증 인증 또는 계좌 인증)에서 브라우저를 새로고침한 뒤, 입력 상태가 그대로 보존되며 동일한 단계에 머무르는지 확인합니다.
+4. 이전 단계를 건너뛰고 주소창에 `?step=account`를 직접 쳐서 이동해 본 뒤, 스텝 가드 조건에 의해 첫 단계 혹은 올바른 미완료 단계로 리다이렉트되는지 확인합니다.
+5. 핀번호 등록을 마친 뒤, 대시보드로 정상 리다이렉트 되는지와 `sessionStorage`에 보존되었던 온보딩 데이터가 깨끗이 초기화되었는지 검증합니다.
