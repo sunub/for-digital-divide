@@ -18,12 +18,35 @@ Compress the context by writing the code structure and the purpose of the curren
       - **Auxiliary Domains**: Folders containing `hooks`, `utils`, `types`, `ui`, `style`, `components`.
     
     - For **Core Domains**: Recursively call the `research` skill inside those subdirectories (up to Max Depth 2) to ensure they have their own `context.md` files first.
-    - For **Auxiliary Domains**: Do NOT generate separate `context.md` files inside them. Instead, read the exported functions, custom hooks, and type signatures from the source files and inline them directly in the parent/root `context.md` under a dedicated "공유 헬퍼 및 자산" section.
+    - For **Auxiliary Domains**: Do NOT generate separate `context.md` files inside them. Instead, read the exported functions, custom hooks, and type signatures from the source files and inline them directly in the parent/root `context.md` under a dedicated "Shared Assets & Helpers" section.
     
     - Infer the purpose and role of the current directory from the bottom up using only these two pieces of information (structure + sub-context / signatures), and write a new, condensed context.md.
 
 - Case C (Not found anywhere): Analyze the code structure and the types used in the current directory to generate a new, condensed version.
 </HARD-GATE>
+
+## Hybrid Update Strategy (Change Severity Score)
+
+When entering a domain or after code modifications, the agent calculates a **Change Severity Score**:
+- **Modified/Added File**: `+1 point` per file
+- **Directory Structural Change** (new folder, renamed folder): `+5 points`
+- **Configuration/Entry Point Change** (e.g. `funnelConfig.ts`, `page.tsx`): `+3 points`
+
+### Execution Branching Rules
+- **Score = 0**: Use cached `context.md` directly. No tools or tokens spent.
+- **0 < Score <= 3**: **Inline Patch**: Main agent parses local `git diff` and applies minor text edits to existing `context.md` in the current session. No subagent spawned.
+- **Score > 3**: **Subagent Delegation**: Show token/time estimate to the user and request approval. If approved, delegate recursive research to a specialized subagent.
+
+## Subagent Delegation Interface
+
+When executing a large/structural update, the subagent is triggered with:
+- **TypeName**: `self` (inheriting file read/write and execution permissions)
+- **Role**: `Recursive Domain Researcher`
+- **Workspace**: `inherit` (sharing uncommitted workspace modifications)
+
+### Subagent Prompt Metadata
+- **TargetDirectory**: Relative path to target domain (e.g. `frontend/src/app/login`)
+- **PreviousHash**: Git reference point before the changes
 
 ## Anti-Pattern: "Common Mistakes in Search and Context Compression"
 
@@ -42,13 +65,13 @@ Simply listing files or using inefficient commands undermines the core purpose o
 
 You must create tasks for each of the following items and complete them in order:
 
-1. Execute Optimized Search — Search for existing context.md files.
-2. Categorize Subdirectories — Divide Depth-1 subdirectories into Core Domain and Auxiliary.
-3. Execute Core Recursion — Recursively call research skill on Core Domains (Max Depth 2).
-4. Perform Auxiliary Signature Extraction — Extract exported names, types, and JSDocs from Auxiliary directories.
-5. Combine & Infer Context — Pull sub-context files and auxiliary signatures together bottom-up.
-6. Draft & Integrate — Draft updated context.md, ensuring manual developer notes are preserved.
-7. Save & Commit — Write context.md in the current directory and commit.
+1. Calculate Severity Score — Determine change severity based on file modification metrics.
+2. Execute Branching Logic — Route to Cache, Inline Patch, or Subagent Delegation.
+3. Prompt User for Cost (If Score > 3) — Disclose estimated token/time cost and await approval.
+4. Dispatch Subagent — Invoke `Recursive Domain Researcher` subagent with TargetDirectory.
+5. Assemble Bottom-up Context — Subagent performs core recursion and auxiliary signature extraction.
+6. Apply & Save context.md — Update context.md while preserving developer notes.
+7. Stage and Commit — Add context.md to staging and commit.
 
 ## The Process
 
@@ -60,8 +83,7 @@ You must create tasks for each of the following items and complete them in order
 
 <HARD-GATE>
 **Recursion Depth Limit**
-- The maximum recursion depth for executing the research skill recursively is 2 (Depth 2). Do NOT recurse deeper. If structures are nested beyond Depth 2, recommend architecture refactoring to the user.
-- Note: This is distinct from the directory tree visualization depth in the generated `context.md` (which can be up to Depth 3).
+- The maximum recursion depth is 2 (Depth 2). Do NOT recurse deeper. If structures are nested beyond Depth 2, recommend architecture refactoring to the user. (This is distinct from the 3-level tree layout visualization in the document template).
 </HARD-GATE>
 
 <HARD-GATE>
@@ -69,25 +91,39 @@ You must create tasks for each of the following items and complete them in order
 - Always exclude `.git`, `node_modules`, `dist`, `.next`, `build`, `.gemini`, and `.gitignore` patterns.
 </HARD-GATE>
 
+<HARD-GATE>
+**Execution Isolation**
+- The subagent MUST restrict its file reads and modifications strictly to the specified `TargetDirectory` and its subdirectories.
+</HARD-GATE>
+
+<HARD-GATE>
+**Standard Reporting Protocol**
+- The subagent must report back using the following exact format upon completion:
+  - **Status**: DONE | DONE_WITH_CONCERNS | BLOCKED
+  - **Estimated Tokens Used**: [Calculated token estimate]
+  - **Files Updated**: [List of absolute paths to updated context.md files]
+  - **Summary**: [3-line summary of major domain changes]
+</HARD-GATE>
+
 <CONSTRAINT>
 **Manual Note Preservation**
-- Always preserve manually written notes in `context.md` under a `## 개발자 참고 사항 (Manual Notes)` section at the top of the file.
+- Always preserve manually written notes in `context.md` under a `## Manual Notes` section at the top of the file.
 </CONSTRAINT>
 
 ## Document Structure Template
 
 Generated `context.md` files must follow this template:
 
-```markdown
+````markdown
 # [Domain Name] Context
 
-## 1. 역할 및 목적
+## 1. Role and Purpose
 - [Describe domain role]
 
-## 2. 하위 도메인 구성 (Core Sub-domains)
+## 2. Core Sub-domains
 - [[Sub-domain A](file:///path/to/A/context.md)]: [Short description of Sub-domain A]
 
-## 3. 공유 헬퍼 및 자산 (Auxiliary Modules)
+## 3. Shared Assets & Helpers
 ### Hooks (hooks/)
 - `useCustomHook(param: Type) => ReturnType`: [Hook description]
 ### Utilities (utils/)
@@ -95,5 +131,8 @@ Generated `context.md` files must follow this template:
 ### Types & Interfaces (types/)
 - `interface CustomData`: [Type description]
 
-## 4. 디렉토리 구조 (최대 Depth 3)
+## 4. Directory Structure (Max Depth 3)
 ```
+[directory tree structure]
+```
+````
