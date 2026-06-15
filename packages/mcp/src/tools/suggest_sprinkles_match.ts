@@ -3,11 +3,11 @@ import type { McpTool } from "./types.js";
 import { designSystemData, loadData } from "../data.js";
 
 export const suggestSprinklesMatch: McpTool<{
-  style: z.ZodRecord<z.ZodString, z.ZodTypeAny>;
+  style: z.ZodRecord<z.ZodString, z.ZodUnknown>;
 }> = {
   name: "suggest_sprinkles_match",
   schema: {
-    style: z.record(z.string(), z.any()),
+    style: z.record(z.string(), z.unknown()),
   },
   handler: async ({ style }) => {
     loadData();

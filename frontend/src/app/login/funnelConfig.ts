@@ -3,11 +3,6 @@ import type { OnboardingState } from "@/store/onboarding-store";
 
 export const ONBOARDING_STEPS: StepConfig<OnboardingState>[] = [
   {
-    id: "intro",
-    name: "시작",
-    shouldRender: () => true,
-  },
-  {
     id: "verify-selection",
     name: "인증 방식 선택",
     shouldRender: () => true,
@@ -30,7 +25,8 @@ export const ONBOARDING_STEPS: StepConfig<OnboardingState>[] = [
   {
     id: "id-card-selection",
     name: "신분증 유형 선택",
-    shouldRender: (state) => state.isVerifyInfoSubmitted && state.isSmsVerified && state.termsAgreed,
+    shouldRender: (state) =>
+      state.isVerifyInfoSubmitted && state.isSmsVerified && state.termsAgreed,
   },
   {
     id: "id-card-info",

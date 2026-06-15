@@ -14,14 +14,6 @@
   animation-timing-function: var(--ease-squish-1);
 }
 
-@font-face {
-  src: url("/font/NanumSquareNeo-Variable.woff2") format("woff2");
-  font-family: "NanumSquare";
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: normal;
-}
-
 :root {
   --nanum-square-neo: "NanumSquare";
   --gugi-font-family:

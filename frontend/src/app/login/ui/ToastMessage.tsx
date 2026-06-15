@@ -1,7 +1,11 @@
 "use client";
 
+import { Text } from "@internal/design-system/components";
 import { useEffect } from "react";
+import { MdSms } from "react-icons/md";
 import { useToast } from "@/provider/toast/hooks/useToast";
+import { useToastStore } from "@/provider/toast/store/toast-store";
+import * as styles from "@/provider/toast/style/toast.css";
 import { REDIRECT_REASONS } from "@/shared/constants";
 
 export function ToastMessage({ reason }: { reason: string }) {
@@ -28,6 +32,38 @@ export function ToastMessage({ reason }: { reason: string }) {
       5000,
     );
   }, [reason, showToast, messages[reason]]);
+
+  return null;
+}
+
+export function OtpToastMessage({ otp }: { otp: string }) {
+  const dispatch = useToastStore((state) => state.dispatch);
+
+  useEffect(() => {
+    const toastId = "otp-verification-toast";
+    dispatch({
+      type: "info",
+      payload: {
+        id: toastId,
+        type: "info",
+        duration: 0,
+        title: "메시지",
+        icon: <MdSms size={24} />,
+        children: (
+          <Text as="p" className={styles.bodyText}>
+            <span style={{ fontWeight: 700 }}>[Web발신]</span>
+            <br />
+            인증번호 <strong className={styles.strongOtpText}>{otp}</strong>를
+            입력해주세요.
+          </Text>
+        ),
+      },
+    });
+
+    return () => {
+      dispatch({ type: "remove", payload: { id: toastId } });
+    };
+  }, [otp, dispatch]);
 
   return null;
 }

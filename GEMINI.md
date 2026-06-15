@@ -19,6 +19,14 @@
     <rule>If you are unsure about something, do not guess or pretend to be certain. Simply state that you do not know.</rule>
     <rule>If a failure occurs, investigate the root cause before attempting to retry.</rule>
     <rule>Restrict diffs strictly to the requested scope of work. Do not perform drive-by formatting or unrelated refactoring.</rule>
+    <rule name="Context-Driven Exploration Only">
+      When exploring subdirectories, if an existing `context.md` (or equivalent context file) is found, you MUST NOT read individual source code files (.ts, .tsx, .js, .jsx, .css.ts, .prisma, etc.) during the initial analysis/exploration phase.
+      Instead, rely solely on the data inside `context.md` to understand the sub-tree layout, types, and purposes, using this information to build up the wider system context bottom-up.
+
+      Exceptions and Gates:
+      1. [Implementation Phase]: During actual code modification, you are permitted to read only the specific source files you are explicitly assigned to modify, along with their direct dependency interfaces.
+      2. [Escape Hatch]: If the `context.md` is empty, lacks critical type definitions, or is determined to be outdated (e.g. mismatching the actual file list), you may read the minimal necessary entry or configuration files to bridge the gap. However, you MUST prioritize updating and sync-saving the `context.md` with the latest state before proceeding.
+    </rule>
   </behavioral_guidelines>
 
   <teaching_guidelines>

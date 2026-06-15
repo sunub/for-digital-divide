@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface OnboardingState {
   // 1. verify-info
@@ -31,7 +31,15 @@ export interface OnboardingState {
 }
 
 interface OnboardingActions {
-  setVerifyInfo: (info: Pick<OnboardingState, "verifyName" | "verifyResidentNumber" | "verifyCarrier" | "verifyPhoneNumber">) => void;
+  setVerifyInfo: (
+    info: Pick<
+      OnboardingState,
+      | "verifyName"
+      | "verifyResidentNumber"
+      | "verifyCarrier"
+      | "verifyPhoneNumber"
+    >,
+  ) => void;
   setVerifyInfoSubmitted: (submitted: boolean) => void;
   setSmsCode: (code: string) => void;
   setSmsVerified: (verified: boolean) => void;
@@ -70,7 +78,8 @@ export const useOnboardingStore = create<OnboardingState & OnboardingActions>()(
       ...initialOnboardingState,
 
       setVerifyInfo: (info) => set(info),
-      setVerifyInfoSubmitted: (submitted) => set({ isVerifyInfoSubmitted: submitted }),
+      setVerifyInfoSubmitted: (submitted) =>
+        set({ isVerifyInfoSubmitted: submitted }),
       setSmsCode: (code) => set({ smsCode: code }),
       setSmsVerified: (verified) => set({ isSmsVerified: verified }),
       setTermsAgreed: (agreed) => set({ termsAgreed: agreed }),
@@ -81,12 +90,12 @@ export const useOnboardingStore = create<OnboardingState & OnboardingActions>()(
       setAccountVerified: (verified) => set({ isAccountVerified: verified }),
       setPinNumber: (pin) => set({ pinNumber: pin }),
       setPinRegistered: (registered) => set({ isPinRegistered: registered }),
-      
+
       resetOnboarding: () => set(initialOnboardingState),
     }),
     {
       name: "onboarding-storage",
       storage: createJSONStorage(() => sessionStorage),
-    }
-  )
+    },
+  ),
 );

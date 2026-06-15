@@ -29,7 +29,7 @@ const pulseSoftKeyframes = keyframes({
 export const pulseCircle = style({
   width: "128px",
   height: "128px",
-  borderRadius: "50%",
+  borderRadius: vars.borderRadius.full,
   backgroundColor: "rgba(108, 62, 198, 0.05)",
   display: "flex",
   alignItems: "center",
@@ -43,18 +43,18 @@ export const dashedBorder = style({
   position: "absolute",
   inset: 0,
   border: `2px dashed rgba(108, 62, 198, 0.2)`,
-  borderRadius: "50%",
+  borderRadius: vars.borderRadius.full,
 });
 
 // Safe & Secure 뱃지
 export const secureBadge = style({
-  marginTop: "16px",
+  marginTop: vars.space[4],
   display: "inline-flex",
   alignItems: "center",
-  padding: "6px 12px",
-  backgroundColor: "oklch(88.53% 0 0)", // surface-container-high
-  borderRadius: "9999px",
-  gap: "6px",
+  padding: `${vars.space["1.5"]} ${vars.space[3]}`,
+  backgroundColor: vars.color.deviceOutline,
+  borderRadius: vars.borderRadius.full,
+  gap: vars.space["1.5"],
 });
 
 export const secureBadgeText = style({
@@ -69,9 +69,9 @@ export const secureBadgeText = style({
 export const featureCard = style({
   display: "flex",
   alignItems: "center",
-  gap: "12px",
-  padding: "16px",
-  borderRadius: "16px",
+  gap: vars.space[3],
+  padding: vars.space[4],
+  borderRadius: vars.borderRadius.md,
   backgroundColor: vars.color.white,
   boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
   border: `1px solid rgba(0, 0, 0, 0.05)`,
@@ -89,12 +89,12 @@ export const featureText = style({
 export const phoneContentLayout = style({
   display: "flex",
   flexDirection: "column",
-  padding: "24px",
+  padding: vars.space[6],
   paddingTop: "48px",
   height: "100%",
   boxSizing: "border-box",
   justifyContent: "space-between",
-  gap: "24px",
+  gap: vars.space[6],
 });
 
 export const phoneTitle = style({
@@ -112,50 +112,31 @@ export const phoneSubtitle = style({
   lineHeight: "1.5",
   color: vars.color.descriptionText,
   textAlign: "left",
-  marginTop: "8px",
+  marginTop: vars.space[2],
 });
 
-// 액션 버튼 스타일 (평면의 Premium 느낌 재현)
+// 디자인 시스템 Button의 색상/상태 스타일을 유지하고 레이아웃만 보정
 export const primaryButton = style({
   width: "100%",
-  backgroundColor: vars.color.button,
-  color: vars.color.white,
-  fontWeight: "600",
-  fontSize: "15px",
-  padding: "16px",
-  borderRadius: "16px",
-  border: "none",
-  cursor: "pointer",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: "8px",
+  minHeight: vars.buttonPrimitive.height.lg,
+  gap: vars.space[2],
   boxShadow: "0 10px 20px rgba(108, 62, 198, 0.15)",
-  transition: "all 0.2s ease",
-  selectors: {
-    "&:hover": {
-      backgroundColor: "oklch(52.06% 0.041 294.47)",
-      transform: "translateY(-1px)",
-    },
-    "&:active": {
-      transform: "translateY(0)",
-    },
-  },
 });
 
 export const secondaryButton = style({
   width: "100%",
-  backgroundColor: "transparent",
+  minHeight: vars.buttonPrimitive.height.lg,
   color: vars.color.descriptionText,
-  fontWeight: "500",
-  fontSize: "13px",
+  fontWeight: vars.fontWeight.medium,
+  fontSize: vars.buttonPrimitive.fontSize.sm,
   textAlign: "center",
-  border: "none",
-  cursor: "pointer",
-  padding: "4px 0",
-  transition: "color 0.2s ease",
+  borderRadius: vars.buttonPrimitive.radius.md,
+  padding: `${vars.space[1]} 0`,
   selectors: {
     "&:hover": {
+      color: vars.color.button,
+    },
+    "&:focus-visible": {
       color: vars.color.button,
     },
   },
@@ -164,13 +145,13 @@ export const secondaryButton = style({
 export const featureList = style({
   display: "flex",
   flexDirection: "column",
-  gap: "8px",
+  gap: vars.space[2],
   width: "100%",
 });
 
 export const actionArea = style({
   display: "flex",
   flexDirection: "column",
-  gap: "12px",
+  gap: vars.space[3],
   width: "100%",
 });

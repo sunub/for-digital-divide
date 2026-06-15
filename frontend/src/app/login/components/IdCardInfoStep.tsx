@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { Button, Text } from "@internal/design-system/components";
 import { Flex } from "@internal/design-system/primitives";
+import { useState } from "react";
 import { useOnboardingStore } from "@/store/onboarding-store";
 
 interface StepProps {
@@ -21,16 +21,35 @@ export default function IdCardInfoStep({ onNext }: StepProps) {
   };
 
   return (
-    <Flex as="form" onSubmit={handleSubmit} direction="column" gap="1rem" width="full">
-      <Text as="h2" variant="title" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>주민등록증 정보 입력</Text>
-      
+    <Flex
+      as="form"
+      onSubmit={handleSubmit}
+      direction="column"
+      gap="1rem"
+      width="full"
+    >
+      <Text
+        as="h2"
+        variant="title"
+        style={{ fontSize: "1.5rem", fontWeight: "bold" }}
+      >
+        주민등록증 정보 입력
+      </Text>
+
       <Flex direction="column" gap="0.5rem">
-        <Text as="span" style={{ fontSize: "0.9rem", fontWeight: "bold" }}>발급일자</Text>
-        <input 
-          value={issueDate} 
-          onChange={(e) => setIssueDate(e.target.value)} 
-          placeholder="예: YYYY-MM-DD" 
-          style={{ padding: "12px", borderRadius: "8px", border: "1px solid #ccc", width: "100%" }}
+        <Text as="span" style={{ fontSize: "0.9rem", fontWeight: "bold" }}>
+          발급일자
+        </Text>
+        <input
+          value={issueDate}
+          onChange={(e) => setIssueDate(e.target.value)}
+          placeholder="예: YYYY-MM-DD"
+          style={{
+            padding: "12px",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+            width: "100%",
+          }}
           required
         />
       </Flex>

@@ -184,19 +184,22 @@ export default function IntroPage() {
               <div className={styles.actionArea}>
                 <Button
                   type="button"
+                  size="lg"
                   className={clsx(styles.primaryButton, actionNextStepGlow)}
                   onClick={handleStart}
                 >
                   <span>인증서 발급하기</span>
                   <MdArrowForwardIos size={14} />
                 </Button>
-                <button
+                <Button
                   type="button"
+                  variant="transparent"
+                  size="lg"
                   className={styles.secondaryButton}
                   onClick={handleCancel}
                 >
                   나중에 발급할게요
-                </button>
+                </Button>
               </div>
             </div>
           </Device.Content>

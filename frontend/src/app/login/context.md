@@ -20,6 +20,7 @@
 
 ### Utilities (utils/)
 - `hasPinAuthMethod(provider_uid: string) => Promise<boolean>`: Server action validating if a user has a registered PIN auth record.
+- `zodResolver(schema: ZodSchema) => Resolver`: Lightweight custom Zod resolver for react-hook-form to perform type-safe validation.
 
 ### Types & Interfaces (types/)
 - `type ActionState`: Custom type representing the unified server action response schema containing status states (`idle` | `continue` | `success` | `error` | etc.), payload message arrays, step progress states, and next-step redirection indicators.
@@ -32,7 +33,7 @@
 - `PinRegisterStep({ onComplete: () => void }) => JSX.Element`: Screen to set up the 6-digit 간편 비밀번호 PIN login.
 - `SuccessStep({ onNext: () => void }) => JSX.Element`: Success transition screen showing verification completion.
 - `TermsStep({ onNext: () => void }) => JSX.Element`: Renders 약관 동의 (terms of service agreements).
-- `VerifyInfoStep({ onNext: () => void }) => JSX.Element`: Collects basic personal information (name, resident number, carrier).
+- `VerifyInfoStep({ onNext: () => void }) => JSX.Element`: Collects and validates basic personal information (name, resident registration number front/back, carrier select, phone) using `react-hook-form` and `zodResolver` with premium styles, auto-formatting, and auto-focus micro-interactions.
 - `VerifyOtpStep({ onNext: () => void }) => JSX.Element`: Verification code input (SMS OTP validation).
 - `VerifySelectionStep({ onNext: () => void }) => JSX.Element`: Gateway selection to begin SMS certification.
 
@@ -82,6 +83,7 @@ login/
 │   ├── PinRegisterStep.tsx
 │   ├── SuccessStep.tsx
 │   ├── TermsStep.tsx
+│   ├── VerifyInfoStep.css.ts
 │   ├── VerifyInfoStep.tsx
 │   ├── VerifyOtpStep.tsx
 │   └── VerifySelectionStep.tsx
@@ -107,5 +109,6 @@ login/
 │   ├── PinNumberCard.tsx
 │   └── ToastMessage.tsx
 └── utils/
-    └── hasPinAuthMethod.ts
+    ├── hasPinAuthMethod.ts
+    └── zodResolver.ts
 ```

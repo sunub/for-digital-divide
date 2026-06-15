@@ -187,7 +187,7 @@ export const buttonRecipe = recipe({
     variant: {
       default: {
         backgroundColor: vars.button.primary.background,
-        color: vars.button.primary.foreground,
+        color: vars.button.secondary.background,
         selectors: {
           "&:hover": {
             color: vars.button.primary.hoverForeground,

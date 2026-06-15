@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "build:mcp": "tsx scripts/build-mcp-data.ts"
   },
   "sideEffects": [
     "**/*.css.ts",
@@ -59,6 +60,7 @@
   },
   "devDependencies": {
     "@vanilla-extract/esbuild-plugin": "^2.3.22",
-    "tsup": "^8.5.1"
+    "tsup": "^8.5.1",
+    "tsx": "^4.22.3"
   }
 }

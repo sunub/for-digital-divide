@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import tools from "./tools/index.js";
 import type { z } from "zod";
+import { tools } from "./tools/index.js";
 
 export default function createMcpServer(): McpServer {
   const server = new McpServer(
@@ -19,21 +19,23 @@ Available tools:
 - suggest_sprinkles_match: Suggest Vanilla-Extract Sprinkles mappings for CSS styles.
 - refresh_mcp_data: Trigger a rebuild and reload of MCP design system metadata.
       `,
-    }
+    },
   );
 
-  // Register all modular tools
   for (const tool of tools) {
-    server.tool(
+    server.registerTool(
       tool.name,
-      tool.schema as Record<string, z.ZodType>,
+      {
+        description: tool.description,
+        inputSchema: tool.schema as Record<string, z.ZodType>,
+      },
       tool.handler as (args: Record<string, unknown>) => Promise<{
         isError?: boolean;
         content: Array<{
           type: "text";
           text: string;
         }>;
-      }>
+      }>,
     );
   }
 

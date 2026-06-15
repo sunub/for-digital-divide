@@ -5,22 +5,21 @@ import type { MotionNodeAnimationOptions } from "motion/react";
 import { motion } from "motion/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useFunnel } from "@/shared/hooks/useFunnel/useFunnel";
-import { ONBOARDING_STEPS } from "../funnelConfig";
-import { useOnboardingStore } from "@/store/onboarding-store";
 import { useIsMounted } from "@/shared/hooks/useIsMounted";
-import { ToastMessage } from "../ui/ToastMessage";
-
+import { useOnboardingStore } from "@/store/onboarding-store";
+import AccountStep from "../components/AccountStep";
+import IdCardInfoStep from "../components/IdCardInfoStep";
+import IdCardSelectionStep from "../components/IdCardSelectionStep";
 // 10개 단계별 컴포넌트 임포트
 import IntroStep from "../components/IntroStep";
-import VerifySelectionStep from "../components/VerifySelectionStep";
+import PinRegisterStep from "../components/PinRegisterStep";
+import SuccessStep from "../components/SuccessStep";
+import TermsStep from "../components/TermsStep";
 import VerifyInfoStep from "../components/VerifyInfoStep";
 import VerifyOtpStep from "../components/VerifyOtpStep";
-import TermsStep from "../components/TermsStep";
-import IdCardSelectionStep from "../components/IdCardSelectionStep";
-import IdCardInfoStep from "../components/IdCardInfoStep";
-import AccountStep from "../components/AccountStep";
-import SuccessStep from "../components/SuccessStep";
-import PinRegisterStep from "../components/PinRegisterStep";
+import VerifySelectionStep from "../components/VerifySelectionStep";
+import { ONBOARDING_STEPS } from "../funnelConfig";
+import { ToastMessage } from "../ui/ToastMessage";
 
 interface LoginContentContainerProps {
   hasPinLoginAvailable: boolean; // 기존 프롭 유지
@@ -61,9 +60,7 @@ export function AnimationPresenceWrapper({
   );
 }
 
-export function LoginContentContainer({
-  reason,
-}: LoginContentContainerProps) {
+export function LoginContentContainer({ reason }: LoginContentContainerProps) {
   const isMounted = useIsMounted();
   const state = useOnboardingStore();
   const router = useRouter();
@@ -106,16 +103,27 @@ export function LoginContentContainer({
     >
       {reason && <ToastMessage reason={reason} />}
       <AnimationPresenceWrapper animationKey={currentStepId}>
-        {currentStepId === "intro" && <IntroStep onNext={funnel.next} />}
-        {currentStepId === "verify-selection" && <VerifySelectionStep onNext={funnel.next} />}
-        {currentStepId === "verify-info" && <VerifyInfoStep onNext={funnel.next} />}
-        {currentStepId === "verify-otp" && <VerifyOtpStep onNext={funnel.next} />}
+        {currentStepId === "verify-selection" && (
+          <VerifySelectionStep onNext={funnel.next} />
+        )}
+        {currentStepId === "verify-info" && (
+          <VerifyInfoStep onNext={funnel.next} />
+        )}
+        {currentStepId === "verify-otp" && (
+          <VerifyOtpStep onNext={funnel.next} />
+        )}
         {currentStepId === "terms" && <TermsStep onNext={funnel.next} />}
-        {currentStepId === "id-card-selection" && <IdCardSelectionStep onNext={funnel.next} />}
-        {currentStepId === "id-card-info" && <IdCardInfoStep onNext={funnel.next} />}
+        {currentStepId === "id-card-selection" && (
+          <IdCardSelectionStep onNext={funnel.next} />
+        )}
+        {currentStepId === "id-card-info" && (
+          <IdCardInfoStep onNext={funnel.next} />
+        )}
         {currentStepId === "account" && <AccountStep onNext={funnel.next} />}
         {currentStepId === "success" && <SuccessStep onNext={funnel.next} />}
-        {currentStepId === "pin-register" && <PinRegisterStep onComplete={handleCompleteOnboarding} />}
+        {currentStepId === "pin-register" && (
+          <PinRegisterStep onComplete={handleCompleteOnboarding} />
+        )}
       </AnimationPresenceWrapper>
     </Flex>
   );
