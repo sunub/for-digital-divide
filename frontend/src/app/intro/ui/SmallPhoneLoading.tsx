@@ -1,4 +1,4 @@
-import { Loading } from "@/components/Loading";
+import { Loading } from "@internal/design-system/components";
 import { loadingContainer } from "./SmallPhone.css";
 
 export function SmallPhoneLoading({ isOpen }: { isOpen: boolean }) {
