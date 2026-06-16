@@ -1,9 +1,8 @@
 "use client";
 
-import { Button } from "@internal/design-system/components";
+import { Button, VisuallyHidden } from "@internal/design-system/components";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
-import VisuallyHidden from "@/components/VisuallyHidden";
 import { useHistory } from "@/shared/hooks/useHistory";
 import * as styles from "../../style/layout.css";
 
