@@ -29,26 +29,56 @@ export const phoneSubtitle = style({
   color: vars.color.descriptionText,
   textAlign: "left",
   marginTop: "8px",
-  marginBottom: "32px",
+  marginBottom: "24px",
 });
 
-export const methodButtons = style({
+export const methodForm = style({
+  width: "100%",
+});
+
+export const methodFieldset = style({
+  border: "none",
+  margin: 0,
+  padding: 0,
+});
+
+export const srOnly = style({
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: 0,
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  border: 0,
+});
+
+export const methodOptions = style({
   display: "flex",
   flexDirection: "column",
   gap: "16px",
   width: "100%",
 });
 
-export const kbButton = style({
+export const methodOptionInput = style({
+  position: "absolute",
+  opacity: 0,
+  width: "1px",
+  height: "1px",
+  pointerEvents: "none",
+});
+
+export const methodOptionLabel = style({
   width: "100%",
-  height: "4.5rem",
+  minHeight: "4.5rem",
   borderRadius: "16px",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "flex-start",
+  gap: "4px",
   padding: "16px 24px",
-  border: `1px solid ${vars.color.border || "rgba(0, 0, 0, 0.08)"}`,
+  border: `1px solid ${vars.color.border}`,
   background: vars.color.white,
   cursor: "pointer",
   textAlign: "left",
@@ -59,13 +89,38 @@ export const kbButton = style({
       transform: "translateY(-1px)",
       boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
     },
-    "&:active": {
-      transform: "translateY(0)",
+    [`${methodOptionInput}:focus-visible + &`]: {
+      outline: `2px solid ${vars.color.button}`,
+      outlineOffset: "2px",
     },
   },
 });
 
-export const kbBadge = style({
+export const methodOptionLabelSelected = style({
+  borderColor: vars.color.button,
+  backgroundColor: vars.color.emphasis,
+});
+
+export const methodOptionHeader = style({
+  display: "flex",
+  width: "100%",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: "12px",
+});
+
+export const methodOptionTitle = style({
+  fontWeight: 700,
+  color: vars.color.text,
+});
+
+export const methodOptionDescription = style({
+  fontSize: "13px",
+  color: vars.color.descriptionText,
+  fontWeight: "400",
+});
+
+export const methodBadge = style({
   fontSize: "12px",
   background: "rgba(108, 62, 198, 0.08)",
   color: vars.color.button,
@@ -74,11 +129,40 @@ export const kbBadge = style({
   fontWeight: "700",
 });
 
-export const methodDesc = style({
-  fontSize: "13px",
-  color: vars.color.descriptionText,
-  fontWeight: "400",
-  marginTop: "4px",
+export const actionButtons = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: "12px",
+  marginTop: "16px",
+});
+
+export const guideButton = style({
+  width: "100%",
+});
+
+export const submitButton = style({
+  width: "100%",
+});
+
+export const dialogContent = style({
+  padding: "16px",
+});
+
+export const dialogTitle = style({
+  fontSize: "1.25rem",
+  fontWeight: 700,
+  textAlign: "center",
+});
+
+export const dialogDescription = style({
+  textAlign: "center",
+  lineHeight: "1.5",
+  fontSize: "0.95rem",
+});
+
+export const dialogCloseAction = style({
+  width: "100%",
+  marginTop: "8px",
 });
 
 export const infoText = style({
