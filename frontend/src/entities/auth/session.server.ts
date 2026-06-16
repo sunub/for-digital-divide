@@ -87,7 +87,7 @@ export const requireAuthSession = cache(async () => {
   const { session } = await getAuthState();
 
   if (!session) {
-    redirect("/login");
+    redirect("/onboarding");
   }
 
   return session;

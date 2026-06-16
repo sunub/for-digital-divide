@@ -61,7 +61,7 @@ export default async function middleware(req: NextRequest) {
     return redirectResponse(url);
   }
 
-  if (pathname === "/login") {
+  if (pathname === "/onboarding") {
     const method = req.nextUrl.searchParams.get("method");
     const isDefaultMethod =
       method === null || method === "default" || method === "";
@@ -88,7 +88,7 @@ export default async function middleware(req: NextRequest) {
     const parsedSession = SessionCookieSchema.safeParse(sessionCookie);
     if (!parsedSession.success) {
       const url = req.nextUrl.clone();
-      url.pathname = "/login";
+      url.pathname = "/onboarding";
       return redirectResponse(url);
     }
   }
@@ -97,5 +97,5 @@ export default async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard", "/sign-up/register-user", "/login"],
+  matcher: ["/dashboard", "/sign-up/register-user", "/onboarding"],
 };

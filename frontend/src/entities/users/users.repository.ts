@@ -45,9 +45,8 @@ export const usersRepository = {
     });
   },
   async create(data: Users) {
-    return prisma.users.createMany({
-      data: [data],
-      skipDuplicates: true,
+    return prisma.users.create({
+      data,
     });
   },
   async updateSessionIdByUserId(user_id: UsersId, session_id: string | null) {

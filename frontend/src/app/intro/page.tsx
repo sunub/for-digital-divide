@@ -109,7 +109,7 @@ export default function IntroPage() {
 
   const handleStart = useCallback(() => {
     add(window.location.href);
-    router.push("/login");
+    router.push("/onboarding");
   }, [add, router]);
 
   const handleCancel = useCallback(() => {
