@@ -15,10 +15,21 @@ export interface OnboardingState {
 
   // 3. terms
   termsAgreed: boolean;
+  optionalTerms: {
+    personalInfoCollectionOptional: boolean;
+    marketingSms: boolean;
+    marketingCall: boolean;
+    marketingEmail: boolean;
+    marketingMail: boolean;
+    personalInfoProvisionOptional: boolean;
+    marketingPush: boolean;
+  };
 
   // 4. id-card-selection / info
   selectedIdCardType: "resident" | "driver" | "passport" | null;
-  idCardInfo: string;
+  idCardName: string;
+  idCardResidentNumber: string;
+  idCardIssueDate: string;
   isIdCardVerified: boolean;
 
   // 5. account
@@ -44,8 +55,13 @@ interface OnboardingActions {
   setSmsCode: (code: string) => void;
   setSmsVerified: (verified: boolean) => void;
   setTermsAgreed: (agreed: boolean) => void;
+  setOptionalTerms: (terms: OnboardingState["optionalTerms"]) => void;
   setSelectedIdCardType: (type: OnboardingState["selectedIdCardType"]) => void;
-  setIdCardInfo: (info: string) => void;
+  setIdCardDetails: (details: {
+    idCardName: string;
+    idCardResidentNumber: string;
+    idCardIssueDate: string;
+  }) => void;
   setIdCardVerified: (verified: boolean) => void;
   setAccountNumber: (account: string) => void;
   setAccountVerified: (verified: boolean) => void;
@@ -63,8 +79,19 @@ const initialOnboardingState: OnboardingState = {
   smsCode: "",
   isSmsVerified: false,
   termsAgreed: false,
+  optionalTerms: {
+    personalInfoCollectionOptional: false,
+    marketingSms: false,
+    marketingCall: false,
+    marketingEmail: false,
+    marketingMail: false,
+    personalInfoProvisionOptional: false,
+    marketingPush: false,
+  },
   selectedIdCardType: null,
-  idCardInfo: "",
+  idCardName: "",
+  idCardResidentNumber: "",
+  idCardIssueDate: "",
   isIdCardVerified: false,
   accountNumber: "",
   isAccountVerified: false,
@@ -83,8 +110,9 @@ export const useOnboardingStore = create<OnboardingState & OnboardingActions>()(
       setSmsCode: (code) => set({ smsCode: code }),
       setSmsVerified: (verified) => set({ isSmsVerified: verified }),
       setTermsAgreed: (agreed) => set({ termsAgreed: agreed }),
+      setOptionalTerms: (terms) => set({ optionalTerms: terms }),
       setSelectedIdCardType: (type) => set({ selectedIdCardType: type }),
-      setIdCardInfo: (info) => set({ idCardInfo: info }),
+      setIdCardDetails: (details) => set({ ...details }),
       setIdCardVerified: (verified) => set({ isIdCardVerified: verified }),
       setAccountNumber: (account) => set({ accountNumber: account }),
       setAccountVerified: (verified) => set({ isAccountVerified: verified }),
