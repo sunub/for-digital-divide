@@ -235,9 +235,10 @@ export const buttonRecipe = recipe({
         ),
       },
       wide: {
+        width: "100%",
         padding: fallbackVar(
           buttonPaddingVar,
-          `${vars.buttonPrimitive.padding.y.md} ${vars.buttonPrimitive.padding.x.wide}`,
+          `${vars.space[1]} ${vars.space[2]}`,
         ),
       },
       sm: {
