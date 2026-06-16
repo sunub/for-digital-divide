@@ -1,8 +1,8 @@
 "use client";
 
+import { Loading } from "@internal/design-system/components";
 import { CheckIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { Loading } from "@/components/Loading";
 import { useStepper } from "../hooks/useStepper";
 import { useStepperStore } from "../store/stepper-store";
 import * as styles from "./Stepper.css";

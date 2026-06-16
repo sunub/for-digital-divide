@@ -12,11 +12,13 @@ interface UseDemoLoginFlowProps {
     payload: FormData,
   ) => ActionState | Promise<ActionState>;
   onActionComplete?: () => void;
+  onSuccess?: () => void;
 }
 
 export function useRegisterPinFlow({
   action,
   onActionComplete,
+  onSuccess,
 }: UseDemoLoginFlowProps) {
   const router = useRouter();
   const showToast = useToast();
@@ -49,13 +51,16 @@ export function useRegisterPinFlow({
     try {
       setCurrentStep("completed");
 
-      router.back();
-
-      setTimeout(() => {
-        if (window.location.pathname.includes("/register-pin")) {
-          router.replace("/dashboard");
-        }
-      }, 120);
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        router.back();
+        setTimeout(() => {
+          if (window.location.pathname.includes("/register-pin")) {
+            router.replace("/dashboard");
+          }
+        }, 120);
+      }
     } catch (error) {
       console.error("PIN registration redirect failed:", error);
       showToast("error", "PIN 등록 후 이동 중 문제가 발생했습니다.");

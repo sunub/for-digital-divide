@@ -1,4 +1,4 @@
-import { Badge } from "../Badge";
+import { Badge } from "@internal/design-system/components";
 import { InfoBox } from "../InfoBox";
 import { InstructionBox } from "./InstructionBox";
 import { InstructionItem } from "./InstructionItem";

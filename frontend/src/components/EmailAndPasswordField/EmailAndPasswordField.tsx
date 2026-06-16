@@ -1,11 +1,9 @@
 "use client";
 
+import { TextField } from "@internal/design-system/components";
 import { Flex } from "@internal/design-system/primitives";
-import { AtSignIcon, KeySquare } from "lucide-react";
+import { AtSignIcon, EyeClosedIcon, EyeIcon, KeySquare } from "lucide-react";
 import { useState } from "react";
-import { TextField } from "@/components/TextField/TextField";
-import { TextFieldGroup } from "@/components/TextField/TextFieldGroup";
-import * as style from "./EmailAndPasswordField.css";
 import { useEmailValidation } from "./hooks/useEmailValidation";
 import { usePasswordValidation } from "./hooks/usePasswordValidation";
 
@@ -15,6 +13,7 @@ export function EmailAndPasswordField() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -34,39 +33,55 @@ export function EmailAndPasswordField() {
 
   return (
     <Flex direction={"column"}>
-      <TextFieldGroup>
+      <Flex direction="column" gap="1rem">
         <TextField
           id="register-email__input-field"
           name="email"
           labelContent="이메일을 입력해주세요"
           autoComplete="email"
           value={email}
-          isError={!emailError}
+          isError={!!emailError}
+          errorMessage={emailError ?? undefined}
           onChange={handleEmailChange}
           onBlur={handleEmailBlur}
-          leftIcon={<AtSignIcon size={16} />}
+          leftElement={<AtSignIcon size={16} />}
         />
         <TextField
           id="register-password__input-field"
           name="password"
+          type={passwordVisible ? "text" : "password"}
           labelContent="비밀번호를 입력해주세요"
           autoComplete="new-password"
           value={password}
-          isError={!passwordError}
+          isError={!!passwordError}
+          errorMessage={
+            passwordError ??
+            "비밀번호는 최소 8자 이상이어야 하며, 대문자, 소문자, 숫자, 특수문자를 각각 하나 이상 포함해야 합니다."
+          }
           onChange={handlePasswordChange}
           onBlur={handlePasswordBlur}
-          leftIcon={<KeySquare size={16} />}
-          passwordVisibility={true}
+          leftElement={<KeySquare size={16} />}
+          rightElement={
+            <button
+              type="button"
+              onClick={() => setPasswordVisible(!passwordVisible)}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                color: "inherit",
+              }}
+            >
+              {passwordVisible ? (
+                <EyeIcon size={16} />
+              ) : (
+                <EyeClosedIcon size={16} />
+              )}
+            </button>
+          }
         />
-      </TextFieldGroup>
-      <Flex direction={"column"} paddingTop={"1rem"}>
-        <span className={style.errorText({ isVisible: !!passwordError })}>
-          {passwordError ||
-            "비밀번호는 최소 8자 이상이어야 하며, 대문자, 소문자, 숫자, 특수문자를 각각 하나 이상 포함해야 합니다."}
-        </span>
-        <span className={style.errorText({ isVisible: !!emailError })}>
-          {emailError || "\u00A0"}
-        </span>
       </Flex>
     </Flex>
   );

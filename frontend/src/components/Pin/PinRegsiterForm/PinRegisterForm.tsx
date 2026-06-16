@@ -20,6 +20,7 @@ type PinFormProps = Omit<FormProps, "action"> & {
   children: React.ReactNode;
   title: string;
   description?: string;
+  onSuccess?: () => void;
 };
 
 export function PinRegisterForm({
@@ -28,11 +29,13 @@ export function PinRegisterForm({
   children,
   title,
   description,
+  onSuccess,
   ...props
 }: PinFormProps) {
   const deleteNumpad = useNumpadStore((s) => s.deleteNumpad);
   const { formAction, status, actionState } = useRegisterPinFlow({
     action,
+    onSuccess,
     onActionComplete() {
       deleteNumpad();
     },

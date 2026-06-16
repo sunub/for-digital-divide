@@ -1,4 +1,4 @@
-export * from "../Badge";
+export { Badge } from "@internal/design-system/components";
 export * from "../InfoBox";
 export * from "./Instruction";
 export * from "./InstructionBox";
