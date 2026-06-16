@@ -9,7 +9,8 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "ci": "turbo ci",
-    "format": "turbo format"
+    "format": "turbo format",
+    "check": "turbo check"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.8",
