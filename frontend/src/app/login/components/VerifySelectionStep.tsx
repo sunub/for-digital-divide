@@ -1,14 +1,15 @@
 "use client";
 
-import { Button, Text } from "@internal/design-system/components";
-import { Flex } from "@internal/design-system/primitives";
-import { useRef } from "react";
-import { AlertCloseButton } from "@/app/dashboard/ui/Alert/AlertCloseButton";
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogTrigger,
-} from "@/components/AlertDialog";
+  Button,
+  Text,
+} from "@internal/design-system/components";
+import { Flex } from "@internal/design-system/primitives";
+import { useRef } from "react";
+import { AlertCloseButton } from "@/app/dashboard/ui/Alert/AlertCloseButton";
 
 interface StepProps {
   onNext: () => void;
