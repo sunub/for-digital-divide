@@ -14,6 +14,8 @@ export {
   DrawerIndicator,
 };
 
+export { DevicePortalContext } from "@internal/design-system/components";
+
 type DeviceCompoundComponent = typeof DeviceFrame & {
   Frame: typeof DeviceFrame;
   Content: typeof DeviceContent;

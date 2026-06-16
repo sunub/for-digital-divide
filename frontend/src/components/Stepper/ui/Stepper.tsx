@@ -7,7 +7,7 @@ import { useStepper } from "../hooks/useStepper";
 import { useStepperStore } from "../store/stepper-store";
 import * as styles from "./Stepper.css";
 
-const TARGET_PATHS = ["/sign-up/register-user", "/login", "/intro"];
+const TARGET_PATHS = ["/sign-up/register-user", "/onboarding", "/intro"];
 export const CONFIRM_COLOR = "oklch(0.404 0.2121 288.17775174927874)";
 
 function StepIcon({ done }: { done: boolean }) {

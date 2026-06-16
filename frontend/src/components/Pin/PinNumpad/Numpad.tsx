@@ -1,6 +1,6 @@
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { type ComponentProps, useTransition } from "react";
-import reloadNumpad from "@/app/login/Pin/utils/reload";
+import reloadNumpad from "@/app/onboarding/Pin/utils/reload";
 import { useNumpadStore } from "@/context/NumpadContext";
 import type { KeypadDetail } from "@/entities/keypad/keypad.model";
 import * as style from "./PinNumpad.css";

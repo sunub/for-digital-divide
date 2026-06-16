@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
-import type { ActionState } from "@/app/login/types";
+import type { ActionState } from "@/app/onboarding/types";
 import { useToast } from "@/provider/toast/hooks/useToast";
 import { useEffectEvent } from "@/shared/hooks/useEffectEvent";
 

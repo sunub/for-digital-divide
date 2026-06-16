@@ -9,4 +9,5 @@ export const panel = style({
   backgroundColor: "transparent",
   overflowY: "auto",
   overflowX: "hidden",
+  maxHeight: "100vh",
 });
