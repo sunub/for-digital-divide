@@ -1,10 +1,9 @@
 "use server";
 
-// @ts-expect-error: Next.js internal export
-import { isRedirectError } from "next/dist/client/components/redirect";
-
 import { userService } from "@entities/users/users.service";
 import bcrypt from "bcryptjs";
+// @ts-expect-error: Next.js internal export
+import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod/v4";
