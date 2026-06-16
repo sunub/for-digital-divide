@@ -1,6 +1,6 @@
+import { Tooltip } from "@internal/design-system/components";
 import { Grid } from "@internal/design-system/primitives";
 import { Suspense } from "react";
-import { Tooltip } from "@/components/Tooltip";
 import { requireAuthSession } from "@/entities/auth/session.server";
 import { Device } from "@/shared/layout";
 import * as style from "./layout.css";

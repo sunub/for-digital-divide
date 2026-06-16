@@ -1,8 +1,8 @@
 "use client";
 
+import { useAlertDialogContext } from "@internal/design-system/components";
 import { animate, motion, press } from "motion/react";
 import { useEffect, useRef } from "react";
-import { useAlertDialogContext } from "@/components/AlertDialog/hooks/useAlertDialogContext";
 import * as style from "./AlertCloseButton.css";
 
 export function AlertCloseButton() {

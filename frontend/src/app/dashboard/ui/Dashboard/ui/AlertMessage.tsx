@@ -1,9 +1,13 @@
 "use client";
 
-import { Button, Text } from "@internal/design-system/components";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  Button,
+  Text,
+} from "@internal/design-system/components";
 import { Flex } from "@internal/design-system/primitives";
 import Link from "next/link";
-import { AlertDialog, AlertDialogContent } from "@/components/AlertDialog";
 import { AlertCloseButton } from "../../Alert/AlertCloseButton";
 
 export function AlertMessage({ defaultOpen }: { defaultOpen: boolean }) {

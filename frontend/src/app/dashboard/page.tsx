@@ -1,9 +1,9 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { redirect } from "next/navigation";
 import { TransactionProvider } from "@/components/TransactionChart/TransactionProvider";
 import { accountKeys } from "@/entities/accounts/accounts.query";
 import { transactionKeys } from "@/entities/transactions/transaction.query";
 import { getQueryClient } from "@/lib/query-client";
-import { AlertMessage } from "./ui/Dashboard/ui/AlertMessage";
 import { getAccountsData } from "./ui/Dashboard/utils/getAccountsData";
 import { getPinAvailable } from "./ui/Dashboard/utils/getPinAvailable";
 import { getTransactions } from "./ui/Dashboard/utils/getTransactions";
@@ -15,6 +15,10 @@ export default async function Dashboard() {
     getPinAvailable(),
     getAccountsData(),
   ]);
+
+  if (!isPinAvailable) {
+    redirect("/register-pin");
+  }
 
   const queryClient = getQueryClient();
   queryClient.setQueryData(accountKeys.all(), accounts);
@@ -31,7 +35,6 @@ export default async function Dashboard() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <TransactionProvider>
-        <AlertMessage defaultOpen={!isPinAvailable} />
         <MainTitle />
         <DashboardPage />
       </TransactionProvider>
