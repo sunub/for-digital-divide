@@ -1,10 +1,10 @@
 "use client";
 
-import { BaseForm, type FormProps } from "@for-digital-divide/design-system";
+import { BaseForm, type FormProps } from "@internal/design-system/primitives";
 import clsx from "clsx";
 import type { Ref } from "react";
-import { SubmittingStatus } from "@/app/login/email-password/ui/SubmittingStatus";
-import type { ActionState } from "@/app/login/types";
+import { SubmittingStatus } from "@/app/onboarding/email-password/ui/SubmittingStatus";
+import type { ActionState } from "@/app/onboarding/types";
 import { useNumpadStore } from "@/context/NumpadContext";
 import { useDemoLoginFlow } from "@/shared/hooks/useDemoLoginFlow";
 import { ContentOpener } from "@/shared/layout/ui/ContentOpener";

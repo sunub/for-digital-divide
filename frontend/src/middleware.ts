@@ -1,8 +1,11 @@
+import { jwtDecrypt } from "jose";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import {
+  DeviceIdSchema,
+  SessionCookieSchema,
+} from "@/entities/cookies/cookies.model";
 import { REDIRECT_REASONS } from "@/shared/constants";
-import { getPermanentCookieStorage } from "@/utils/cookies/permanentCookieStorage";
-import { getSessionCookieStorage } from "@/utils/cookies/sessionCookieStorage";
 
 const NEED_TO_AUTHENTICATE_PATHS = ["/dashboard"];
 
@@ -27,11 +30,30 @@ const redirectResponse = (url: URL) => {
   return response;
 };
 
+// 미들웨어 전용 경량 JWT 복호화 함수
+async function decryptCookie(tokenValue: string | undefined) {
+  if (!tokenValue) return null;
+  const secretKey = process.env.JWT_SECRET;
+  if (!secretKey) return null;
+  try {
+    const buf = Buffer.from(secretKey, "base64");
+    const { payload } = await jwtDecrypt(tokenValue, buf);
+    return payload;
+  } catch (_error) {
+    return null;
+  }
+}
+
 export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const userAgent = req.headers.get("user-agent");
-  const sessionCookie = await getSessionCookieStorage("en_session");
-  const deviceCookie = await getPermanentCookieStorage("en_device");
+
+  // 미들웨어 환경에서 안전하게 요청 객체에서 쿠키 동기 획득
+  const sessionToken = req.cookies.get("en_session")?.value;
+  const deviceToken = req.cookies.get("en_device")?.value;
+
+  const sessionCookie = await decryptCookie(sessionToken);
+  const deviceCookie = await decryptCookie(deviceToken);
 
   if (isMobile(userAgent)) {
     const url = req.nextUrl.clone();
@@ -39,19 +61,22 @@ export default async function middleware(req: NextRequest) {
     return redirectResponse(url);
   }
 
-  if (pathname === "/login") {
+  if (pathname === "/onboarding") {
     const method = req.nextUrl.searchParams.get("method");
     const isDefaultMethod =
       method === null || method === "default" || method === "";
 
-    if (method === "pin" && !deviceCookie?.device_id) {
+    const parsedDevice = DeviceIdSchema.safeParse(deviceCookie);
+    const hasDeviceId = parsedDevice.success && parsedDevice.data.device_id;
+
+    if (method === "pin" && !hasDeviceId) {
       const url = req.nextUrl.clone();
       url.searchParams.delete("method");
       url.searchParams.set("reason", REDIRECT_REASONS.PIN_NOT_VERIFIED);
       return redirectResponse(url);
     }
 
-    if (isDefaultMethod && deviceCookie?.device_id && req.method === "GET") {
+    if (isDefaultMethod && hasDeviceId && req.method === "GET") {
       const url = req.nextUrl.clone();
       url.searchParams.set("reason", REDIRECT_REASONS.EXIST_DEVICE_ID);
       url.searchParams.set("method", "pin");
@@ -60,9 +85,10 @@ export default async function middleware(req: NextRequest) {
   }
 
   if (NEED_TO_AUTHENTICATE_PATHS.includes(pathname)) {
-    if (!sessionCookie) {
+    const parsedSession = SessionCookieSchema.safeParse(sessionCookie);
+    if (!parsedSession.success) {
       const url = req.nextUrl.clone();
-      url.pathname = "/login";
+      url.pathname = "/onboarding";
       return redirectResponse(url);
     }
   }
@@ -71,5 +97,5 @@ export default async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard", "/sign-up/register-user", "/login"],
+  matcher: ["/dashboard", "/sign-up/register-user", "/onboarding"],
 };

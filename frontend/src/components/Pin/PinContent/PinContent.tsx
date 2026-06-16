@@ -1,6 +1,7 @@
 "use client";
 
-import { Flex, Text } from "@for-digital-divide/design-system";
+import { Text } from "@internal/design-system/components";
+import { Flex } from "@internal/design-system/primitives";
 import { useNumpadStore } from "@/context/NumpadContext";
 import * as style from "./PinContent.css";
 

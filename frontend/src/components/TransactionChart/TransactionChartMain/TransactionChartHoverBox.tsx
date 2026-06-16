@@ -1,4 +1,5 @@
-import { Box, Flex, Text } from "@for-digital-divide/design-system";
+import { Text } from "@internal/design-system/components";
+import { Box, Flex } from "@internal/design-system/primitives";
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { clsx } from "clsx";
 import { useShallow } from "zustand/react/shallow";

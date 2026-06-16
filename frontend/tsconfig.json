@@ -20,18 +20,35 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@storybook/react": ["./node_modules/@storybook/react/dist/index"],
-      "@for-digital-divide/design-system": [
-        "./packages/design-system/src/index.ts"
+      "@internal/design-system/components": [
+        "../packages/design-system/src/components/index"
       ],
-      "@for-digital-divide/design-system/button-group-styles": [
-        "./packages/design-system/src/components/ButtonGroup.css.ts"
+      "@internal/design-system/components/*": [
+        "../packages/design-system/src/components/*"
       ],
-      "@for-digital-divide/design-system/button-styles": [
-        "./packages/design-system/src/components/Button.css.ts"
+      "@internal/design-system/primitives": [
+        "../packages/design-system/src/primitives/index"
       ],
-      "@for-digital-divide/design-system/styles": [
-        "./packages/design-system/src/styles/index.ts"
+      "@internal/design-system/primitives/*": [
+        "../packages/design-system/src/primitives/*"
+      ],
+      "@internal/design-system/tokens": [
+        "../packages/design-system/src/tokens/index"
+      ],
+      "@internal/design-system/tokens/*": [
+        "../packages/design-system/src/tokens/*"
+      ],
+      "@internal/design-system/style": [
+        "../packages/design-system/src/styles/index"
+      ],
+      "@internal/design-system/style/*": [
+        "../packages/design-system/src/styles/*"
+      ],
+      "@internal/design-system/patterns": [
+        "../packages/design-system/src/patterns/index"
+      ],
+      "@internal/design-system/patterns/*": [
+        "../packages/design-system/src/patterns/*"
       ],
       "@compo/*": ["./src/components/*"],
       "@icons/*": ["./src/icons/*"],
@@ -63,12 +80,16 @@
     "./type.d.ts",
     "scripts/generateTransactions.mjs",
     "eslint.config.mjs",
-    ".next/dev/types/**/*.ts"
+    ".next/dev/types/**/*.ts",
+    "../packages/design-system/src/**/*.ts",
+    "../packages/design-system/src/**/*.tsx"
   ],
   "exclude": [
     "./node_modules",
     "storybook-static",
     "**/*.stories.ts",
-    "**/*.stories.tsx"
+    "**/*.stories.tsx",
+    "../packages/design-system/src/**/*.stories.ts",
+    "../packages/design-system/src/**/*.stories.tsx"
   ]
 }

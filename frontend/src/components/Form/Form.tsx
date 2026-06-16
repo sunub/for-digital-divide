@@ -1,9 +1,9 @@
 "use client";
 
-import { BaseForm, type FormProps } from "@for-digital-divide/design-system";
+import { BaseForm, type FormProps } from "@internal/design-system/primitives";
 import type { Ref } from "react";
 import { useActionState } from "react";
-import type { ActionState } from "@/app/login/types";
+import type { ActionState } from "@/app/onboarding/types";
 import { useFormActionToast } from "@/shared/hooks/useFormActionToast";
 import { FormInputContainer } from "../FormInputContainer";
 import { SubmitButton } from "./SubmitButton";

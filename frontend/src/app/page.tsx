@@ -1,12 +1,8 @@
 "use client";
 
-import {
-  Flex,
-  Grid,
-  gridLayout,
-  Text,
-  ThreeDButton,
-} from "@for-digital-divide/design-system";
+import { Text, ThreeDButton } from "@internal/design-system/components";
+import { Flex, Grid } from "@internal/design-system/primitives";
+import { gridLayout } from "@internal/design-system/style/Grid.css";
 import Link from "next/link";
 import { memo, useCallback } from "react";
 import { Instruction } from "@/components/Instruction";
@@ -34,6 +30,7 @@ const StartButton = memo(function StartButton({
         onClick={handleStart}
         onHoverStart={handleHover}
         onMouseLeave={handleHover}
+        highlighting={true}
         href={"/intro"}
       >
         시작하기

@@ -1,23 +1,6 @@
-export { vars } from "../tokens/theme.css";
-export {
-  flexAlignEnd,
-  flexAlignStart,
-  flexCenter,
-  flexColumnAlignEnd,
-  flexColumnAlignStart,
-  flexColumnCenter,
-  flexColumnSpaceBetween,
-  flexSpaceBetween,
-} from "./Flex.css";
-export {
-  gridCenter,
-  gridFlexStart,
-} from "./Grid.css";
-export {
-  splitProps,
-  sprinklePropNames,
-} from "./sprinkels.utils";
-export {
-  type BaseStyle,
-  baseStyles,
-} from "./sprinkles.css";
+export * from "../tokens/theme.css";
+export * from "./Flex.css";
+export * from "./Grid.css";
+export * from "./sprinkels.utils";
+export * from "./sprinkles.css";
+export * from "./effects.css";

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { FunnelResult, StepConfig } from "./types";
 
 /**
@@ -34,6 +34,8 @@ export function useFunnel<T>(
     return activeSteps.findIndex((s) => s.id === currentStepId);
   }, [activeSteps, currentStepId]);
 
+  const prevActiveLengthRef = useRef(activeSteps.length);
+
   useEffect(() => {
     if (currentIndex === -1 && activeSteps.length > 0) {
       const firstStepId = activeSteps[0].id;
@@ -42,6 +44,20 @@ export function useFunnel<T>(
       router.replace(`${pathname}?${params.toString()}`);
     }
   }, [currentIndex, activeSteps, pathname, router, searchParams]);
+
+  useEffect(() => {
+    if (activeSteps.length > prevActiveLengthRef.current) {
+      if (currentIndex === prevActiveLengthRef.current - 1) {
+        const nextStepId = activeSteps[currentIndex + 1]?.id;
+        if (nextStepId) {
+          const params = new URLSearchParams(searchParams.toString());
+          params.set("step", nextStepId);
+          router.push(`${pathname}?${params.toString()}`);
+        }
+      }
+    }
+    prevActiveLengthRef.current = activeSteps.length;
+  }, [activeSteps, currentIndex, pathname, router, searchParams]);
 
   const progress = useMemo(() => {
     if (activeSteps.length === 0) {

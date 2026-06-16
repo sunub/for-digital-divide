@@ -1,6 +1,6 @@
 import { assignInlineVars } from "@vanilla-extract/dynamic";
+import { Slot } from "@radix-ui/react-slot";
 import clsx from "clsx";
-import NextLink from "next/link";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { vars } from "../tokens/theme.css";
 import * as styles from "./AppLink.css";
@@ -8,8 +8,9 @@ import * as styles from "./AppLink.css";
 type AppLinkVariant = keyof typeof styles.linkVariant;
 
 export interface AppLinkProps
-  extends Omit<ComponentPropsWithoutRef<typeof NextLink>, "children"> {
+  extends ComponentPropsWithoutRef<"a"> {
   children: ReactNode;
+  asChild?: boolean;
   className?: string;
   hoverColor?: string;
   standoutColor?: string;
@@ -19,6 +20,7 @@ export interface AppLinkProps
 
 export function AppLink({
   children,
+  asChild = false,
   className,
   hoverColor = vars.color.button,
   standoutColor = vars.color.standOut,
@@ -36,8 +38,10 @@ export function AppLink({
       })
     : undefined;
 
+  const Component = asChild ? Slot : "a";
+
   return (
-    <NextLink
+    <Component
       className={clsx(
         styles.linkBase,
         styles.linkVariant[variant],
@@ -52,6 +56,6 @@ export function AppLink({
       >
         {children}
       </span>
-    </NextLink>
+    </Component>
   );
 }

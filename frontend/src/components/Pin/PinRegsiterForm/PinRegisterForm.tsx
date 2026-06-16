@@ -1,10 +1,10 @@
 "use client";
 
-import { BaseForm, type FormProps } from "@for-digital-divide/design-system";
+import { BaseForm, type FormProps } from "@internal/design-system/primitives";
 import clsx from "clsx";
 import type { Ref } from "react";
-import { SubmittingStatus } from "@/app/login/email-password/ui/SubmittingStatus";
-import type { ActionState } from "@/app/login/types";
+import { SubmittingStatus } from "@/app/onboarding/email-password/ui/SubmittingStatus";
+import type { ActionState } from "@/app/onboarding/types";
 import { useNumpadStore } from "@/context/NumpadContext";
 import { ContentOpener } from "@/shared/layout/ui/ContentOpener";
 import { PinContent } from "../PinContent/PinContent";
@@ -20,6 +20,7 @@ type PinFormProps = Omit<FormProps, "action"> & {
   children: React.ReactNode;
   title: string;
   description?: string;
+  onSuccess?: () => void;
 };
 
 export function PinRegisterForm({
@@ -28,11 +29,13 @@ export function PinRegisterForm({
   children,
   title,
   description,
+  onSuccess,
   ...props
 }: PinFormProps) {
   const deleteNumpad = useNumpadStore((s) => s.deleteNumpad);
   const { formAction, status, actionState } = useRegisterPinFlow({
     action,
+    onSuccess,
     onActionComplete() {
       deleteNumpad();
     },

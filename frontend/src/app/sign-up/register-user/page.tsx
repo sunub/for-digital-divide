@@ -1,4 +1,5 @@
-import { Flex, Grid, Text } from "@for-digital-divide/design-system";
+import { Text } from "@internal/design-system/components";
+import { Flex, Grid } from "@internal/design-system/primitives";
 import Link from "next/link";
 import {
   MdAccountBalance,

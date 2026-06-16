@@ -28,6 +28,7 @@
     },
     "lint": {},
     "ci": {},
-    "format": {}
+    "format": {},
+    "check": {}
   }
 }

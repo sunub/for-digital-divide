@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex } from "@for-digital-divide/design-system";
+import { Box, Flex } from "@internal/design-system/primitives";
 import { HandIcon, SmileIcon } from "lucide-react";
 import { motion, useAnimate } from "motion/react";
 import { useCallback } from "react";

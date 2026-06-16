@@ -1,4 +1,5 @@
-import { Box, Flex, Surface, Text } from "@for-digital-divide/design-system";
+import { Surface, Text } from "@internal/design-system/components";
+import { Box, Flex } from "@internal/design-system/primitives";
 import * as style from "./TransactionChart.css";
 
 const skeletonBarHeights = [

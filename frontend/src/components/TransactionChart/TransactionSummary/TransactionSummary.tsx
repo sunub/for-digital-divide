@@ -1,4 +1,5 @@
-import { ButtonGroup, Flex } from "@for-digital-divide/design-system";
+import { ButtonGroup } from "@internal/design-system/components";
+import { Flex } from "@internal/design-system/primitives";
 import Spacer from "@/constants/Spacer";
 import { CHART_VIEW_MODES } from "../constants/chartViewMode";
 import { TIME_PERIODS } from "../constants/timePeriod";

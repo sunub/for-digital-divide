@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  Flex,
   ThreeDButton,
   type ThreeDButtonProps,
-} from "@for-digital-divide/design-system";
+} from "@internal/design-system/components";
+import { Flex } from "@internal/design-system/primitives";
 
 interface SubmitButtonProps
   extends Omit<ThreeDButtonProps, "children" | "type"> {

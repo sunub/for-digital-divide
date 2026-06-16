@@ -234,6 +234,8 @@ export const vars = createGlobalTheme(":root", {
     phone: "376px",
     numpad: "40px",
     button: "100px",
+    deviceWidth: "var(--device-width, 437.5px)",
+    deviceHeight: "var(--device-height, 875px)",
   },
   fontSize: {
     "0.25rem": "0.25rem",

@@ -1,7 +1,8 @@
-import { Flex, PageFlexSection } from "@for-digital-divide/design-system";
+import { Tooltip } from "@internal/design-system/components";
+import { PageFlexSection } from "@internal/design-system/patterns";
+import { Flex } from "@internal/design-system/primitives";
 import { LogOutIcon } from "lucide-react";
 import { Suspense } from "react";
-import { Tooltip } from "@/components/Tooltip";
 import { logoutAction } from "../../utils/logoutAction";
 import * as style from "./DashboardHeader.css";
 import { Username } from "./Username";

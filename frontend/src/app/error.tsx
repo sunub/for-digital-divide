@@ -1,6 +1,6 @@
 "use client";
 
-import { ThreeDButton } from "@for-digital-divide/design-system";
+import { ThreeDButton } from "@internal/design-system/components";
 import { goToHome } from "@/utils/revalidate";
 import * as styles from "./error.css";
 

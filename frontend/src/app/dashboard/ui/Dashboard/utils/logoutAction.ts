@@ -11,5 +11,5 @@ export async function logoutAction() {
     await userService.updateSessionIdByUserId(session.user_id, null);
   }
   await deleteSessionCookieStorage("en_session");
-  redirect("/login");
+  redirect("/onboarding");
 }

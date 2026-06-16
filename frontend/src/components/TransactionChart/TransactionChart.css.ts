@@ -1,4 +1,4 @@
-import { vars } from "@for-digital-divide/design-system/styles";
+import { vars } from "@internal/design-system/style";
 import { keyframes, style } from "@vanilla-extract/css";
 
 const shimmer = keyframes({

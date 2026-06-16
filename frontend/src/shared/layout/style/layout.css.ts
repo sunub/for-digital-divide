@@ -1,4 +1,4 @@
-import { gridCenter, vars } from "@for-digital-divide/design-system/styles";
+import { gridCenter, vars } from "@internal/design-system/style";
 import {
   createVar,
   fallbackVar,
@@ -110,12 +110,8 @@ export const container = style({
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
-  width: "431px",
-  height: "851px",
-  minWidth: "431px",
-  minHeight: "851px",
-  maxWidth: "320px",
-  maxHeight: "650px",
+  width: vars.size.deviceWidth,
+  height: vars.size.deviceHeight,
   flexShrink: 0,
   borderRadius: "40px",
   overflow: "hidden",
@@ -182,7 +178,7 @@ globalStyle(`${frame}::after`, {
 export const drawerContent = style({
   display: fallbackVar(drawerContentDisplayVar, "none"),
   flexDirection: "column",
-  gap: vars.space[9],
+  gap: vars.space[2],
   alignItems: "center",
   zIndex: drawerContentZVar,
   transform: `translateY(var(${translateYValVar}))`,
@@ -228,11 +224,11 @@ export const drawerContainer = style({
 
 globalStyle(`${frame}[data-view='drawer'] ${drawerContainer}`, {
   vars: {
-    [drawerContentVar]: "10fr",
+    [drawerContentVar]: "15fr",
     [drawerOpenerVar]: "1fr",
     [translateYValVar]: "0%",
     [drawerContentZVar]: "0",
-    [drawerContenPaddingVar]: vars.fontSize["1rem"],
+    [drawerContenPaddingVar]: vars.space["0.5"],
   },
 });
 
@@ -246,7 +242,7 @@ globalStyle(`${frame} > ${drawerContainer}`, {
 
 export const drawerOpener = style({
   position: "relative",
-  height: "3cqh",
+  height: "20px",
   width: "100cqw",
   transition: "transform 100ms cubic-bezier(0.39, 0.575, 0.565, 1)",
   outlineOffset: "4px",
@@ -449,4 +445,11 @@ export const footerContent = style({
   alignItems: "center",
   gap: "24px",
   marginRight: "2rem",
+});
+
+export const devicePortalWrapper = style({
+  position: "absolute",
+  inset: 0,
+  pointerEvents: "none",
+  zIndex: 9999,
 });

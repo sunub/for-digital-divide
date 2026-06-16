@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import type { ActionState } from "@/app/login/types";
+import type { ActionState } from "@/app/onboarding/types";
 import { useToast } from "@/provider/toast/hooks/useToast";
 
 export function useFormActionToast(

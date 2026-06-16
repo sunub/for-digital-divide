@@ -1,10 +1,9 @@
 "use client";
 
-import { Flex } from "@for-digital-divide/design-system";
+import { TextField } from "@internal/design-system/components";
+import { Flex } from "@internal/design-system/primitives";
 import { UserIcon } from "lucide-react";
 import { useState } from "react";
-import { TextField } from "@/components/TextField/TextField";
-import { errorText } from "../EmailAndPasswordField/EmailAndPasswordField.css";
 import { useUsernameValidation } from "./hooks/useUsernameValidation";
 
 export function UsernameInput() {
@@ -28,15 +27,15 @@ export function UsernameInput() {
         name="username"
         onBlur={handleOnBlur}
         onChange={handleOnChange}
-        isError={!usernameError}
+        isError={!!usernameError}
+        errorMessage={
+          usernameError ||
+          "2자 이상 20자 이하의 한글 또는 영문 대소문자만 사용할 수 있습니다."
+        }
         labelContent="사용자 이름을 입력해주세요"
         autoComplete="username"
-        leftIcon={<UserIcon size={16} />}
+        leftElement={<UserIcon size={16} />}
       />
-      <span className={errorText({ isVisible: usernameError != null })}>
-        {usernameError ||
-          "2자 이상 20자 이하의 한글 또는 영문 대소문자만 사용할 수 있습니다."}
-      </span>
     </Flex>
   );
 }

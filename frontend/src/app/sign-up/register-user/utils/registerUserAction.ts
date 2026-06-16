@@ -2,10 +2,12 @@
 
 import { userService } from "@entities/users/users.service";
 import bcrypt from "bcryptjs";
+// @ts-expect-error: Next.js internal export
+import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod/v4";
-import type { ActionState } from "@/app/login/types";
+import type { ActionState } from "@/app/onboarding/types";
 import { authMethodsService } from "@/entities/auth_methods/auth_methods.service";
 import { createCookieStorage } from "@/utils/cookies/createCookieStorage";
 import { setFlashMessageCookie } from "@/utils/cookies/setFlashMessageCookie";
@@ -77,7 +79,7 @@ export async function registerUserAction(
 
   if (sessionCookie) {
     setFlashMessageCookie("기존의 세션이 존재합니다.");
-    redirect("/login");
+    redirect("/onboarding");
   }
 
   try {
@@ -102,7 +104,11 @@ export async function registerUserAction(
     );
 
     setFlashMessageCookie("사용자 이름이 성공적으로 등록되었습니다.");
+    redirect("/onboarding");
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
     console.error(error);
     return {
       ...prevState,
@@ -111,5 +117,5 @@ export async function registerUserAction(
     };
   }
 
-  redirect("/login");
+  redirect("/onboarding");
 }

@@ -27,21 +27,21 @@ export const STEPPERS_MAP: StepperType["steps"] = [
     label: "로그인",
     done: false,
     index: 2,
-    path: "/login",
+    path: "/onboarding",
   },
   {
     id: "login-email-stepper",
     label: "Email 비밀번호 로그인",
     done: false,
     index: 3,
-    path: "/login?step=email-input",
+    path: "/onboarding?step=email-input",
   },
   {
     id: "login-pin-stepper",
     label: "PIN 로그인",
     done: false,
     index: 4,
-    path: "/login?step=pin-input",
+    path: "/onboarding?step=pin-input",
   },
 ];
 

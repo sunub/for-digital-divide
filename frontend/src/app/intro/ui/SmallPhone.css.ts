@@ -1,4 +1,4 @@
-import { gridCenter } from "@for-digital-divide/design-system/styles";
+import { gridCenter } from "@internal/design-system/style";
 import { createVar, keyframes, style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 import { fullSize } from "@/style/Size.css";

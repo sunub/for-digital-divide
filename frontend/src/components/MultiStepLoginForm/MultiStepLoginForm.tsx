@@ -1,8 +1,8 @@
 "use client";
 
-import { BaseForm } from "@for-digital-divide/design-system";
-import { SubmittingStatus } from "@/app/login/email-password/ui/SubmittingStatus";
-import type { ActionState } from "@/app/login/types";
+import { BaseForm } from "@internal/design-system/primitives";
+import { SubmittingStatus } from "@/app/onboarding/email-password/ui/SubmittingStatus";
+import type { ActionState } from "@/app/onboarding/types";
 import { useDemoLoginFlow } from "@/shared/hooks/useDemoLoginFlow";
 import { SubmitButton } from "../Form/SubmitButton";
 import { FormInputContainer } from "../FormInputContainer";

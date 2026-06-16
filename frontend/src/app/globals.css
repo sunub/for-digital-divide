@@ -14,14 +14,6 @@
   animation-timing-function: var(--ease-squish-1);
 }
 
-@font-face {
-  src: url("/font/NanumSquareNeo-Variable.woff2") format("woff2");
-  font-family: "NanumSquare";
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: normal;
-}
-
 :root {
   --nanum-square-neo: "NanumSquare";
   --gugi-font-family:
@@ -64,31 +56,33 @@
     oklch(68.88% 0.231 26.47) 0%
   );
   /* oklch(65.29% 0.231 25.278467161119735) */
-  --input: oklch(41.69% 0.104 284.48);
-  --input-invalid: oklch(58.82% 0.182 25.278467161119735);
+  --input: 245 33% 38%;
+  --input-invalid: 0 62% 54%;
 
-  --ring: oklch(76.7% 0.123 284.14);
-  --accent: oklch(65.57% 0.19552898037793698 288.17775174927874);
-  --accent-foreground: var(--color-background);
+  --ring: 241 100% 83%;
+  --accent: 251 100% 73%;
+  --accent-foreground: 252 53% 93%;
 
   --foreground-primary: oklch(96.86% 0.009 288.17775174927874);
   --foreground-destructive: oklch(58.82% 0.182 25.278467161119735);
 
-  --primary: oklch(85.93% 0.0733 288.25);
-  --primary-foreground: oklch(42.44% 0.011 17.58);
+  --primary: 245 100% 90%;
+  --primary-foreground: 0 5% 31%;
 
-  --secondary: oklch(91.4% 0.014 314.75);
-  --secondary-foreground: oklch(42.44% 0.011 17.58);
+  --secondary: 280 17% 90%;
+  --secondary-foreground: 0 5% 31%;
 
-  --destructive: oklch(73.96% 0.1586202546972356 25.278467161119735);
-  --destructive-foreground: oklch(96.88% 0.015 294.47);
+  --destructive: 4 100% 73%;
+  --destructive-foreground: 251 85% 97%;
 
   --pad-button-text-size: 2rem;
   --pad-button-width: 60px;
   --pad-button-height: 65px;
   --pad-button-radius: 8px;
   --pad-button-scale: 1;
-  --intro-phone-height: 350px;
+  --device-width: 370px;
+  --device-height: 781px;
+  --intro-phone-height: calc(var(--device-height) / 2.5);
 }
 
 html {
@@ -371,10 +365,11 @@ button {
 
 @container devsite-content (height < 1035px) {
   * {
+    --device-width: 312.5px;
+    --device-height: 625px;
     --pad-button-text-size: 2rem;
     --pad-button-radius: 8px;
     --pad-button-scale: 0.8;
-    --intro-phone-height: 250px;
   }
 
   #device-root {
@@ -427,10 +422,6 @@ button {
 
   span.pin-pointer {
     --pin-pointer-width: 6cqw;
-  }
-
-  #register-pin__numpad-container {
-    flex-direction: row;
   }
 }
 

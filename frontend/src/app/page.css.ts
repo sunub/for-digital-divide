@@ -1,7 +1,4 @@
-import {
-  baseStyles,
-  gridCenter,
-} from "@for-digital-divide/design-system/styles";
+import { baseStyles, gridCenter } from "@internal/design-system/style";
 import { style } from "@vanilla-extract/css";
 
 export const welcomeMessage = style([

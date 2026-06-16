@@ -1,0 +1,66 @@
+import clsx from "clsx";
+import type { ComponentProps, ReactNode } from "react";
+import { useId, forwardRef } from "react";
+import * as style from "./TextField.css";
+
+export interface TextFieldProps extends Omit<ComponentProps<"input">, "ref"> {
+  labelContent?: string;
+  leftElement?: ReactNode;
+  rightElement?: ReactNode;
+  isError?: boolean;
+  errorMessage?: string;
+}
+
+export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
+  (
+    {
+      id,
+      labelContent,
+      leftElement,
+      rightElement,
+      isError = false,
+      errorMessage,
+      className,
+      ...props
+    },
+    ref,
+  ) => {
+    const internalId = useId();
+    const inputId = id || internalId;
+
+    return (
+      <div className={style.inputGroup}>
+        {labelContent && (
+          <label htmlFor={inputId} className={style.labelStyle}>
+            {labelContent}
+          </label>
+        )}
+        <div className={style.inputWrapper({ isError })}>
+          {leftElement && (
+            <div className={style.leftElementWrapper}>{leftElement}</div>
+          )}
+          <input
+            ref={ref}
+            id={inputId}
+            className={clsx(style.inputField, className)}
+            aria-invalid={isError}
+            aria-describedby={
+              isError && errorMessage ? `${inputId}-error` : undefined
+            }
+            {...props}
+          />
+          {rightElement && (
+            <div className={style.rightElementWrapper}>{rightElement}</div>
+          )}
+        </div>
+        {isError && errorMessage && (
+          <span id={`${inputId}-error`} className={style.errorText}>
+            {errorMessage}
+          </span>
+        )}
+      </div>
+    );
+  },
+);
+
+TextField.displayName = "TextField";

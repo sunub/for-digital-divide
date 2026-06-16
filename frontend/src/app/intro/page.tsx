@@ -1,11 +1,10 @@
 "use client";
 
-import {
-  Flex,
-  Grid,
-  gridLayout,
-  Text,
-} from "@for-digital-divide/design-system";
+import { Button, Text } from "@internal/design-system/components";
+import { Flex, Grid } from "@internal/design-system/primitives";
+import { actionNextStepGlow } from "@internal/design-system/style";
+import { gridLayout } from "@internal/design-system/style/Grid.css";
+import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { memo, useCallback } from "react";
 import {
@@ -110,7 +109,7 @@ export default function IntroPage() {
 
   const handleStart = useCallback(() => {
     add(window.location.href);
-    router.push("/login");
+    router.push("/onboarding");
   }, [add, router]);
 
   const handleCancel = useCallback(() => {
@@ -183,21 +182,24 @@ export default function IntroPage() {
               </div>
 
               <div className={styles.actionArea}>
-                <button
+                <Button
                   type="button"
-                  className={styles.primaryButton}
+                  size="lg"
+                  className={clsx(styles.primaryButton, actionNextStepGlow)}
                   onClick={handleStart}
                 >
                   <span>인증서 발급하기</span>
                   <MdArrowForwardIos size={14} />
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="transparent"
+                  size="lg"
                   className={styles.secondaryButton}
                   onClick={handleCancel}
                 >
                   나중에 발급할게요
-                </button>
+                </Button>
               </div>
             </div>
           </Device.Content>
