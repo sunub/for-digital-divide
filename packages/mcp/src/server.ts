@@ -28,6 +28,7 @@ Available tools:
       {
         description: tool.description,
         inputSchema: tool.schema as Record<string, z.ZodType>,
+        annotations: tool.annotations,
       },
       tool.handler as (args: Record<string, unknown>) => Promise<{
         isError?: boolean;

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpTool } from "./types.js";
 import { designSystemData, loadData } from "../data.js";
+import { ToolCategory } from "./category.js";
 
 export const getThemeTokens: McpTool<{
   category: z.ZodOptional<
@@ -16,6 +17,10 @@ export const getThemeTokens: McpTool<{
   >;
 }> = {
   name: "get_theme_tokens",
+  annotations: {
+    category: ToolCategory.TOKENS,
+    readOnlyHint: true,
+  },
   schema: {
     category: z
       .enum([

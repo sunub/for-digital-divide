@@ -1,14 +1,19 @@
 import { execSync } from "child_process";
 import type { McpTool } from "./types.js";
 import { designSystemData, loadData } from "../data.js";
+import { ToolCategory } from "./category.js";
 
 export const refreshMcpData: McpTool<Record<string, never>> = {
   name: "refresh_mcp_data",
+  annotations: {
+    category: ToolCategory.SYSTEM,
+    readOnlyHint: false,
+  },
   schema: {},
   handler: async () => {
     try {
       const root = designSystemData.designSystemRoot;
-      console.log(`Running build:mcp in ${root}...`);
+      console.error(`Running build:mcp in ${root}...`);
       execSync("pnpm build:mcp", { cwd: root });
 
       // Reload datasets

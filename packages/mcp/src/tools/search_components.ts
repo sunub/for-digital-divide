@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpTool } from "./types.js";
 import { designSystemData, loadData } from "../data.js";
+import { ToolCategory } from "./category.js";
 
 interface SearchResult {
   name: string;
@@ -12,6 +13,10 @@ export const searchComponents: McpTool<{
   query: z.ZodOptional<z.ZodString>;
 }> = {
   name: "search_components",
+  annotations: {
+    category: ToolCategory.COMPONENTS,
+    readOnlyHint: true,
+  },
   schema: {
     query: z.string().optional(),
   },

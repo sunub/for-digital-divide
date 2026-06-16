@@ -9,7 +9,6 @@ const designSystemRoot = path.resolve(__dirname, "../../design-system");
 const tokensPath = path.join(designSystemRoot, "dist/mcp-tokens.json");
 const componentsPath = path.join(designSystemRoot, "dist/mcp-components.json");
 
-// Define strict types for the design system JSON structures
 export interface TokenCategoryData {
   [tokenName: string]: string | Record<string, string>;
 }
@@ -41,12 +40,16 @@ let componentsData: ComponentsData = {};
 export function loadData(): void {
   try {
     if (fs.existsSync(tokensPath)) {
-      tokensData = JSON.parse(fs.readFileSync(tokensPath, "utf-8")) as TokensData;
+      tokensData = JSON.parse(
+        fs.readFileSync(tokensPath, "utf-8"),
+      ) as TokensData;
     } else {
       console.error(`Tokens file not found at: ${tokensPath}`);
     }
     if (fs.existsSync(componentsPath)) {
-      componentsData = JSON.parse(fs.readFileSync(componentsPath, "utf-8")) as ComponentsData;
+      componentsData = JSON.parse(
+        fs.readFileSync(componentsPath, "utf-8"),
+      ) as ComponentsData;
     } else {
       console.error(`Components file not found at: ${componentsPath}`);
     }
@@ -55,7 +58,6 @@ export function loadData(): void {
   }
 }
 
-// Initial load
 loadData();
 
 export const designSystemData = {
@@ -67,5 +69,5 @@ export const designSystemData = {
   },
   get designSystemRoot(): string {
     return designSystemRoot;
-  }
+  },
 };

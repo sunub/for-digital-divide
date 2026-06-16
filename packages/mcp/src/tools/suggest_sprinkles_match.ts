@@ -1,11 +1,16 @@
 import { z } from "zod";
 import type { McpTool } from "./types.js";
 import { designSystemData, loadData } from "../data.js";
+import { ToolCategory } from "./category.js";
 
 export const suggestSprinklesMatch: McpTool<{
   style: z.ZodRecord<z.ZodString, z.ZodUnknown>;
 }> = {
   name: "suggest_sprinkles_match",
+  annotations: {
+    category: ToolCategory.STYLING,
+    readOnlyHint: true,
+  },
   schema: {
     style: z.record(z.string(), z.unknown()),
   },
