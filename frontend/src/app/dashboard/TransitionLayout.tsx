@@ -3,7 +3,6 @@
 import { Flex } from "@internal/design-system/primitives";
 import type { MotionNodeAnimationOptions } from "motion/react";
 import { AnimatePresence, motion } from "motion/react";
-import { useSelectedLayoutSegment } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const pageVariants: MotionNodeAnimationOptions["variants"] = {
@@ -20,23 +19,21 @@ export const pageTransition: MotionNodeAnimationOptions["transition"] = {
 
 export function TransitionLayout({
   children,
-  modal,
+  className,
 }: {
   children: React.ReactNode;
-  modal: React.ReactNode;
+  className?: string;
 }) {
-  const registerSegment = useSelectedLayoutSegment("modal");
-  const isModalOpen = registerSegment !== null;
   const [hasHydrated, setHasHydrated] = useState(false);
 
   useEffect(() => {
     setHasHydrated(true);
   }, []);
 
-  const layoutKey = isModalOpen ? "dashboard-modal" : "dashboard-content";
+  const layoutKey = "dashboard-content";
 
   return (
-    <Flex>
+    <Flex className={className} width="full" position="relative">
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.div
           key={layoutKey}
@@ -47,7 +44,7 @@ export function TransitionLayout({
           transition={pageTransition}
           style={{ width: "100%", height: "100%" }}
         >
-          {isModalOpen ? modal : children}
+          {children}
         </motion.div>
       </AnimatePresence>
     </Flex>
