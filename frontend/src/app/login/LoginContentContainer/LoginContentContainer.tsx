@@ -3,23 +3,19 @@
 import { Flex } from "@internal/design-system/primitives";
 import type { MotionNodeAnimationOptions } from "motion/react";
 import { motion } from "motion/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useFunnel } from "@/shared/hooks/useFunnel/useFunnel";
 import { useIsMounted } from "@/shared/hooks/useIsMounted";
 import { useOnboardingStore } from "@/store/onboarding-store";
 import AccountStep from "../components/AccountStep";
-import IdCardInfoStep from "../components/IdCardInfoStep";
-import IdCardSelectionStep from "../components/IdCardSelectionStep";
-// 10개 단계별 컴포넌트 임포트
-import IntroStep from "../components/IntroStep";
-import PinRegisterStep from "../components/PinRegisterStep";
-import SuccessStep from "../components/SuccessStep";
-import TermsStep from "../components/TermsStep";
-import VerifyInfoStep from "../components/VerifyInfoStep";
-import VerifyOtpStep from "../components/VerifyOtpStep";
 import VerifySelectionStep from "../components/VerifySelectionStep";
 import { ONBOARDING_STEPS } from "../funnelConfig";
+import { IdCardInfoStep } from "../IdCardInfoStep";
+import IdCardSelectionStep from "../IdCardSelectionStep";
+import TermsStep from "../TermsStep/TermsStep";
 import { ToastMessage } from "../ui/ToastMessage";
+import VerifyInfoStep from "../VerifyInfoStep";
+import VerifyOtpStep from "../VerifyOtpStep";
 
 interface LoginContentContainerProps {
   hasPinLoginAvailable: boolean; // 기존 프롭 유지
@@ -75,7 +71,6 @@ export function LoginContentContainer({ reason }: LoginContentContainerProps) {
         justifyContent={"center"}
         style={{
           width: "100%",
-          minHeight: "450px", // CLS 방지를 위한 고정 최소 높이 설정
         }}
       >
         로딩 중...
@@ -84,22 +79,13 @@ export function LoginContentContainer({ reason }: LoginContentContainerProps) {
   }
 
   const currentStepId = funnel.currentStepId;
-
-  const handleCompleteOnboarding = () => {
-    state.resetOnboarding(); // 스토어 초기화
-    router.replace("/dashboard");
-  };
-
   return (
     <Flex
       direction={"column"}
       alignItems={"center"}
       justifyContent={"center"}
       gap={"3rem"}
-      style={{
-        width: "100%",
-        minHeight: "450px", // CLS 방지를 위한 고정 최소 높이 설정
-      }}
+      height={"full"}
     >
       {reason && <ToastMessage reason={reason} />}
       <AnimationPresenceWrapper animationKey={currentStepId}>
@@ -117,13 +103,9 @@ export function LoginContentContainer({ reason }: LoginContentContainerProps) {
           <IdCardSelectionStep onNext={funnel.next} />
         )}
         {currentStepId === "id-card-info" && (
-          <IdCardInfoStep onNext={funnel.next} />
+          <IdCardInfoStep onNext={() => router.replace("/login/success")} />
         )}
         {currentStepId === "account" && <AccountStep onNext={funnel.next} />}
-        {currentStepId === "success" && <SuccessStep onNext={funnel.next} />}
-        {currentStepId === "pin-register" && (
-          <PinRegisterStep onComplete={handleCompleteOnboarding} />
-        )}
       </AnimationPresenceWrapper>
     </Flex>
   );
