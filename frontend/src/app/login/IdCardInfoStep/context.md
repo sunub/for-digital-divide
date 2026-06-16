@@ -11,8 +11,6 @@
 - [ResidentNumberField](./ResidentNumberField.tsx): Split resident number input group (front 6 digits + masked back first digit) with sanitization and auto-focus behavior.
 - [IssueDateField](./IssueDateField.tsx): Controlled issue-date input with `YYYY.MM.DD` formatter.
 - [form](./form.ts): Validation schema, error IDs/messages, and reusable input sanitizers/formatters.
-- [index](./index.ts): Barrel export that re-exports `IdCardInfoStep` as the domain entrypoint.
-- [IdCardInfoStep.css.ts](./IdCardInfoStep.css.ts): Style-only presentation layer consumed by step/field components.
 
 ## 3. Shared Assets & Helpers
 ### Hooks (hooks/)
@@ -23,10 +21,6 @@
 - `sanitizeResidentFront(value: string) => string`: Keeps numeric characters only and truncates to 6 digits.
 - `sanitizeResidentBack(value: string) => string`: Keeps numeric characters only and truncates to 1 digit.
 - `formatIssueDate(value: string) => string`: Converts raw numeric input into `YYYY.MM.DD` progressively.
-- `ID_CARD_ERROR_CODES`: Canonical validation error code constants used by `zod` schema messages.
-- `ID_CARD_ERROR_MESSAGES: Record<string, string>`: Error-code-to-message dictionary.
-- `ID_CARD_FIELD_IDS`: Stable DOM IDs for input fields.
-- `ID_CARD_ERROR_IDS`: Stable DOM IDs for resident number error rendering.
 
 ### Types & Interfaces (types/)
 - `type IdCardFormData = z.infer<typeof idCardSchema>`: Canonical form value shape (`name`, `residentFront`, `residentBack`, `issueDate`).
