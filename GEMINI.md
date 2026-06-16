@@ -8,7 +8,7 @@
     <project_scope>
       This repository is a monorepo for "For-digital-divide", a service designed to bridge the digital divide by enabling mobile-first financial services to be used seamlessly on PC.
       It consists of three main systems:
-      1. Next.js Web Application (frontend/): Simulates a mobile device frame, managing steps/history navigation using Jotai, Zod, and vanilla-extract.
+      1. Next.js Web Application (frontend/): Simulates a mobile device frame, managing steps/history navigation using Zustand, Zod, and vanilla-extract.
       2. Nest.js API Server (backend/): Handles business logic, session authentication, and database access via Prisma.
       3. Design System Package (packages/design-system/): A shared component library built with Vanilla-Extract CSS, motion (framer-motion), and bundled using tsup.
     </project_scope>
