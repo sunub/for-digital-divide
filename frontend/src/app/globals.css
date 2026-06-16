@@ -423,10 +423,6 @@ button {
   span.pin-pointer {
     --pin-pointer-width: 6cqw;
   }
-
-  #register-pin__numpad-container {
-    flex-direction: row;
-  }
 }
 
 @layer base {
