@@ -25,7 +25,7 @@
 ### Types & Interfaces (types/)
 - `type ActionState`: Custom type representing the unified server action response schema containing status states (`idle` | `continue` | `success` | `error` | etc.), payload message arrays, step progress states, and next-step redirection indicators.
 
-### Onboarding Steps Components (components/)
+### Onboarding Steps Components
 - `AccountStep({ onNext: () => void }) => JSX.Element`: Renders input fields for account verification.
 - `IdCardInfoStep({ onNext: () => void }) => JSX.Element`: Renders input fields for verification of resident identity cards.
 - `IdCardSelectionStep({ onNext: () => void }) => JSX.Element`: Select screen for choosing between ID types.
@@ -33,8 +33,8 @@
 - `PinRegisterStep({ onComplete: () => void }) => JSX.Element`: Screen to set up the 6-digit 간편 비밀번호 PIN login.
 - `SuccessStep({ onNext: () => void }) => JSX.Element`: Success transition screen showing verification completion.
 - `TermsStep({ onNext: () => void }) => JSX.Element`: Renders 약관 동의 (terms of service agreements).
-- `VerifyInfoStep({ onNext: () => void }) => JSX.Element`: Collects and validates basic personal information (name, resident registration number front/back, carrier select, phone) using `react-hook-form` and `zodResolver` with premium styles, auto-formatting, and auto-focus micro-interactions.
-- `VerifyOtpStep({ onNext: () => void }) => JSX.Element`: Verification code input (SMS OTP validation).
+- `VerifyInfoStep({ onNext: () => void }) => JSX.Element` (`VerifyInfoStep/VerifyInfoStep.tsx`): Collects and validates basic personal information (name, resident registration number front/back, carrier select, phone) using `react-hook-form` and `zodResolver` with split subcomponents, accessibility-aware field ids/names/labels, and input auto-format/focus interactions.
+- `VerifyOtpStep({ onNext: () => void }) => JSX.Element` (`VerifyOtpStep/VerifyOtpStep.tsx`): Verification code input (SMS OTP validation) with split form helpers, input field component, and accessibility metadata.
 - `VerifySelectionStep({ onNext: () => void }) => JSX.Element`: Gateway selection to begin SMS certification.
 
 ### Common UI Components (ui/)
@@ -75,6 +75,23 @@ login/
 │   ├── VerifyStep.css.ts
 │   ├── VerifyStep.tsx
 │   └── context.md
+├── VerifyInfoStep/
+│   ├── CarrierField.tsx
+│   ├── NameField.tsx
+│   ├── PhoneField.tsx
+│   ├── ResidentNumberField.tsx
+│   ├── VerifyInfoStep.css.ts
+│   ├── VerifyInfoStep.tsx
+│   ├── VerifyInfoStepHeader.tsx
+│   ├── form.ts
+│   └── index.ts
+├── VerifyOtpStep/
+│   ├── OtpCodeField.tsx
+│   ├── VerifyOtpStep.css.ts
+│   ├── VerifyOtpStep.tsx
+│   ├── VerifyOtpStepHeader.tsx
+│   ├── form.ts
+│   └── index.ts
 ├── components/
 │   ├── AccountStep.tsx
 │   ├── IdCardInfoStep.tsx
@@ -83,9 +100,6 @@ login/
 │   ├── PinRegisterStep.tsx
 │   ├── SuccessStep.tsx
 │   ├── TermsStep.tsx
-│   ├── VerifyInfoStep.css.ts
-│   ├── VerifyInfoStep.tsx
-│   ├── VerifyOtpStep.tsx
 │   └── VerifySelectionStep.tsx
 ├── email-password/
 │   ├── context.md

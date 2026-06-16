@@ -30,40 +30,21 @@ export const ONBOARDING_STEPS: StepConfig<OnboardingState>[] = [
   },
   {
     id: "id-card-info",
-    name: "주민등록증 정보 입력",
+    name: "신분증 정보 입력",
     shouldRender: (state) =>
       state.isVerifyInfoSubmitted &&
       state.isSmsVerified &&
       state.termsAgreed &&
-      state.selectedIdCardType === "resident",
-  },
-  {
-    id: "account",
-    name: "계좌 인증",
-    shouldRender: (state) =>
-      state.isVerifyInfoSubmitted &&
-      state.isSmsVerified &&
-      state.termsAgreed &&
-      state.isIdCardVerified,
-  },
-  {
-    id: "success",
-    name: "검증 완료 성공",
-    shouldRender: (state) =>
-      state.isVerifyInfoSubmitted &&
-      state.isSmsVerified &&
-      state.termsAgreed &&
-      state.isIdCardVerified &&
-      state.isAccountVerified,
-  },
-  {
-    id: "pin-register",
-    name: "PIN 번호 등록",
-    shouldRender: (state) =>
-      state.isVerifyInfoSubmitted &&
-      state.isSmsVerified &&
-      state.termsAgreed &&
-      state.isIdCardVerified &&
-      state.isAccountVerified,
+      state.selectedIdCardType !== null,
   },
 ];
+//
+// {
+//     id: "account",
+//     name: "계좌 인증",
+//     shouldRender: (state) =>
+//       state.isVerifyInfoSubmitted &&
+//       state.isSmsVerified &&
+//       state.termsAgreed &&
+//       state.isIdCardVerified,
+//   },
