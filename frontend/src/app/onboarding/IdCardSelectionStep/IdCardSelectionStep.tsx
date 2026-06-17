@@ -1,6 +1,7 @@
 import { Button } from "@internal/design-system/components";
 import { Flex } from "@internal/design-system/primitives";
 import { useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import {
   type OnboardingState,
   useOnboardingStore,
@@ -28,7 +29,12 @@ const ID_CARD_OPTIONS: IdCardOptionConfig[] = [
 ];
 
 export function IdCardSelectionStep({ onNext }: StepProps) {
-  const store = useOnboardingStore();
+  const store = useOnboardingStore(
+    useShallow((store) => ({
+      selectedIdCardType: store.selectedIdCardType,
+      setSelectedIdCardType: store.setSelectedIdCardType,
+    })),
+  );
   const [selectedType, setSelectedType] = useState<IdCardType>(
     store.selectedIdCardType ?? "resident",
   );

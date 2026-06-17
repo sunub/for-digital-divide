@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { useOnboardingStore } from "@/store/onboarding/onboarding-store";
 import { OptionalTermsSection } from "./components/OptionalTermsSection";
 import { RequiredTermsSection } from "./components/RequiredTermsSection";
@@ -13,7 +14,12 @@ interface StepProps {
 }
 
 export default function TermsStep({ onNext }: StepProps) {
-  const store = useOnboardingStore();
+  const store = useOnboardingStore(
+    useShallow((store) => ({
+      setTermsAgreed: store.setTermsAgreed,
+      setOptionalTerms: store.setOptionalTerms,
+    })),
+  );
 
   const [req, setReq] = useState({
     hanaOneQApp: false,

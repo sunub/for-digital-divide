@@ -1,7 +1,13 @@
 import type { StepConfig } from "@/shared/hooks/useFunnel/types";
-import type { OnboardingState } from "@/store/onboarding/onboarding-store";
 
-export const ONBOARDING_STEPS: StepConfig<OnboardingState>[] = [
+export interface FunnelConditionState {
+  isVerifyInfoSubmitted: boolean;
+  isSmsVerified: boolean;
+  termsAgreed: boolean;
+  selectedIdCardType: string | null;
+}
+
+export const ONBOARDING_STEPS: StepConfig<FunnelConditionState>[] = [
   {
     id: "verify-selection",
     name: "인증 방식 선택",

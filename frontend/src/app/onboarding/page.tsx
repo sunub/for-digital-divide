@@ -1,18 +1,15 @@
 import { Grid } from "@internal/design-system/primitives";
 import { gridLayout } from "@internal/design-system/style";
 import { Device } from "@/shared/layout";
-import { getPermanentCookieStorage } from "@/utils/cookies/permanentCookieStorage";
-import { LoginContentContainer } from "./LoginContentContainer";
+import { OnboardingContentContainer } from "./OnboardingContentContainer";
 import { OnboardingGuide } from "./OnboardingGuide";
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ step?: string; reason?: string }>;
+  searchParams: Promise<{ step?: string }>;
 }) {
-  const { reason, step } = (await searchParams) || {};
-  const deviceCookie = await getPermanentCookieStorage("en_device");
-  const hasPinLoginAvailable = Boolean(deviceCookie?.device_id);
+  const { step } = (await searchParams) || {};
 
   return (
     <Grid className={gridLayout}>
@@ -22,10 +19,7 @@ export default async function Page({
       {/* right panel */}
       <Device.Frame>
         <Device.Content>
-          <LoginContentContainer
-            hasPinLoginAvailable={hasPinLoginAvailable}
-            reason={reason}
-          />
+          <OnboardingContentContainer />
         </Device.Content>
       </Device.Frame>
     </Grid>
