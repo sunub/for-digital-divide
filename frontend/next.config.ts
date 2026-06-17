@@ -7,7 +7,7 @@ const withVanillaExtract = createVanillaExtractPlugin();
 const nextConfig: NextConfig = {
   basePath: "",
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
-  transpilePackages: ["@for-digital-divide/design-system"],
+  transpilePackages: ["@internal/design-system"],
   images: {
     formats: ["image/avif", "image/webp"],
   },

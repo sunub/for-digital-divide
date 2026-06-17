@@ -15,7 +15,7 @@ export const panelContainer = style({
   flexDirection: "column",
   gap: vars.space[6],
   padding: vars.space[6],
-  maxWidth: "600px",
+  maxWidth: "80%",
   width: "100%",
   justifySelf: "flex-end",
   textAlign: "center",
