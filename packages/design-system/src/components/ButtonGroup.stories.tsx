@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ButtonGroup } from "./ButtonGroup";
 import { Button } from "./Button";
+import { ButtonGroup } from "./ButtonGroup";
 
 const meta = {
   title: "Components/ButtonGroup",
@@ -8,7 +8,8 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: "여러 개의 버튼을 그룹화하여 보여줄 때 사용하는 컴포넌트입니다.",
+        component:
+          "여러 개의 버튼을 그룹화하여 보여줄 때 사용하는 컴포넌트입니다.",
       },
     },
   },

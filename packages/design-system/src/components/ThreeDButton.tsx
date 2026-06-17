@@ -1,11 +1,11 @@
 "use client";
 
+import clsx from "clsx";
 import type { MotionProps } from "motion/react";
 import { motion } from "motion/react";
 import type { ComponentPropsWithoutRef, ElementType } from "react";
 import { memo, useEffect, useMemo, useState } from "react";
 import * as styles from "./ThreeDButton.css";
-import clsx from "clsx";
 
 export type ThreeDButtonStatus = "idle" | "pending" | "resolved" | "rejected";
 
@@ -18,8 +18,8 @@ interface ThreeDButtonOwnProps<E extends ElementType = "button"> {
 
 export type ThreeDButtonProps<E extends ElementType = "button"> =
   ThreeDButtonOwnProps<E> &
-  Omit<ComponentPropsWithoutRef<E>, keyof ThreeDButtonOwnProps> &
-  MotionProps;
+    Omit<ComponentPropsWithoutRef<E>, keyof ThreeDButtonOwnProps> &
+    MotionProps;
 
 function ThreeDButtonInner<T extends ElementType = "button">({
   variant = "default",

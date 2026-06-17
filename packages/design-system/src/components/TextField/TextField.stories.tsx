@@ -7,7 +7,8 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: "기본적인 텍스트 입력을 위한 TextField 컴포넌트입니다. 라벨, 에러 상태, 커스텀 아이콘 등을 지원합니다.",
+        component:
+          "기본적인 텍스트 입력을 위한 TextField 컴포넌트입니다. 라벨, 에러 상태, 커스텀 아이콘 등을 지원합니다.",
       },
     },
   },

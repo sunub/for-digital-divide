@@ -1,6 +1,6 @@
-import { vars } from "../../../styles";
 import { style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
+import { vars } from "../../../styles";
 
 export const portalContainer = recipe({
   base: {

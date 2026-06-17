@@ -4,8 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsup",
-    "build:mcp": "tsx scripts/build-mcp-data.ts"
+    "build": "tsup && tsx ./build.ts",
+    "build:mcp": "tsx scripts/build-mcp-data.ts",
+    "lint": "pnpm exec biome lint --write",
+    "ci": "pnpm exec biome ci",
+    "format": "pnpm exec biome format --write",
+    "check": "pnpm exec biome check --write"
   },
   "sideEffects": [
     "**/*.css.ts",
@@ -56,11 +60,13 @@
     "@vanilla-extract/recipes": "^0.5.7",
     "@vanilla-extract/sprinkles": "^1.6.5",
     "clsx": "^2.1.1",
+    "glob": "^13.0.6",
     "motion": "^12.4.3",
     "react-icons": "^5.6.0"
   },
   "devDependencies": {
     "@vanilla-extract/esbuild-plugin": "^2.3.22",
+    "lightningcss": "^1.32.0",
     "tsup": "^8.5.1",
     "tsx": "^4.22.3"
   }

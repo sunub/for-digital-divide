@@ -316,6 +316,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      glob:
+        specifier: ^13.0.6
+        version: 13.0.6
       motion:
         specifier: ^12.4.3
         version: 12.40.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -335,6 +338,9 @@ importers:
       '@vanilla-extract/esbuild-plugin':
         specifier: ^2.3.22
         version: 2.3.22(esbuild@0.27.7)
+      lightningcss:
+        specifier: ^1.32.0
+        version: 1.32.0
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(@swc/core@1.15.40)(jiti@2.7.0)(postcss@8.5.15)(tsx@4.22.3)(typescript@6.0.3)(yaml@2.9.0)

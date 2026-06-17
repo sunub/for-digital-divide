@@ -1,10 +1,10 @@
 "use client";
 
-import { Box } from "../../primitives";
 import clsx from "clsx";
 import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
 import { GoRocket } from "react-icons/go";
 import { MdCheckCircle, MdError, MdInfo, MdWarning } from "react-icons/md";
+import { Box } from "../../primitives";
 import * as styles from "./Badge.css";
 
 const ICON_PRESETS = {

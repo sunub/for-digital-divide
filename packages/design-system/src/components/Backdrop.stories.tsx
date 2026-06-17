@@ -7,7 +7,8 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: "모달이나 드로어의 배경에 깔리는 오버레이(blur) 컴포넌트입니다.",
+        component:
+          "모달이나 드로어의 배경에 깔리는 오버레이(blur) 컴포넌트입니다.",
       },
     },
   },

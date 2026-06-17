@@ -1,4 +1,4 @@
-import { createVar, style, keyframes } from "@vanilla-extract/css";
+import { createVar, keyframes, style } from "@vanilla-extract/css";
 import { type RecipeVariants, recipe } from "@vanilla-extract/recipes";
 import { vars } from "../tokens/theme.css";
 

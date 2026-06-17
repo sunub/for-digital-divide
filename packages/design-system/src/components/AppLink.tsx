@@ -1,5 +1,5 @@
-import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { Slot } from "@radix-ui/react-slot";
+import { assignInlineVars } from "@vanilla-extract/dynamic";
 import clsx from "clsx";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { vars } from "../tokens/theme.css";
@@ -7,8 +7,7 @@ import * as styles from "./AppLink.css";
 
 type AppLinkVariant = keyof typeof styles.linkVariant;
 
-export interface AppLinkProps
-  extends ComponentPropsWithoutRef<"a"> {
+export interface AppLinkProps extends ComponentPropsWithoutRef<"a"> {
   children: ReactNode;
   asChild?: boolean;
   className?: string;
