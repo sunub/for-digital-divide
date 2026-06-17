@@ -1,5 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import Link from "next/link";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ComponentProps } from "react";
 import {
   StoryDoc,
@@ -16,6 +15,12 @@ import { ThreeDButton } from "./ThreeDButton";
 const variantOptions = ["default", "confirm", "destructive"] as const;
 const statusOptions = ["idle", "pending", "resolved", "rejected"] as const;
 const inlineCode = (value: string) => <code key={value}>{value}</code>;
+
+const DummyLink = ({ href, children, ...props }: ComponentProps<"a">) => (
+  <a href={href} {...props}>
+    {children}
+  </a>
+);
 
 const meta = {
   title: "Components/ThreeDButton",
@@ -135,7 +140,7 @@ export const StatusStates: Story = {
 
 export const IntroEntryAction: Story = {
   render: () => (
-    <ThreeDButton as={Link} href="/intro">
+    <ThreeDButton as={DummyLink} href="/intro">
       시작하기
     </ThreeDButton>
   ),

@@ -9,7 +9,9 @@
     "lint": "pnpm exec biome lint --write",
     "ci": "pnpm exec biome ci",
     "format": "pnpm exec biome format --write",
-    "check": "pnpm exec biome check --write"
+    "check": "pnpm exec biome check --write",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "sideEffects": [
     "**/*.css.ts",
@@ -49,7 +51,6 @@
     }
   },
   "peerDependencies": {
-    "next": "^15.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -65,8 +66,19 @@
     "react-icons": "^5.6.0"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^5.2.1",
+    "@storybook/addon-a11y": "10.4.5",
+    "@storybook/addon-docs": "10.4.5",
+    "@storybook/addon-mcp": "^0.6.0",
+    "@storybook/addon-vitest": "10.4.5",
+    "@storybook/react-vite": "10.4.5",
     "@vanilla-extract/esbuild-plugin": "^2.3.22",
+    "@vanilla-extract/vite-plugin": "^5.2.2",
+    "@vitest/browser-playwright": "4.1.8",
+    "@vitest/coverage-v8": "4.1.8",
     "lightningcss": "^1.32.0",
+    "playwright": "^1.61.0",
+    "storybook": "10.4.5",
     "tsup": "^8.5.1",
     "tsx": "^4.22.3"
   }

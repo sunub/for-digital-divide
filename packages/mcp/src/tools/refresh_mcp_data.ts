@@ -16,7 +16,6 @@ export const refreshMcpData: McpTool<Record<string, never>> = {
       console.error(`Running build:mcp in ${root}...`);
       execSync("pnpm build:mcp", { cwd: root });
 
-      // Reload datasets
       loadData();
 
       return {
@@ -28,7 +27,8 @@ export const refreshMcpData: McpTool<Record<string, never>> = {
         ],
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       return {
         isError: true,
         content: [

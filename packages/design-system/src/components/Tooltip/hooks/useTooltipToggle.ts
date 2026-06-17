@@ -6,7 +6,7 @@ export function useTooltipToggle() {
   if (!context) {
     throw new Error("useTooltipToggle must be used within a TooltipProvider");
   }
-  const { isVisible, toggleVisible, rootContainerRef } = context;
+  const { isVisible, toggleVisible } = context;
   const handleToggle = useCallback(() => {
     toggleVisible();
   }, [toggleVisible]);
@@ -14,6 +14,5 @@ export function useTooltipToggle() {
   return {
     isVisible,
     handleToggle,
-    rootContainerRef,
   };
 }

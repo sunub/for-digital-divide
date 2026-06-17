@@ -42,8 +42,7 @@ export const content = recipe({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    backgroundColor:
-      "color-mix(in oklch, var(--color-transparent) 0%, var(--color-background))",
+    backgroundColor: `color-mix(in oklch, ${vars.color.transparent} 0%, ${vars.color.background})`,
     padding: "24px",
     borderRadius: "12px",
     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",

@@ -1,4 +1,4 @@
-import { createVar, fallbackVar, style } from "@vanilla-extract/css";
+import { createVar, fallbackVar } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const topVar = createVar();
@@ -9,7 +9,7 @@ export const tooltipTriangleWidthVar = createVar();
 
 export const tooltipContent = recipe({
   base: {
-    position: "absolute",
+    position: "fixed",
     width: "max-content",
     padding: "4px 8px",
     borderRadius: "0.5rem",
@@ -20,7 +20,7 @@ export const tooltipContent = recipe({
 
     transform: "translateX(-50%)",
     userSelect: "none",
-    zIndex: 100,
+    zIndex: 9999,
 
     top: fallbackVar(topVar, "0px"),
     left: fallbackVar(leftVar, "50%"),
@@ -52,9 +52,4 @@ export const tooltipContent = recipe({
   defaultVariants: {
     isVisible: false,
   },
-});
-
-export const tooltipProvider = style({
-  position: "relative",
-  zIndex: 30,
 });
