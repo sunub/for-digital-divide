@@ -1,7 +1,7 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import ts from "typescript";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,10 +30,16 @@ function unwrapAsAndSatisfies(node: ts.Node): ts.Node {
 }
 
 // AST Evaluation Helpers
-function evaluateNode(node: ts.Node, localDecls: Map<string, any>): any {
+function evaluateNode(
+  node: ts.Node,
+  localDecls: Map<string, unknown>,
+): unknown {
   const unwrapped = unwrapAsAndSatisfies(node);
-  
-  if (ts.isStringLiteral(unwrapped) || ts.isNoSubstitutionTemplateLiteral(unwrapped)) {
+
+  if (
+    ts.isStringLiteral(unwrapped) ||
+    ts.isNoSubstitutionTemplateLiteral(unwrapped)
+  ) {
     return unwrapped.text;
   }
   if (ts.isNumericLiteral(unwrapped)) {
@@ -51,7 +57,10 @@ function evaluateNode(node: ts.Node, localDecls: Map<string, any>): any {
   if (ts.isPrefixUnaryExpression(unwrapped)) {
     const operand = evaluateNode(unwrapped.operand, localDecls);
     if (unwrapped.operator === ts.SyntaxKind.MinusToken) {
-      return -operand;
+      if (typeof operand === "number") {
+        return -operand;
+      }
+      return -Number(operand);
     }
     return operand;
   }
@@ -66,17 +75,18 @@ function evaluateNode(node: ts.Node, localDecls: Map<string, any>): any {
     const expression = evaluateNode(unwrapped.expression, localDecls);
     const name = unwrapped.name.text;
     if (expression && typeof expression === "object" && name in expression) {
-      return (expression as any)[name];
+      return (expression as Record<string, unknown>)[name];
     }
     return `${expression}.${name}`;
   }
   if (ts.isObjectLiteralExpression(unwrapped)) {
-    const obj: any = {};
+    const obj: Record<string, unknown> = {};
     for (const prop of unwrapped.properties) {
       if (ts.isPropertyAssignment(prop)) {
-        const keyName = ts.isIdentifier(prop.name) || ts.isStringLiteral(prop.name)
-          ? prop.name.text
-          : prop.name.getText();
+        const keyName =
+          ts.isIdentifier(prop.name) || ts.isStringLiteral(prop.name)
+            ? prop.name.text
+            : prop.name.getText();
         obj[keyName] = evaluateNode(prop.initializer, localDecls);
       } else if (ts.isShorthandPropertyAssignment(prop)) {
         const keyName = prop.name.text;
@@ -90,22 +100,27 @@ function evaluateNode(node: ts.Node, localDecls: Map<string, any>): any {
     return obj;
   }
   if (ts.isArrayLiteralExpression(unwrapped)) {
-    return unwrapped.elements.map(el => evaluateNode(el, localDecls));
+    return unwrapped.elements.map((el) => evaluateNode(el, localDecls));
   }
   return null;
 }
 
 // Extract tokens from theme.css.ts
-function parseThemeTokens(filePath: string): any {
+function parseThemeTokens(filePath: string): unknown {
   const code = fs.readFileSync(filePath, "utf-8");
-  const sourceFile = ts.createSourceFile(filePath, code, ts.ScriptTarget.Latest, true);
-  const localDecls = new Map<string, any>();
-  let varsResult: any = null;
+  const sourceFile = ts.createSourceFile(
+    filePath,
+    code,
+    ts.ScriptTarget.Latest,
+    true,
+  );
+  const localDecls = new Map<string, unknown>();
+  let varsResult: unknown = null;
 
   function visit(node: ts.Node) {
     if (ts.isVariableDeclaration(node) && node.initializer) {
       const name = node.name.getText();
-      let val: any = null;
+      let val: unknown = null;
       const unwrappedInitializer = unwrapAsAndSatisfies(node.initializer);
 
       if (ts.isCallExpression(unwrappedInitializer)) {
@@ -132,20 +147,33 @@ function parseThemeTokens(filePath: string): any {
   return varsResult;
 }
 
+interface SprinklesResult {
+  shorthands?: Record<string, unknown>;
+  properties?: Record<string, unknown>;
+}
+
 // Extract sprinkles from sprinkles.css.ts
-function parseSprinkles(filePath: string): any {
+function parseSprinkles(filePath: string): SprinklesResult | null {
   const code = fs.readFileSync(filePath, "utf-8");
-  const sourceFile = ts.createSourceFile(filePath, code, ts.ScriptTarget.Latest, true);
-  const localDecls = new Map<string, any>();
-  let sprinklesResult: any = null;
+  const sourceFile = ts.createSourceFile(
+    filePath,
+    code,
+    ts.ScriptTarget.Latest,
+    true,
+  );
+  const localDecls = new Map<string, unknown>();
+  let sprinklesResult: SprinklesResult | null = null;
 
   function visit(node: ts.Node) {
     if (ts.isVariableDeclaration(node) && node.initializer) {
       const name = node.name.getText();
-      let val: any = null;
+      let val: unknown = null;
       const unwrappedInitializer = unwrapAsAndSatisfies(node.initializer);
 
-      if (ts.isCallExpression(unwrappedInitializer) && unwrappedInitializer.arguments.length > 0) {
+      if (
+        ts.isCallExpression(unwrappedInitializer) &&
+        unwrappedInitializer.arguments.length > 0
+      ) {
         val = evaluateNode(unwrappedInitializer.arguments[0], localDecls);
       } else {
         val = evaluateNode(unwrappedInitializer, localDecls);
@@ -154,7 +182,7 @@ function parseSprinkles(filePath: string): any {
       if (val !== null) {
         localDecls.set(name, val);
         if (name === "baseStyleProperties") {
-          sprinklesResult = val;
+          sprinklesResult = val as SprinklesResult;
         }
       }
     }
@@ -164,16 +192,20 @@ function parseSprinkles(filePath: string): any {
   return sprinklesResult;
 }
 
-function getObjectPropertyValue(objNode: ts.ObjectLiteralExpression, propPath: string[]): ts.Node | null {
+function getObjectPropertyValue(
+  objNode: ts.ObjectLiteralExpression,
+  propPath: string[],
+): ts.Node | null {
   let current: ts.Node = objNode;
   for (const key of propPath) {
     if (!ts.isObjectLiteralExpression(current)) return null;
     let found: ts.Node | null = null;
     for (const prop of current.properties) {
       if (ts.isPropertyAssignment(prop)) {
-        const propName = ts.isIdentifier(prop.name) || ts.isStringLiteral(prop.name)
-          ? prop.name.text
-          : prop.name.getText();
+        const propName =
+          ts.isIdentifier(prop.name) || ts.isStringLiteral(prop.name)
+            ? prop.name.text
+            : prop.name.getText();
         if (propName === key) {
           found = prop.initializer;
           break;
@@ -193,40 +225,68 @@ function isExported(node: ts.VariableDeclaration): boolean {
       ? ts.getModifiers(variableStatement)
       : undefined;
     if (modifiers) {
-      return modifiers.some(m => m.kind === ts.SyntaxKind.ExportKeyword);
+      return modifiers.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
     }
   }
   return false;
 }
 
 function cleanUpJsx(text: string): string {
-  text = text.trim();
-  if (text.startsWith("(") && text.endsWith(")")) {
-    text = text.slice(1, -1).trim();
+  let result = text.trim();
+  if (result.startsWith("(") && result.endsWith(")")) {
+    result = result.slice(1, -1).trim();
   }
-  if (text.startsWith("{") && text.endsWith("}")) {
-    const match = text.match(/return\s+\(?([\s\S]+?)\)?\s*;?\s*}$/);
+  if (result.startsWith("{") && result.endsWith("}")) {
+    const match = result.match(/return\s+\(?([\s\S]+?)\)?\s*;?\s*}$/);
     if (match) {
       return match[1].trim();
     }
   }
-  return text;
+  return result;
+}
+
+interface StorybookProp {
+  type: string;
+  description: string;
+  defaultValue: string;
+}
+
+interface StorybookExample {
+  scenario: string;
+  code: string;
+}
+
+interface StorybookData {
+  name: string;
+  description: string;
+  importPath: string;
+  props: Record<string, StorybookProp>;
+  examples: StorybookExample[];
 }
 
 // Parse Storybook stories file
-function parseStorybook(filePath: string): any {
+function parseStorybook(filePath: string): StorybookData {
   const code = fs.readFileSync(filePath, "utf-8");
-  const sourceFile = ts.createSourceFile(filePath, code, ts.ScriptTarget.Latest, true);
-  
+  const sourceFile = ts.createSourceFile(
+    filePath,
+    code,
+    ts.ScriptTarget.Latest,
+    true,
+  );
+
   let componentName = "";
   let description = "";
-  const props: any = {};
-  const examples: any[] = [];
-  
-  const localDecls = new Map<string, any>();
+  const props: Record<string, StorybookProp> = {};
+  const examples: StorybookExample[] = [];
+
+  const localDecls = new Map<string, unknown>();
   // Pre-populate local variables (e.g. variantOptions)
   function visitLocalDecls(node: ts.Node) {
-    if (ts.isVariableDeclaration(node) && node.initializer && node.name.getText() !== "meta") {
+    if (
+      ts.isVariableDeclaration(node) &&
+      node.initializer &&
+      node.name.getText() !== "meta"
+    ) {
       const name = node.name.getText();
       const val = evaluateNode(node.initializer, localDecls);
       if (val !== null) {
@@ -239,11 +299,15 @@ function parseStorybook(filePath: string): any {
 
   // Find meta object and component name
   function visitMeta(node: ts.Node) {
-    if (ts.isVariableDeclaration(node) && node.name.getText() === "meta" && node.initializer) {
+    if (
+      ts.isVariableDeclaration(node) &&
+      node.name.getText() === "meta" &&
+      node.initializer
+    ) {
       const unwrapped = unwrapAsAndSatisfies(node.initializer);
       if (ts.isObjectLiteralExpression(unwrapped)) {
         const metaNode = unwrapped;
-        
+
         // Component name
         const compNode = getObjectPropertyValue(metaNode, ["component"]);
         if (compNode) {
@@ -251,41 +315,55 @@ function parseStorybook(filePath: string): any {
         } else {
           componentName = path.basename(filePath, ".stories.tsx");
         }
-        
+
         // Description
-        const descNode = getObjectPropertyValue(metaNode, ["parameters", "docs", "description", "component"]);
+        const descNode = getObjectPropertyValue(metaNode, [
+          "parameters",
+          "docs",
+          "description",
+          "component",
+        ]);
         if (descNode) {
-          description = evaluateNode(descNode, localDecls) || "";
+          description = (evaluateNode(descNode, localDecls) as string) || "";
         }
-        
+
         // argTypes
         const argTypesNode = getObjectPropertyValue(metaNode, ["argTypes"]);
         if (argTypesNode && ts.isObjectLiteralExpression(argTypesNode)) {
           for (const prop of argTypesNode.properties) {
             if (ts.isPropertyAssignment(prop)) {
-              const propName = ts.isIdentifier(prop.name) || ts.isStringLiteral(prop.name)
-                ? prop.name.text
-                : prop.name.getText();
-              const propConfig = evaluateNode(prop.initializer, localDecls) || {};
-              
+              const propName =
+                ts.isIdentifier(prop.name) || ts.isStringLiteral(prop.name)
+                  ? prop.name.text
+                  : prop.name.getText();
+              const propConfig = (evaluateNode(prop.initializer, localDecls) ||
+                {}) as Record<string, unknown>;
+
               const options = propConfig.options;
               const hasOptions = Array.isArray(options);
-              
+
               props[propName] = {
                 type: hasOptions
-                  ? options.map((o: any) => typeof o === "string" ? `"${o}"` : String(o)).join(" | ")
-                  : (propConfig.control === "boolean" ? "boolean" : "any"),
-                description: propConfig.description || "",
-                defaultValue: ""
+                  ? (options as unknown[])
+                      .map((o: unknown) =>
+                        typeof o === "string" ? `"${o}"` : String(o),
+                      )
+                      .join(" | ")
+                  : propConfig.control === "boolean"
+                    ? "boolean"
+                    : "any",
+                description: (propConfig.description as string) || "",
+                defaultValue: "",
               };
             }
           }
         }
-        
+
         // default args
         const argsNode = getObjectPropertyValue(metaNode, ["args"]);
         if (argsNode && ts.isObjectLiteralExpression(argsNode)) {
-          const defaultArgs = evaluateNode(argsNode, localDecls) || {};
+          const defaultArgs = (evaluateNode(argsNode, localDecls) ||
+            {}) as Record<string, unknown>;
           for (const key in defaultArgs) {
             if (props[key]) {
               props[key].defaultValue = String(defaultArgs[key]);
@@ -293,7 +371,7 @@ function parseStorybook(filePath: string): any {
               props[key] = {
                 type: typeof defaultArgs[key],
                 description: "",
-                defaultValue: String(defaultArgs[key])
+                defaultValue: String(defaultArgs[key]),
               };
             }
           }
@@ -322,12 +400,17 @@ function parseStorybook(filePath: string): any {
           if (renderNode) {
             const unwrappedRender = unwrapAsAndSatisfies(renderNode);
             if (ts.isArrowFunction(unwrappedRender)) {
-              exampleCode = cleanUpJsx(unwrappedRender.body.getText(sourceFile));
+              exampleCode = cleanUpJsx(
+                unwrappedRender.body.getText(sourceFile),
+              );
             } else if (ts.isFunctionExpression(unwrappedRender)) {
-              exampleCode = cleanUpJsx(unwrappedRender.body.getText(sourceFile));
+              exampleCode = cleanUpJsx(
+                unwrappedRender.body.getText(sourceFile),
+              );
             }
           } else if (argsNode) {
-            const storyArgs = evaluateNode(argsNode, localDecls) || {};
+            const storyArgs = (evaluateNode(argsNode, localDecls) ||
+              {}) as Record<string, unknown>;
             const attributes = Object.entries(storyArgs)
               .map(([k, v]) => {
                 if (k === "children") return "";
@@ -336,14 +419,14 @@ function parseStorybook(filePath: string): any {
               })
               .filter(Boolean)
               .join(" ");
-            const children = storyArgs.children || "";
-            exampleCode = `<${componentName}${attributes ? " " + attributes : ""}>${children}</${componentName}>`;
+            const children = (storyArgs.children as string) || "";
+            exampleCode = `<${componentName}${attributes ? ` ${attributes}` : ""}>${children}</${componentName}>`;
           }
 
           if (exampleCode) {
             examples.push({
               scenario: name,
-              code: exampleCode
+              code: exampleCode,
             });
           }
         }
@@ -358,41 +441,43 @@ function parseStorybook(filePath: string): any {
     description,
     importPath: `@internal/design-system/components`,
     props,
-    examples
+    examples,
   };
 }
 
 // Main Build function
 function main() {
   console.log("Starting MCP data generation...");
-  
+
   // 1. Parse tokens
   const themeFile = path.join(srcDir, "tokens", "theme.css.ts");
   console.log(`Parsing theme tokens from ${themeFile}...`);
   const tokens = parseThemeTokens(themeFile);
-  
+
   // 2. Parse sprinkles
   const sprinklesFile = path.join(srcDir, "styles", "sprinkles.css.ts");
   console.log(`Parsing sprinkles config from ${sprinklesFile}...`);
   const sprinkles = parseSprinkles(sprinklesFile);
-  
+
   const mcpTokens = {
-    ...tokens,
-    sprinkles: sprinkles ? {
-      shorthands: Object.keys(sprinkles.shorthands || {}),
-      properties: Object.keys(sprinkles.properties || {})
-    } : null
+    ...(tokens as Record<string, unknown>),
+    sprinkles: sprinkles
+      ? {
+          shorthands: Object.keys(sprinkles.shorthands || {}),
+          properties: Object.keys(sprinkles.properties || {}),
+        }
+      : null,
   };
-  
+
   const tokensOut = path.join(distDir, "mcp-tokens.json");
   fs.writeFileSync(tokensOut, JSON.stringify(mcpTokens, null, 2));
   console.log(`Successfully generated tokens metadata at ${tokensOut}`);
-  
+
   // 3. Scan components stories
   const componentsDir = path.join(srcDir, "components");
   console.log(`Scanning component stories under ${componentsDir}...`);
-  
-  const mcpComponents: any = {};
+
+  const mcpComponents: Record<string, StorybookData> = {};
   function scanStories(dir: string) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
@@ -411,7 +496,7 @@ function main() {
     }
   }
   scanStories(componentsDir);
-  
+
   const compsOut = path.join(distDir, "mcp-components.json");
   fs.writeFileSync(compsOut, JSON.stringify(mcpComponents, null, 2));
   console.log(`Successfully generated components metadata at ${compsOut}`);

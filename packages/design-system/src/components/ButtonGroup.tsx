@@ -6,7 +6,6 @@ import * as styles from "./ButtonGroup.css";
 export interface ButtonGroupProps extends ComponentProps<typeof Box> {
   orientation?: "horizontal" | "vertical";
   children?: React.ReactNode;
-  [key: string]: any;
 }
 
 export function ButtonGroup({

@@ -1,18 +1,17 @@
 "use client";
 
-import {
-  Button,
-  type NativeButtonProps,
-} from "../../Button";
 import clsx from "clsx";
 import { useState } from "react";
+import { Button, type NativeButtonProps } from "../../Button";
 import { useTooltipToggle } from "../hooks/useTooltipToggle";
 import { useTooltipContext } from "./TooltipProvider";
 
 export type TooltipTriggerProps = NativeButtonProps;
 
 export function TooltipTrigger({ children, ...props }: TooltipTriggerProps) {
-  const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
   const { isVisible, handleToggle } = useTooltipToggle();
   const { setTriggerElement } = useTooltipContext();
 

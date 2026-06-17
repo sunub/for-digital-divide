@@ -14,6 +14,15 @@ export default defineConfig({
   clean: true,
   sourcemap: true,
   minify: true,
-  external: ["react", "react-dom", /^next/, "@vanilla-extract/css", "motion", /^motion\//, "react-icons", /^react-icons\//],
+  external: [
+    "react",
+    "react-dom",
+    /^next/,
+    "@vanilla-extract/css",
+    "motion",
+    /^motion\//,
+    "react-icons",
+    /^react-icons\//,
+  ],
   esbuildPlugins: [vanillaExtractPlugin()],
 });

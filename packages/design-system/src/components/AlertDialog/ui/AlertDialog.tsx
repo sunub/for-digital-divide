@@ -1,9 +1,17 @@
 "use client";
 
-import { createContext, useCallback, useMemo, useState, useContext, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
 import { Slot } from "@radix-ui/react-slot";
 import clsx from "clsx";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
 import * as style from "./Alert.css";
 
 // 1. Contexts
@@ -26,7 +34,9 @@ export const AlertDialogContext = createContext<AlertDialogContextType>({
 export function useAlertDialogContext() {
   const context = useContext(AlertDialogContext);
   if (!context) {
-    throw new Error("AlertDialog components must be rendered within an AlertDialog provider");
+    throw new Error(
+      "AlertDialog components must be rendered within an AlertDialog provider",
+    );
   }
   return context;
 }
@@ -56,7 +66,7 @@ export function AlertDialog({
       }
       onOpenChange?.(value);
     },
-    [isControlled, onOpenChange]
+    [isControlled, onOpenChange],
   );
 
   const onOpenToggle = useCallback(() => {
@@ -70,9 +80,8 @@ export function AlertDialog({
       onOpenToggle,
       contentId: "alert-dialog-content",
     }),
-    [open, setOpen, onOpenToggle]
+    [open, setOpen, onOpenToggle],
   );
-
 
   return (
     <AlertDialogContext.Provider value={contextValue}>
@@ -82,7 +91,8 @@ export function AlertDialog({
 }
 
 // 3. AlertDialogTrigger
-export interface AlertDialogTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface AlertDialogTriggerProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
 
@@ -108,8 +118,9 @@ export function AlertDialogTrigger({
     <Component
       onClick={handleClick}
       className={clsx(
-        !asChild && style.alertDialogTrigger({ state: open ? "open" : "closed" }),
-        className
+        !asChild &&
+          style.alertDialogTrigger({ state: open ? "open" : "closed" }),
+        className,
       )}
       aria-haspopup="dialog"
       aria-expanded={open}
@@ -135,7 +146,8 @@ export function AlertDialogPortal({ children }: { children: React.ReactNode }) {
     if (devicePortalElement) {
       setPortalRoot(devicePortalElement);
     } else {
-      const rootElement = document.getElementById("alertDialog-wrapper") || document.body;
+      const rootElement =
+        document.getElementById("alertDialog-wrapper") || document.body;
       setPortalRoot(rootElement);
     }
   }, [devicePortalElement]);
@@ -144,32 +156,39 @@ export function AlertDialogPortal({ children }: { children: React.ReactNode }) {
     return null;
   }
 
-  const isGlobal = portalRoot === document.body || portalRoot.id === "alertDialog-wrapper";
+  const isGlobal =
+    portalRoot === document.body || portalRoot.id === "alertDialog-wrapper";
 
   return createPortal(
-    <div className={style.portalContainer({ isGlobal })}>
-      {children}
-    </div>,
-    portalRoot
+    <div className={style.portalContainer({ isGlobal })}>{children}</div>,
+    portalRoot,
   );
 }
 
 // 5. AlertDialogOverlay (Backdrop)
-export interface AlertDialogOverlayProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface AlertDialogOverlayProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function AlertDialogOverlay({ className, ...props }: AlertDialogOverlayProps) {
+export function AlertDialogOverlay({
+  className,
+  ...props
+}: AlertDialogOverlayProps) {
   const { open } = useAlertDialogContext();
 
   return (
     <div
-      className={clsx(style.overlay({ state: open ? "open" : "closed" }), className)}
+      className={clsx(
+        style.overlay({ state: open ? "open" : "closed" }),
+        className,
+      )}
       {...props}
     />
   );
 }
 
 // 6. AlertDialogContent (Body)
-export interface AlertDialogContentProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AlertDialogContentProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
 
@@ -205,7 +224,9 @@ export function AlertDialogContent({
       'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable]';
 
     const contentWrapper = contentWrapperRef.current;
-    const focusable = Array.from(contentWrapper.querySelectorAll(focusableElementsQuery));
+    const focusable = Array.from(
+      contentWrapper.querySelectorAll(focusableElementsQuery),
+    );
 
     if (focusable.length > 0) {
       (focusable[0] as HTMLElement).focus();
@@ -239,7 +260,10 @@ export function AlertDialogContent({
 
   return (
     <div
-      className={clsx(style.content({ state: open ? "open" : "closed" }), className)}
+      className={clsx(
+        style.content({ state: open ? "open" : "closed" }),
+        className,
+      )}
       ref={contentWrapperRef}
       role="alertdialog"
       id={contentId}
@@ -253,24 +277,37 @@ export function AlertDialogContent({
 }
 
 // 7. Auxiliary components
-export function AlertDialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+export function AlertDialogHeader({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   return <div className={clsx(style.header, className)} {...props} />;
 }
 
-export function AlertDialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+export function AlertDialogFooter({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   return <div className={clsx(style.footer, className)} {...props} />;
 }
 
-export function AlertDialogTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+export function AlertDialogTitle({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   return <h2 className={clsx(style.title, className)} {...props} />;
 }
 
-export function AlertDialogDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
+export function AlertDialogDescription({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLParagraphElement>) {
   return <p className={clsx(style.description, className)} {...props} />;
 }
 
 // 8. Action and Cancel (trigger closing)
-export interface AlertDialogActionProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface AlertDialogActionProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
 
@@ -298,7 +335,8 @@ export function AlertDialogAction({
   );
 }
 
-export interface AlertDialogCancelProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface AlertDialogCancelProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
 
