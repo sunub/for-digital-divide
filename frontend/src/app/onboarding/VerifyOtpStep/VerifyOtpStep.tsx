@@ -5,6 +5,7 @@ import { Flex } from "@internal/design-system/primitives";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaAngleRight } from "react-icons/fa";
+import { useShallow } from "zustand/react/shallow";
 import { useInterval } from "@/shared/hooks/useInterval";
 import { useOnboardingStore } from "@/store/onboarding/onboarding-store";
 import { OtpToastMessage } from "../ui/ToastMessage";
@@ -25,7 +26,12 @@ interface VerifyOtpStepProps {
 }
 
 export default function VerifyOtpStep({ onNext }: VerifyOtpStepProps) {
-  const store = useOnboardingStore();
+  const store = useOnboardingStore(
+    useShallow((state) => ({
+      setSmsCode: state.setSmsCode,
+      setSmsVerified: state.setSmsVerified,
+    })),
+  );
   const [timeLeft, setTimeLeft] = useState<number>(OTP_TIME_LIMIT_SECONDS);
   const [generatedOtp, setGeneratedOtp] = useState<string>(generateOtpCode);
 

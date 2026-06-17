@@ -4,6 +4,7 @@ import { Button } from "@internal/design-system/components";
 import { Flex } from "@internal/design-system/primitives";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { useShallow } from "zustand/react/shallow";
 import { useOnboardingStore } from "@/store/onboarding/onboarding-store";
 import { zodResolver } from "../utils/zodResolver";
 import { CarrierField } from "./CarrierField";
@@ -25,8 +26,17 @@ interface VerifyInfoStepProps {
 }
 
 export default function VerifyInfoStep({ onNext }: VerifyInfoStepProps) {
-  const store = useOnboardingStore();
   const residentBackRef = useRef<HTMLInputElement | null>(null);
+  const store = useOnboardingStore(
+    useShallow((store) => ({
+      verifyName: store.verifyName,
+      verifyPhoneNumber: store.verifyPhoneNumber,
+      verifyCarrier: store.verifyCarrier,
+      verifyResidentNumber: store.verifyResidentNumber,
+      setVerifyInfoSubmitted: store.setVerifyInfoSubmitted,
+      setVerifyInfo: store.setVerifyInfo,
+    })),
+  );
 
   const defaultResident = store.verifyResidentNumber || "900101-1234567";
   const [initialFront, initialBackPart] = defaultResident.split("-");

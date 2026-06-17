@@ -4,6 +4,7 @@ import { Button } from "@internal/design-system/components";
 import { Flex } from "@internal/design-system/primitives";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { useShallow } from "zustand/react/shallow";
 import { useOnboardingStore } from "@/store/onboarding/onboarding-store";
 import { completeOnboardingAction } from "../utils/completeOnboardingAction";
 import { zodResolver } from "../utils/zodResolver";
@@ -23,8 +24,16 @@ interface IdCardInfoStepProps {
 }
 
 export function IdCardInfoStep({ onNext }: IdCardInfoStepProps) {
-  const store = useOnboardingStore();
   const residentBackRef = useRef<HTMLInputElement | null>(null);
+  const store = useOnboardingStore(
+    useShallow((store) => ({
+      idCardResidentNumber: store.idCardResidentNumber,
+      idCardName: store.idCardName,
+      idCardIssueDate: store.idCardIssueDate,
+      setIdCardDetails: store.setIdCardDetails,
+      setIdCardVerified: store.setIdCardVerified,
+    })),
+  );
 
   const defaultResident = store.idCardResidentNumber || "900101-1234567";
   const [initialFront, initialBackPart] = defaultResident.split("-");

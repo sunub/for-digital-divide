@@ -18,72 +18,73 @@ import {
   MdVerifiedUser,
   MdWorkspacePremium,
 } from "react-icons/md";
-import { Instruction } from "@/components/Instruction";
 import { useHistory } from "@/shared/hooks/useHistory";
 import { Device } from "@/shared/layout";
+import * as guideStyles from "../onboarding/OnboardingGuide/PhoneVerificationGuide.css";
 import * as styles from "./page.css";
 
-const InformationGuide = memo(function InformationGuide() {
+const IntroGuide = memo(function IntroGuide() {
   return (
-    <>
-      <Instruction.Badge
-        icon={
-          <MdVerifiedUser size={18} style={{ color: "var(--color-button)" }} />
-        }
-      >
-        모바일 뱅킹 인증센터
-      </Instruction.Badge>
-      <Instruction.Title
-        as="h1"
-        style={{ fontSize: "2rem", lineHeight: "1.2", margin: "1rem 0" }}
-      >
+    <Flex direction="column" className={guideStyles.panelContainer}>
+      <div className={guideStyles.badge}>
+        <MdVerifiedUser size={18} />
+        <span>모바일 뱅킹 인증센터</span>
+      </div>
+      <h1 className={guideStyles.title}>
         안전한 금융 거래를 위한
         <br />
-        인증서 발급 안내
-      </Instruction.Title>
+        <span className={guideStyles.titleHighlight}>인증서 발급 안내</span>
+      </h1>
 
-      <Instruction.InfoBox
-        title={"왜 인증서가 필요한가요?"}
-        icon={
-          <MdAccountBalance
-            size={24}
-            style={{ color: "var(--color-button)" }}
-          />
-        }
-      >
-        <Text as="p" variant="body" color={"text"}>
-          본인 확인 및 전자 서명을 통해 타인으로부터의 도용을 방지하고, 송금 및
-          상품 가입 시 법적 효력을 갖는 안전한 금융 거래를 보장하기 위해 반드시
-          필요합니다.
-        </Text>
-      </Instruction.InfoBox>
-    </>
-  );
-});
+      <Grid className={guideStyles.infoGrid}>
+        <Flex direction="column" className={guideStyles.infoBox}>
+          <Flex
+            alignItems="center"
+            justifyContent="center"
+            className={guideStyles.infoIconContainer}
+          >
+            <MdAccountBalance size={24} />
+          </Flex>
+          <div>
+            <h3 className={guideStyles.infoTitle}>왜 인증서가 필요한가요?</h3>
+            <p className={guideStyles.infoDescription}>
+              본인 확인 및 전자 서명을 통해 타인으로부터의 도용을 방지하고, 송금
+              및 상품 가입 시 법적 효력을 갖는 안전한 금융 거래를 보장하기 위해
+              반드시 필요합니다.
+            </p>
+          </div>
+        </Flex>
+      </Grid>
 
-const StepGuide = memo(function StepGuide() {
-  return (
-    <Instruction.Box>
-      <Instruction.Title
-        style={{ display: "flex", alignItems: "center", gap: "8px" }}
-      >
-        <MdVerifiedUser size={20} style={{ color: "var(--color-button)" }} />
-        발급 후 진행 단계
-      </Instruction.Title>
-      <Instruction.List activeStep={1}>
-        <Instruction.Item step={1}>
-          <strong>계좌 연결 및 본인확인:</strong> 보유하신 계좌 정보를 통해 실명
-          인증을 완료합니다.
-        </Instruction.Item>
-        <Instruction.Item step={2}>
-          <strong>이체 한도 설정:</strong> 사용 용도에 맞춰 1일/1회 이체 한도를
-          지정합니다.
-        </Instruction.Item>
-        <Instruction.Item step={3}>
-          <strong>서비스 이용 시작:</strong> 간편 송금, 상품 가입 등 모든 기능을
-          이용할 수 있습니다.
-        </Instruction.Item>
-      </Instruction.List>
+      <Flex direction="column" className={guideStyles.sectionContainer}>
+        <h3 className={guideStyles.sectionTitle}>
+          <MdVerifiedUser size={20} style={{ color: "#9367ef" }} />
+          발급 후 진행 단계
+        </h3>
+        <ul className={guideStyles.stepList}>
+          <li className={guideStyles.stepItem}>
+            <div className={guideStyles.stepNumber}>1</div>
+            <span>
+              <strong>계좌 연결 및 본인확인:</strong> 보유하신 계좌 정보를 통해
+              실명 인증을 완료합니다.
+            </span>
+          </li>
+          <li className={guideStyles.stepItem}>
+            <div className={guideStyles.stepNumber}>2</div>
+            <span>
+              <strong>이체 한도 설정:</strong> 사용 용도에 맞춰 1일/1회 이체
+              한도를 지정합니다.
+            </span>
+          </li>
+          <li className={guideStyles.stepItem}>
+            <div className={guideStyles.stepNumber}>3</div>
+            <span>
+              <strong>서비스 이용 시작:</strong> 간편 송금, 상품 가입 등 모든
+              기능을 이용할 수 있습니다.
+            </span>
+          </li>
+        </ul>
+      </Flex>
 
       <Flex
         alignItems="center"
@@ -99,7 +100,7 @@ const StepGuide = memo(function StepGuide() {
           본 인증 시스템은 금융보안 가이드라인을 준수합니다.
         </Text>
       </Flex>
-    </Instruction.Box>
+    </Flex>
   );
 });
 
@@ -118,10 +119,7 @@ export default function IntroPage() {
 
   return (
     <Grid className={gridLayout} style={{ overflowX: "hidden" }}>
-      <Instruction.Panel>
-        <InformationGuide />
-        <StepGuide />
-      </Instruction.Panel>
+      <IntroGuide />
 
       <Grid placeItems={"center"} width={"full"} height={"fit"}>
         <Device.Frame>

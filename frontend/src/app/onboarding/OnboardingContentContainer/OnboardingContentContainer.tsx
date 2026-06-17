@@ -4,6 +4,7 @@ import { Flex } from "@internal/design-system/primitives";
 import type { MotionNodeAnimationOptions } from "motion/react";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
+import { useShallow } from "zustand/react/shallow";
 import { useFunnel } from "@/shared/hooks/useFunnel/useFunnel";
 import { useIsMounted } from "@/shared/hooks/useIsMounted";
 import { useOnboardingStore } from "@/store/onboarding/onboarding-store";
@@ -11,15 +12,9 @@ import { ONBOARDING_STEPS } from "../funnelConfig";
 import { IdCardInfoStep } from "../IdCardInfoStep";
 import IdCardSelectionStep from "../IdCardSelectionStep";
 import TermsStep from "../TermsStep/TermsStep";
-import { ToastMessage } from "../ui/ToastMessage";
 import VerifyInfoStep from "../VerifyInfoStep";
 import VerifyOtpStep from "../VerifyOtpStep";
 import { VerifySelectionStep } from "../VerifySelectionStep";
-
-interface LoginContentContainerProps {
-  hasPinLoginAvailable: boolean; // 기존 프롭 유지
-  reason?: string;
-}
 
 const pageVariants: MotionNodeAnimationOptions["variants"] = {
   initial: { opacity: 0, x: "100%", z: -1 },
@@ -55,12 +50,22 @@ export function AnimationPresenceWrapper({
   );
 }
 
-export function LoginContentContainer({ reason }: LoginContentContainerProps) {
+export function OnboardingContentContainer() {
   const isMounted = useIsMounted();
-  const state = useOnboardingStore();
   const router = useRouter();
+  const funnelConditionState = useOnboardingStore(
+    useShallow((state) => ({
+      isVerifyInfoSubmitted: state.isVerifyInfoSubmitted,
+      isSmsVerified: state.isSmsVerified,
+      termsAgreed: state.termsAgreed,
+      selectedIdCardType: state.selectedIdCardType,
+    })),
+  );
 
-  const funnel = useFunnel(isMounted ? ONBOARDING_STEPS : [], state);
+  const funnel = useFunnel(
+    isMounted ? ONBOARDING_STEPS : [],
+    funnelConditionState,
+  );
 
   if (!isMounted) {
     return (
@@ -88,7 +93,6 @@ export function LoginContentContainer({ reason }: LoginContentContainerProps) {
       width={"fullCqw"}
       padding={"1rem"}
     >
-      {reason && <ToastMessage reason={reason} />}
       <AnimationPresenceWrapper animationKey={currentStepId}>
         {currentStepId === "verify-selection" && (
           <VerifySelectionStep onNext={funnel.next} />
