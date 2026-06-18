@@ -31,11 +31,6 @@
 - Rich UI elements and complex interactives built on top of the primitives.
 - Includes its own subfolder [context.md](file:///Users/sunub/workspace/for-digital-divide/packages/design-system/src/components/context.md) documenting details for individual components (`Button`, `ThreeDButton`, `InteractiveCard`, `AppLink`, `Badge`, `TextField`, etc.).
 
-### [Patterns (src/patterns)](file:///Users/sunub/workspace/for-digital-divide/packages/design-system/src/patterns)
-- Specialized higher-level layout sections.
-  - [Stack](file:///Users/sunub/workspace/for-digital-divide/packages/design-system/src/patterns/Stack.tsx): Spaced row/column layouts.
-  - [PageGridSection / PageFlexSection](file:///Users/sunub/workspace/for-digital-divide/packages/design-system/src/patterns/PageGridSection.tsx): Container-wrapped sections.
-
 ---
 
 ## 3. Shared Assets & Helpers
@@ -67,6 +62,5 @@ packages/design-system/
     ├── tokens/
     ├── styles/
     ├── primitives/
-    ├── patterns/
     └── components/
 ```
