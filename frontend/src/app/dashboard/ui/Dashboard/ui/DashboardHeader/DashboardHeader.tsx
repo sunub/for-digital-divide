@@ -1,5 +1,4 @@
 import { Tooltip } from "@internal/design-system/components";
-import { PageFlexSection } from "@internal/design-system/patterns";
 import { Flex } from "@internal/design-system/primitives";
 import { LogOutIcon } from "lucide-react";
 import { Suspense } from "react";
@@ -10,8 +9,14 @@ import { UsernameSection } from "./UsernameSection";
 
 export function DashboardHeader() {
   return (
-    <PageFlexSection
-      justifyContent={"space-between"}
+    <Flex
+      alignItems="center"
+      justifyContent="space-between"
+      width="full"
+      marginLeft="auto"
+      marginRight="auto"
+      padding={8}
+      position="relative"
       top={0}
       className={style.headerContainer}
     >
@@ -31,6 +36,6 @@ export function DashboardHeader() {
         </Tooltip.Trigger>
         <Tooltip.Content>로그아웃</Tooltip.Content>
       </Flex>
-    </PageFlexSection>
+    </Flex>
   );
 }
