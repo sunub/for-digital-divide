@@ -14,7 +14,6 @@ interface Position {
 
 export function useTooltipPosition(
   triggerElement: HTMLElement | null,
-  rootContainer: HTMLElement | null,
 ): Position {
   const [top, setTop] = useState(0);
   const [left, setLeft] = useState(0);
@@ -26,13 +25,9 @@ export function useTooltipPosition(
     }
 
     const box = triggerElement.getBoundingClientRect();
-    const rootBox = rootContainer?.getBoundingClientRect() || {
-      top: 0,
-      left: 0,
-    };
 
-    const newLeft = box.left - rootBox.left + box.width / 2;
-    const newTop = box.bottom - rootBox.top + SPACING;
+    const newLeft = box.left + box.width / 2;
+    const newTop = box.bottom + SPACING;
     const newTriangleTop = -SPACING;
 
     setLeft(newLeft);
@@ -47,7 +42,7 @@ export function useTooltipPosition(
       tooltipTriangleHeightVar,
       `${SPACING}px`,
     );
-  }, [triggerElement, rootContainer]);
+  }, [triggerElement]);
 
   useEffect(() => {
     updatePosition();

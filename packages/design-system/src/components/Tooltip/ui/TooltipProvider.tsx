@@ -5,15 +5,12 @@ import {
   useCallback,
   useContext,
   useMemo,
-  useRef,
   useState,
 } from "react";
-import * as style from "./Tooltip.css";
 
 type TooltipContextValue = {
   isVisible: boolean;
   toggleVisible: () => void;
-  rootContainerRef: React.RefObject<HTMLElement | null>;
   triggerElement: HTMLElement | null;
   setTriggerElement: (element: HTMLElement | null) => void;
 };
@@ -29,7 +26,6 @@ export const useTooltipContext = () => {
 };
 
 export function TooltipProvider({ children }: { children: React.ReactNode }) {
-  const rootContainerRef = useRef<HTMLDivElement | null>(null);
   const [triggerElement, setTriggerElement] = useState<HTMLElement | null>(
     null,
   );
@@ -43,7 +39,6 @@ export function TooltipProvider({ children }: { children: React.ReactNode }) {
     () => ({
       isVisible,
       toggleVisible,
-      rootContainerRef,
       triggerElement,
       setTriggerElement,
     }),
@@ -51,10 +46,6 @@ export function TooltipProvider({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <TooltipContext.Provider value={value}>
-      <div ref={rootContainerRef} className={style.tooltipProvider}>
-        {children}
-      </div>
-    </TooltipContext.Provider>
+    <TooltipContext.Provider value={value}>{children}</TooltipContext.Provider>
   );
 }

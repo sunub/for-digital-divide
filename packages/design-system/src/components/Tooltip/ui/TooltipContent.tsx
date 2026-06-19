@@ -10,11 +10,8 @@ import { useTooltipContext } from "./TooltipProvider";
 
 export function TooltipContent({ children }: { children: React.ReactNode }) {
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const { triggerElement, isVisible, rootContainerRef } = useTooltipContext();
-  const { top, left, triangleTop } = useTooltipPosition(
-    triggerElement,
-    rootContainerRef.current,
-  );
+  const { triggerElement, isVisible } = useTooltipContext();
+  const { top, left, triangleTop } = useTooltipPosition(triggerElement);
   const isMounted = useIsMounted();
   const safeTop = typeof top === "number" && !Number.isNaN(top) ? top : 0;
   const safeLeft = typeof left === "number" && !Number.isNaN(left) ? left : 0;
@@ -34,6 +31,6 @@ export function TooltipContent({ children }: { children: React.ReactNode }) {
     >
       {children}
     </div>,
-    document.getElementById("tooltip-root") || document.body,
+    document.body,
   );
 }

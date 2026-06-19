@@ -14,7 +14,6 @@ import {
 import { createPortal } from "react-dom";
 import * as style from "./Alert.css";
 
-// 1. Contexts
 export const DevicePortalContext = createContext<HTMLDivElement | null>(null);
 
 export interface AlertDialogContextType {
@@ -41,7 +40,6 @@ export function useAlertDialogContext() {
   return context;
 }
 
-// 2. AlertDialog (Root)
 export interface AlertDialogProps {
   children?: React.ReactNode;
   open?: boolean;
@@ -90,7 +88,6 @@ export function AlertDialog({
   );
 }
 
-// 3. AlertDialogTrigger
 export interface AlertDialogTriggerProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
@@ -132,7 +129,6 @@ export function AlertDialogTrigger({
   );
 }
 
-// 4. AlertDialogPortal
 export interface AlertDialogPortalProps {
   children?: React.ReactNode;
 }
@@ -165,7 +161,6 @@ export function AlertDialogPortal({ children }: { children: React.ReactNode }) {
   );
 }
 
-// 5. AlertDialogOverlay (Backdrop)
 export interface AlertDialogOverlayProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -186,7 +181,6 @@ export function AlertDialogOverlay({
   );
 }
 
-// 6. AlertDialogContent (Body)
 export interface AlertDialogContentProps
   extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
@@ -200,7 +194,6 @@ export function AlertDialogContent({
   const { open, setOpen, contentId } = useAlertDialogContext();
   const contentWrapperRef = useRef<HTMLDivElement>(null);
 
-  // Close on ESC
   useEffect(() => {
     if (!open) return;
 
@@ -216,7 +209,6 @@ export function AlertDialogContent({
     };
   }, [open, setOpen]);
 
-  // Focus trap
   useEffect(() => {
     if (!open || !contentWrapperRef.current) return;
 
@@ -259,24 +251,26 @@ export function AlertDialogContent({
   }, [open]);
 
   return (
-    <div
-      className={clsx(
-        style.content({ state: open ? "open" : "closed" }),
-        className,
-      )}
-      ref={contentWrapperRef}
-      role="alertdialog"
-      id={contentId}
-      aria-modal="true"
-      tabIndex={-1}
-      {...props}
-    >
-      {children}
-    </div>
+    <AlertDialogPortal>
+      <AlertDialogOverlay />
+      <div
+        className={clsx(
+          style.content({ state: open ? "open" : "closed" }),
+          className,
+        )}
+        ref={contentWrapperRef}
+        role="alertdialog"
+        id={contentId}
+        aria-modal="true"
+        tabIndex={-1}
+        {...props}
+      >
+        {children}
+      </div>
+    </AlertDialogPortal>
   );
 }
 
-// 7. Auxiliary components
 export function AlertDialogHeader({
   className,
   ...props
@@ -305,7 +299,6 @@ export function AlertDialogDescription({
   return <p className={clsx(style.description, className)} {...props} />;
 }
 
-// 8. Action and Cancel (trigger closing)
 export interface AlertDialogActionProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
