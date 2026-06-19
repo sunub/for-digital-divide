@@ -19,20 +19,10 @@
     "./dist/**/*.css"
   ],
   "exports": {
-    ".": {
-      "types": "./dist/patterns/index.d.ts",
-      "import": "./dist/patterns/index.js",
-      "require": "./dist/patterns/index.cjs"
-    },
     "./components": {
       "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js",
       "require": "./dist/components/index.cjs"
-    },
-    "./patterns": {
-      "types": "./dist/patterns/index.d.ts",
-      "import": "./dist/patterns/index.js",
-      "require": "./dist/patterns/index.cjs"
     },
     "./primitives": {
       "types": "./dist/primitives/index.d.ts",
