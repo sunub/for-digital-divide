@@ -1,13 +1,18 @@
 import { style } from "@vanilla-extract/css";
+import { designSystemLayer } from "../../styles/layers.css";
 
 export const hiddenStyles = style({
-  display: "inline-block",
-  position: "absolute",
-  overflow: "hidden",
-  clip: "rect(0 0 0 0)",
-  height: 1,
-  width: 1,
-  margin: -1,
-  padding: 0,
-  border: 0,
+  "@layer": {
+    [designSystemLayer]: {
+      display: "inline-block",
+      position: "absolute",
+      overflow: "hidden",
+      clip: "rect(0 0 0 0)",
+      height: 1,
+      width: 1,
+      margin: -1,
+      padding: 0,
+      border: 0,
+    },
+  },
 });
