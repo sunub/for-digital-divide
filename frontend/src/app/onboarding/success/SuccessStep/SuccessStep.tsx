@@ -1,14 +1,13 @@
 "use client";
 
 import { Button, Text } from "@internal/design-system/components";
-import { useRouter } from "next/navigation";
+import { Box, Flex } from "@internal/design-system/primitives";
+import Link from "next/link";
 import { useEffect } from "react";
 import { useOnboardingStore } from "@/store/onboarding/onboarding-store";
 import { SuccessIcon } from "./SuccessIcon";
-import * as styles from "./SuccessStep.css";
 
 export default function SuccessStep() {
-  const router = useRouter();
   const resetOnboarding = useOnboardingStore((state) => state.resetOnboarding);
 
   useEffect(() => {
@@ -18,26 +17,34 @@ export default function SuccessStep() {
   }, [resetOnboarding]);
 
   return (
-    <div className={styles.container}>
+    <Flex
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      width="full"
+      gap={6}
+      padding={"1rem"}
+    >
       <SuccessIcon />
 
-      <div className={styles.textContainer}>
-        <Text as="h2" variant="title" className={styles.titleText}>
+      <Flex direction="column" alignItems="center" gap={2}>
+        <Text as="h2" variant="title" textAlign="center">
           계좌 검증 완료
         </Text>
-        <Text as="p" variant="body" className={styles.descriptionText}>
+        <Text as="p" variant="body" color="descriptionText" textAlign="center">
           온보딩 검증이 완료되었습니다.
           <br />
           마지막 단계인 간편 PIN 번호를 등록해 주세요.
         </Text>
-      </div>
+      </Flex>
 
-      <Button
-        onClick={() => router.replace("/register-pin")}
-        className={styles.button}
-      >
-        간편 PIN 비밀번호 등록
-      </Button>
-    </div>
+      <Box width="full" marginTop={4}>
+        <Button asChild size={"wide"}>
+          <Link href={"/register-pin"}>
+            <Box>간편 PIN 비밀번호 등록</Box>
+          </Link>
+        </Button>
+      </Box>
+    </Flex>
   );
 }
