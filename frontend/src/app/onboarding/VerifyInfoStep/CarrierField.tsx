@@ -1,9 +1,9 @@
+import { Box, Flex } from "@internal/design-system/primitives";
 import clsx from "clsx";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import { VERIFY_INFO_FIELD_IDS, type VerifyFormData } from "./form";
-import * as styles from "./VerifyInfoStep.css";
-import { Flex, Box } from "@internal/design-system/primitives";
+import * as styles from "./CarrierField.css";
 
 interface CarrierFieldProps {
   control: Control<VerifyFormData>;

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@internal/design-system/components";
-import { Flex, Box } from "@internal/design-system/primitives";
+import { Box, Flex } from "@internal/design-system/primitives";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useShallow } from "zustand/react/shallow";
@@ -18,7 +18,6 @@ import {
 import { NameField } from "./NameField";
 import { PhoneField } from "./PhoneField";
 import { ResidentNumberField } from "./ResidentNumberField";
-import * as styles from "./VerifyInfoStep.css";
 import { VerifyInfoStepHeader } from "./VerifyInfoStepHeader";
 
 interface VerifyInfoStepProps {

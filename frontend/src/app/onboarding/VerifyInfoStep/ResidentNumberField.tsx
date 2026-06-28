@@ -1,3 +1,4 @@
+import { Flex } from "@internal/design-system/primitives";
 import clsx from "clsx";
 import { type RefObject, useId } from "react";
 import type { Control } from "react-hook-form";
@@ -9,8 +10,6 @@ import {
   type VerifyFormData,
 } from "./form";
 import * as styles from "./VerifyInfoStep.css";
-import { TextField } from "@internal/design-system/components";
-import { Flex } from "@internal/design-system/primitives";
 
 interface ResidentNumberFieldProps {
   control: Control<VerifyFormData>;
