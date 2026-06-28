@@ -1,3 +1,6 @@
+@layer reset, base, designSystemLayer;
+
+@layer reset {
 *,
 *::before,
 *::after {
@@ -423,6 +426,7 @@ button {
   span.pin-pointer {
     --pin-pointer-width: 6cqw;
   }
+}
 }
 
 @layer base {
