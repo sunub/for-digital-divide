@@ -1,7 +1,7 @@
 import { style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
-import { vars } from "../../tokens/theme.css";
 import { designSystemLayer } from "../../styles/layers.css";
+import { vars } from "../../tokens/theme.css";
 
 export const inputGroup = style({
   "@layer": {

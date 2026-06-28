@@ -1,6 +1,6 @@
 import { style, styleVariants } from "@vanilla-extract/css";
-import { vars } from "../tokens/theme.css";
 import { designSystemLayer } from "../styles/layers.css";
+import { vars } from "../tokens/theme.css";
 
 export const surfaceBase = style({
   "@layer": {
