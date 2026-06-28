@@ -3,7 +3,7 @@
 import { Button, Text } from "@internal/design-system/components";
 import { Box, Flex, Grid } from "@internal/design-system/primitives";
 import { gridLayout } from "@internal/design-system/style/Grid.css";
-
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { memo, useCallback } from "react";
 import {
@@ -17,7 +17,6 @@ import {
   MdVerifiedUser,
   MdWorkspacePremium,
 } from "react-icons/md";
-import { useHistory } from "@/shared/hooks/useHistory";
 import { Device } from "@/shared/layout";
 import * as styles from "./page.css";
 
@@ -163,13 +162,7 @@ const IntroGuide = memo(function IntroGuide() {
 });
 
 export default function IntroPage() {
-  const { add } = useHistory();
   const router = useRouter();
-
-  const handleStart = useCallback(() => {
-    add(window.location.href);
-    router.push("/onboarding");
-  }, [add, router]);
 
   const handleCancel = useCallback(() => {
     router.push("/");
@@ -272,9 +265,11 @@ export default function IntroPage() {
               </Flex>
 
               <Flex direction="column" gap={3} width="full">
-                <Button type="button" size="lg" onClick={handleStart}>
-                  <span>인증서 발급하기</span>
-                  <MdArrowForwardIos size={14} />
+                <Button asChild size="lg">
+                  <Link href={"/onboarding"}>
+                    <span>인증서 발급하기</span>
+                    <MdArrowForwardIos size={14} />
+                  </Link>
                 </Button>
                 <Button
                   type="button"
