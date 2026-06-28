@@ -1,3 +1,4 @@
+import { appStyle } from "@/style/utils";
 import { vars } from "@internal/design-system/style";
 import { style } from "@vanilla-extract/css";
 
@@ -23,4 +24,16 @@ export const methodRow = style({
       transform: "scale(0.99)",
     },
   },
+});
+
+export const description = appStyle({
+  fontSize: "11px",
+  lineHeight: "16px",
+  opacity: 0.8,
+  padding: "0 4px",
+});
+
+export const recommendMent = appStyle({
+  lineHeight: "16px",
+  opacity: 0.6,
 });
