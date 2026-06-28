@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@internal/design-system/components";
-import { Flex } from "@internal/design-system/primitives";
+import { Flex, Box } from "@internal/design-system/primitives";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaAngleRight } from "react-icons/fa";
@@ -18,8 +18,8 @@ import {
   otpSchema,
 } from "./form";
 import { OtpCodeField } from "./OtpCodeField";
-import * as styles from "./VerifyOtpStep.css";
 import { VerifyOtpStepHeader } from "./VerifyOtpStepHeader";
+import { resendButton, verifyButton } from "./VerifyOtpStep.css";
 
 interface VerifyOtpStepProps {
   onNext: () => void;
@@ -103,19 +103,19 @@ export default function VerifyOtpStep({ onNext }: VerifyOtpStepProps) {
   };
 
   return (
-    <div className={styles.phoneContentLayout}>
+    <Flex direction="column" height="full" width="full">
       <OtpToastMessage otp={generatedOtp} />
 
-      <Flex direction="column" width="full">
+      <Flex direction="column" width="full" height="full">
         <VerifyOtpStepHeader />
 
         <Flex
           as="form"
           onSubmit={handleSubmit(onSubmit)}
           direction="column"
-          gap="1rem"
+          gap={4}
           width="full"
-          className={styles.formContainer}
+          style={{ flex: 1 }}
         >
           <OtpCodeField
             control={control}
@@ -125,30 +125,32 @@ export default function VerifyOtpStep({ onNext }: VerifyOtpStepProps) {
             onExtendTime={handleExtendTime}
           />
 
-          <div className={styles.resendContainer}>
+          <Flex justifyContent="flex-end" width="full">
             <Button
               type="button"
               variant="transparent"
               size="sm"
               onClick={handleResendOtp}
+              className={resendButton}
             >
               인증번호 다시 요청하기
               <FaAngleRight aria-hidden />
             </Button>
-          </div>
+          </Flex>
 
-          <div className={styles.buttonContainer}>
+          <Box marginTop="auto" paddingTop={6} width="full">
             <Button
               type="submit"
               variant="primary"
               size="wide"
               disabled={!isValid || timeLeft === 0}
+              className={verifyButton}
             >
               인증하기
             </Button>
-          </div>
+          </Box>
         </Flex>
       </Flex>
-    </div>
+    </Flex>
   );
 }
