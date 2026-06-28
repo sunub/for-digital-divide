@@ -2,6 +2,7 @@
 
 import { type Account, generateAccounts } from "@root/scripts/generateAccounts";
 import { generateTransactions } from "@root/scripts/generateTransactions";
+import { prisma } from "@root/prisma/prisma";
 import chalk from "chalk";
 import ora from "ora";
 import {
@@ -115,16 +116,8 @@ async function seedTransactions(accounts: Account[]) {
 
   console.log(`🔢 ${accounts.length}개 계정에 대한 거래 생성을 시작합니다`);
 
-  const { transactions, updatedAccounts } =
+  const { transactions } =
     await generateTransactions(accounts);
-
-  console.log(`💰 ${updatedAccounts.length}개 계정의 잔액을 업데이트합니다`);
-
-  if (updatedAccounts.length > 0) {
-    await accountsService.updateManyByAccountNumbers(
-      updatedAccounts as AccountType[],
-    );
-  }
 
   processOra.text = "🔄 거래 처리 및 검증 중...";
   console.log(`📋 ${transactions.length}개의 거래를 처리 중입니다`);
@@ -144,7 +137,28 @@ async function seedTransactions(accounts: Account[]) {
         const dataToInsert = validTransactionChunk.map(
           ({ transaction_id, ...rest }) => rest,
         );
-        await transactionsService.createMany(dataToInsert);
+        
+        const netChanges: Record<number, number> = {};
+        for (const tx of dataToInsert) {
+           const amt = Number(tx.amount);
+           if (tx.transaction_type === 'WITHDRAWAL' || tx.transaction_type === 'PAYMENT') {
+              netChanges[tx.account_number] = (netChanges[tx.account_number] || 0) - amt;
+           } else if (tx.transaction_type === 'DEPOSIT') {
+              netChanges[tx.account_number] = (netChanges[tx.account_number] || 0) + amt;
+           }
+        }
+
+        const operations = [
+          prisma.transactions.createMany({ data: dataToInsert }),
+          ...Object.entries(netChanges).map(([accNum, change]) => 
+             prisma.accounts.update({
+                where: { account_number: Number(accNum) },
+                data: { balance: { increment: change } }
+             })
+          )
+        ];
+
+        await prisma.$transaction(operations);
       } catch (error) {
         processOra.fail("❌ 거래 생성 중 오류 발생");
         console.error(error);
