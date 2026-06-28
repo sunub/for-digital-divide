@@ -1,5 +1,6 @@
 import { vars } from "@internal/design-system/style";
 import { style } from "@vanilla-extract/css";
+import { appStyle } from "@/style/utils";
 
 export const certButton = style({
   border: "1px solid rgba(0, 0, 0, 0.08)",
@@ -23,4 +24,16 @@ export const methodRow = style({
       transform: "scale(0.99)",
     },
   },
+});
+
+export const description = appStyle({
+  fontSize: "11px",
+  lineHeight: "16px",
+  opacity: 0.8,
+  padding: "0 4px",
+});
+
+export const recommendMent = appStyle({
+  lineHeight: "16px",
+  opacity: 0.6,
 });

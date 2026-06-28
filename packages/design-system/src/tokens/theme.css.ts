@@ -33,6 +33,7 @@ const primitiveColors = {
 } as const;
 
 const semanticColors = {
+  ...primitiveColors,
   border: "oklch(0.6393 0.206 288.34 / 0.6)",
   input: "hsl(var(--input))",
   ring: "hsl(var(--ring))",

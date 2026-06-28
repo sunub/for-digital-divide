@@ -5,7 +5,7 @@ import {
   formatIssueDate,
   ID_CARD_FIELD_IDS,
   type IdCardFormData,
-} from "./form";
+} from "../form";
 
 interface IssueDateFieldProps {
   control: Control<IdCardFormData>;

@@ -1,7 +1,7 @@
 import { TextField } from "@internal/design-system/components";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import { ID_CARD_FIELD_IDS, type IdCardFormData } from "./form";
+import { ID_CARD_FIELD_IDS, type IdCardFormData } from "../form";
 
 interface NameFieldProps {
   control: Control<IdCardFormData>;

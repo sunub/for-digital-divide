@@ -1,16 +1,12 @@
+import { Box, Flex } from "@internal/design-system/primitives";
 import React from "react";
 import { MdChevronRight, MdExpandMore } from "react-icons/md";
 import { Checkbox } from "@/components/CheckBox";
 import {
   chevronIcon,
   itemGroupHeaderChevron,
-  itemRow,
-  itemRowGroup,
-  itemRowGroupHeader,
   sectionCard,
-  sectionContent,
   sectionHeader,
-  subItemContainer,
   textGray,
   textSmallGray,
 } from "../TermsStep.css";
@@ -40,15 +36,20 @@ function RequiredTermsSectionComponent({
   onToggleCertAll,
 }: Props) {
   return (
-    <div className={sectionCard}>
-      <div className={sectionHeader}>
+    <Box className={sectionCard}>
+      <Flex
+        alignItems="center"
+        justifyContent="space-between"
+        padding={4}
+        className={sectionHeader}
+      >
         <Checkbox checked={isAllReqChecked} onChange={onToggleAll}>
           [필수] 전체동의
         </Checkbox>
         <MdExpandMore className={chevronIcon} />
-      </div>
-      <div className={sectionContent}>
-        <div className={itemRow}>
+      </Flex>
+      <Flex direction="column" gap={4} padding={4}>
+        <Flex alignItems="center" justifyContent="space-between" width="full">
           <Checkbox
             checked={values.hanaOneQApp}
             onChange={(e) => onChange("hanaOneQApp", e.target.checked)}
@@ -56,9 +57,9 @@ function RequiredTermsSectionComponent({
             <span className={textGray}>하나원큐 앱 이용약관</span>
           </Checkbox>
           <MdChevronRight className={chevronIcon} />
-        </div>
+        </Flex>
 
-        <div className={itemRow}>
+        <Flex alignItems="center" justifyContent="space-between" width="full">
           <Checkbox
             checked={values.donTong}
             onChange={(e) => onChange("donTong", e.target.checked)}
@@ -66,9 +67,9 @@ function RequiredTermsSectionComponent({
             <span className={textGray}>돈통 이용약관</span>
           </Checkbox>
           <MdChevronRight className={chevronIcon} />
-        </div>
+        </Flex>
 
-        <div className={itemRow}>
+        <Flex alignItems="center" justifyContent="space-between" width="full">
           <Checkbox
             checked={values.hanaCertService}
             onChange={(e) => onChange("hanaCertService", e.target.checked)}
@@ -76,10 +77,14 @@ function RequiredTermsSectionComponent({
             <span className={textGray}>하나인증서 서비스 이용약관</span>
           </Checkbox>
           <MdChevronRight className={chevronIcon} />
-        </div>
+        </Flex>
 
-        <div className={itemRowGroup}>
-          <div className={itemRowGroupHeader}>
+        <Flex direction="column" width="full">
+          <Flex
+            alignItems="flex-start"
+            justifyContent="space-between"
+            width="full"
+          >
             <Checkbox
               checked={
                 values.certUniqueIdInfo &&
@@ -95,9 +100,14 @@ function RequiredTermsSectionComponent({
               </span>
             </Checkbox>
             <MdChevronRight className={itemGroupHeaderChevron} />
-          </div>
+          </Flex>
 
-          <div className={subItemContainer}>
+          <Flex
+            direction="column"
+            gap={2}
+            marginTop={2}
+            style={{ marginLeft: 32 }}
+          >
             <Checkbox
               checked={values.certUniqueIdInfo}
               onChange={(e) => onChange("certUniqueIdInfo", e.target.checked)}
@@ -122,10 +132,10 @@ function RequiredTermsSectionComponent({
                 중요식별정보(CI) 수집·이용에 동의
               </span>
             </Checkbox>
-          </div>
-        </div>
+          </Flex>
+        </Flex>
 
-        <div className={itemRow}>
+        <Flex alignItems="center" justifyContent="space-between" width="full">
           <Checkbox
             checked={values.thirdPartyProvisionInfo}
             onChange={(e) =>
@@ -137,9 +147,9 @@ function RequiredTermsSectionComponent({
             </span>
           </Checkbox>
           <MdChevronRight className={chevronIcon} />
-        </div>
+        </Flex>
 
-        <div className={itemRow}>
+        <Flex alignItems="center" justifyContent="space-between" width="full">
           <Checkbox
             checked={values.autoLoginInfo}
             onChange={(e) => onChange("autoLoginInfo", e.target.checked)}
@@ -149,9 +159,9 @@ function RequiredTermsSectionComponent({
             </span>
           </Checkbox>
           <MdChevronRight className={chevronIcon} />
-        </div>
-      </div>
-    </div>
+        </Flex>
+      </Flex>
+    </Box>
   );
 }
 

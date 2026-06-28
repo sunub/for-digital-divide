@@ -69,13 +69,15 @@
     "@vanilla-extract/next-plugin": "^2.4.16",
     "@vanilla-extract/sprinkles": "^1.6.5",
     "@vanilla-extract/webpack-plugin": "^2.3.22",
+    "@vitest/ui": "^4.1.9",
     "css-loader": "^7.1.2",
     "mini-css-extract-plugin": "^2.9.4",
     "prisma": "^7.1.0",
     "storybook": "^10.2.17",
     "tsx": "^4.21.0",
     "turbo": "^2.9.16",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.8"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"

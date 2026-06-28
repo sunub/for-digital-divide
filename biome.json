@@ -6,8 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": true,
-    "includes": ["**", "!node_modules", "!.next", "!dist", "!build"]
+    "ignoreUnknown": true
   },
   "formatter": {
     "enabled": true,
@@ -24,6 +23,17 @@
       "react": "recommended"
     }
   },
+  "overrides": [
+    {
+      "includes": ["**/test.css", "**/build.ts"],
+      "linter": {
+        "enabled": false
+      },
+      "formatter": {
+        "enabled": false
+      }
+    }
+  ],
   "assist": {
     "actions": {
       "source": {

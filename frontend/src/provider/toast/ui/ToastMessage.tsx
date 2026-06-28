@@ -6,6 +6,7 @@ import { MdCheckCircle, MdError, MdInfo, MdWarning } from "react-icons/md";
 import { useToastStore } from "../store/toast-store";
 import * as styles from "../style/toast.css";
 import type { Toast } from "../types";
+import { messageWrapper } from "./ToastMessage.css";
 
 const toastVariants: Variants = {
   initial: { opacity: 0, y: -50 },
@@ -106,7 +107,7 @@ export function ToastMessage({
           {IconComponent}
         </Flex>
 
-        <Flex direction="column" style={{ flexGrow: 1, overflow: "hidden" }}>
+        <Flex direction="column" className={messageWrapper}>
           <Flex
             direction="row"
             justifyContent="space-between"

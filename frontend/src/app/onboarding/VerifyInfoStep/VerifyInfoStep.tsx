@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@internal/design-system/components";
-import { Flex } from "@internal/design-system/primitives";
+import { Box, Flex } from "@internal/design-system/primitives";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useShallow } from "zustand/react/shallow";
@@ -18,7 +18,6 @@ import {
 import { NameField } from "./NameField";
 import { PhoneField } from "./PhoneField";
 import { ResidentNumberField } from "./ResidentNumberField";
-import * as styles from "./VerifyInfoStep.css";
 import { VerifyInfoStepHeader } from "./VerifyInfoStepHeader";
 
 interface VerifyInfoStepProps {
@@ -106,16 +105,16 @@ export default function VerifyInfoStep({ onNext }: VerifyInfoStepProps) {
   };
 
   return (
-    <div className={styles.phoneContentLayout}>
-      <Flex direction="column" width="full">
+    <Flex direction="column" p={6} height="full" width="full">
+      <Flex direction="column" width="full" height="full">
         <VerifyInfoStepHeader />
         <Flex
           as="form"
           onSubmit={handleSubmit(onSubmit)}
           direction="column"
-          gap="1rem"
+          gap={4}
           width="full"
-          className={styles.formContainer}
+          style={{ flex: 1 }}
         >
           <NameField
             control={control}
@@ -140,13 +139,13 @@ export default function VerifyInfoStep({ onNext }: VerifyInfoStepProps) {
             hasError={hasPhoneError}
             errorMessage={phoneErrorMessage}
           />
-          <div className={styles.buttonContainer}>
+          <Box marginTop="auto" paddingTop={6} width="full">
             <Button type="submit" disabled={!isValid} style={{ width: "100%" }}>
               본인 정보 입력 완료
             </Button>
-          </div>
+          </Box>
         </Flex>
       </Flex>
-    </div>
+    </Flex>
   );
 }

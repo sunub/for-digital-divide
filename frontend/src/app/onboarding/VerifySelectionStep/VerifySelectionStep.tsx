@@ -95,12 +95,8 @@ export function VerifySelectionStep({ onNext }: StepProps) {
             variant="description"
             color="descriptionText"
             marginTop={1}
-            style={{
-              fontSize: "11px",
-              lineHeight: "16px",
-              opacity: 0.8,
-              padding: "0 4px",
-            }}
+            className={styles.description}
+            size={"0.75rem"}
           >
             다른 은행 인증서가 없다면 먼저 발급받은 후 본인확인을 진행해 주세요.
           </Text>
@@ -117,7 +113,7 @@ export function VerifySelectionStep({ onNext }: StepProps) {
         color="descriptionText"
         marginTop="auto"
         paddingBottom={4}
-        style={{ fontSize: "11px", lineHeight: "16px", opacity: 0.6 }}
+        size={"0.75rem"}
       >
         본인명의 휴대폰이 없거나 신분증이 없는 경우 [다른 방법으로 본인확인]을
         선택해주세요.

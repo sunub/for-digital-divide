@@ -1,4 +1,5 @@
 import { Button, Text } from "@internal/design-system/components";
+import { Flex } from "@internal/design-system/primitives";
 import clsx from "clsx";
 import { type Control, Controller } from "react-hook-form";
 import {
@@ -31,7 +32,7 @@ export function OtpCodeField({
     : OTP_FIELD_IDS.timer;
 
   return (
-    <div className={styles.inputGroup}>
+    <Flex direction="column" gap={1} width="full">
       <label htmlFor={OTP_FIELD_IDS.input} className={styles.srOnly}>
         인증번호 6자리 입력
       </label>
@@ -96,6 +97,6 @@ export function OtpCodeField({
           {errorMessage}
         </Text>
       ) : null}
-    </div>
+    </Flex>
   );
 }

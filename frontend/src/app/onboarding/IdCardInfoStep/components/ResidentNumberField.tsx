@@ -1,3 +1,4 @@
+import { Flex } from "@internal/design-system/primitives";
 import clsx from "clsx";
 import { type RefObject, useId } from "react";
 import type { Control } from "react-hook-form";
@@ -7,8 +8,8 @@ import {
   type IdCardFormData,
   sanitizeResidentBack,
   sanitizeResidentFront,
-} from "./form";
-import * as styles from "./IdCardInfoStep.css";
+} from "../form";
+import * as styles from "../IdCardInfoStep.css";
 
 interface ResidentNumberFieldProps {
   control: Control<IdCardFormData>;
@@ -28,7 +29,7 @@ export function ResidentNumberField({
   const groupLabelId = useId();
 
   return (
-    <div className={styles.inputGroup}>
+    <Flex direction="column" gap={1} width="full">
       <label
         id={groupLabelId}
         htmlFor={ID_CARD_FIELD_IDS.residentFront}
@@ -42,7 +43,7 @@ export function ResidentNumberField({
           hasError && styles.inputWrapperError,
         )}
       >
-        <div className={styles.rrnSplitWrapper}>
+        <Flex alignItems="center" gap={2} width="full">
           <Controller
             name="residentFront"
             control={control}
@@ -110,13 +111,13 @@ export function ResidentNumberField({
               ●●●●●●
             </span>
           </div>
-        </div>
+        </Flex>
       </div>
       {hasError && errorMessage && errorId && (
         <span id={errorId} className={styles.errorText} role="alert">
           {errorMessage}
         </span>
       )}
-    </div>
+    </Flex>
   );
 }

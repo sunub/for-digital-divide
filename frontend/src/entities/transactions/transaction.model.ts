@@ -21,16 +21,18 @@ function coerceNumberLike(value: unknown) {
 }
 
 function coerceDateLike(value: unknown) {
-  if (value instanceof Date) return value;
+  if (value instanceof Date) {
+    return value;
+  }
   if (typeof value === "string" || typeof value === "number") {
     return new Date(value);
   }
   return value;
 }
 
-export const TransactionIdSchema = z.number().int().safe();
-export const AccountNumberSchema = z.number().int().safe();
-export const AmountSchema = z.number().finite().min(0);
+export const TransactionIdSchema = z.number().int();
+export const AccountNumberSchema = z.number().int();
+export const AmountSchema = z.number().positive();
 
 export const TransactionSchema = z.object({
   transaction_id: TransactionIdSchema,

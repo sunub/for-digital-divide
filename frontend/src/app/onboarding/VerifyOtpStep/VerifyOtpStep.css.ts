@@ -1,51 +1,30 @@
 import { vars } from "@internal/design-system/style";
-import { style } from "@vanilla-extract/css";
+import { appStyle } from "../../../style/utils";
 
-export const phoneContentLayout = style({
-  display: "flex",
-  flexDirection: "column",
-  padding: "24px",
-  paddingTop: "24px",
-  height: "100%",
-  boxSizing: "border-box",
-  justifyContent: "space-between",
-  gap: "24px",
-  width: "100%",
+export const resendButton = appStyle({
+  color: vars.color.gray200,
+  ":hover": {
+    color: vars.color.button,
+  },
 });
 
-export const headerContainer = style({
-  marginBottom: "32px",
+export const verifyButton = appStyle({
+  padding: `${vars.space["2"]} ${vars.space["4"]}`,
 });
 
-export const phoneTitle = style({
-  fontSize: "24px",
-  fontWeight: "700",
-  lineHeight: "32px",
+export const phoneTitle = appStyle({
   color: vars.color.button,
   letterSpacing: "-0.01em",
   textAlign: "left",
+  textWrap: "pretty",
 });
 
-export const formContainer = style({
-  display: "flex",
-  flexDirection: "column",
-  gap: "16px",
-  width: "100%",
-});
-
-export const inputGroup = style({
-  display: "flex",
-  flexDirection: "column",
-  gap: "4px",
-  width: "100%",
-});
-
-export const inputWrapper = style({
+export const inputWrapper = appStyle({
   display: "flex",
   alignItems: "center",
-  padding: "12px 16px",
-  borderRadius: "12px",
-  border: "1px solid rgba(0, 0, 0, 0.08)",
+  padding: `${vars.space["3"]} ${vars.space["4"]}`,
+  borderRadius: vars.borderRadius.md,
+  border: `1px solid rgba(0, 0, 0, 0.08)`,
   backgroundColor: vars.color.white,
   position: "relative",
   transition: "border-color 0.2s ease, box-shadow 0.2s ease",
@@ -57,19 +36,20 @@ export const inputWrapper = style({
   },
 });
 
-export const inputWrapperError = style({
-  borderColor: `${vars.color.highlight} !important`,
-  boxShadow: `0 0 0 1px ${vars.color.highlight} !important`,
+export const inputWrapperError = appStyle({
+  borderColor: `${vars.color.highlight}!important`,
+  boxShadow: `0 0 0 1px ${vars.color.highlight}!important`,
 });
 
-export const inputField = style({
+export const inputField = appStyle({
   width: "100%",
   backgroundColor: "transparent",
   border: "none",
   padding: 0,
   paddingRight: "110px",
-  fontSize: "16px",
+  fontSize: vars.fontSize["1rem"],
   color: vars.color.text,
+  height: vars.fontSize["2rem"],
   outline: "none",
   selectors: {
     "&::placeholder": {
@@ -79,41 +59,29 @@ export const inputField = style({
   },
 });
 
-export const timerWrapper = style({
+export const timerWrapper = appStyle({
   position: "absolute",
-  right: "12px",
+  right: vars.space["3"],
   display: "flex",
   alignItems: "center",
-  gap: "8px",
+  gap: vars.space["2"],
 });
 
-export const timerText = style({
+export const timerText = appStyle({
   fontSize: "14px",
   fontWeight: "600",
   color: vars.color.button,
   fontVariantNumeric: "tabular-nums",
 });
 
-export const resendContainer = style({
-  display: "flex",
-  justifyContent: "flex-end",
-  width: "100%",
-});
-
-export const errorText = style({
-  fontSize: "12px",
+export const errorText = appStyle({
+  fontSize: vars.fontSize["0.75rem"],
   color: vars.color.highlight,
-  paddingLeft: "4px",
+  paddingLeft: vars.space["1"],
   marginTop: "2px",
 });
 
-export const buttonContainer = style({
-  marginTop: "auto",
-  paddingTop: "24px",
-  width: "100%",
-});
-
-export const srOnly = style({
+export const srOnly = appStyle({
   position: "absolute",
   width: "1px",
   height: "1px",

@@ -1,5 +1,9 @@
-import { Button } from "@internal/design-system/components";
-import { Flex } from "@internal/design-system/primitives";
+import {
+  Button,
+  Text,
+  VisuallyHidden,
+} from "@internal/design-system/components";
+import { Box, Flex } from "@internal/design-system/primitives";
 import { useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import {
@@ -45,19 +49,25 @@ export function IdCardSelectionStep({ onNext }: StepProps) {
   };
 
   return (
-    <Flex direction="column" paddingTop={"2rem"} className={styles.root}>
-      <Flex direction="column" className={styles.content}>
-        <h1 className={styles.title}>
+    <Flex direction="column" paddingTop={8} height="full">
+      <Flex direction="column" style={{ flex: 1 }} paddingBottom={8}>
+        <Text
+          as="h1"
+          variant="hero"
+          textAlign="center"
+          marginTop={2}
+          marginBottom={6}
+        >
           신분증을 선택해
           <br />
           주세요.
-        </h1>
+        </Text>
 
         <IdCardIllustration />
 
-        <fieldset className={styles.optionsFieldset}>
-          <legend className={styles.srOnly}>신분증 선택</legend>
-          <Flex direction="column" className={styles.optionsList}>
+        <Box as="fieldset" className={styles.optionsFieldset}>
+          <VisuallyHidden>신분증 선택</VisuallyHidden>
+          <Flex direction="column" gap={2}>
             {ID_CARD_OPTIONS.map((option) => (
               <IdCardOption
                 key={option.value}
@@ -69,16 +79,11 @@ export function IdCardSelectionStep({ onNext }: StepProps) {
               />
             ))}
           </Flex>
-        </fieldset>
+        </Box>
       </Flex>
 
-      <Flex className={styles.action}>
-        <Button
-          type="button"
-          size="wide"
-          onClick={handleSubmit}
-          className={styles.submitButton}
-        >
+      <Flex marginTop="auto" paddingBottom={2}>
+        <Button type="button" size="wide" onClick={handleSubmit}>
           신분증 인증
         </Button>
       </Flex>

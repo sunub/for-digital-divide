@@ -1,8 +1,9 @@
+import { Box, Flex } from "@internal/design-system/primitives";
 import clsx from "clsx";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
+import * as styles from "./CarrierField.css";
 import { VERIFY_INFO_FIELD_IDS, type VerifyFormData } from "./form";
-import * as styles from "./VerifyInfoStep.css";
 
 interface CarrierFieldProps {
   control: Control<VerifyFormData>;
@@ -18,7 +19,7 @@ export function CarrierField({
   errorId,
 }: CarrierFieldProps) {
   return (
-    <div className={styles.inputGroup}>
+    <Flex direction="column" gap={1} width="full">
       <label
         htmlFor={VERIFY_INFO_FIELD_IDS.carrier}
         className={styles.inputLabel}
@@ -31,7 +32,7 @@ export function CarrierField({
           hasError && styles.inputWrapperError,
         )}
       >
-        <div className={styles.dropdownWrapper}>
+        <Box position="relative" width="full">
           <Controller
             name="carrier"
             control={control}
@@ -50,13 +51,13 @@ export function CarrierField({
               </select>
             )}
           />
-        </div>
+        </Box>
       </div>
       {hasError && errorMessage && errorId && (
         <span id={errorId} className={styles.errorText} role="alert">
           {errorMessage}
         </span>
       )}
-    </div>
+    </Flex>
   );
 }

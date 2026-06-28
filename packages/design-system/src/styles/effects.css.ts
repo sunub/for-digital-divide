@@ -1,5 +1,6 @@
 import { keyframes, style } from "@vanilla-extract/css";
 import { vars } from "../tokens/theme.css";
+import { designSystemLayer } from "./layers.css";
 
 export const pulseGlowAnimation = keyframes({
   "0%": {
@@ -20,16 +21,20 @@ export const pulseGlowAnimation = keyframes({
 });
 
 export const actionNextStepGlow = style({
-  animation: `${pulseGlowAnimation} 2s infinite cubic-bezier(0.4, 0, 0.2, 1)`,
-  transition: "all 0.3s ease",
-  willChange: "box-shadow",
+  "@layer": {
+    [designSystemLayer]: {
+      animation: `${pulseGlowAnimation} 2s infinite cubic-bezier(0.4, 0, 0.2, 1)`,
+      transition: "all 0.3s ease",
+      willChange: "box-shadow",
 
-  selectors: {
-    "&:hover, &:focus-within": {
-      animation: "none",
-      boxShadow: `0 0 0 4px color-mix(in srgb, ${vars.color.button} 95%, transparent), 
-                  0 0 20px 8px color-mix(in srgb, ${vars.color.emphasis} 90%, transparent),
-                  0 0 36px 16px color-mix(in srgb, ${vars.color.button} 55%, transparent) !important`,
+      selectors: {
+        "&:hover, &:focus-within": {
+          animation: "none",
+          boxShadow: `0 0 0 4px color-mix(in srgb, ${vars.color.button} 95%, transparent), 
+                      0 0 20px 8px color-mix(in srgb, ${vars.color.emphasis} 90%, transparent),
+                      0 0 36px 16px color-mix(in srgb, ${vars.color.button} 55%, transparent) !important`,
+        },
+      },
     },
   },
 });

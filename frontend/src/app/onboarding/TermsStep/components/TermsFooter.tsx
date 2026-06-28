@@ -1,4 +1,5 @@
 import { Button } from "@internal/design-system/components";
+import { Box } from "@internal/design-system/primitives";
 import React from "react";
 import { footer } from "../TermsStep.css";
 
@@ -9,7 +10,7 @@ interface Props {
 
 function TermsFooterComponent({ onNext, disabled }: Props) {
   return (
-    <div className={footer}>
+    <Box className={footer}>
       <Button
         size="wide"
         variant="primary"
@@ -18,7 +19,7 @@ function TermsFooterComponent({ onNext, disabled }: Props) {
       >
         다음
       </Button>
-    </div>
+    </Box>
   );
 }
 

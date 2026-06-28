@@ -1,6 +1,6 @@
+import { Box } from "@internal/design-system/primitives";
 import React from "react";
 import { Checkbox } from "@/components/CheckBox";
-import { allAgreementWrapper } from "../TermsStep.css";
 
 interface Props {
   checked: boolean;
@@ -9,11 +9,11 @@ interface Props {
 
 function TermsAllAgreementComponent({ checked, onChange }: Props) {
   return (
-    <div className={allAgreementWrapper}>
+    <Box style={{ marginBottom: "3cqh" }}>
       <Checkbox checked={checked} onChange={onChange} isBold>
         전체동의 (선택 동의 포함)
       </Checkbox>
-    </div>
+    </Box>
   );
 }
 

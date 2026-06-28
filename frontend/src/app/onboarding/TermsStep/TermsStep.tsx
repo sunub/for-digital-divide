@@ -1,3 +1,4 @@
+import { Flex } from "@internal/design-system/primitives";
 import { useCallback, useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useOnboardingStore } from "@/store/onboarding/onboarding-store";
@@ -7,7 +8,7 @@ import { TermsAllAgreement } from "./components/TermsAllAgreement";
 import { TermsFooter } from "./components/TermsFooter";
 import { TermsHeader } from "./components/TermsHeader";
 import { termsSchema } from "./schema";
-import { layoutContainer, scrollContent } from "./TermsStep.css";
+import { scrollContent } from "./TermsStep.css";
 
 interface StepProps {
   onNext: () => void;
@@ -162,7 +163,12 @@ export default function TermsStep({ onNext }: StepProps) {
 
   return (
     <>
-      <div className={layoutContainer}>
+      <Flex
+        direction="column"
+        position="relative"
+        width="full"
+        style={{ backgroundColor: "#f9f9f9", overflow: "hidden" }}
+      >
         <div className={scrollContent}>
           <TermsHeader />
           <TermsAllAgreement
@@ -187,7 +193,7 @@ export default function TermsStep({ onNext }: StepProps) {
             onToggleMarketingAll={handleToggleMarketingAll}
           />
         </div>
-      </div>
+      </Flex>
       <TermsFooter onNext={handleSubmit} disabled={!isValid} />
     </>
   );

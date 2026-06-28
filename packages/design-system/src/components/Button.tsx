@@ -58,13 +58,13 @@ export function Button(props: ButtonProps) {
   const status = props.asChild ? "idle" : (props.status ?? "idle");
   const isPending = status === "pending";
   const className = clsx(
+    props.className,
     buttonRecipe({
       variant: props.variant ?? "default",
       size: props.size ?? "default",
       font: props.font ?? "default",
       status,
     }),
-    props.className,
   );
 
   if (props.asChild) {
