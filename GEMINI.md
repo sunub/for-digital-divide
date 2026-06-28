@@ -51,6 +51,13 @@
       <rule name="Type Strictness">Define explicit TypeScript types for all variables, function parameters, and return values. Avoid using `any`.</rule>
       <rule name="Asynchronous Handling">Must include `try-catch` blocks and `async/await` patterns to safely manage latency and errors during any I/O or API calls.</rule>
       <rule name="Modularization">Strictly separate domain logic (e.g., embedding, DB connection, UI rendering, file monitoring) into independent utility files.</rule>
+      <rule name="Frontend Design System Enforcement (Strict)">
+        For Domain A (Frontend), you MUST adhere to the **Primitives-First** paradigm.
+        1. Never use hardcoded values (e.g., px, rem, hex colors) for layout or spacing.
+        2. Always use `<Box>` or `<Flex>` primitives with Sprinkles as the primary method for layout and spacing.
+        3. If writing custom CSS is absolutely necessary, you MUST wrap it using the `appStyle` utility to enforce the `@layer app` priority.
+        4. Before writing custom styles or Sprinkles, proactively query the `mcp_server` tools (e.g., `suggest_sprinkles_match`, `get_theme_tokens`) to ensure your values map to valid design system tokens.
+      </rule>
   </coding_guidelines>
 
   <commit_message_format>

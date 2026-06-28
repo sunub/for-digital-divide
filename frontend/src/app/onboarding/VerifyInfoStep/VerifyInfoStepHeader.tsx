@@ -1,14 +1,14 @@
 import { Text } from "@internal/design-system/components";
-import * as styles from "./VerifyInfoStep.css";
+import { Box } from "@internal/design-system/primitives";
 
 export function VerifyInfoStepHeader() {
   return (
-    <div style={{ marginBottom: "24px" }}>
-      <Text as="h2" className={styles.phoneTitle}>
+    <Box marginBottom={6}>
+      <Text as="h2" variant="title">
         본인확인을 위해
         <br />
         정보를 입력해 주세요
       </Text>
-    </div>
+    </Box>
   );
 }

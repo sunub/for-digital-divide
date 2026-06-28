@@ -18,6 +18,9 @@
 - `loadData() => void`: Dynamically loads theme tokens and components metadata JSON files from the design system's `dist/` folder.
 - `designSystemData`: An object with getters for `tokens`, `components`, and the `designSystemRoot` path.
 
+### External Dependencies
+- `@internal/design-system-linter`: Provides the core business logic (`auditStyles`) for mapping CSS properties to design system Sprinkles/tokens. This package is shared with external static analysis tools (e.g., Stylelint).
+
 ### Types & Interfaces
 
 **From `src/data.ts`:**

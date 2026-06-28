@@ -9,6 +9,8 @@ import {
   type VerifyFormData,
 } from "./form";
 import * as styles from "./VerifyInfoStep.css";
+import { TextField } from "@internal/design-system/components";
+import { Flex } from "@internal/design-system/primitives";
 
 interface ResidentNumberFieldProps {
   control: Control<VerifyFormData>;
@@ -28,7 +30,7 @@ export function ResidentNumberField({
   const groupLabelId = useId();
 
   return (
-    <div className={styles.inputGroup}>
+    <Flex direction="column" gap={1} width="full">
       <label
         id={groupLabelId}
         htmlFor={VERIFY_INFO_FIELD_IDS.residentFront}
@@ -42,7 +44,7 @@ export function ResidentNumberField({
           hasError && styles.inputWrapperError,
         )}
       >
-        <div className={styles.rrnSplitWrapper}>
+        <Flex alignItems="center" gap={2} width="full">
           <Controller
             name="residentFront"
             control={control}
@@ -77,7 +79,7 @@ export function ResidentNumberField({
             -
           </span>
 
-          <div className={styles.rrnBackFieldWrapper}>
+          <Flex alignItems="center" style={{ flex: 1 }}>
             <Controller
               name="residentBack"
               control={control}
@@ -109,14 +111,14 @@ export function ResidentNumberField({
             <span className={styles.rrnMask} aria-hidden>
               ●●●●●●
             </span>
-          </div>
-        </div>
+          </Flex>
+        </Flex>
       </div>
       {hasError && errorMessage && errorId && (
         <span id={errorId} className={styles.errorText} role="alert">
           {errorMessage}
         </span>
       )}
-    </div>
+    </Flex>
   );
 }
