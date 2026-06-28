@@ -1,19 +1,13 @@
+import { Box, Flex } from "@internal/design-system/primitives";
 import React from "react";
 import { MdChevronRight, MdExpandMore } from "react-icons/md";
 import { Checkbox } from "@/components/CheckBox";
 import {
   chevronIcon,
   itemGroupHeaderChevron,
-  itemRow,
-  itemRowGroup,
-  itemRowGroupHeader,
-  marketingHeaderWrapper,
   optionalSectionGuide,
-  personalInfoProvisionWrapper,
   sectionCard,
-  sectionContent,
   sectionHeader,
-  subItemContainer,
   subItemContainerBordered,
   textGray,
   textSmallGray,
@@ -56,16 +50,25 @@ function OptionalTermsSectionComponent({
     values.personalInfoProvisionOptional;
 
   return (
-    <div className={sectionCard}>
-      <div className={sectionHeader}>
+    <Box className={sectionCard}>
+      <Flex
+        alignItems="center"
+        justifyContent="space-between"
+        padding={4}
+        className={sectionHeader}
+      >
         <Checkbox checked={isAllOptChecked} onChange={onToggleAll}>
           [선택] 전체동의
         </Checkbox>
         <MdExpandMore className={chevronIcon} />
-      </div>
-      <div className={sectionContent}>
-        <div className={itemRowGroup}>
-          <div className={itemRowGroupHeader}>
+      </Flex>
+      <Flex direction="column" gap={4} padding={4}>
+        <Flex direction="column" width="full">
+          <Flex
+            alignItems="flex-start"
+            justifyContent="space-between"
+            width="full"
+          >
             <Checkbox
               checked={isCollectionGroupChecked}
               onChange={(e) => onToggleSubGroup(e.target.checked)}
@@ -77,10 +80,21 @@ function OptionalTermsSectionComponent({
               </span>
             </Checkbox>
             <MdChevronRight className={itemGroupHeaderChevron} />
-          </div>
+          </Flex>
 
-          <div className={subItemContainerBordered}>
-            <div className={itemRow}>
+          <Flex
+            direction="column"
+            gap={2}
+            paddingTop={2}
+            paddingBottom={2}
+            className={subItemContainerBordered}
+            style={{ marginTop: 16 }}
+          >
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              width="full"
+            >
               <Checkbox
                 checked={values.personalInfoCollectionOptional}
                 onChange={(e) =>
@@ -89,18 +103,23 @@ function OptionalTermsSectionComponent({
               >
                 <span className={textGray}>개인(신용)정보 수집 · 이용동의</span>
               </Checkbox>
-            </div>
+            </Flex>
 
-            <div className={marketingHeaderWrapper}>
+            <Box style={{ marginBottom: "1.5cqh" }}>
               <Checkbox
                 checked={isMarketingAllChecked}
                 onChange={(e) => onToggleMarketingAll(e.target.checked)}
               >
                 <span className={textGray}>광고성정보 수신동의</span>
               </Checkbox>
-            </div>
+            </Box>
 
-            <div className={subItemContainer}>
+            <Flex
+              direction="column"
+              gap={2}
+              marginTop={2}
+              style={{ marginLeft: 32 }}
+            >
               <Checkbox
                 checked={values.marketingSms}
                 onChange={(e) => onChange("marketingSms", e.target.checked)}
@@ -127,9 +146,9 @@ function OptionalTermsSectionComponent({
               >
                 <span className={textSmallGray}>우편, 택배 등</span>
               </Checkbox>
-            </div>
+            </Flex>
 
-            <div className={personalInfoProvisionWrapper}>
+            <Flex alignItems="center" style={{ marginTop: "2cqh" }}>
               <Checkbox
                 checked={values.personalInfoProvisionOptional}
                 onChange={(e) =>
@@ -138,24 +157,24 @@ function OptionalTermsSectionComponent({
               >
                 <span className={textGray}>개인(신용)정보 제공 동의</span>
               </Checkbox>
-            </div>
-          </div>
+            </Flex>
+          </Flex>
 
-          <div className={itemRow}>
+          <Flex alignItems="center" justifyContent="space-between" width="full">
             <Checkbox
               checked={values.marketingPush}
               onChange={(e) => onChange("marketingPush", e.target.checked)}
             >
               <span className={textGray}>마케팅 푸시 알림 동의</span>
             </Checkbox>
-          </div>
-        </div>
-      </div>
+          </Flex>
+        </Flex>
+      </Flex>
 
       <p className={optionalSectionGuide}>
         · 재테크, 상품, 이벤트 정보를 받아보려면 동의해 주세요.
       </p>
-    </div>
+    </Box>
   );
 }
 
