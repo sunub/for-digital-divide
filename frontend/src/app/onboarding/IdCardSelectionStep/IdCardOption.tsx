@@ -1,4 +1,5 @@
 import { Text } from "@internal/design-system/components";
+import { Box } from "@internal/design-system/primitives";
 import { RadioCard } from "@/components/RadioCard";
 import * as styles from "./IdCardSelectionStep.css";
 
@@ -37,7 +38,16 @@ export function IdCardOption({
   );
 
   if (disabled) {
-    return <span className={styles.disabledOptionTrigger}>{content}</span>;
+    return (
+      <Box
+        as="span"
+        display="block"
+        width="full"
+        className={styles.disabledOptionTrigger}
+      >
+        {content}
+      </Box>
+    );
   }
 
   return content;
