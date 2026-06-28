@@ -1,23 +1,23 @@
 "use client";
 
-import { Button } from "@internal/design-system/components";
-import { Flex } from "@internal/design-system/primitives";
+import { Button, Text } from "@internal/design-system/components";
+import { Box, Flex } from "@internal/design-system/primitives";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useShallow } from "zustand/react/shallow";
 import { useOnboardingStore } from "@/store/onboarding/onboarding-store";
 import { completeOnboardingAction } from "../utils/completeOnboardingAction";
 import { zodResolver } from "../utils/zodResolver";
+import { IdCardIllustration } from "./components/IdCardIllustration";
+import { IssueDateField } from "./components/IssueDateField";
+import { NameField } from "./components/NameField";
+import { ResidentNumberField } from "./components/ResidentNumberField";
 import {
   getIdCardErrorMessage,
   ID_CARD_ERROR_IDS,
   type IdCardFormData,
   idCardSchema,
 } from "./form";
-import * as styles from "./IdCardInfoStep.css";
-import { IssueDateField } from "./IssueDateField";
-import { NameField } from "./NameField";
-import { ResidentNumberField } from "./ResidentNumberField";
 
 interface IdCardInfoStepProps {
   onNext: () => void;
@@ -43,7 +43,7 @@ export function IdCardInfoStep({ onNext }: IdCardInfoStepProps) {
     control,
     handleSubmit,
     watch,
-    formState: { errors, isValid, touchedFields },
+    formState: { errors, isValid, touchedFields, isSubmitting },
   } = useForm<IdCardFormData>({
     resolver: zodResolver(idCardSchema),
     mode: "onChange",
@@ -112,68 +112,31 @@ export function IdCardInfoStep({ onNext }: IdCardInfoStepProps) {
   };
 
   return (
-    <div className={styles.phoneContentLayout}>
-      <Flex direction="column" width="full">
-        <h1 className={styles.phoneTitle} style={{ marginBottom: "24px" }}>
-          촬영된 신분증 정보를
-          <br />
-          <span style={{ color: "#6c3ec6" }}>확인해 주세요</span>
-        </h1>
+    <Flex direction="column" padding={6} height="full" width="full">
+      <Flex direction="column" width="full" height="full">
+        <Box marginBottom={6}>
+          <Text as="h2" variant="title">
+            촬영된 신분증 정보를
+            <br />
+            <Box as="span" color="button">
+              확인해 주세요
+            </Box>
+          </Text>
+        </Box>
 
-        <div className={styles.illustrationCard}>
-          <div className={styles.hologram1}></div>
-          <div className={styles.hologram2}></div>
-
-          <div className={styles.cardHeader}>
-            <div className={styles.cardTitleGroup}>
-              <span className={styles.cardCountry}>대한민국</span>
-              <span className={styles.cardTitle}>주민등록증</span>
-            </div>
-            <div className={styles.cardPhoto}>
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="rgba(108, 62, 198, 0.4)"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <title>id-card-icon</title>
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-            </div>
-          </div>
-
-          <div className={styles.cardInfo}>
-            <div className={styles.cardNameText}>{nameVal || "이름"}</div>
-            <div className={styles.cardRrnText}>
-              {resFrontVal ? `${resFrontVal}-1******` : "주민등록번호"}
-            </div>
-          </div>
-
-          <div className={styles.cardFooter}>
-            <div className={styles.cardDateGroup}>
-              <span className={styles.cardDateLabel}>발급일</span>
-              <span className={styles.cardDateText}>
-                {issueDateVal || "YYYY.MM.DD"}
-              </span>
-            </div>
-            <div className={styles.cardSeal}>
-              <div className={styles.cardSealInner}></div>
-            </div>
-          </div>
-        </div>
+        <IdCardIllustration
+          name={nameVal}
+          residentFront={resFrontVal}
+          issueDate={issueDateVal}
+        />
 
         <Flex
           as="form"
           onSubmit={handleSubmit(onSubmit)}
           direction="column"
-          gap="1rem"
+          gap={4}
           width="full"
-          className={styles.formContainer}
+          style={{ flex: 1 }}
         >
           <NameField
             control={control}
@@ -192,13 +155,18 @@ export function IdCardInfoStep({ onNext }: IdCardInfoStepProps) {
             hasError={hasIssueDateError}
             errorMessage={issueDateErrorMessage}
           />
-          <div className={styles.buttonContainer}>
-            <Button type="submit" disabled={!isValid} style={{ width: "100%" }}>
+          <Box marginTop="auto" paddingTop={6} width="full">
+            <Button
+              type="submit"
+              status={isSubmitting ? "pending" : "idle"}
+              disabled={!isValid}
+              size={"wide"}
+            >
               다음
             </Button>
-          </div>
+          </Box>
         </Flex>
       </Flex>
-    </div>
+    </Flex>
   );
 }
