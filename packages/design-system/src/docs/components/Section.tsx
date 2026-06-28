@@ -1,6 +1,6 @@
+import { Text } from "../../components/Text";
 import { Box } from "../../primitives/Box";
 import { Flex } from "../../primitives/Flex";
-import { Text } from "../../components/Text";
 import { vars } from "../../tokens/theme.css";
 
 export function Section({

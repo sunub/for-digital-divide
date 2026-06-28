@@ -1,6 +1,6 @@
-import { appStyle } from "@/style/utils";
 import { vars } from "@internal/design-system/style";
 import { style } from "@vanilla-extract/css";
+import { appStyle } from "@/style/utils";
 
 export const certButton = style({
   border: "1px solid rgba(0, 0, 0, 0.08)",

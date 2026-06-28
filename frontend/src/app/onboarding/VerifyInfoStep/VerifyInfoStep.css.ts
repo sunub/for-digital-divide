@@ -75,8 +75,6 @@ export const rrnMask = appStyle({
   userSelect: "none",
 });
 
-
-
 export const errorText = appStyle({
   fontSize: vars.fontSize["0.75rem"],
   color: vars.color.highlight,

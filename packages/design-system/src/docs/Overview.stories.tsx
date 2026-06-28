@@ -21,4 +21,3 @@ type Story = StoryObj<typeof meta>;
 export const Docs: Story = {
   name: "Introduction",
 };
-
