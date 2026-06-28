@@ -1,4 +1,4 @@
-import { RecipientAccountDTO } from "@/shared/mocks/accounts";
+import type { RecipientAccountDTO } from "@/shared/mocks/accounts";
 
 export interface RecipientState {
   recipientName: string;
@@ -16,10 +16,7 @@ export interface MemoState {
   memoToMe: string;
 }
 
-export interface TransferState
-  extends RecipientState,
-    AmountState,
-    MemoState {}
+export interface TransferState extends RecipientState, AmountState, MemoState {}
 
 export interface TransferActions {
   setRecipient: (name: string, bank: string, accountNumber: string) => void;

@@ -67,7 +67,7 @@ export function useDemoLoginFlow({
       router.push(redirectPath);
     } catch (error) {
       console.error("Seeding failed:", error);
-      showToast("error", "Seeding failed. Please try again.");
+      showToast("error", "시딩에 실패 했습니다. 다시 시도해주세요");
       setCurrentStep("idle");
       didSeedRef.current = false;
     }

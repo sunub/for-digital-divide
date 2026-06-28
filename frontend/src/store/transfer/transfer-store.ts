@@ -1,13 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import {
-  createAmountSlice,
-  initialAmountState,
-} from "./slices/amount-slice";
-import {
-  createMemoSlice,
-  initialMemoState,
-} from "./slices/memo-slice";
+import { createAmountSlice, initialAmountState } from "./slices/amount-slice";
+import { createMemoSlice, initialMemoState } from "./slices/memo-slice";
 import {
   createRecipientSlice,
   initialRecipientState,

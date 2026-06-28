@@ -90,7 +90,7 @@ export default function AccountCard({
         variant="default"
         font="default"
         size="wide"
-        onClick={() => router.push('/transfer')}
+        onClick={() => router.push("/transfer")}
       >
         이체
       </Button>

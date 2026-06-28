@@ -1,4 +1,4 @@
-import { style as veStyle, type StyleRule } from "@vanilla-extract/css";
+import { type StyleRule, style as veStyle } from "@vanilla-extract/css";
 
 export function appStyle(rule: StyleRule) {
   return veStyle({
