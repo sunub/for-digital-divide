@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@internal/design-system/components";
-import { Flex, Box } from "@internal/design-system/primitives";
+import { Box, Flex } from "@internal/design-system/primitives";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaAngleRight } from "react-icons/fa";
@@ -18,8 +18,8 @@ import {
   otpSchema,
 } from "./form";
 import { OtpCodeField } from "./OtpCodeField";
-import { VerifyOtpStepHeader } from "./VerifyOtpStepHeader";
 import { resendButton, verifyButton } from "./VerifyOtpStep.css";
+import { VerifyOtpStepHeader } from "./VerifyOtpStepHeader";
 
 interface VerifyOtpStepProps {
   onNext: () => void;
