@@ -7,8 +7,8 @@ import {
   styleVariants,
 } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
-import { vars } from "../tokens/theme.css";
 import { designSystemLayer } from "../styles/layers.css";
+import { vars } from "../tokens/theme.css";
 
 export const buttonPaddingVar = createVar();
 export const buttonCursorVar = createVar();
@@ -49,9 +49,11 @@ export const buttonContentHiddenClass = style({
 export const pendingOverlayClass = style({
   "@layer": {
     [designSystemLayer]: {
+      container: "button-container / size",
       position: "relative",
       display: "inline-flex",
       flexDirection: "row",
+      width: "100%",
       height: "100%",
       minHeight: "41px",
       cursor: "progress",
@@ -85,7 +87,7 @@ export const pendingBottomClass = style({
       zIndex: 1,
       top: "2px",
       left: "-1px",
-      width: "102px",
+      width: "100%",
       height: "60px",
       borderTopLeftRadius: "20px",
       borderTopRightRadius: "20px",
@@ -110,7 +112,7 @@ const pendingBlockBaseClass = style({
       display: "block",
       height: "100%",
       minHeight: "45px",
-      width: "20px",
+      width: "20cqw",
       willChange: "background-color, box-shadow",
       transform: "translate3d(0, 0, 0)",
       animation: `${pendingKeyframes} 1.5s ease-in infinite`,
@@ -206,8 +208,14 @@ export const buttonRecipe = recipe({
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-        fontSize: fallbackVar(buttonFontSizeVar, vars.buttonPrimitive.fontSize.sm),
-        lineHeight: fallbackVar(lineHeightVar, vars.buttonPrimitive.lineHeight.sm),
+        fontSize: fallbackVar(
+          buttonFontSizeVar,
+          vars.buttonPrimitive.fontSize.sm,
+        ),
+        lineHeight: fallbackVar(
+          lineHeightVar,
+          vars.buttonPrimitive.lineHeight.sm,
+        ),
         cursor: fallbackVar(buttonCursorVar, "pointer"),
         borderRadius: vars.buttonPrimitive.radius.md,
         fontWeight: vars.fontWeight.semibold,
@@ -313,7 +321,7 @@ export const buttonRecipe = recipe({
             width: "100%",
             padding: fallbackVar(
               buttonPaddingVar,
-              `${vars.space[1]} ${vars.space[2]}`,
+              `${vars.space[2]} ${vars.space[4]}`,
             ),
           },
         },
