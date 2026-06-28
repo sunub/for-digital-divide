@@ -1,8 +1,8 @@
-import { prisma } from "@root/prisma/prisma";
 import { Prisma } from "@prisma/client";
+import { prisma } from "@root/prisma/prisma";
 import {
-  InsufficientFundsException,
   AccountNotFoundException,
+  InsufficientFundsException,
 } from "@/shared/exceptions/transfer.exception";
 import { TRANSACTION_TYPE } from "./transaction.constants";
 
