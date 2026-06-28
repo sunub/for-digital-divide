@@ -26,21 +26,7 @@ export const accountsRepository = {
     });
   },
 
-  async updateManyByAccountNumbers(accounts: AccountType[]) {
-    return prisma.$transaction(
-      accounts.map((account) =>
-        prisma.accounts.update({
-          where: { account_number: account.account_number },
-          data: {
-            account_type: account.account_type,
-            balance: account.balance,
-            created_at: account.created_at,
-            user_id: account.user_id,
-          },
-        }),
-      ),
-    );
-  },
+
 
   async create(data: AccountType) {
     return prisma.accounts.create({

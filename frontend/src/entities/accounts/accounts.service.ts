@@ -17,9 +17,7 @@ export const accountsService = {
     return accountsRepository.updateByAccountNumber(account_number, data);
   },
 
-  async updateManyByAccountNumbers(accounts: AccountType[]) {
-    return accountsRepository.updateManyByAccountNumbers(accounts);
-  },
+
 
   async create(data: AccountType) {
     return accountsRepository.create(data);
