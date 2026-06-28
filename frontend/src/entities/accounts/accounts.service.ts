@@ -17,8 +17,6 @@ export const accountsService = {
     return accountsRepository.updateByAccountNumber(account_number, data);
   },
 
-
-
   async create(data: AccountType) {
     return accountsRepository.create(data);
   },

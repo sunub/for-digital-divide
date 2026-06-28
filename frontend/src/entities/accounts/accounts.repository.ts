@@ -26,8 +26,6 @@ export const accountsRepository = {
     });
   },
 
-
-
   async create(data: AccountType) {
     return prisma.accounts.create({
       data,
