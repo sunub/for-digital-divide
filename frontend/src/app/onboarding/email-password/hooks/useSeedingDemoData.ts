@@ -8,9 +8,14 @@ export function useSeedingDemoData(
   useEffect(() => {
     if (isSeedingProgress) {
       (async () => {
-        console.log("데모 데이터 심고 있는 중~~~~~~~~");
-        await seedDemoAccountAndTransactionInfo();
-        onSeedingComplete(true);
+        try {
+          console.log("데모 데이터 심고 있는 중~~~~~~~~");
+          await seedDemoAccountAndTransactionInfo();
+          onSeedingComplete(true);
+        } catch (error) {
+          console.error("Demo data seeding failed:", error);
+          onSeedingComplete(false);
+        }
       })();
     }
   }, [isSeedingProgress, onSeedingComplete]);
