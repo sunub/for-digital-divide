@@ -1,0 +1,53 @@
+{
+  "dataset": {
+    "seed": 42,
+    "transactionCount": 5000,
+    "chartWidth": 960,
+    "chartHeight": 326
+  },
+  "processData": [
+    {
+      "period": "1month",
+      "inputCount": 5000,
+      "outputCount": 32,
+      "reductionPct": 99.36,
+      "averageMs": 4.725,
+      "p95Ms": 5.247,
+      "minMs": 4.337,
+      "maxMs": 6.204
+    },
+    {
+      "period": "3months",
+      "inputCount": 5000,
+      "outputCount": 93,
+      "reductionPct": 98.14,
+      "averageMs": 4.926,
+      "p95Ms": 5.584,
+      "minMs": 4.45,
+      "maxMs": 5.792
+    },
+    {
+      "period": "6months",
+      "inputCount": 5000,
+      "outputCount": 183,
+      "reductionPct": 96.34,
+      "averageMs": 4.732,
+      "p95Ms": 5.208,
+      "minMs": 4.34,
+      "maxMs": 6.404
+    }
+  ],
+  "interaction": {
+    "sampleCount": 12000,
+    "averageMs": 0.0009,
+    "p95Ms": 0.0009,
+    "minMs": 0.0008,
+    "maxMs": 0.001,
+    "lookupsPerSecond": 1145597,
+    "frameBudgetSharePct": 0.006,
+    "rawSamples": 12000,
+    "uniqueHoverUpdates": 183,
+    "preventedWrites": 11817,
+    "preventedWritesPct": 98.475
+  }
+}

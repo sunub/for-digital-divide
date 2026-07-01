@@ -37,41 +37,52 @@ async function seedAccounts(userId: number) {
   const accounts = generateAccounts(userId, 4);
 
   const updateAccountsOra = ora("🔄 계정 데이터 검증 및 업데이트 중").start();
-  const validatedAccounts: AccountType[] = [];
 
-  for (const account of accounts) {
-    const parsedAccount = AccountsSchema.safeParse({
-      account_number: Number(account.account_number),
-      user_id: Number(account.user_id),
-      account_type: account.account_type,
-      balance: Number(account.balance),
-      created_at: new Date(account.created_at),
-    });
-    if (!parsedAccount.success) {
-      updateAccountsOra.fail("❌ 잘못된 계정 데이터");
-      console.error(parsedAccount.error);
-      accountsOra.fail();
-      return [];
+  try {
+    const validatedAccounts: AccountType[] = [];
+
+    for (const account of accounts) {
+      const parsedAccount = AccountsSchema.safeParse({
+        account_number: Number(account.account_number),
+        user_id: Number(account.user_id),
+        account_type: account.account_type,
+        balance: Number(account.balance),
+        created_at: new Date(account.created_at),
+      });
+      if (!parsedAccount.success) {
+        updateAccountsOra.fail("❌ 잘못된 계정 데이터");
+        console.error(parsedAccount.error);
+        accountsOra.fail("❌ 계정 시딩 실패");
+        throw new Error("Invalid seeded account data");
+      }
+
+      validatedAccounts.push(parsedAccount.data);
     }
 
-    validatedAccounts.push(parsedAccount.data);
+    const existingAccounts = await accountsService.findByUserId(userId);
+    const existingAccountNumbers = new Set(
+      existingAccounts.map((account) => Number(account.account_number)),
+    );
+    const newAccounts = validatedAccounts.filter(
+      (account) => !existingAccountNumbers.has(account.account_number),
+    );
+
+    if (newAccounts.length > 0) {
+      await accountsService.createMany(newAccounts);
+    }
+
+    updateAccountsOra.succeed("✅ 계정 데이터 검증 및 업데이트 성공");
+    accountsOra.succeed("🎉 계정 시딩 성공");
+    return accountsService.findByUserId(userId);
+  } catch (error) {
+    if (updateAccountsOra.isSpinning) {
+      updateAccountsOra.fail("❌ 계정 데이터 검증 및 업데이트 실패");
+    }
+    if (accountsOra.isSpinning) {
+      accountsOra.fail("❌ 계정 시딩 실패");
+    }
+    throw error;
   }
-
-  const existingAccounts = await accountsService.findByUserId(userId);
-  const existingAccountNumbers = new Set(
-    existingAccounts.map((account) => Number(account.account_number)),
-  );
-  const newAccounts = validatedAccounts.filter(
-    (account) => !existingAccountNumbers.has(account.account_number),
-  );
-
-  if (newAccounts.length > 0) {
-    await accountsService.createMany(newAccounts);
-  }
-
-  updateAccountsOra.succeed("✅ 계정 데이터 검증 및 업데이트 성공");
-  accountsOra.succeed("🎉 계정 시딩 성공");
-  return accountsService.findByUserId(userId);
 }
 
 interface GeneratedTransaction {
@@ -166,8 +177,8 @@ async function seedTransactions(accounts: Account[]) {
       } catch (error) {
         processOra.fail("❌ 거래 생성 중 오류 발생");
         console.error(error);
-        transactionsOra.fail();
-        return;
+        transactionsOra.fail("❌ 거래내역 시딩 실패");
+        throw error;
       }
     }
     chunkCount++;
