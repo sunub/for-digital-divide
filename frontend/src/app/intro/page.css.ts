@@ -2,139 +2,27 @@ import { vars } from "@internal/design-system/style";
 import { globalStyle, keyframes } from "@vanilla-extract/css";
 import { appStyle } from "@/style/utils";
 
-// --- IntroGuide Styles (Migrated from PhoneVerificationGuide) ---
-
-export const guideBadge = appStyle({
-  backgroundColor: "#ffffff",
-  boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.05)",
-  color: vars.color.button,
-  borderRadius: "9999px",
-  fontWeight: vars.fontWeight.semibold,
-  fontSize: "14px",
-  lineHeight: "20px",
-  "@media": {
-    "screen and (max-width: 1023px)": {
-      margin: "0 auto",
-    },
-  },
+export const title = appStyle({
+  fontFamily: "var(--gugi-font-family)",
+  willChange: "transform",
 });
 
-export const guideTitle = appStyle({
-  fontSize: "48px",
-  lineHeight: "56px",
-  fontWeight: vars.fontWeight.bold,
-  letterSpacing: "-0.02em",
-  color: "#1a1c1c", // onSurface
-  margin: 0,
-});
-
-export const guideTitleHighlight = appStyle({
-  color: vars.color.button, // brandViolet
-});
-
-export const guideInfoGrid = appStyle({
-  maxWidth: "500px",
-  margin: "0 auto",
-  width: "100%",
-  textAlign: "left",
-  marginTop: vars.space[2],
-  "@media": {
-    "screen and (min-width: 1024px)": {
-      margin: "0",
-    },
-  },
-});
-
-export const guideInfoBox = appStyle({
-  backgroundColor: "#ffffff",
-  borderRadius: "16px",
-  boxShadow: "0px 4px 20px rgba(147, 103, 239, 0.08)",
-  border: `1px solid color-mix(in srgb, #e2e2e2 50%, transparent)`,
-});
-
-export const guideInfoIconContainer = appStyle({
-  backgroundColor: "#f4effe",
-  color: vars.color.button, // brandViolet
-  borderRadius: "12px",
-});
-
-export const guideInfoTitle = appStyle({
-  fontSize: "16px",
-  fontWeight: vars.fontWeight.bold,
-  color: "#1a1c1c",
-  marginBottom: vars.space[1],
-});
-
-export const guideInfoDescription = appStyle({
-  fontSize: "14px",
-  fontWeight: vars.fontWeight.medium,
-  color: "#4a4453",
-  lineHeight: "20px",
-});
-
-export const guideSectionContainer = appStyle({
-  maxWidth: "500px",
-  margin: "0 auto",
-  width: "100%",
-  textAlign: "left",
-  marginTop: vars.space[2],
-  "@media": {
-    "screen and (min-width: 1024px)": {
-      margin: "0",
-    },
-  },
-});
-
-export const guideSectionTitle = appStyle({
-  fontSize: "16px",
-  fontWeight: vars.fontWeight.bold,
-  color: "#1a1c1c",
-  margin: 0,
-});
-
-export const guideStepList = appStyle({
-  padding: 0,
-  margin: 0,
-  listStyle: "none",
-});
-
-export const guideStepItem = appStyle({
-  fontSize: "14px",
-  lineHeight: "20px",
-  color: "#4a4453",
-});
-
-export const guideStepNumber = appStyle({
-  minWidth: "20px",
-  height: "20px",
-  borderRadius: "50%",
-  backgroundColor: "#f4effe",
-  color: vars.color.button,
-  fontSize: "12px",
-  fontWeight: vars.fontWeight.bold,
-  flexShrink: 0,
-});
-
-export const guidePanelContainer = appStyle({
+export const panelContainer = appStyle({
+  gap: vars.space[6],
+  padding: vars.space[6],
   maxWidth: "80%",
+  width: "100%",
   justifySelf: "flex-end",
+  textAlign: "center",
   maxHeight: "100vh",
   overflowY: "auto",
   boxSizing: "border-box",
-  textAlign: "center",
   "@media": {
     "screen and (min-width: 1024px)": {
       textAlign: "left",
       paddingRight: vars.space[8],
     },
   },
-});
-
-// --- Phone Frame Styles ---
-
-export const title = appStyle({
-  fontFamily: "var(--gugi-font-family)",
-  willChange: "transform",
 });
 
 globalStyle(`${title} > svg`, {
