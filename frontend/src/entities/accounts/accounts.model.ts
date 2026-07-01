@@ -7,6 +7,6 @@ export const AccountsSchema = z.object({
   account_number: z.number().int(),
   user_id: z.number().int(),
   account_type: AccountCodeSchema,
-  balance: z.number().int(),
+  balance: z.number().int().nonnegative(),
   created_at: z.date(),
 });

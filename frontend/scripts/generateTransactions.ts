@@ -251,44 +251,47 @@ export async function generateTransactions(
           }
         }
       } else if (account_type === "CREDIT") {
-        // 신용카드 계좌: 잔액이 마이너스로 누적되는 구조
+        // 신용카드 계좌: 연결 결제 계좌처럼 운용하여 잔액이 음수가 되지 않도록 유지
         // 카드 사용 (PAYMENT/WITHDRAWAL): 매일 55% 확률로 발생
         if (Math.random() < 0.55) {
+          const tempBalance = accountBalances.get(account_number) || 0;
           const amount = Math.floor(
             getRandomNumber(10000, 130000) *
               getMonthlyMultiplier(currentDate.getMonth()) *
               getDayOfWeekMultiplier(dayOfWeek),
           );
-          const occurred_at = getRandomTime(currentDate);
-          const txType = Math.random() < 0.08 ? "WITHDRAWAL" : "PAYMENT";
-          transactions.push({
-            transaction_id: transactionId++,
-            account_number,
-            amount,
-            transaction_type: txType,
-            description: getRandomItem(TRANSACTION_INFO[txType]),
-            occurred_at,
-            counterparty_account_number: null,
-          });
-          accountBalances.set(account_number, currentBalance - amount);
+          if (tempBalance > amount + 50000) {
+            const occurred_at = getRandomTime(currentDate);
+            const txType = Math.random() < 0.08 ? "WITHDRAWAL" : "PAYMENT";
+            transactions.push({
+              transaction_id: transactionId++,
+              account_number,
+              amount,
+              transaction_type: txType,
+              description: getRandomItem(TRANSACTION_INFO[txType]),
+              occurred_at,
+              counterparty_account_number: null,
+            });
+            accountBalances.set(account_number, tempBalance - amount);
+          }
         }
 
-        // 카드 대금 결제 (DEPOSIT): 매월 10일에 누적 사용액(마이너스 분)을 0으로 메꿈
+        // 카드 결제용 충전 (DEPOSIT): 잔액이 일정 수준 이하로 내려가면 보충
         if (dayOfMonth === 10) {
           const tempBalance = accountBalances.get(account_number) || 0;
-          if (tempBalance < 0) {
-            const amount = Math.abs(tempBalance);
+          if (tempBalance < 250000) {
+            const amount = Math.floor(getRandomNumber(300000, 900000));
             const occurred_at = getRandomTime(currentDate);
             transactions.push({
               transaction_id: transactionId++,
               account_number,
               amount,
               transaction_type: "DEPOSIT",
-              description: "카드대금 납부",
+              description: "카드 결제 계좌 충전",
               occurred_at,
               counterparty_account_number: null,
             });
-            accountBalances.set(account_number, 0);
+            accountBalances.set(account_number, tempBalance + amount);
           }
         }
       } else if (account_type === "LOAN") {

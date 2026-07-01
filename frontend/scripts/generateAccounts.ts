@@ -35,7 +35,7 @@ function createAccount(user_id: number): Account {
     ACCOUNT_TYPES[Math.floor(Math.random() * ACCOUNT_TYPES.length)];
   const balance =
     account_type === "CREDIT"
-      ? -Math.floor(Math.random() * 1000000)
+      ? Math.floor(Math.random() * 1500000) + 300000
       : Math.floor(Math.random() * 10000000) + 100000;
 
   return {
