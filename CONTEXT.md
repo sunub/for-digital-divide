@@ -23,3 +23,11 @@ _Avoid_: Hex color hardcoding inside visualization scripts, React re-render for 
 **TransferService**:
 A dedicated orchestration component responsible for executing financial transfers across multiple accounts within a single ACID transaction. It enforces pessimistic locking (`FOR UPDATE`) to ensure absolute data integrity and applies PK-based lock ordering to prevent deadlocks.
 _Avoid_: Updating balances directly in `accounts.repository.ts`, relying on application-level read-modify-write without row locks.
+
+**API Contracts Package**:
+A shared package that defines the versioned API routes, HTTP methods, request schemas, response schemas, and error codes consumed by both the frontend and backend.
+_Avoid_: Duplicated URL constants, frontend-only API types, backend-only DTO definitions
+
+**DB-backed Session**:
+A server-owned login state represented by an opaque browser cookie and validated against a database session record before treating a request as authenticated.
+_Avoid_: User-owned session field, client-interpreted session payload, stateless JWT session
