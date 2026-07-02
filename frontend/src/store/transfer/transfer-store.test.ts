@@ -29,19 +29,18 @@ describe("useTransferStore", () => {
   it("stores the source account selected from the dashboard transfer button", async () => {
     const { useTransferStore } = await import("./transfer-store");
 
-    useTransferStore.getState().setSourceAccount(123456789, "CHECKING", 50000);
+    useTransferStore.getState().setSourceAccount(123456789, "CHECKING");
 
     expect(useTransferStore.getState().sourceAccount).toEqual({
       accountNumber: 123456789,
       accountType: "CHECKING",
-      balance: 50000,
     });
   });
 
   it("resets every persisted transfer state value", async () => {
     const { useTransferStore } = await import("./transfer-store");
 
-    useTransferStore.getState().setSourceAccount(123456789, "CHECKING", 50000);
+    useTransferStore.getState().setSourceAccount(123456789, "CHECKING");
     useTransferStore.getState().setRecipient("홍길동", "국민은행", "987654321");
     useTransferStore.getState().setAmount("10000");
     useTransferStore.getState().setMemos("식비", "내 계좌 메모");
