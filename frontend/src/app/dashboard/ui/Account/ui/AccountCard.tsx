@@ -94,7 +94,7 @@ export default function AccountCard({
       >
         <Link
           href={"/dashboard/transfer"}
-          onClick={() => setSourceAccount(accountNumber, accountType, balance)}
+          onClick={() => setSourceAccount(accountNumber, accountType)}
         >
           이체
         </Link>
