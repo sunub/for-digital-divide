@@ -1,4 +1,8 @@
-import { Flex } from "@internal/design-system/primitives";
+import { Button, Text } from "@internal/design-system/components";
+import { Box, Flex } from "@internal/design-system/primitives";
+import { useQuery } from "@tanstack/react-query";
+import { getAccountsData } from "@/app/dashboard/ui/Dashboard/utils/getAccountsData";
+import { accountKeys } from "@/entities/accounts/accounts.query";
 import { useTransferStore } from "@/store/transfer/transfer-store";
 import { AmountNumpad } from "./AmountNumpad";
 
@@ -9,7 +13,20 @@ export function AmountInputStep({ onNext }: { onNext: () => void }) {
     recipientAccountNumber,
     transferAmount,
     setAmount,
+    sourceAccount,
   } = useTransferStore();
+
+  const { data: accounts } = useQuery({
+    queryKey: accountKeys.all(),
+    queryFn: getAccountsData,
+    staleTime: Infinity,
+  });
+
+  const activeAccount = accounts?.find(
+    (acc) => acc.account_number === sourceAccount?.accountNumber,
+  );
+  const balance = activeAccount?.balance ?? 0;
+  const isLimitExceeded = Number(transferAmount) > balance;
 
   const handleInput = (val: string) => {
     setAmount(transferAmount + val);
@@ -23,54 +40,72 @@ export function AmountInputStep({ onNext }: { onNext: () => void }) {
     ? `${Number(transferAmount).toLocaleString()} 원`
     : "얼마를 보낼까요?";
 
+  const isButtonDisabled =
+    !transferAmount || Number(transferAmount) <= 0 || isLimitExceeded;
+
   return (
     <Flex
       direction="column"
       width="full"
       height="full"
-      style={{ padding: "1rem", justifyContent: "space-between" }}
+      padding={4}
+      justifyContent="space-between"
     >
-      <div style={{ textAlign: "center", marginTop: "2rem" }}>
-        <p style={{ color: "#666", marginBottom: "0.5rem" }}>
+      <Box textAlign="center" marginTop={8}>
+        <Text
+          as="p"
+          variant="description"
+          color="descriptionText"
+          marginBottom={2}
+        >
           {recipientBank} {recipientAccountNumber}
-        </p>
-        <h2 style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+        </Text>
+        <Text as="h2" variant="title">
           {recipientName} 님에게
-        </h2>
-        <div
-          style={{
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-            margin: "2rem 0",
-            color: transferAmount ? "#000" : "#ccc",
-          }}
+        </Text>
+        <Text
+          as="div"
+          fontSize="2.5rem"
+          fontWeight="bold"
+          marginTop={8}
+          marginBottom={isLimitExceeded ? 2 : 8}
+          color={
+            isLimitExceeded
+              ? "destructive"
+              : transferAmount
+                ? "text"
+                : "mutedForeground"
+          }
         >
           {displayAmount}
-        </div>
-        <p style={{ color: "#888" }}>내 계좌 잔액: 1,500,000 원</p>
-      </div>
+        </Text>
+        {isLimitExceeded && (
+          <Text
+            as="p"
+            variant="description"
+            color="destructive"
+            marginBottom={6}
+          >
+            잔액이 부족합니다. (최대 이체 가능 금액: {balance.toLocaleString()}{" "}
+            원)
+          </Text>
+        )}
+        <Text as="p" variant="description" color="descriptionText">
+          내 계좌 잔액: {balance.toLocaleString()} 원
+        </Text>
+      </Box>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+      <Flex direction="column" gap={4}>
         <AmountNumpad onInput={handleInput} onDelete={handleDelete} />
-        <button
-          type="button"
+        <Button
           onClick={onNext}
-          disabled={!transferAmount || Number(transferAmount) <= 0}
-          style={{
-            padding: "1rem",
-            backgroundColor:
-              !transferAmount || Number(transferAmount) <= 0
-                ? "#ccc"
-                : "#0056b3",
-            color: "#fff",
-            borderRadius: "8px",
-            fontWeight: "bold",
-            width: "100%",
-          }}
+          disabled={isButtonDisabled}
+          variant="primary"
+          size="wide"
         >
           완료
-        </button>
-      </div>
+        </Button>
+      </Flex>
     </Flex>
   );
 }
