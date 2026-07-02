@@ -12,12 +12,11 @@ export const createSourceAccountSlice: StateCreator<
   SourceAccountState & Pick<TransferStore, "setSourceAccount">
 > = (set) => ({
   ...initialSourceAccountState,
-  setSourceAccount: (accountNumber, accountType, balance) =>
+  setSourceAccount: (accountNumber, accountType) =>
     set({
       sourceAccount: {
         accountNumber,
         accountType,
-        balance,
       },
     }),
 });

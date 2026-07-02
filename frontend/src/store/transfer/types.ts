@@ -20,7 +20,6 @@ export interface SourceAccountState {
   sourceAccount: {
     accountNumber: number;
     accountType: string;
-    balance: number;
   } | null;
 }
 
@@ -34,7 +33,6 @@ export interface TransferActions {
   setSourceAccount: (
     accountNumber: number,
     accountType: string,
-    balance: number,
   ) => void;
   setRecipient: (name: string, bank: string, accountNumber: string) => void;
   setRecipientFromMock: (account: RecipientAccountDTO) => void;
