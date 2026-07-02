@@ -7,8 +7,9 @@ import {
 } from "@internal/design-system/components";
 import { Flex } from "@internal/design-system/primitives";
 import { EllipsisVerticalIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState } from "react";
+import { useTransferStore } from "@/store/transfer/transfer-store";
 import { RollingNumberList } from "../../Dashboard/ui/RollingNumberList";
 import * as style from "./AccountCard.css";
 
@@ -21,7 +22,7 @@ export default function AccountCard({
   balance: number;
   accountType: string;
 }) {
-  const router = useRouter();
+  const setSourceAccount = useTransferStore((state) => state.setSourceAccount);
   const [isHidden, setIsHidden] = useState(true);
   const formattedBalance = String(balance)
     .split("")
@@ -86,13 +87,17 @@ export default function AccountCard({
       </Flex>
       <Button
         className={style.transferButton}
-        type="button"
         variant="default"
         font="default"
         size="wide"
-        onClick={() => router.push("/transfer")}
+        asChild
       >
-        이체
+        <Link
+          href={"/dashboard/transfer"}
+          onClick={() => setSourceAccount(accountNumber, accountType, balance)}
+        >
+          이체
+        </Link>
       </Button>
     </InteractiveCard>
   );

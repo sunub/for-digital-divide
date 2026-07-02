@@ -16,9 +16,26 @@ export interface MemoState {
   memoToMe: string;
 }
 
-export interface TransferState extends RecipientState, AmountState, MemoState {}
+export interface SourceAccountState {
+  sourceAccount: {
+    accountNumber: number;
+    accountType: string;
+    balance: number;
+  } | null;
+}
+
+export interface TransferState
+  extends RecipientState,
+    AmountState,
+    MemoState,
+    SourceAccountState {}
 
 export interface TransferActions {
+  setSourceAccount: (
+    accountNumber: number,
+    accountType: string,
+    balance: number,
+  ) => void;
   setRecipient: (name: string, bank: string, accountNumber: string) => void;
   setRecipientFromMock: (account: RecipientAccountDTO) => void;
   setAmount: (amount: string) => void;

@@ -1,11 +1,13 @@
 import { Button, Text } from "@internal/design-system/components";
-import { Flex } from "@internal/design-system/primitives";
+import { Box, Flex } from "@internal/design-system/primitives";
+import { useRouter } from "next/navigation";
 import { MdChevronRight } from "react-icons/md";
 import {
   MOCK_ACCOUNTS,
   type RecipientAccountDTO,
 } from "@/shared/mocks/accounts";
 import { useTransferStore } from "@/store/transfer/transfer-store";
+import { TransferHeader } from "../../components/TransferHeader";
 import * as styles from "./RecipientSelectionStep.css";
 
 const getBankAvatarVariant = (bankName: string) => {
@@ -29,22 +31,31 @@ export function RecipientSelectionStep({
   onNavigateToAmountInput: () => void;
   onDirectInput: () => void;
 }) {
-  const setRecipientFromMock = useTransferStore(
-    (state) => state.setRecipientFromMock,
-  );
+  const router = useRouter();
+  const { resetTransfer, setRecipientFromMock } = useTransferStore();
 
   const handleSelectAccount = (acc: RecipientAccountDTO) => {
     setRecipientFromMock(acc);
     onNavigateToAmountInput();
   };
 
+  const handleReturnToDashboard = () => {
+    resetTransfer();
+    router.replace("/dashboard");
+  };
+
   return (
     <Flex direction="column" width="full" gap={6}>
-      <Text as="h2" variant="title">
+      <TransferHeader
+        onClick={handleReturnToDashboard}
+        label="dashboard로 돌아가기"
+      >
         누구에게 보낼까요?
-      </Text>
+      </TransferHeader>
 
       <Button
+        variant="transparent"
+        size="wide"
         onClick={onDirectInput}
         className={styles.directInputButton}
         aria-label="직접 계좌번호 입력하기"
@@ -56,45 +67,50 @@ export function RecipientSelectionStep({
       </Button>
 
       <Flex direction="column" gap={4}>
-        <div style={{ padding: "0 var(--space-2)" }}>
+        <Box px={2}>
           <Text as="h3" variant="default" color="mutedForeground">
             최근 보낸 계좌
           </Text>
-        </div>
-        <ul className={styles.mockAccountList}>
+        </Box>
+        <Box as="ul" className={styles.mockAccountList}>
           {MOCK_ACCOUNTS.map((acc) => (
             <li key={acc.account_number}>
               <Button
                 variant="transparent"
+                size="wide"
                 onClick={() => handleSelectAccount(acc)}
                 className={styles.mockAccountItem}
                 aria-label={`최근 보낸 계좌, ${acc.user.name} 님의 ${acc.bank} ${acc.account_number} 계좌로 이체하기`}
               >
-                <div
+                <Flex
+                  as="span"
+                  size={12}
+                  borderRadius="full"
+                  alignItems="center"
+                  justifyContent="center"
                   className={`${styles.avatarContainer} ${getBankAvatarVariant(acc.bank)}`}
                   aria-hidden="true"
                 >
                   <Text as="span" variant="default">
                     {getBankInitial(acc.bank)}
                   </Text>
-                </div>
-                <div className={styles.textLabelContainer}>
-                  <Text as="span" variant="default">
+                </Flex>
+                <Flex
+                  direction="column"
+                  gap={1}
+                  className={styles.textLabelContainer}
+                >
+                  <Text as="span" variant="bodyStrong">
                     {acc.user.name}
                   </Text>
-                  <Text
-                    as="span"
-                    variant="body"
-                    color="mutedForeground"
-                    style={{ fontSize: "0.875rem" }}
-                  >
+                  <Text as="span" variant="description" color="mutedForeground">
                     {acc.bank} {acc.account_number}
                   </Text>
-                </div>
+                </Flex>
               </Button>
             </li>
           ))}
-        </ul>
+        </Box>
       </Flex>
     </Flex>
   );

@@ -14,22 +14,7 @@ import { SummaryStep } from "./steps/SummaryStep";
 
 export function TransferContentContainer() {
   const isMounted = useIsMounted();
-
   const funnel = useFunnel(isMounted ? TRANSFER_STEPS : [], {});
-
-  if (!isMounted) {
-    return (
-      <Flex
-        direction={"column"}
-        alignItems={"center"}
-        justifyContent={"center"}
-        style={{ width: "100%" }}
-      >
-        로딩 중...
-      </Flex>
-    );
-  }
-
   const currentStepId = funnel.currentStepId;
   return (
     <Flex
@@ -49,7 +34,7 @@ export function TransferContentContainer() {
           />
         )}
         {currentStepId === "recipient-input" && (
-          <RecipientInputStep onNext={funnel.next} />
+          <RecipientInputStep onNext={funnel.next} onPrev={funnel.prev} />
         )}
         {currentStepId === "amount-input" && (
           <AmountInputStep onNext={funnel.next} />
