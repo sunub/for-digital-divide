@@ -11,8 +11,6 @@ export default function SuccessStep() {
   const resetOnboarding = useOnboardingStore((state) => state.resetOnboarding);
 
   useEffect(() => {
-    // 본인 인증이 완료되어 성공 페이지에 도달했으므로,
-    // 뒤로가기를 통한 오동작을 방지하기 위해 스토어를 초기화합니다.
     resetOnboarding();
   }, [resetOnboarding]);
 
