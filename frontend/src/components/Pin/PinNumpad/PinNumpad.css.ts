@@ -25,10 +25,10 @@ export const numpadWrapper = style({
 export const numpadRow = style({
   display: "flex",
   flexDirection: "row",
-  width: "273px",
   gap: "2px",
   color: vars.color.deviceText,
   justifyContent: "center",
+  width: "100%",
 });
 
 export const innerButton = style({

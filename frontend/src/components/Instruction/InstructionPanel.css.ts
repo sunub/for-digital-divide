@@ -10,4 +10,5 @@ export const panel = style({
   overflowY: "auto",
   overflowX: "hidden",
   maxHeight: "100vh",
+  maxWidth: "80%",
 });

@@ -51,25 +51,3 @@ export function OnboardingGuide({ step }: OnboardingGuideProps) {
 
   return <LoginMethodSelectionGuide />;
 }
-//
-// {currentStepId === "verify-selection" && (
-//   <VerifySelectionStep onNext={funnel.next} />
-// )}
-// {currentStepId === "verify-info" && (
-//   <VerifyInfoStep onNext={funnel.next} />
-// )}
-// {currentStepId === "verify-otp" && (
-//   <VerifyOtpStep onNext={funnel.next} />
-// )}
-// {currentStepId === "terms" && <TermsStep onNext={funnel.next} />}
-// {currentStepId === "id-card-selection" && (
-//   <IdCardSelectionStep onNext={funnel.next} />
-// )}
-// {currentStepId === "id-card-info" && (
-//   <IdCardInfoStep onNext={funnel.next} />
-// )}
-// {currentStepId === "account" && <AccountStep onNext={funnel.next} />}
-// {currentStepId === "success" && <SuccessStep onNext={funnel.next} />}
-// {currentStepId === "pin-register" && (
-//   <PinRegisterStep onComplete={handleCompleteOnboarding} />
-// )}
