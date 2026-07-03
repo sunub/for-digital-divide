@@ -2,19 +2,48 @@
 
 import crypto from "node:crypto";
 import type { ActionState } from "@/app/onboarding/types";
-import { getAuthState } from "@/entities/auth/session.server";
 import { authMethodsService } from "@/entities/auth_methods/auth_methods.service";
 import { PinNumberFormSchema } from "@/entities/keypad/keypad.model";
 import { UsersSchema } from "@/entities/users/users.model";
+import { userService } from "@/entities/users/users.service";
 import { getKeypadData } from "@/shared/utils/getKeypadData";
 import {
   deleteCookieStorage,
   getCookieStorage,
 } from "@/utils/cookies/createCookieStorage";
 import { createPermanentCookieStorage } from "@/utils/cookies/permanentCookieStorage";
+import { getSessionCookieStorage } from "@/utils/cookies/sessionCookieStorage";
 import { setFlashMessageCookie } from "@/utils/cookies/setFlashMessageCookie";
 
 const UserIdSchema = UsersSchema.shape.user_id.nonoptional();
+
+async function getRegistrationTokenUserId(): Promise<number | null> {
+  const tokenPayload = await getCookieStorage("rg_token");
+  const parsedUserId = UserIdSchema.safeParse(tokenPayload?.user_id);
+
+  return parsedUserId.success ? parsedUserId.data : null;
+}
+
+async function getSessionUserId(): Promise<number | null> {
+  const sessionCookie = await getSessionCookieStorage("en_session");
+  const parsedUserId = UserIdSchema.safeParse(sessionCookie?.user_id);
+
+  if (!sessionCookie || !parsedUserId.success) {
+    return null;
+  }
+
+  const userInfo = await userService.findByUserId(parsedUserId.data);
+  const parsedUserInfo = UsersSchema.safeParse(userInfo);
+
+  if (
+    !parsedUserInfo.success ||
+    parsedUserInfo.data.session_id !== sessionCookie.session_id
+  ) {
+    return null;
+  }
+
+  return parsedUserId.data;
+}
 
 export async function pinRegisterAction(
   prevState: ActionState,
@@ -46,31 +75,14 @@ export async function pinRegisterAction(
     };
   }
 
-  let user_id: number;
-
-  const { session } = await getAuthState();
-  if (session) {
-    const parsedUserId = UserIdSchema.safeParse(session.user_id);
-    if (!parsedUserId.success) {
-      return {
-        ...prevState,
-        status: "error",
-        payload: ["유효하지 않은 사용자 ID입니다."],
-      };
-    }
-    user_id = parsedUserId.data;
-  } else {
-    // Check if there is a valid rg_token from onboarding completion
-    const tokenPayload = await getCookieStorage("rg_token");
-    if (tokenPayload && typeof tokenPayload.user_id === "number") {
-      user_id = tokenPayload.user_id;
-    } else {
-      return {
-        ...prevState,
-        status: "error",
-        payload: ["등록 가능한 유저 세션 또는 가입 정보가 없습니다."],
-      };
-    }
+  const user_id =
+    (await getRegistrationTokenUserId()) ?? (await getSessionUserId());
+  if (!user_id) {
+    return {
+      ...prevState,
+      status: "error",
+      payload: ["등록 가능한 유저 세션 또는 가입 정보가 없습니다."],
+    };
   }
 
   const deviceUId = crypto.randomBytes(16).toString("hex");

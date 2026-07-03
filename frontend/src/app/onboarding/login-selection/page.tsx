@@ -3,6 +3,7 @@ import { gridLayout } from "@internal/design-system/style";
 import { RegisterPhase } from "@/app/register-pin/RegisterPhase";
 import { RegisterUserForm } from "@/app/sign-up/register-user/RegisterUserForm";
 import { Device } from "@/shared/layout";
+import type { DeviceView } from "@/shared/layout/ui/DeviceContext";
 import { getKeypadData } from "@/shared/utils/getKeypadData";
 import EmailPasswordLogin from "../email-password/page";
 import { LoginSelection } from "../LoginSelection";
@@ -34,11 +35,12 @@ export default async function LoginSelectionPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const view = parseLoginSelectionParams(params);
   const isPinStep = view.view === "step" && view.method === "pin";
+  const deviceView: DeviceView = isPinStep ? "drawer" : "content";
 
   return (
     <Grid className={gridLayout}>
       <OnboardingGuide step={getGuideStep(view)} />
-      <Device.Frame defaultView={isPinStep ? "drawer" : undefined}>
+      <Device.Frame key={deviceView} defaultView={deviceView}>
         <Device.Content>
           {view.view === "selection" ? (
             <LoginSelection />
