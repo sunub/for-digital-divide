@@ -84,7 +84,11 @@ export default async function middleware(req: NextRequest) {
     }
   }
 
-  if (NEED_TO_AUTHENTICATE_PATHS.includes(pathname)) {
+  if (
+    NEED_TO_AUTHENTICATE_PATHS.some(
+      (path) => pathname === path || pathname.startsWith(`${path}/`),
+    )
+  ) {
     const parsedSession = SessionCookieSchema.safeParse(sessionCookie);
     if (!parsedSession.success) {
       const url = req.nextUrl.clone();
@@ -97,5 +101,5 @@ export default async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard", "/sign-up/register-user", "/onboarding"],
+  matcher: ["/dashboard/:path*", "/sign-up/register-user", "/onboarding"],
 };
