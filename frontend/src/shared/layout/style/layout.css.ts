@@ -201,7 +201,7 @@ export const input = style({
 
 export const drawerContainer = style({
   vars: {
-    [drawerContentVar]: "1px",
+    [drawerContentVar]: "0px",
     [drawerOpenerVar]: "1fr",
     [translateYValVar]: "50%",
     [drawerBorderRadiusVar]: "16px",

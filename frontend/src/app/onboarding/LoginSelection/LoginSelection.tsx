@@ -1,4 +1,4 @@
-import { AppLink, Text } from "@internal/design-system/components";
+import { Text } from "@internal/design-system/components";
 import { Flex, Grid } from "@internal/design-system/primitives";
 import { EmailCard } from "../ui/EmailCard";
 import { PinNumberCard } from "../ui/PinNumberCard";
@@ -11,11 +11,7 @@ const loginMethodGridStyle = {
   gridTemplateColumns: "repeat(2, 1fr)",
 } as const;
 
-export function LoginSelection({
-  hasPinLoginAvailable = false,
-}: {
-  hasPinLoginAvailable?: boolean;
-}) {
+export function LoginSelection() {
   return (
     <>
       <Flex
@@ -39,23 +35,9 @@ export function LoginSelection({
       </Flex>
 
       <Grid gap={8} padding={8} style={loginMethodGridStyle}>
-        <EmailCard />
-        <PinNumberCard hasDeviceId={hasPinLoginAvailable} />
+        <EmailCard href="/onboarding/login-selection?method=email&step=register" />
+        <PinNumberCard href="/onboarding/login-selection?method=pin&step=register" />
       </Grid>
-
-      <Flex
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        gap={2}
-      >
-        <AppLink href="/sign-up/register-user" variant="standout">
-          회원가입
-        </AppLink>
-        <Text color="standOut" variant="description">
-          회원가입을 하지 않으셨다면 회원가입을 해주세요.
-        </Text>
-      </Flex>
     </>
   );
 }

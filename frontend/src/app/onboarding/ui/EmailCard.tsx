@@ -7,12 +7,16 @@ import { CardLayout } from "./Card/CardLayout";
 import { SmallCard } from "./Card/SmallCard";
 import { HoveringTextField } from "./HoveringTextField";
 
-export function EmailCard() {
+export function EmailCard({
+  href = "/onboarding?step=email-input",
+}: {
+  href?: string;
+}) {
   const { add } = useHistory();
 
   return (
     <CardLayout
-      href={"/onboarding?step=email-input"}
+      href={href}
       onPress={() =>
         add(new URL("/onboarding", window.location.href).toString())
       }

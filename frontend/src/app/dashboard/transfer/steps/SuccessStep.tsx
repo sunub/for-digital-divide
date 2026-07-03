@@ -40,6 +40,14 @@ export function SuccessStep() {
           </Text>
           을 보냈습니다.
         </Text>
+        <Text
+          as="p"
+          variant="description"
+          color="mutedForeground"
+          marginTop={4}
+        >
+          모든 교육 과정이 종료되었습니다. 이제 사이트를 종료하셔도 됩니다.
+        </Text>
       </Box>
 
       <Box width="full" marginTop="auto">

@@ -1,5 +1,7 @@
+import { Flex } from "@internal/design-system/primitives";
 import type { ComponentProps } from "react";
 import * as style from "@/components/Pin/PinNumpad/PinNumpad.css";
+import { numpad } from "./AmountNumpad.css";
 
 type ShapeType = "tl" | "tr" | "bl" | "br" | "none";
 
@@ -88,7 +90,7 @@ export function AmountNumpad({
   };
 
   return (
-    <div className={style.numpadWrapper}>
+    <Flex direction={"column"} width={"full"} className={numpad}>
       {layout.map((row, rowIndex) => (
         <ul key={`row-${row.join("-")}`} className={style.numpadRow}>
           {row.map((cellData, colIndex) =>
@@ -96,6 +98,6 @@ export function AmountNumpad({
           )}
         </ul>
       ))}
-    </div>
+    </Flex>
   );
 }

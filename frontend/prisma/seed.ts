@@ -191,6 +191,62 @@ async function seedTransactions(accounts: Account[]) {
   transactionsOra.succeed("🎉 거래내역 시딩 성공");
 }
 
+async function seedMockRecipients() {
+  const mockRecipients = [
+    {
+      email: "hana@example.com",
+      name: "김하나",
+      account_number: BigInt("35791012345607"),
+      account_type: "CHECKING",
+      balance: 0,
+    },
+    {
+      email: "kookmin@example.com",
+      name: "이국민",
+      account_number: BigInt("46810204056789"),
+      account_type: "CHECKING",
+      balance: 0,
+    },
+    {
+      email: "ibk@example.com",
+      name: "박기업",
+      account_number: BigInt("11034567802012"),
+      account_type: "CHECKING",
+      balance: 0,
+    },
+  ];
+
+  for (const recipient of mockRecipients) {
+    let user = await prisma.users.findUnique({
+      where: { email: recipient.email },
+    });
+
+    if (!user) {
+      user = await prisma.users.create({
+        data: {
+          email: recipient.email,
+          name: recipient.name,
+        },
+      });
+    }
+
+    const account = await prisma.accounts.findUnique({
+      where: { account_number: recipient.account_number },
+    });
+
+    if (!account) {
+      await prisma.accounts.create({
+        data: {
+          account_number: recipient.account_number,
+          user_id: user.user_id,
+          account_type: recipient.account_type,
+          balance: recipient.balance,
+        },
+      });
+    }
+  }
+}
+
 export async function seedDemoAccountAndTransactionInfo() {
   const sessionCookie = await getSessionCookieStorage("en_session");
   if (!sessionCookie) {
@@ -199,6 +255,8 @@ export async function seedDemoAccountAndTransactionInfo() {
     );
     return;
   }
+
+  await seedMockRecipients();
 
   const existingAccounts = await accountsService.findByUserId(
     sessionCookie.user_id,

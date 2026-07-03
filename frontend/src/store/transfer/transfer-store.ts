@@ -6,17 +6,23 @@ import {
   createRecipientSlice,
   initialRecipientState,
 } from "./slices/recipient-slice";
+import {
+  createSourceAccountSlice,
+  initialSourceAccountState,
+} from "./slices/source-account-slice";
 import type { TransferStore } from "./types";
 
 export const useTransferStore = create<TransferStore>()(
   persist(
     (set, get, store) => ({
+      ...createSourceAccountSlice(set, get, store),
       ...createRecipientSlice(set, get, store),
       ...createAmountSlice(set, get, store),
       ...createMemoSlice(set, get, store),
 
       resetTransfer: () =>
         set({
+          ...initialSourceAccountState,
           ...initialRecipientState,
           ...initialAmountState,
           ...initialMemoState,
@@ -27,6 +33,7 @@ export const useTransferStore = create<TransferStore>()(
       storage: createJSONStorage(() => sessionStorage),
 
       partialize: (state) => ({
+        sourceAccount: state.sourceAccount,
         recipientName: state.recipientName,
         recipientBank: state.recipientBank,
         recipientAccountNumber: state.recipientAccountNumber,

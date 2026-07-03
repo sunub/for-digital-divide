@@ -53,7 +53,7 @@ pnpm-debug.log*
 **/.nyc_output
 
 # Exclude empty backend directory from monorepo commits
-backend/
+# backend/
 
 # Superpowers Brainstorming Companion
 .superpowers/

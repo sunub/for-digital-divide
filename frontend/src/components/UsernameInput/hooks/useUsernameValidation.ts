@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { z } from "zod";
 
-const USERNAME_ERROR_MESSAGE =
+export const USERNAME_ERROR_MESSAGE =
   "사용자 이름은 2자 이상 20자 이하의 한글 또는 영문 대소문자만 사용할 수 있습니다.";
 
 const UsernameSchema = z
@@ -18,7 +18,26 @@ const UsernameSchema = z
     message: USERNAME_ERROR_MESSAGE,
   });
 
-function useUsernameValidation(): [string | null, (value: unknown) => boolean] {
+export function validateUsername(value: unknown) {
+  if (typeof value !== "string") {
+    return false;
+  }
+  if (value.length === 0) {
+    return true;
+  }
+
+  try {
+    UsernameSchema.parse(value);
+    return true;
+  } catch (_e) {
+    return false;
+  }
+}
+
+export function useUsernameValidation(): [
+  string | null,
+  (value: unknown) => boolean,
+] {
   const [error, setError] = useState<string | null>(null);
 
   const validateUsername = (value: unknown) => {
@@ -43,5 +62,3 @@ function useUsernameValidation(): [string | null, (value: unknown) => boolean] {
 
   return [error, validateUsername] as const;
 }
-
-export { UsernameSchema, useUsernameValidation };

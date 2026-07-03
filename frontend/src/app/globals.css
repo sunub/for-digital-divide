@@ -107,6 +107,10 @@
     color: inherit;
   }
 
+  ul {
+    padding-inline-start: 0px;
+  }
+
   #_next {
     font-family: inherit;
     isolation: isolate;

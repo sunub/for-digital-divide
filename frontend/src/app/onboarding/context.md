@@ -1,19 +1,19 @@
-# Login Context
+# Onboarding Context
 
 ## 1. Role and Purpose
-- Handles the entry page (`/login`), selection, and execution of various login methods (Email/Password or PIN-based) on a simulated desktop browser and mobile device frame.
+- Handles the entry page (`/onboarding`), selection, and execution of onboarding-adjacent login methods (Email/Password or PIN-based) on a simulated desktop browser and mobile device frame.
 - Hosts a multi-step onboarding/funnel sequence (using a client-side funnel pattern) to guide new or unverified users through identity verification (phone SMS OTP), terms agreement, ID verification type selection, and ID card information entry.
-- Once the identity verification and ID card steps are completed, the client-side funnel redirects the user to a verification success screen (`/login/success`), which guides them to the simplified PIN registration page (`/register-pin`).
+- Once the identity verification and ID card steps are completed, the client-side funnel redirects the user to `/onboarding/login-selection`, where query parameters branch into email or PIN registration/login.
 - Displays dynamic, responsive guide/educational sidebars to aid users depending on the active onboarding or login step.
 
 ## 2. Core Sub-domains
-- [[LoginContentContainer](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/LoginContentContainer/context.md)]: Manages the client-side rendering of the multi-step onboarding/funnel steps and transitions.
-- [[LoginGuide](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/LoginGuide/context.md)]: Dynamically renders educational guides/instructions corresponding to the current login step (`step` parameter from search parameters).
-- [[LoginSelection](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/LoginSelection/context.md)]: Entry selection layout allowing users to pick between Email/Password or PIN login.
-- [[Pin](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/Pin/context.md)]: Handles 4-digit PIN authentication using a secure random numpad.
-- [[VerifyStep](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/VerifyStep/context.md)]: Identity verification route prompting choices like 휴대폰인증 (SMS validation) or certificates.
-- [[email-password](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/email-password/context.md)]: Traditional authentication handling email/password login actions, input validations, and mock data seeding.
-- [[IdCardInfoStep](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/login/IdCardInfoStep/context.md)]: Renders and validates the identity-card confirmation step (주민등록증/운전면허증) in the login onboarding flow.
+- [[OnboardingContentContainer](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/onboarding/OnboardingContentContainer/context.md)]: Manages the client-side rendering of the multi-step onboarding/funnel steps and transitions.
+- [[OnboardingGuide](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/onboarding/OnboardingGuide/context.md)]: Dynamically renders educational guides/instructions corresponding to the current onboarding or login step.
+- [[LoginSelection](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/onboarding/LoginSelection/context.md)]: Onboarding-owned selection and query parsing surface for email/PIN registration and login branches.
+- [[Pin](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/onboarding/Pin/context.md)]: Handles PIN authentication using a secure random numpad.
+- [[VerifyStep](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/onboarding/VerifyStep/context.md)]: Identity verification route prompting choices like 휴대폰인증 (SMS validation) or certificates.
+- [[email-password](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/onboarding/email-password/context.md)]: Traditional authentication handling email/password login actions, input validations, and mock data seeding.
+- [[IdCardInfoStep](file:///Users/sunub/workspace/for-digital-divide/frontend/src/app/onboarding/IdCardInfoStep/context.md)]: Renders and validates the identity-card confirmation step (주민등록증/운전면허증) in the onboarding flow.
 
 ## 3. Shared Assets & Helpers
 ### Hooks (hooks/)
@@ -37,12 +37,13 @@
 - `AccountStep({ onNext: () => void }) => JSX.Element` (`components/AccountStep.tsx`): Commented out/inactive onboarding step for account verification.
 - `IntroStep({ onNext: () => void }) => JSX.Element` (`components/IntroStep.tsx`): Commented out/inactive onboarding welcomes panel.
 
-### Success & Navigation Components
-- `SuccessStep() => JSX.Element` (`success/SuccessStep/SuccessStep.tsx`): Success transition page component that resets onboarding store state to prevent back button issues, and links the user to simplified PIN registration (`/register-pin`).
+### Login Selection & Navigation Components
+- `LoginSelectionPage() => JSX.Element` (`login-selection/page.tsx`): Server route that parses `method=email|pin` and `step=register|login`, then renders base selection, email registration/login, or PIN registration/login.
+- `SuccessPage() => never` (`success/page.tsx`): Legacy route that redirects to `/onboarding/login-selection`.
 
 ### Common UI Components (ui/)
-- `EmailCard() => JSX.Element`: Card component mapping to Email login route.
-- `PinNumberCard({ hasDeviceId: boolean }) => JSX.Element`: Card component mapping to PIN login route (disabled if device ID cookie is absent).
+- `EmailCard({ href?: string }) => JSX.Element`: Card component mapping to an email login or registration route.
+- `PinNumberCard({ hasDeviceId: boolean, href?: string, disabled?: boolean }) => JSX.Element`: Card component mapping to a PIN login or registration route.
 - `HoveringTextField({ hasDeviceId?: boolean }) => JSX.Element`: Graphical hover background effect inside method cards.
 - `ToastMessage({ reason: string }) => null`: Emits toast alerts for registration status (e.g. `ALREADY_REGISTERED`, `PIN_NOT_VERIFIED`).
 - `CardLayout(props) => JSX.Element`: Flex/Link container structure for selecting login methods.
@@ -52,7 +53,7 @@
 
 ## 4. Directory Structure (Max Depth 3)
 ```text
-login/
+onboarding/
 ├── LoginContentContainer/
 │   ├── LoginContentContainer.tsx
 │   ├── context.md
@@ -70,7 +71,11 @@ login/
 ├── LoginSelection/
 │   ├── LoginSelection.tsx
 │   ├── context.md
-│   └── index.ts
+│   ├── index.ts
+│   ├── loginSelectionParams.test.ts
+│   └── loginSelectionParams.ts
+├── login-selection/
+│   └── page.tsx
 ├── Pin/
 │   ├── context.md
 │   ├── index.ts

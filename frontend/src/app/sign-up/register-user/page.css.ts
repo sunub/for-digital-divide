@@ -1,9 +1,15 @@
 import { vars } from "@internal/design-system/style";
 import { style } from "@vanilla-extract/css";
+import { appStyle } from "@/style/utils";
 
 export const title = style({
   fontFamily: "var(--gugi-font-family)",
   willChange: "transform",
+});
+
+export const signupUserForm = appStyle({
+  display: "flex",
+  gap: vars.space["4"],
 });
 
 export const gridStyle = style({

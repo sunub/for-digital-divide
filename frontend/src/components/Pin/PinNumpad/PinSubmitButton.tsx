@@ -1,6 +1,5 @@
 import { Button } from "@internal/design-system/components";
 import type { FormStatus } from "react-dom";
-import { StatusButton } from "@/components/StautsButton";
 import { useNumpadStore } from "@/context/NumpadContext";
 import * as style from "./PinNumpad.css";
 
@@ -9,17 +8,19 @@ export function PinSubmitButton({ status }: { status: FormStatus }) {
 
   return (
     <div className={style.actionButtons}>
-      <StatusButton
+      <Button
         type="submit"
         status={status.pending ? "pending" : "idle"}
+        size={"wide"}
         variant={"default"}
         disabled={status.pending}
       >
         확인
-      </StatusButton>
+      </Button>
       <Button
         type="button"
         variant={"destructive"}
+        size={"wide"}
         onClick={deleteNumpad}
         aria-label="입력한 핀 번호 전체 삭제"
       >

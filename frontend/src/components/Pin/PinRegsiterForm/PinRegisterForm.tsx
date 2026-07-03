@@ -20,13 +20,15 @@ type PinFormProps = Omit<FormProps, "action"> & {
   children: React.ReactNode;
   title: string;
   description?: string;
-  onSuccess?: () => void;
+  contentFooter?: React.ReactNode;
+  onSuccess?: () => void | Promise<void>;
 };
 
 export function PinRegisterForm({
   action,
   ref,
   children,
+  contentFooter,
   title,
   description,
   onSuccess,
@@ -57,6 +59,7 @@ export function PinRegisterForm({
           isPending={status.isPending}
           isSubmitting={status.isGlobalPending}
         />
+        {contentFooter}
       </PinContent>
       {children}
     </BaseForm>

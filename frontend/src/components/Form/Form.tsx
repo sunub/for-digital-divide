@@ -38,6 +38,7 @@ export function Form<State>({
       flexDirection={"column"}
       placeItems={"center"}
       noValidate
+      gap={4}
       {...props}
     >
       <FormInputContainer>{children}</FormInputContainer>

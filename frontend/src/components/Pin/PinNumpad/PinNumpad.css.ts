@@ -6,6 +6,9 @@ export const bgPosX = createVar();
 export const bgPosY = createVar();
 
 export const container = style({
+  position: "relative",
+  top: "5cqh",
+
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -25,11 +28,12 @@ export const numpadRow = style({
   width: "273px",
   gap: "2px",
   color: vars.color.deviceText,
+  justifyContent: "center",
 });
 
 export const innerButton = style({
-  width: "100%",
-  height: "100%",
+  width: "inherit",
+  height: "inherit",
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",

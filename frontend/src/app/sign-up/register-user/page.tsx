@@ -1,5 +1,5 @@
 import { Text } from "@internal/design-system/components";
-import { Flex, Grid } from "@internal/design-system/primitives";
+import { Grid } from "@internal/design-system/primitives";
 import Link from "next/link";
 import {
   MdAccountBalance,
@@ -8,14 +8,11 @@ import {
   MdVerifiedUser,
 } from "react-icons/md";
 import { logoutAction } from "@/app/dashboard/ui/Dashboard/utils/logoutAction";
-import { EmailAndPasswordField } from "@/components/EmailAndPasswordField";
-import { Form } from "@/components/Form/Form";
 import { Instruction } from "@/components/Instruction";
-import { UsernameInput } from "@/components/UsernameInput/UsernameInput";
 import { getAuthState } from "@/entities/auth/session.server";
 import { Device } from "@/shared/layout";
 import * as style from "./page.css";
-import { registerUserAction } from "./utils/registerUserAction";
+import { RegisterUserForm } from "./RegisterUserForm";
 
 function RegisterGuide({ hasSession }: { hasSession: boolean }) {
   if (hasSession) {
@@ -126,28 +123,7 @@ export default async function RegisterUserNamePage() {
               </div>
             </div>
           ) : (
-            <Flex
-              direction="column"
-              alignItems="center"
-              justifyContent="center"
-              gap="2rem"
-              style={{
-                padding: "24px",
-                paddingTop: "48px",
-                boxSizing: "border-box",
-              }}
-            >
-              <h1
-                className={style.phoneTitle}
-                style={{ textAlign: "center", width: "100%" }}
-              >
-                회원 가입
-              </h1>
-              <Form action={registerUserAction}>
-                <UsernameInput />
-                <EmailAndPasswordField />
-              </Form>
-            </Flex>
+            <RegisterUserForm />
           )}
         </Device.Content>
       </Device.Frame>

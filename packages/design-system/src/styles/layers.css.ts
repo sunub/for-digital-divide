@@ -1,5 +1,6 @@
-import { globalLayer, layer } from "@vanilla-extract/css";
+import { globalLayer } from "@vanilla-extract/css";
 
-globalLayer("reset");
-export const designSystemLayer = layer("design-system");
-globalLayer("app");
+export const resetLayer = globalLayer("reset");
+export const designSystemLayer = globalLayer("design-system");
+export const appLayer = globalLayer("app");
+export const utilitiesLayer = globalLayer("utilities");
