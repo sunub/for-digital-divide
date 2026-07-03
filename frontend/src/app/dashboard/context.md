@@ -9,6 +9,7 @@
 ## 2. Core Sub-domains
 - **Account Card Component (`ui/Account/`)**: Renders visual representation cards for accounts, supporting state tracking for balance visibility and loading indicators.
 - **Alert Controls (`ui/Alert/`)**: Reusable close button component designed to interface with Alert and Dialog containers.
+- **Transfer Route (`transfer/`)**: Child route served at `/dashboard/transfer`, preserving dashboard-authenticated navigation while rendering the standalone transfer funnel and guide layout.
 - **Dashboard Sections (`ui/Dashboard/`)**:
   - **DashboardHeader**: Contains the greeting section (`UsernameSection`) that responds to mouse hover with spring-physics transitions, and the logout action trigger.
   - **RollingNumberList**: An animated number list that slides/rolls individual digits to dynamically increment or decrement the active balance representation.
@@ -37,7 +38,18 @@ dashboard/
 ├── TransitionLayout.tsx
 ├── layout.css.ts
 ├── layout.tsx
+├── loading.tsx
 ├── page.tsx
+├── transfer/
+│   ├── TransferContentContainer.tsx
+│   ├── TransferGuide.tsx
+│   ├── TransferGuideParts/
+│   │   ├── TransferGuideContent.tsx
+│   │   ├── guideContentData.ts
+│   │   └── components/
+│   ├── funnelConfig.ts
+│   ├── page.tsx
+│   └── steps/
 └── ui/
     ├── Account/
     │   ├── index.ts
