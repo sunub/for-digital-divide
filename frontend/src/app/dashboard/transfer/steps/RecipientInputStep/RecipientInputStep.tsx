@@ -1,5 +1,5 @@
 import { Flex } from "@internal/design-system/primitives";
-import { useEffect, useEffectEvent, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDevice } from "@/shared/layout/ui/DeviceContext";
 import { useTransferStore } from "@/store/transfer/transfer-store";
@@ -128,7 +128,7 @@ export function RecipientInputStep({
         <TransferHeader label="계좌선택으로 돌아가기" onClick={onPrev}>
           받는분
         </TransferHeader>
-        <RecipientInputHeader onPrev={onPrev} />
+        <RecipientInputHeader />
         <form
           onSubmit={handleSubmit(onSubmit)}
           style={{ display: "flex", flexDirection: "column", flex: 1 }}

@@ -1,6 +1,6 @@
-import { appStyle } from "@/style/utils";
 import { vars } from "@internal/design-system/style";
 import { style } from "@vanilla-extract/css";
+import { appStyle } from "@/style/utils";
 
 export const title = style({
   fontFamily: "var(--gugi-font-family)",

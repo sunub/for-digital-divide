@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid2X2PlusIcon, GridIcon } from "lucide-react";
+import { GridIcon } from "lucide-react";
 import { useRef } from "react";
 import { useAnimationOnce } from "../hooks/useAnimationOnce";
 import { CardContent } from "./Card/CardContent";

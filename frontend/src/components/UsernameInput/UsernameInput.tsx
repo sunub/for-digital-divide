@@ -3,7 +3,7 @@
 import { TextField } from "@internal/design-system/components";
 import { Flex } from "@internal/design-system/primitives";
 import { UserIcon } from "lucide-react";
-import { Control, Controller } from "react-hook-form";
+import { type Control, Controller } from "react-hook-form";
 import type { FormSchemaType } from "@/app/sign-up/register-user/types";
 
 interface UsernameFieldProps {

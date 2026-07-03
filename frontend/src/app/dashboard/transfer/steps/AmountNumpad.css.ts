@@ -1,5 +1,5 @@
-import { appStyle } from "@/style/utils";
 import { vars } from "@internal/design-system/style";
+import { appStyle } from "@/style/utils";
 
 export const numpad = appStyle({
   gap: "2px",

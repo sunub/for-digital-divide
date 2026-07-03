@@ -1,4 +1,4 @@
-import { AppLink, Text } from "@internal/design-system/components";
+import { Text } from "@internal/design-system/components";
 import { Flex, Grid } from "@internal/design-system/primitives";
 import { EmailCard } from "../ui/EmailCard";
 import { PinNumberCard } from "../ui/PinNumberCard";

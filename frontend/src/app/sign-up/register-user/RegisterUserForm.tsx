@@ -1,15 +1,15 @@
 "use client";
 
 import { Flex } from "@internal/design-system/primitives";
-import { EmailAndPasswordField } from "@/components/EmailAndPasswordField";
-import { UsernameInput } from "@/components/UsernameInput/UsernameInput";
-import * as style from "./page.css";
-import { registerUser } from "./utils/registerUserAction";
-import { formSchema, FormInput } from "./types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@/app/onboarding/utils/zodResolver";
+import { EmailAndPasswordField } from "@/components/EmailAndPasswordField";
 import { SubmitButton } from "@/components/Form/SubmitButton";
 import { FormInputContainer } from "@/components/FormInputContainer";
+import { UsernameInput } from "@/components/UsernameInput/UsernameInput";
+import * as style from "./page.css";
+import { type FormInput, formSchema } from "./types";
+import { registerUser } from "./utils/registerUserAction";
 
 interface RegisterUserFormProps {
   redirectTo?: string;

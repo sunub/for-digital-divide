@@ -1,6 +1,6 @@
+import { Flex } from "@internal/design-system/primitives";
 import type { ComponentProps } from "react";
 import * as style from "@/components/Pin/PinNumpad/PinNumpad.css";
-import { Flex } from "@internal/design-system/primitives";
 import { numpad } from "./AmountNumpad.css";
 
 type ShapeType = "tl" | "tr" | "bl" | "br" | "none";

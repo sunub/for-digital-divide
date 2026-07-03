@@ -6,13 +6,14 @@ import bcrypt from "bcryptjs";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import type { ActionState } from "@/app/onboarding/types";
 import { authMethodsService } from "@/entities/auth_methods/auth_methods.service";
 import { createCookieStorage } from "@/utils/cookies/createCookieStorage";
 import { setFlashMessageCookie } from "@/utils/cookies/setFlashMessageCookie";
-import { FormInput, formSchema } from "../types";
-
-import { ALLOWED_REGISTER_REDIRECT_PATHS } from "../types";
+import {
+  ALLOWED_REGISTER_REDIRECT_PATHS,
+  type FormInput,
+  formSchema,
+} from "../types";
 
 const DEFAULT_REGISTER_REDIRECT_PATH = "/onboarding";
 
@@ -28,14 +29,16 @@ function getRegisterRedirectPath(value?: string | null): string {
 
 export async function registerUser(
   data: FormInput,
-  redirectTo?: string
+  redirectTo?: string,
 ): Promise<{ success: boolean; error?: string }> {
   const parsedFormData = formSchema.safeParse(data);
 
   if (!parsedFormData.success) {
     return {
       success: false,
-      error: parsedFormData.error.issues[0]?.message || "입력값이 올바르지 않습니다.",
+      error:
+        parsedFormData.error.issues[0]?.message ||
+        "입력값이 올바르지 않습니다.",
     };
   }
 

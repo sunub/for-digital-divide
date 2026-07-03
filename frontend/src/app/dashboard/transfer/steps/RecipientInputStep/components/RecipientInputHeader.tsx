@@ -1,7 +1,7 @@
 import { Text } from "@internal/design-system/components";
 import { Flex } from "@internal/design-system/primitives";
 
-export function RecipientInputHeader({ onPrev }: { onPrev: () => void }) {
+export function RecipientInputHeader() {
   return (
     <Flex direction="column" gap={2}>
       <Text as="h2" variant="title">
