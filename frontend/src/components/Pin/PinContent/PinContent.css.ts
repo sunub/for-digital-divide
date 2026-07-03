@@ -1,3 +1,4 @@
+import { vars } from "@internal/design-system/style";
 import {
   createVar,
   fallbackVar,
@@ -11,6 +12,7 @@ const pointerPlaceholderVar = createVar();
 
 export const rootContainer = style({
   gridArea: "content-device / 1",
+  paddingTop: vars.space["8"],
 });
 
 export const headerContainer = style({

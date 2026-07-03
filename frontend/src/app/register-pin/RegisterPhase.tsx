@@ -10,8 +10,10 @@ import { pinRegisterAction } from "./utils/pinRegisterAction";
 
 export function RegisterPhase({
   registerPadInfo,
+  confirmPath = "/register-pin?phase=confirm",
 }: {
   registerPadInfo: KeypadInfo;
+  confirmPath?: string;
 }) {
   const router = useRouter();
 
@@ -22,9 +24,8 @@ export function RegisterPhase({
         title="간편 비밀번호 등록"
         className={style.registerPinForm}
         description="사용하실 6자리 핀 번호를 입력해 주세요."
-        onSuccess={() => router.replace("/register-pin?phase=confirm")}
+        onSuccess={() => router.replace(confirmPath)}
       >
-        <Device.DrawerIndicator />
         <Device.Drawer>
           <Pin.numpad padInfo={registerPadInfo} />
         </Device.Drawer>

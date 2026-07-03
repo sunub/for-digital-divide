@@ -12,7 +12,7 @@ interface UseDemoLoginFlowProps {
     payload: FormData,
   ) => ActionState | Promise<ActionState>;
   onActionComplete?: () => void;
-  onSuccess?: () => void;
+  onSuccess?: () => void | Promise<void>;
 }
 
 export function useRegisterPinFlow({
@@ -52,7 +52,7 @@ export function useRegisterPinFlow({
       setCurrentStep("completed");
 
       if (onSuccess) {
-        onSuccess();
+        await onSuccess();
       } else {
         router.back();
         setTimeout(() => {

@@ -23,7 +23,7 @@ export default async function RegisterPinPage(props: PageProps) {
       ) : (
         <RegisterPinPhaseGuide />
       )}
-      <Device.Frame>
+      <Device.Frame defaultView="drawer">
         <Device.Content>
           {phase === "confirm" ? (
             <LoginPinPage />
