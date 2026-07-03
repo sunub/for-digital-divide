@@ -45,7 +45,7 @@ export function RecipientSelectionStep({
   };
 
   return (
-    <Flex direction="column" width="full" gap={6}>
+    <Flex direction="column" width="full" gap={6} padding={"1rem"}>
       <TransferHeader
         onClick={handleReturnToDashboard}
         label="dashboard로 돌아가기"

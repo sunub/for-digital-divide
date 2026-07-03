@@ -1,8 +1,23 @@
-import { Flex } from "@internal/design-system/primitives";
+import {
+  Button,
+  Surface,
+  Text,
+  TextField,
+} from "@internal/design-system/components";
+import { Box, Flex } from "@internal/design-system/primitives";
+import { useQuery } from "@tanstack/react-query";
+import { getAccountsData } from "@/app/dashboard/ui/Dashboard/utils/getAccountsData";
+import { accountKeys } from "@/entities/accounts/accounts.query";
 import { useTransferStore } from "@/store/transfer/transfer-store";
+import * as styles from "./SummaryStep.css";
 
-export function SummaryStep({ onNext }: { onNext: () => void }) {
+interface SummaryStepProps {
+  onNext: () => void;
+}
+
+export function SummaryStep({ onNext }: SummaryStepProps) {
   const {
+    sourceAccount,
     recipientName,
     recipientBank,
     recipientAccountNumber,
@@ -12,105 +27,92 @@ export function SummaryStep({ onNext }: { onNext: () => void }) {
     setMemos,
   } = useTransferStore();
 
+  const { data: accounts } = useQuery({
+    queryKey: accountKeys.all(),
+    queryFn: getAccountsData,
+    staleTime: Infinity,
+  });
+
+  const activeAccount = accounts?.find(
+    (acc) => acc.account_number === sourceAccount?.accountNumber,
+  );
+  const balance = activeAccount?.balance ?? 0;
+  const formattedAmount = Number(transferAmount).toLocaleString();
+  const formattedBalance = balance.toLocaleString();
+  const accountDescription = `${recipientBank} ${recipientAccountNumber}`;
+
   return (
     <Flex
       direction="column"
       width="full"
-      gap="1rem"
-      style={{ padding: "1rem" }}
+      height="full"
+      gap={6}
+      padding={4}
+      justifyContent="space-between"
     >
-      <h2
-        style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1rem" }}
-      >
-        최종 확인
-      </h2>
+      <Box>
+        <Text as="h2" variant="title" marginBottom={6}>
+          최종 확인
+        </Text>
 
-      <div
-        style={{
-          backgroundColor: "#f9f9f9",
-          padding: "1.5rem",
-          borderRadius: "12px",
-        }}
-      >
-        <p style={{ fontSize: "1.1rem", marginBottom: "0.5rem" }}>
-          <strong>{recipientName}</strong> 님에게
-        </p>
-        <p
-          style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "1rem" }}
+        <Surface
+          tone="canvas"
+          elevation="none"
+          borderRadius="md"
+          padding={6}
+          className={styles.summaryCard}
         >
-          {Number(transferAmount).toLocaleString()}원
-        </p>
-        <p style={{ color: "#666" }}>
-          {recipientBank} {recipientAccountNumber}
-        </p>
-        <p style={{ color: "#888", marginTop: "1rem", fontSize: "0.9rem" }}>
-          출금 계좌 잔액: 1,500,000 원
-        </p>
-      </div>
+          <Text as="p" variant="body" marginBottom={2}>
+            <Text as="strong" variant="bodyStrong">
+              {recipientName}
+            </Text>
+            님에게
+          </Text>
+          <Text as="p" variant="hero" marginBottom={4}>
+            {formattedAmount}원
+          </Text>
+          <Text
+            as="p"
+            variant="description"
+            color="descriptionText"
+            className={styles.accountText}
+          >
+            {accountDescription}
+          </Text>
+          <Text
+            as="p"
+            variant="description"
+            color="descriptionText"
+            className={styles.balanceText}
+          >
+            출금 계좌 잔액: {formattedBalance} 원
+          </Text>
+        </Surface>
+      </Box>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.5rem",
-          marginTop: "1rem",
-        }}
-      >
-        <label
-          htmlFor="memo-to-recipient"
-          style={{ fontSize: "0.9rem", color: "#666" }}
-        >
-          받는 분에게 표시
-        </label>
-        <input
+      <Flex direction="column" gap={4} className={styles.memoFields}>
+        <TextField
           id="memo-to-recipient"
           type="text"
           value={memoToRecipient}
-          onChange={(e) => setMemos(e.target.value, memoToMe)}
+          onChange={(event) => setMemos(event.target.value, memoToMe)}
+          labelContent="받는 분에게 표시"
           placeholder={recipientName}
-          style={{
-            padding: "1rem",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-          }}
         />
-      </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-        <label
-          htmlFor="memo-to-me"
-          style={{ fontSize: "0.9rem", color: "#666" }}
-        >
-          나에게 표시
-        </label>
-        <input
+        <TextField
           id="memo-to-me"
           type="text"
           value={memoToMe}
-          onChange={(e) => setMemos(memoToRecipient, e.target.value)}
+          onChange={(event) => setMemos(memoToRecipient, event.target.value)}
+          labelContent="나에게 표시"
           placeholder={recipientName}
-          style={{
-            padding: "1rem",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-          }}
         />
-      </div>
+      </Flex>
 
-      <button
-        type="button"
-        onClick={onNext}
-        style={{
-          padding: "1rem",
-          backgroundColor: "#0056b3",
-          color: "#fff",
-          borderRadius: "8px",
-          fontWeight: "bold",
-          marginTop: "2rem",
-        }}
-      >
+      <Button type="button" onClick={onNext} variant="primary" size="wide">
         다음
-      </button>
+      </Button>
     </Flex>
   );
 }

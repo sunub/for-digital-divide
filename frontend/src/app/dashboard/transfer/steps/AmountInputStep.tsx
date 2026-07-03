@@ -65,8 +65,7 @@ export function AmountInputStep({ onNext }: { onNext: () => void }) {
         </Text>
         <Text
           as="div"
-          fontSize="2.5rem"
-          fontWeight="bold"
+          variant="hero"
           marginTop={8}
           marginBottom={isLimitExceeded ? 2 : 8}
           color={

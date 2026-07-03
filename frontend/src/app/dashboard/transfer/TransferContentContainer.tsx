@@ -4,6 +4,7 @@ import { Flex } from "@internal/design-system/primitives";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { AnimationPresenceWrapper } from "@/app/onboarding/OnboardingContentContainer/OnboardingContentContainer";
+import type { KeypadInfo } from "@/entities/keypad/keypad.model";
 import { useToast } from "@/provider/toast/hooks/useToast";
 import { useFunnel } from "@/shared/hooks/useFunnel/useFunnel";
 import { useIsMounted } from "@/shared/hooks/useIsMounted";
@@ -16,7 +17,13 @@ import { RecipientSelectionStep } from "./steps/RecipientSelectionStep";
 import { SuccessStep } from "./steps/SuccessStep";
 import { SummaryStep } from "./steps/SummaryStep";
 
-export function TransferContentContainer() {
+interface TransferContentContainerProps {
+  transferPinPadInfo: KeypadInfo;
+}
+
+export function TransferContentContainer({
+  transferPinPadInfo,
+}: TransferContentContainerProps) {
   const isMounted = useIsMounted();
   const router = useRouter();
   const showToast = useToast();
@@ -63,7 +70,7 @@ export function TransferContentContainer() {
         )}
         {currentStepId === "summary" && <SummaryStep onNext={funnel.next} />}
         {currentStepId === "confirm-pin" && (
-          <ConfirmPinStep onNext={funnel.next} />
+          <ConfirmPinStep onNext={funnel.next} padInfo={transferPinPadInfo} />
         )}
         {currentStepId === "success" && <SuccessStep />}
       </AnimationPresenceWrapper>

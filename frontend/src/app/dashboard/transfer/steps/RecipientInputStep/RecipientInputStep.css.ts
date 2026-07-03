@@ -1,7 +1,35 @@
 import { vars } from "@internal/design-system/style";
 import { appLayer } from "@internal/design-system/style/layers.css";
 import { globalStyle } from "@vanilla-extract/css";
+import {
+  contentHeightVar,
+  drawerContainer,
+  drawerContainerSizeVar,
+  drawerHeightVar,
+} from "@/shared/layout/style/layout.css";
 import { appStyle } from "@/style/utils";
+
+export const accountNumber = appStyle({
+  border: `1px solid ${vars.color.gray700}`,
+  width: "100%",
+});
+
+export const recipientInputLayout = appStyle({
+  display: "grid",
+  width: "100cqw",
+  height: "100cqh",
+  transition: "grid 500ms cubic-bezier(0.17, 1.48, 0.24, 1)",
+  gridTemplateRows: `[content-device] ${contentHeightVar} [drawer-device] ${drawerHeightVar}`,
+});
+
+export const recipientInputContent = appStyle({
+  gridArea: "content-device / 1",
+  minHeight: 0,
+});
+
+globalStyle(`${recipientInputLayout} > ${drawerContainer}`, {
+  width: drawerContainerSizeVar,
+});
 
 export const accountList = appStyle({
   listStyle: "none",
@@ -37,6 +65,8 @@ globalStyle(`${accountButton} > span`, {
 export const bankSelectButton = appStyle({
   width: "100%",
   textAlign: "left",
+  border: `1px solid ${vars.color.gray500}`,
+  color: vars.color.black,
 });
 
 globalStyle(`${bankSelectButton} > span`, {
@@ -54,4 +84,11 @@ export const drawerBankButton = appStyle({
 
 export const fullWidthButton = appStyle({
   width: "100%",
+});
+
+export const bankErrorText = appStyle({
+  fontSize: "12px",
+  color: vars.color.highlight,
+  paddingLeft: "4px",
+  marginTop: "2px",
 });

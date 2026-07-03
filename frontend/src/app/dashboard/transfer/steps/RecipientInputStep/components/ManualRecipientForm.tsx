@@ -1,67 +1,91 @@
 import { Button, Text, TextField } from "@internal/design-system/components";
 import { Box, Flex } from "@internal/design-system/primitives";
-import type { ChangeEvent } from "react";
+import type { Control, FieldErrors } from "react-hook-form";
+import { Controller } from "react-hook-form";
+import type { FormValues } from "../RecipientInputStep";
 import * as styles from "../RecipientInputStep.css";
-import { DeviceDrawer } from "@/shared/layout";
 
 interface ManualRecipientFormProps {
-  accountNumber: string;
-  selectedBank: string;
-  onAccountNumberChange: (value: string) => void;
+  control: Control<FormValues>;
+  errors: FieldErrors<FormValues>;
   onOpenBankSelection: () => void;
-  onSubmit: () => void;
-  onCloseBankSelection: () => void;
+  verifiedRecipientName: string;
+  isSubmitting: boolean;
 }
 
 export function ManualRecipientForm({
-  selectedBank,
-  accountNumber,
-  onAccountNumberChange,
+  control,
+  errors,
   onOpenBankSelection,
-  onSubmit,
-  onCloseBankSelection,
+  verifiedRecipientName,
+  isSubmitting,
 }: ManualRecipientFormProps) {
-  const canSubmit = selectedBank.length > 0 && accountNumber.length > 0;
-
-  const handleAccountNumberChange = (
-    event: ChangeEvent<HTMLInputElement>,
-  ): void => {
-    onAccountNumberChange(event.target.value.replace(/\D/g, ""));
-  };
-
   return (
     <Flex direction="column" gap={4} marginTop={4} style={{ flex: 1 }}>
       <Text as="h3" variant="bodyStrong">
         직접 입력
       </Text>
 
-      <TextField
-        type="text"
-        inputMode="numeric"
-        labelContent="계좌번호"
-        placeholder="-없이 계좌번호 입력"
-        value={accountNumber}
-        onChange={handleAccountNumberChange}
+      <Controller
+        name="accountNumber"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            className={styles.accountNumber}
+            type="text"
+            inputMode="numeric"
+            labelContent="계좌번호"
+            placeholder="-없이 계좌번호 입력"
+            isError={!!errors.accountNumber}
+            errorMessage={errors.accountNumber?.message}
+            onChange={(e) => {
+              field.onChange(e.target.value.replace(/\D/g, ""));
+            }}
+          />
+        )}
       />
-      <Button
-        variant="default"
-        onClick={onOpenBankSelection}
-        className={styles.bankSelectButton}
-      >
-        {selectedBank || "은행 또는 증권사 선택"}
-      </Button>
-      <DeviceDrawer>
-        <h1>HI</h1>
-      </DeviceDrawer>
+
+      <Controller
+        name="bank"
+        control={control}
+        render={({ field }) => (
+          <Flex direction="column" gap={1}>
+            <Button
+              type="button"
+              variant="transparent"
+              onClick={onOpenBankSelection}
+              className={styles.bankSelectButton}
+            >
+              {field.value || "은행 또는 증권사 선택"}
+            </Button>
+            {errors.bank?.message && (
+              <span className={styles.bankErrorText}>
+                {errors.bank.message}
+              </span>
+            )}
+          </Flex>
+        )}
+      />
+
+      {verifiedRecipientName && (
+        <TextField
+          type="text"
+          labelContent="확인된 예금주"
+          value={verifiedRecipientName}
+          disabled
+          readOnly
+        />
+      )}
 
       <Box marginTop="auto" width="full">
         <Button
+          type="submit"
           variant="primary"
-          onClick={onSubmit}
-          disabled={!canSubmit}
+          status={isSubmitting ? "pending" : "idle"}
           className={styles.fullWidthButton}
         >
-          확인
+          {verifiedRecipientName ? "다음" : "확인"}
         </Button>
       </Box>
     </Flex>

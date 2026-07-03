@@ -1,86 +1,111 @@
-import { Flex } from "@internal/design-system/primitives";
+import { Button, Text } from "@internal/design-system/components";
+import { Box, Flex } from "@internal/design-system/primitives";
+import { useState } from "react";
+import { Pin } from "@/components/Pin";
+import { NumpadProvider } from "@/context/NumpadContext";
+import type { KeypadInfo } from "@/entities/keypad/keypad.model";
+import { Device } from "@/shared/layout";
 import { useDevice } from "@/shared/layout/ui/DeviceContext";
-import { DeviceDrawer } from "@/shared/layout/ui/DeviceDrawer";
 import { useTransferStore } from "@/store/transfer/transfer-store";
+import { executeTransferAction } from "../utils/executeTransferAction";
+import { verifyTransferPinAction } from "../utils/verifyTransferPinAction";
+import * as styles from "./ConfirmPinStep.css";
 
-export function ConfirmPinStep({ onNext }: { onNext: () => void }) {
-  const { recipientName, transferAmount } = useTransferStore();
+interface ConfirmPinStepProps {
+  onNext: () => void;
+  padInfo: KeypadInfo;
+}
+
+export function ConfirmPinStep({ onNext, padInfo }: ConfirmPinStepProps) {
+  const {
+    sourceAccount,
+    recipientAccountNumber,
+    transferAmount,
+    recipientName,
+  } = useTransferStore();
   const { openDrawer, closeDrawer } = useDevice();
 
-  const handleVerify = () => {
-    // In a real app, this would verify the PIN using PinNumpad logic
-    // For this educational simulator, we just simulate success
-    closeDrawer();
-    onNext();
+  const [isTransferring, setIsTransferring] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handlePinVerified = async () => {
+    if (!sourceAccount) {
+      setErrorMsg("출금 계좌 정보가 없습니다.");
+      return;
+    }
+    if (!recipientAccountNumber) {
+      setErrorMsg("입금 계좌 정보가 없습니다.");
+      return;
+    }
+
+    setIsTransferring(true);
+    setErrorMsg("");
+
+    try {
+      const result = await executeTransferAction(
+        sourceAccount.accountNumber,
+        recipientAccountNumber,
+        Number(transferAmount),
+      );
+
+      if (result.success) {
+        closeDrawer();
+        onNext();
+      } else {
+        setErrorMsg(result.message || "이체 처리에 실패했습니다.");
+      }
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "알 수 없는 오류가 발생했습니다.";
+      setErrorMsg(message);
+    } finally {
+      setIsTransferring(false);
+    }
   };
 
   return (
-    <Flex
-      direction="column"
-      width="full"
-      height="full"
-      gap="1rem"
-      style={{ padding: "1rem", justifyContent: "space-between" }}
-    >
-      <div style={{ textAlign: "center", marginTop: "2rem" }}>
-        <p style={{ fontSize: "1.1rem", marginBottom: "0.5rem" }}>보낼 금액</p>
-        <p
-          style={{
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-            marginBottom: "1rem",
-          }}
-        >
-          {Number(transferAmount).toLocaleString()}원
-        </p>
-      </div>
-
-      <button
-        type="button"
-        onClick={openDrawer}
-        style={{
-          padding: "1.2rem",
-          backgroundColor: "#0056b3",
-          color: "#fff",
-          borderRadius: "8px",
-          fontWeight: "bold",
-          fontSize: "1.2rem",
-        }}
-      >
-        {recipientName} 님에게 이체
-      </button>
-
-      {/* Drawer for Simulated PIN Verification */}
-      <DeviceDrawer>
-        <Flex
-          direction="column"
-          gap="1rem"
-          style={{ padding: "1rem", textAlign: "center" }}
-        >
-          <h3 style={{ marginBottom: "1rem" }}>비밀번호 6자리를 입력하세요</h3>
-          <p style={{ color: "#888" }}>
-            ※ 이 화면은 시뮬레이션입니다.
-            <br />
-            하단의 완료 버튼을 누르면 인증이 통과됩니다.
-          </p>
-
-          {/* We use a mock confirm here because reusing Pin.numpad requires NumpadContext and server-side keypad fetch (getKeypadData) which complicates the client-side funnel */}
-          <button
-            type="button"
-            onClick={handleVerify}
-            style={{
-              padding: "1rem",
-              backgroundColor: "#28a745",
-              color: "#fff",
-              borderRadius: "8px",
-              fontWeight: "bold",
-              marginTop: "1rem",
-            }}
+    <NumpadProvider>
+      <Pin.registerForm
+        action={verifyTransferPinAction}
+        title={`${Number(transferAmount).toLocaleString()}원`}
+        description={`${recipientName} 님에게 이체하려면 등록하신 4자리 핀 번호를 입력해 주세요.`}
+        onSuccess={handlePinVerified}
+        className={styles.pinForm}
+        contentFooter={
+          <Flex
+            direction="column"
+            gap={3}
+            className={styles.transferActionFooter}
           >
-            [시뮬레이션] 비밀번호 인증 성공
-          </button>
-        </Flex>
-      </DeviceDrawer>
-    </Flex>
+            {errorMsg && (
+              <Text
+                as="p"
+                variant="description"
+                className={styles.transferErrorText}
+              >
+                {errorMsg}
+              </Text>
+            )}
+            <Box width="full">
+              <Button
+                type="button"
+                onClick={openDrawer}
+                variant="primary"
+                size="wide"
+                status={isTransferring ? "pending" : "idle"}
+              >
+                {recipientName} 님에게 이체
+              </Button>
+            </Box>
+          </Flex>
+        }
+      >
+        <Device.Drawer>
+          <Pin.numpad padInfo={padInfo} />
+        </Device.Drawer>
+      </Pin.registerForm>
+    </NumpadProvider>
   );
 }
