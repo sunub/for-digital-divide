@@ -109,7 +109,7 @@ export function OnboardingContentContainer() {
         )}
         {currentStepId === "id-card-info" && (
           <IdCardInfoStep
-            onNext={() => router.replace("/onboarding/success")}
+            onNext={() => router.replace("/onboarding/login-selection")}
           />
         )}
       </AnimationPresenceWrapper>

@@ -2,61 +2,23 @@
 
 import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
-import z from "zod/v4";
 import { authMethodsService } from "@/entities/auth_methods/auth_methods.service";
 import { UsersSchema } from "@/entities/users/users.model";
 import { userService } from "@/entities/users/users.service";
 import { createSessionCookieStorage } from "@/utils/cookies/sessionCookieStorage";
 import type { ActionState } from "../../types";
+import {
+  type EmailPasswordLoginFormInput,
+  emailPasswordLoginFormSchema,
+} from "../schema";
 
-const EMAIL_ERROR_MESSAGE = "이메일 형식이 올바르지 않습니다.";
-const PASSWORD_ERROR_MESSAGE = "비밀번호 형식이 올바르지 않습니다.";
-const PASSWORD_REGEXES = [/[A-Z]/, /[a-z]/, /[0-9]/, /[^A-Za-z0-9]/];
 const UserIdSchema = UsersSchema.shape.user_id.nonoptional();
-
-const formSchema = z.object({
-  email: z
-    .email({
-      error: () => ({
-        message: EMAIL_ERROR_MESSAGE,
-      }),
-    })
-    .trim(),
-  password: z
-    .string()
-    .trim()
-    .refine(
-      (val) => {
-        if (
-          val.length < 8 ||
-          !PASSWORD_REGEXES.every((regex) => regex.test(val))
-        ) {
-          return false;
-        }
-        return true;
-      },
-      { error: PASSWORD_ERROR_MESSAGE },
-    ),
-});
-
-type FormInput = {
-  email: string;
-  password: string;
-};
 
 export async function emailPasswordLoginAction(
   prevState: ActionState,
-  formData: FormData,
+  input: EmailPasswordLoginFormInput,
 ): Promise<ActionState> {
-  const rawEmail = formData.get("email");
-  const rawPassword = formData.get("password");
-
-  const input: FormInput = {
-    email: typeof rawEmail === "string" ? rawEmail : "",
-    password: typeof rawPassword === "string" ? rawPassword : "",
-  };
-
-  const parsedFormData = formSchema.safeParse(input);
+  const parsedFormData = emailPasswordLoginFormSchema.safeParse(input);
   if (!parsedFormData.success) {
     return {
       ...prevState,
