@@ -35,14 +35,14 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
             {labelContent}
           </label>
         )}
-        <div className={style.inputWrapper({ isError })}>
+        <div className={clsx(className, style.inputWrapper({ isError }))}>
           {leftElement && (
             <div className={style.leftElementWrapper}>{leftElement}</div>
           )}
           <input
             ref={ref}
             id={inputId}
-            className={clsx(style.inputField, className)}
+            className={style.inputField}
             aria-invalid={isError}
             aria-describedby={
               isError && errorMessage ? `${inputId}-error` : undefined
@@ -54,9 +54,9 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           )}
         </div>
         {isError && errorMessage && (
-          <span id={`${inputId}-error`} className={style.errorText}>
+          <div id={`${inputId}-error`} className={style.errorText}>
             {errorMessage}
-          </span>
+          </div>
         )}
       </div>
     );

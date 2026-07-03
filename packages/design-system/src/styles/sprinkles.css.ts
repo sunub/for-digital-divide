@@ -1,7 +1,9 @@
 import { createSprinkles, defineProperties } from "@vanilla-extract/sprinkles";
 import { vars } from "../tokens/theme.css";
+import { utilitiesLayer } from "./layers.css";
 
 const baseStyleProperties = defineProperties({
+  "@layer": utilitiesLayer,
   properties: {
     display: ["none", "flex", "block", "inline", "grid"],
     flexWrap: ["nowrap", "wrap", "wrap-reverse"],
