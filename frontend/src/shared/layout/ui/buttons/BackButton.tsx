@@ -8,7 +8,7 @@ import * as styles from "../../style/layout.css";
 
 export const BackButton = memo(() => {
   const router = useRouter();
-  const { goBack, canGoPrev, currentItem } = useHistory();
+  const { goBack, canGoPrev } = useHistory();
 
   const onClick = () => {
     if (!canGoPrev) {
@@ -16,7 +16,7 @@ export const BackButton = memo(() => {
     }
     const prevHistory = goBack();
     if (prevHistory) {
-      router.push(currentItem ? currentItem : prevHistory);
+      router.push(prevHistory);
     }
   };
 

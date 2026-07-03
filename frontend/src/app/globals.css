@@ -1,6 +1,7 @@
 @layer reset, base, designSystemLayer;
 
 @layer reset {
+
   *,
   *::before,
   *::after {
@@ -22,11 +23,9 @@
     --gugi-font-family:
       "Gugi", var(--nanum-square-neo), system-ui, -apple-system, sans-serif;
 
-    --color-accent: color-mix(
-      in oklch,
-      oklch(63.93% 0.206 288.34),
-      var(--color-primary) 20%
-    );
+    --color-accent: color-mix(in oklch,
+        oklch(63.93% 0.206 288.34),
+        var(--color-primary) 20%);
     --color-thumb: oklch(45.42% 0.007 239.95);
     --color-thumb-background: oklch(45.42% 0.007 239.95);
     --color-background: oklch(0.9217 0.0271 294.47);
@@ -37,27 +36,21 @@
     --color-highlight: oklch(73.96% 0.1963 25.278467161119735);
     --color-confirm: oklch(84.51% 0.162 147.29);
     --color-invalid: oklch(58.82% 0.182 25.278467161119735);
-    --default-shadow: linear-gradient(
-      to left,
-      oklch(21.25% 0.005 17.53) 0%,
-      oklch(50.2% 0.013 17.59) 9%,
-      oklch(50.2% 0.013 17.59) 91%,
-      oklch(21.25% 0.005 17.53) 100%
-    );
-    --confirm-shadow: linear-gradient(
-      to left,
-      oklch(60.96% 0.114 146.9) 0%,
-      oklch(73.59% 0.114 146.9) 9%,
-      oklch(73.59% 0.114 146.9) 91%,
-      oklch(60.96% 0.114 146.9) 100%
-    );
-    --destructive-shadow: linear-gradient(
-      to left,
-      oklch(68.88% 0.231 26.47) 0%,
-      oklch(65.88% 0.231 26.47) 9%,
-      oklch(65.88% 0.231 26.47) 91%,
-      oklch(68.88% 0.231 26.47) 0%
-    );
+    --default-shadow: linear-gradient(to left,
+        oklch(21.25% 0.005 17.53) 0%,
+        oklch(50.2% 0.013 17.59) 9%,
+        oklch(50.2% 0.013 17.59) 91%,
+        oklch(21.25% 0.005 17.53) 100%);
+    --confirm-shadow: linear-gradient(to left,
+        oklch(60.96% 0.114 146.9) 0%,
+        oklch(73.59% 0.114 146.9) 9%,
+        oklch(73.59% 0.114 146.9) 91%,
+        oklch(60.96% 0.114 146.9) 100%);
+    --destructive-shadow: linear-gradient(to left,
+        oklch(68.88% 0.231 26.47) 0%,
+        oklch(65.88% 0.231 26.47) 9%,
+        oklch(65.88% 0.231 26.47) 91%,
+        oklch(68.88% 0.231 26.47) 0%);
     /* oklch(65.29% 0.231 25.278467161119735) */
     --input: 245 33% 38%;
     --input-invalid: 0 62% 54%;
@@ -105,6 +98,10 @@
   a {
     text-decoration: none;
     color: inherit;
+  }
+
+  ul {
+    padding-inline-start: 0px;
   }
 
   #_next {
@@ -319,11 +316,9 @@
   ::-webkit-scrollbar {
     width: 8px;
     height: 12px;
-    background-color: color-mix(
-      in oklch,
-      oklch(92.17% 0.039 291.94),
-      transparent
-    );
+    background-color: color-mix(in oklch,
+        oklch(92.17% 0.039 291.94),
+        transparent);
   }
 
   ::-webkit-scrollbar-thumb {
@@ -332,14 +327,12 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: color-mix(
-      in oklch,
-      oklch(92.17% 0.039 291.94) 10%,
-      transparent
-    );
+    background: color-mix(in oklch,
+        oklch(92.17% 0.039 291.94) 10%,
+        transparent);
   }
 
-  @container root (width <= 360px) {
+  @container root (width <=360px) {
     #devsite__init-page-title {
       flex-direction: column;
     }
@@ -406,13 +399,11 @@
         border-bottom-left-radius: 16px;
         border-bottom-right-radius: 36px;
 
-        grid-template-columns: [opener] var(--drawer-opener) [drawer-content] var(
-            --drawer-content
-          );
+        grid-template-columns: [opener] var(--drawer-opener) [drawer-content] var(--drawer-content);
         grid-template-rows: 1fr;
       }
 
-      &:has(input:checked) > label#drawer-label {
+      &:has(input:checked)>label#drawer-label {
         height: 100cqh;
         width: 100%;
       }
@@ -550,6 +541,7 @@
 }
 
 @keyframes pending {
+
   0%,
   100% {
     background-color: oklch(87.45% 0.064 286.931);
@@ -563,6 +555,7 @@
 }
 
 @keyframes blink {
+
   0%,
   100% {
     opacity: 1;

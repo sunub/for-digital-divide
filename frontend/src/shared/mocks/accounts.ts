@@ -12,7 +12,7 @@ export interface RecipientAccountDTO {
 
 export const MOCK_ACCOUNTS: RecipientAccountDTO[] = [
   {
-    account_number: "1234567890",
+    account_number: "35791012345607",
     user_id: 1,
     account_type: "CHECKING",
     balance: 1500000,
@@ -23,7 +23,7 @@ export const MOCK_ACCOUNTS: RecipientAccountDTO[] = [
     },
   },
   {
-    account_number: "9876543210",
+    account_number: "46810204056789",
     user_id: 2,
     account_type: "SAVINGS",
     balance: 5000000,
@@ -34,7 +34,7 @@ export const MOCK_ACCOUNTS: RecipientAccountDTO[] = [
     },
   },
   {
-    account_number: "1112223333",
+    account_number: "11034567802012",
     user_id: 3,
     account_type: "CHECKING",
     balance: 200000,

@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 
-type DeviceView = "content" | "drawer";
+export type DeviceView = "content" | "drawer";
 
 interface DeviceContextType {
   currentView: DeviceView;
@@ -16,10 +16,18 @@ interface DeviceContextType {
   closeDrawer: () => void;
 }
 
+interface DeviceProviderProps {
+  children: React.ReactNode;
+  defaultView?: DeviceView;
+}
+
 const DeviceContext = createContext<DeviceContextType | null>(null);
 
-export function DeviceProvider({ children }: { children: React.ReactNode }) {
-  const [currentView, setCurrentView] = useState<DeviceView>("content");
+export function DeviceProvider({
+  children,
+  defaultView = "content",
+}: DeviceProviderProps) {
+  const [currentView, setCurrentView] = useState<DeviceView>(defaultView);
   const openDrawer = useCallback(() => {
     setCurrentView("drawer");
   }, []);

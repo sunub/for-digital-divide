@@ -7,29 +7,29 @@ import { useEffectEvent } from "./useEffectEvent";
 
 export type LoginStep = "idle" | "logging-in" | "seeding" | "completed";
 
-interface UseDemoLoginFlowProps {
+interface UseDemoLoginFlowProps<TPayload = FormData> {
   action: (
     state: Awaited<ActionState>,
-    payload: FormData,
+    payload: TPayload,
   ) => ActionState | Promise<ActionState>;
   onSeedingStart?: () => void;
   onActionComplete?: () => void;
   redirectPath?: string;
 }
 
-export function useDemoLoginFlow({
+export function useDemoLoginFlow<TPayload = FormData>({
   action,
   onSeedingStart,
   onActionComplete,
   redirectPath = "/dashboard",
-}: UseDemoLoginFlowProps) {
+}: UseDemoLoginFlowProps<TPayload>) {
   const router = useRouter();
   const showToast = useToast();
 
   const [currentStep, setCurrentStep] = useState<LoginStep>("idle");
   const [actionState, formAction, isPending] = useActionState<
     ActionState,
-    FormData
+    TPayload
   >(action, {
     status: "idle",
     payload: [""],
