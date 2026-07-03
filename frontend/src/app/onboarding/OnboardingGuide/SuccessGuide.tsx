@@ -1,10 +1,10 @@
 import { Flex, Grid } from "@internal/design-system/primitives";
 import {
-  MdBadge,
   MdCheckCircle,
   MdInfoOutline,
   MdListAlt,
   MdWarningAmber,
+  MdWorkspacePremium,
 } from "react-icons/md";
 import * as styles from "./PhoneVerificationGuide.css";
 
@@ -12,7 +12,7 @@ export function SuccessGuide() {
   return (
     <Flex direction="column" className={styles.panelContainer}>
       <div className={styles.badge}>
-        <MdBadge size={18} />
+        <MdWorkspacePremium size={18} />
         <span>인증서 발급 완료</span>
       </div>
       <h1 className={styles.title}>
