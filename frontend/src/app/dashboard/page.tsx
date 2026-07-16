@@ -35,7 +35,7 @@ export default async function Dashboard() {
   const defaultAccount = accounts[0];
 
   if (defaultAccount) {
-    queryClient.prefetchQuery({
+    await queryClient.prefetchQuery({
       queryKey: transactionKeys.byAccount(defaultAccount.account_number),
       queryFn: () => getTransactions(defaultAccount.account_number),
     });
