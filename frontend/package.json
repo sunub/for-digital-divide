@@ -16,7 +16,8 @@
     "check": "pnpm exec biome check --write",
     "metrics:report": "node scripts/vault-metrics-report.mjs",
     "metrics:md": "node scripts/vault-metrics-markdown.mjs",
-    "benchmark:transaction-chart": "pnpm exec tsx scripts/benchmark-transaction-chart.ts"
+    "benchmark:transaction-chart": "pnpm exec tsx scripts/benchmark-transaction-chart.ts",
+    "benchmark:transfer-concurrency": "node scripts/benchmark-transfer-concurrency.mjs --out=reports/transfer-concurrency-benchmark.json"
   },
   "dependencies": {
     "@internal/design-system": "workspace:*",

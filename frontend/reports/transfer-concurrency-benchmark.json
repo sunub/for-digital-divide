@@ -1,0 +1,65 @@
+{
+  "environment": {
+    "postgres": "PostgreSQL 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit",
+    "pairs": 50,
+    "rounds": 20,
+    "amount": 100,
+    "initialBalance": 100000
+  },
+  "crossTransfers": {
+    "naive": {
+      "lockOrder": "naive",
+      "requests": 2000,
+      "succeeded": 1343,
+      "failed": 657,
+      "deadlocks": 657,
+      "failureRatePct": 32.85,
+      "elapsedMs": 100369,
+      "balanceSum": 10000000,
+      "expectedBalanceSum": 10000000,
+      "balanceSumPreserved": true,
+      "transactionRows": 2686,
+      "orphanTransactionRows": 0
+    },
+    "ordered": {
+      "lockOrder": "ordered",
+      "requests": 2000,
+      "succeeded": 2000,
+      "failed": 0,
+      "deadlocks": 0,
+      "failureRatePct": 0,
+      "elapsedMs": 1559,
+      "balanceSum": 10000000,
+      "expectedBalanceSum": 10000000,
+      "balanceSumPreserved": true,
+      "transactionRows": 4000,
+      "orphanTransactionRows": 0
+    }
+  },
+  "lostUpdate": {
+    "withoutLock": {
+      "withLock": false,
+      "requests": 200,
+      "committed": 200,
+      "expectedBalance": 80000,
+      "actualBalance": 99300,
+      "lostAmount": 19300,
+      "lostUpdates": 193
+    },
+    "withPessimisticLock": {
+      "withLock": true,
+      "requests": 200,
+      "committed": 200,
+      "expectedBalance": 80000,
+      "actualBalance": 80000,
+      "lostAmount": 0,
+      "lostUpdates": 0
+    }
+  },
+  "rollback": {
+    "rejected": true,
+    "reason": "INSUFFICIENT_FUNDS",
+    "balanceUnchanged": true,
+    "leftoverTransactionRows": 0
+  }
+}
