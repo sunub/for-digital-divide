@@ -10,7 +10,13 @@ import * as styles from "./PhoneVerificationGuide.css";
 
 export function SuccessGuide() {
   return (
-    <Flex direction="column" className={styles.panelContainer}>
+    <Flex
+      as="aside"
+      aria-label="단계 안내"
+      tabIndex={0}
+      direction="column"
+      className={styles.panelContainer}
+    >
       <div className={styles.badge}>
         <MdWorkspacePremium size={18} />
         <span>인증서 발급 완료</span>

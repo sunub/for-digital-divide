@@ -27,7 +27,7 @@ export const badge = recipe({
           [designSystemLayer]: {
             backgroundColor: "rgba(255, 255, 255, 0.5)",
             border: "1px solid rgba(255, 255, 255, 0.6)",
-            color: vars.color.button,
+            color: vars.color.accentText,
           },
         },
       },
@@ -45,7 +45,7 @@ export const badge = recipe({
           [designSystemLayer]: {
             backgroundColor: "rgba(255, 255, 255, 0.5)",
             border: "1px solid rgba(255, 255, 255, 0.6)",
-            color: vars.color.destructive,
+            color: vars.color.destructiveText,
           },
         },
       },

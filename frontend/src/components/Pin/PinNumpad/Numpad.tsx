@@ -23,6 +23,8 @@ const numpadShapeGrid = [
   ["bl", "none", "br"],
 ] as const;
 
+const SECURE_DIGIT_LABEL = "보안 키패드 숫자";
+
 const getRowKey = (rowIndex: number) => `numpad-row-${rowIndex}`;
 function PadIcon({
   x,
@@ -60,6 +62,7 @@ function PadButton({
         className={style.innerButton}
         onClick={onClick}
         disabled={disabled}
+        aria-label={label}
         {...props}
       >
         {children}
@@ -126,16 +129,16 @@ export function Numpad({
       }
     };
 
+    // 포커스된 동안에만 실제 숫자를 읽어주고, 포커스가 빠지면 일반 이름으로 되돌린다.
     const handleBlur = (e: React.FocusEvent<HTMLButtonElement>) => {
-      const target = e.currentTarget;
-      target.removeAttribute("aria-label");
+      e.currentTarget.setAttribute("aria-label", SECURE_DIGIT_LABEL);
     };
 
     return (
       <PadButton
         key={key}
         shape={shape}
-        label="보안 키패드 숫자"
+        label={SECURE_DIGIT_LABEL}
         onClick={handleClick}
         onFocus={handleFocus}
         onBlur={handleBlur}

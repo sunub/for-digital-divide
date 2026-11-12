@@ -21,7 +21,7 @@ export function TransactionChartTitle() {
   return (
     <Button
       type="button"
-      aria-label="Scroll to transaction chart main bottom"
+      aria-label="내 자산 흐름을 한눈에 확인해 보세요! 거래 차트로 이동"
       variant="transparent"
       className={style.cardLayoutRootContainer}
       onClick={handleScroll}

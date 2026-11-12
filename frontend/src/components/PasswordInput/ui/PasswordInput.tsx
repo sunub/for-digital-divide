@@ -45,6 +45,8 @@ export function PasswordInput(props: PasswordInputProps) {
         <button
           type="button"
           onClick={() => setPasswordVisible(!passwordVisible)}
+          aria-label="비밀번호 표시"
+          aria-pressed={passwordVisible}
           style={{
             background: "none",
             border: "none",

@@ -1,5 +1,6 @@
 import { Grid } from "@internal/design-system/primitives";
 import { gridLayout } from "@internal/design-system/style";
+import type { Metadata } from "next";
 import { RegisterPhase } from "@/app/register-pin/RegisterPhase";
 import { RegisterUserForm } from "@/app/sign-up/register-user/RegisterUserForm";
 import { Device } from "@/shared/layout";
@@ -30,6 +31,8 @@ function getGuideStep(
 
   return view.method === "email" ? "email-input" : "pin-input";
 }
+
+export const metadata: Metadata = { title: "로그인" };
 
 export default async function LoginSelectionPage({ searchParams }: PageProps) {
   const params = await searchParams;

@@ -7,14 +7,18 @@ const primitiveColors = {
   purple300: "oklch(88.25% 0.0276 297.27)",
   purple400: "oklch(76.64% 0.13 292.01)",
   purple500: "oklch(65.57% 0.19552898037793698 288.17775174927874)",
+  purple600: "oklch(52% 0.195 288.18)",
   purple700: "oklch(52.06% 0.041 294.47)",
   purple900: "oklch(0.1099 0.0518 291.84)",
   green300: "oklch(84.32% 0.114 146.91)",
   green400: "oklch(84.51% 0.162 147.29)",
   green700: "oklch(46.84% 0.099 111.15)",
+  green800: "oklch(50% 0.13 150)",
+  orange700: "oklch(52% 0.14 50)",
   red400: "oklch(74.12% 0.157 25.26)",
   red500: "oklch(73.96% 0.1963 25.278467161119735)",
   red700: "oklch(56.18% 0.182 25.26)",
+  red800: "oklch(52% 0.19 25.26)",
   gray000: "oklch(97.65% 0 0)",
   gray200: "oklch(88.53% 0 0)",
   gray400: "oklch(74.41% 0 0)",
@@ -94,7 +98,15 @@ const semanticColors = {
   backdrop: "oklch(3.53% 0 73 / 50%)",
   standOut:
     "color-mix(in oklch, oklch(63.93% 0.206 288.34), var(--color-primary) 20%)",
-  descriptionText: "color-mix(in oklch, var(--color-text) 70%, transparent)",
+  // 본문 보조 텍스트: 가장 어두운 배경(#e6e2f6)에서도 WCAG AA 4.5:1 이상 (4.98:1)
+  descriptionText: "color-mix(in oklch, var(--color-text) 88%, transparent)",
+  // 글자 전용 강조색: 브랜드 보라(button)는 배경용으로 두고, 텍스트는 대비를 확보한 톤을 쓴다 (≥4.72:1)
+  accentText: primitiveColors.purple600,
+  // 경고 글자색: 옅은 경고 배경 위에서 4.5:1 이상 (4.65:1)
+  destructiveText: primitiveColors.red800,
+  // 성공·주의 상태 글자색: 흰 배경 계열에서 4.5:1 이상
+  successText: primitiveColors.green800,
+  warningText: primitiveColors.orange700,
 } as const;
 
 const buttonPrimitives = {

@@ -5,7 +5,13 @@ import * as guideStyles from "../../onboarding/OnboardingGuide/PhoneVerification
 
 export function IntroGuide() {
   return (
-    <Flex direction="column" className={guideStyles.panelContainer}>
+    <Flex
+      as="aside"
+      aria-label="단계 안내"
+      tabIndex={0}
+      direction="column"
+      className={guideStyles.panelContainer}
+    >
       <div className={guideStyles.badge}>
         <MdVerifiedUser size={18} />
         <span>모바일 뱅킹 인증센터</span>

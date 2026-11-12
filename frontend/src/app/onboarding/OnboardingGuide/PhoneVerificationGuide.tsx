@@ -9,7 +9,11 @@ import * as styles from "./PhoneVerificationGuide.css";
 
 export function PhoneVerificationGuide() {
   return (
-    <div className={styles.panelContainer}>
+    <aside
+      aria-label="단계 안내"
+      tabIndex={0}
+      className={styles.panelContainer}
+    >
       <div className={styles.badge}>
         <MdBadge size={18} />
         <span>본인 확인</span>
@@ -95,6 +99,6 @@ export function PhoneVerificationGuide() {
           </li>
         </ul>
       </div>
-    </div>
+    </aside>
   );
 }

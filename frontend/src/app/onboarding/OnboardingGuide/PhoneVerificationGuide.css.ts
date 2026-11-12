@@ -30,7 +30,7 @@ export const badge = style({
   gap: vars.space[2],
   backgroundColor: vars.color.white,
   boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.05)",
-  color: vars.color.button,
+  color: vars.color.accentText,
   padding: `${vars.space[2]} ${vars.space[4]}`,
   borderRadius: vars.borderRadius.full,
   width: "fit-content",
@@ -55,7 +55,7 @@ export const title = style({
 });
 
 export const titleHighlight = style({
-  color: vars.color.button,
+  color: vars.color.accentText,
 });
 
 export const description = style({
@@ -175,7 +175,7 @@ export const stepNumber = style({
   height: vars.space[5],
   borderRadius: vars.borderRadius.full,
   backgroundColor: emphasisTint,
-  color: vars.color.button,
+  color: vars.color.accentText,
   fontSize: vars.fontSize["0.75rem"],
   fontWeight: vars.fontWeight.bold,
   flexShrink: 0,
@@ -198,5 +198,5 @@ export const warningItem = style({
   gap: vars.space[2],
   fontSize: vars.fontSize["0.75rem"],
   lineHeight: vars.space[4],
-  color: vars.color.destructive,
+  color: vars.color.destructiveText,
 });

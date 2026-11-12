@@ -64,10 +64,10 @@ export const typeTitle = recipe({
   },
   variants: {
     type: {
-      success: { color: "#22c55e" },
-      error: { color: "#ef4444" },
-      info: { color: "#9367ef" },
-      warning: { color: "#f97316" },
+      success: { color: vars.color.successText },
+      error: { color: vars.color.destructiveText },
+      info: { color: vars.color.accentText },
+      warning: { color: vars.color.warningText },
     },
   },
 });
@@ -88,12 +88,12 @@ export const bodyText = style({
 
 export const strongText = style({
   fontWeight: 700,
-  color: "#9367ef",
+  color: vars.color.accentText,
 });
 
 export const strongOtpText = style({
   fontWeight: 700,
-  color: "#9367ef",
+  color: vars.color.accentText,
   fontSize: "1.25rem",
   lineHeight: "1.2",
 });
