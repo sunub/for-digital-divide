@@ -1,0 +1,401 @@
+{
+  "generatedAt": "2026-11-12T00:06:55.538Z",
+  "axeTags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa"
+  ],
+  "totals": {
+    "screens": 18,
+    "guideOutsideFrame": 18,
+    "frameControlInsideFrame": 18,
+    "guideInLandmark": 18,
+    "guideChangedOnStepChange": 16,
+    "screensWithWhySection": 10,
+    "screensWithAxeViolations": 0
+  },
+  "balanceObservation": {
+    "amountInputStep": "7,819,057",
+    "summaryStep": "7,819,057",
+    "consistent": true
+  },
+  "screens": [
+    {
+      "id": "verify-selection",
+      "label": "본인 확인 방식 선택",
+      "flow": "onboarding",
+      "url": "/onboarding",
+      "guideHeading": "안전한 금융 거래를 위해 본인 확인 방식을 선택해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "어떤 방식이 있나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": null,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "verify-info",
+      "label": "본인인증 정보 입력",
+      "flow": "onboarding",
+      "url": "/onboarding?step=verify-info",
+      "guideHeading": "정확한 본인 확인을 위해 개인 정보를 입력해 주세요",
+      "guideSectionHeadings": [
+        "왜 이 정보가 필요한가요?",
+        "무엇을 주의해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "verify-otp",
+      "label": "SMS 인증번호 입력",
+      "flow": "onboarding",
+      "url": "/onboarding?step=verify-otp",
+      "guideHeading": "문자로 발송된 인증번호 6자리를 입력해 주세요",
+      "guideSectionHeadings": [
+        "인증번호가 오지 않나요?",
+        "시간이 초과되었다면?"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "terms",
+      "label": "약관 동의",
+      "flow": "onboarding",
+      "url": "/onboarding?step=terms",
+      "guideHeading": "서비스 이용을 위해 필수 약관에 동의해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 확인해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "id-card-selection",
+      "label": "신분증 유형 선택",
+      "flow": "onboarding",
+      "url": "/onboarding?step=id-card-selection",
+      "guideHeading": "안전한 금융 거래를 위해 신분증 확인이 필요합니다",
+      "guideSectionHeadings": [
+        "빛 반사 주의",
+        "정확한 영역 확인"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "id-card-info",
+      "label": "신분증 정보 확인",
+      "flow": "onboarding",
+      "url": "/onboarding?step=id-card-info",
+      "guideHeading": "인식된 신분증 정보가 맞는지 확인해 주세요",
+      "guideSectionHeadings": [
+        "왜 꼼꼼히 봐야 하나요?",
+        "수정은 어떻게 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "login-selection",
+      "label": "로그인 방식 선택",
+      "flow": "login",
+      "url": "/onboarding/login-selection",
+      "guideHeading": "가장 편리한 방법으로 로그인을 시작하세요",
+      "guideSectionHeadings": [
+        "어떤 로그인 방법이 좋은가요?"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "email-register",
+      "label": "이메일 회원가입",
+      "flow": "login",
+      "url": "/onboarding/login-selection?method=email&step=register",
+      "guideHeading": "가입하신 정보로 안전하게 로그인",
+      "guideSectionHeadings": [
+        "안전한 사용을 위한 보안 수칙"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "email-login",
+      "label": "이메일 로그인",
+      "flow": "login",
+      "url": "/onboarding/login-selection?method=email&step=login",
+      "guideHeading": "가입하신 정보로 안전하게 로그인",
+      "guideSectionHeadings": [
+        "안전한 사용을 위한 보안 수칙"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": false,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "pin-register",
+      "label": "PIN 등록 1/2",
+      "flow": "pin-register",
+      "url": "/register-pin",
+      "guideHeading": "안전하고 간편한 비밀번호를 설정해 주세요",
+      "guideSectionHeadings": [
+        "어떤 번호가 좋은가요?",
+        "주의할 점"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "pin-confirm",
+      "label": "PIN 등록 2/2",
+      "flow": "pin-register",
+      "url": "/register-pin?phase=confirm",
+      "guideHeading": "입력하신 비밀번호를 다시 한번 확인합니다",
+      "guideSectionHeadings": [
+        "왜 한 번 더 입력하나요?",
+        "틀리면 어떻게 되나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "dashboard",
+      "label": "대시보드",
+      "flow": "dashboard",
+      "url": "/dashboard",
+      "guideHeading": "계좌를 확인한 뒤 이체를 시작해 주세요",
+      "guideSectionHeadings": [
+        "먼저 무엇을 확인하나요?",
+        "어디로 이동하나요?"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "recipient-selection",
+      "label": "받는 사람 선택",
+      "flow": "transfer",
+      "url": "/dashboard/transfer",
+      "guideHeading": "먼저 받을 사람을 선택해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "recipient-input",
+      "label": "계좌번호 직접 입력",
+      "flow": "transfer",
+      "url": "/dashboard/transfer?step=recipient-input",
+      "guideHeading": "은행과 계좌번호를 정확히 입력해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 해야 하나요?",
+        "테스트용 가상 계좌"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "amount-input",
+      "label": "금액 입력",
+      "flow": "transfer",
+      "url": "/dashboard/transfer?step=amount-input",
+      "guideHeading": "보낼 금액을 입력해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "summary",
+      "label": "최종 확인",
+      "flow": "transfer",
+      "url": "/dashboard/transfer?step=summary",
+      "guideHeading": "보내기 전에 최종 확인해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "confirm-pin",
+      "label": "간편 비밀번호 인증",
+      "flow": "transfer",
+      "url": "/dashboard/transfer?step=confirm-pin",
+      "guideHeading": "간편 비밀번호로 이체를 인증해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    },
+    {
+      "id": "success",
+      "label": "이체 완료",
+      "flow": "transfer",
+      "url": "/dashboard/transfer?step=success",
+      "guideHeading": "고생하셨습니다 교육이 완료되었습니다",
+      "guideSectionHeadings": [
+        "무엇을 마쳤나요?",
+        "이제 무엇을 하면 되나요?"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideInLandmark": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 0,
+        "violatedNodeCount": 0,
+        "violations": []
+      }
+    }
+  ]
+}

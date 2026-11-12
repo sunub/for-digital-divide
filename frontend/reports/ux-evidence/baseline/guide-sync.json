@@ -1,0 +1,907 @@
+{
+  "generatedAt": "2026-11-11T16:09:14.772Z",
+  "axeTags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa"
+  ],
+  "totals": {
+    "screens": 18,
+    "guideOutsideFrame": 18,
+    "frameControlInsideFrame": 18,
+    "guideChangedOnStepChange": 16,
+    "screensWithWhySection": 10,
+    "screensWithAxeViolations": 18
+  },
+  "balanceObservation": {
+    "amountInputStep": "458,793",
+    "summaryStep": "458,793",
+    "consistent": true
+  },
+  "screens": [
+    {
+      "id": "verify-selection",
+      "label": "본인 확인 방식 선택",
+      "flow": "onboarding",
+      "url": "/onboarding",
+      "guideHeading": "안전한 금융 거래를 위해 본인 확인 방식을 선택해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "어떤 방식이 있나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": null,
+      "axe": {
+        "violationCount": 2,
+        "violatedNodeCount": 8,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 7,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "verify-info",
+      "label": "본인인증 정보 입력",
+      "flow": "onboarding",
+      "url": "/onboarding?step=verify-info",
+      "guideHeading": "정확한 본인 확인을 위해 개인 정보를 입력해 주세요",
+      "guideSectionHeadings": [
+        "왜 이 정보가 필요한가요?",
+        "무엇을 주의해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 2,
+        "violatedNodeCount": 9,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 8,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "verify-otp",
+      "label": "SMS 인증번호 입력",
+      "flow": "onboarding",
+      "url": "/onboarding?step=verify-otp",
+      "guideHeading": "문자로 발송된 인증번호 6자리를 입력해 주세요",
+      "guideSectionHeadings": [
+        "인증번호가 오지 않나요?",
+        "시간이 초과되었다면?"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 3,
+        "violatedNodeCount": 11,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 9,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          },
+          {
+            "id": "scrollable-region-focusable",
+            "impact": "serious",
+            "help": "Scrollable region must have keyboard access",
+            "nodes": 1,
+            "targets": [
+              ".PhoneVerificationGuide_panelContainer__1t3reu00"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "terms",
+      "label": "약관 동의",
+      "flow": "onboarding",
+      "url": "/onboarding?step=terms",
+      "guideHeading": "서비스 이용을 위해 필수 약관에 동의해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 확인해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 3,
+        "violatedNodeCount": 12,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 10,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          },
+          {
+            "id": "scrollable-region-focusable",
+            "impact": "serious",
+            "help": "Scrollable region must have keyboard access",
+            "nodes": 1,
+            "targets": [
+              ".PhoneVerificationGuide_panelContainer__1t3reu00"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "id-card-selection",
+      "label": "신분증 유형 선택",
+      "flow": "onboarding",
+      "url": "/onboarding?step=id-card-selection",
+      "guideHeading": "안전한 금융 거래를 위해 신분증 확인이 필요합니다",
+      "guideSectionHeadings": [
+        "빛 반사 주의",
+        "정확한 영역 확인"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 3,
+        "violatedNodeCount": 12,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 10,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          },
+          {
+            "id": "scrollable-region-focusable",
+            "impact": "serious",
+            "help": "Scrollable region must have keyboard access",
+            "nodes": 1,
+            "targets": [
+              ".PhoneVerificationGuide_panelContainer__1t3reu00"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "id-card-info",
+      "label": "신분증 정보 확인",
+      "flow": "onboarding",
+      "url": "/onboarding?step=id-card-info",
+      "guideHeading": "인식된 신분증 정보가 맞는지 확인해 주세요",
+      "guideSectionHeadings": [
+        "왜 꼼꼼히 봐야 하나요?",
+        "수정은 어떻게 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 3,
+        "violatedNodeCount": 12,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 10,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          },
+          {
+            "id": "scrollable-region-focusable",
+            "impact": "serious",
+            "help": "Scrollable region must have keyboard access",
+            "nodes": 1,
+            "targets": [
+              ".PhoneVerificationGuide_panelContainer__1t3reu00"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "login-selection",
+      "label": "로그인 방식 선택",
+      "flow": "login",
+      "url": "/onboarding/login-selection",
+      "guideHeading": "가장 편리한 방법으로 로그인을 시작하세요",
+      "guideSectionHeadings": [
+        "어떤 로그인 방법이 좋은가요?"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 2,
+        "violatedNodeCount": 2,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 1,
+            "targets": [
+              ".Badge_badgeText__wngefb7"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "email-register",
+      "label": "이메일 회원가입",
+      "flow": "login",
+      "url": "/onboarding/login-selection?method=email&step=register",
+      "guideHeading": "가입하신 정보로 안전하게 로그인",
+      "guideSectionHeadings": [
+        "안전한 사용을 위한 보안 수칙"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 3,
+        "violatedNodeCount": 3,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "nodes": 1,
+            "targets": [
+              ".TextField_rightElementWrapper__4xtaqv6 > button[type=\"button\"]"
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 1,
+            "targets": [
+              ".Badge_badgeText__wngefb7"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "email-login",
+      "label": "이메일 로그인",
+      "flow": "login",
+      "url": "/onboarding/login-selection?method=email&step=login",
+      "guideHeading": "가입하신 정보로 안전하게 로그인",
+      "guideSectionHeadings": [
+        "안전한 사용을 위한 보안 수칙"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": false,
+      "axe": {
+        "violationCount": 3,
+        "violatedNodeCount": 4,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "nodes": 1,
+            "targets": [
+              ".TextField_rightElementWrapper__4xtaqv6 > button[type=\"button\"]"
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 2,
+            "targets": [
+              ".Badge_badgeText__wngefb7",
+              ".toast_bodyText__l9qkxui > span"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "pin-register",
+      "label": "PIN 등록 1/2",
+      "flow": "pin-register",
+      "url": "/register-pin",
+      "guideHeading": "안전하고 간편한 비밀번호를 설정해 주세요",
+      "guideSectionHeadings": [
+        "어떤 번호가 좋은가요?",
+        "주의할 점"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 4,
+        "violatedNodeCount": 22,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "nodes": 12,
+            "targets": [
+              ".PinNumpad_padButtonItem_shape_tl__18135ba7 > .PinNumpad_innerButton__18135ba5[type=\"button\"]",
+              ".PinNumpad_numpadRow__18135ba4:nth-child(1) > .PinNumpad_padButtonItem_shape_none__18135bab.PinNumpad_padButtonItem__18135ba6 > .PinNumpad_innerButton__18135ba5[type=\"button\"]",
+              ".PinNumpad_padButtonItem_shape_tr__18135ba8 > .PinNumpad_innerButton__18135ba5[type=\"button\"]"
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 8,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          },
+          {
+            "id": "label-content-name-mismatch",
+            "impact": "serious",
+            "help": "Elements must have their visible text as part of their accessible name",
+            "nodes": 1,
+            "targets": [
+              ".Button_buttonRecipe_variant_destructive__r5p8tsj"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "pin-confirm",
+      "label": "PIN 등록 2/2",
+      "flow": "pin-register",
+      "url": "/register-pin?phase=confirm",
+      "guideHeading": "입력하신 비밀번호를 다시 한번 확인합니다",
+      "guideSectionHeadings": [
+        "왜 한 번 더 입력하나요?",
+        "틀리면 어떻게 되나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 4,
+        "violatedNodeCount": 24,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "nodes": 12,
+            "targets": [
+              ".PinNumpad_padButtonItem_shape_tl__18135ba7 > .PinNumpad_innerButton__18135ba5[type=\"button\"]",
+              ".PinNumpad_numpadRow__18135ba4:nth-child(1) > .PinNumpad_padButtonItem_shape_none__18135bab.PinNumpad_padButtonItem__18135ba6 > .PinNumpad_innerButton__18135ba5[type=\"button\"]",
+              ".PinNumpad_padButtonItem_shape_tr__18135ba8 > .PinNumpad_innerButton__18135ba5[type=\"button\"]"
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 10,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          },
+          {
+            "id": "label-content-name-mismatch",
+            "impact": "serious",
+            "help": "Elements must have their visible text as part of their accessible name",
+            "nodes": 1,
+            "targets": [
+              ".Button_buttonRecipe_variant_destructive__r5p8tsj"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "dashboard",
+      "label": "대시보드",
+      "flow": "dashboard",
+      "url": "/dashboard",
+      "guideHeading": "계좌를 확인한 뒤 이체를 시작해 주세요",
+      "guideSectionHeadings": [
+        "먼저 무엇을 확인하나요?",
+        "어디로 이동하나요?"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 4,
+        "violatedNodeCount": 15,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "nodes": 3,
+            "targets": [
+              ".DashboardHeader_logOutButton__z2pkpk2",
+              ".Carousel_prevButton__1yriw1m5",
+              ".Carousel_nextButton__1yriw1m6"
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 10,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          },
+          {
+            "id": "label-content-name-mismatch",
+            "impact": "serious",
+            "help": "Elements must have their visible text as part of their accessible name",
+            "nodes": 1,
+            "targets": [
+              ".TransactionChartTitle_cardLayoutRootContainer__nrnh8h0"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "recipient-selection",
+      "label": "받는 사람 선택",
+      "flow": "transfer",
+      "url": "/dashboard/transfer",
+      "guideHeading": "먼저 받을 사람을 선택해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 3,
+        "violatedNodeCount": 15,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 10,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          },
+          {
+            "id": "label-content-name-mismatch",
+            "impact": "serious",
+            "help": "Elements must have their visible text as part of their accessible name",
+            "nodes": 4,
+            "targets": [
+              ".RecipientSelectionStep__125igyd1",
+              "li:nth-child(1) > .RecipientSelectionStep__125igyd4.Button_buttonRecipe_size_wide__r5p8tsl[type=\"button\"]",
+              "li:nth-child(2) > .RecipientSelectionStep__125igyd4.Button_buttonRecipe_size_wide__r5p8tsl[type=\"button\"]"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "recipient-input",
+      "label": "계좌번호 직접 입력",
+      "flow": "transfer",
+      "url": "/dashboard/transfer?step=recipient-input",
+      "guideHeading": "은행과 계좌번호를 정확히 입력해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 해야 하나요?",
+        "테스트용 가상 계좌"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 3,
+        "violatedNodeCount": 14,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 12,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          },
+          {
+            "id": "scrollable-region-focusable",
+            "impact": "serious",
+            "help": "Scrollable region must have keyboard access",
+            "nodes": 1,
+            "targets": [
+              ".PhoneVerificationGuide_panelContainer__1t3reu00"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "amount-input",
+      "label": "금액 입력",
+      "flow": "transfer",
+      "url": "/dashboard/transfer?step=amount-input",
+      "guideHeading": "보낼 금액을 입력해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 3,
+        "violatedNodeCount": 11,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 9,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          },
+          {
+            "id": "scrollable-region-focusable",
+            "impact": "serious",
+            "help": "Scrollable region must have keyboard access",
+            "nodes": 1,
+            "targets": [
+              ".PhoneVerificationGuide_panelContainer__1t3reu00"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "summary",
+      "label": "최종 확인",
+      "flow": "transfer",
+      "url": "/dashboard/transfer?step=summary",
+      "guideHeading": "보내기 전에 최종 확인해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 2,
+        "violatedNodeCount": 10,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 9,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "confirm-pin",
+      "label": "간편 비밀번호 인증",
+      "flow": "transfer",
+      "url": "/dashboard/transfer?step=confirm-pin",
+      "guideHeading": "간편 비밀번호로 이체를 인증해 주세요",
+      "guideSectionHeadings": [
+        "왜 필요한가요?",
+        "무엇을 해야 하나요?"
+      ],
+      "hasWhySection": true,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 3,
+        "violatedNodeCount": 11,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 9,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          },
+          {
+            "id": "scrollable-region-focusable",
+            "impact": "serious",
+            "help": "Scrollable region must have keyboard access",
+            "nodes": 1,
+            "targets": [
+              ".PhoneVerificationGuide_panelContainer__1t3reu00"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "success",
+      "label": "이체 완료",
+      "flow": "transfer",
+      "url": "/dashboard/transfer?step=success",
+      "guideHeading": "고생하셨습니다 교육이 완료되었습니다",
+      "guideSectionHeadings": [
+        "무엇을 마쳤나요?",
+        "이제 무엇을 하면 되나요?"
+      ],
+      "hasWhySection": false,
+      "guideOutsideFrame": true,
+      "frameControlInsideFrame": true,
+      "guideChangedFromPrevious": true,
+      "axe": {
+        "violationCount": 2,
+        "violatedNodeCount": 9,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 8,
+            "targets": [
+              ".PhoneVerificationGuide_badge__1t3reu01 > span",
+              ".PhoneVerificationGuide_titleHighlight__1t3reu03",
+              ".PhoneVerificationGuide_description__1t3reu04"
+            ]
+          },
+          {
+            "id": "document-title",
+            "impact": "serious",
+            "help": "Documents must have <title> element to aid in navigation",
+            "nodes": 1,
+            "targets": [
+              "html"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
