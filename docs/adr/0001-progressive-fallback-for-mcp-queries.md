@@ -1,0 +1,3 @@
+# Progressive Fallback for MCP Design Queries
+
+To prevent the AI agent from excessively interrupting the developer (Human-in-the-loop) or performing expensive, unbounded searches across the entire codebase when a design query is ambiguous, we decided to implement a "Progressive Fallback" strategy. The agent must first attempt a shallow inference based on the local component context, then perform a scoped MCP search (selecting the top 1-2 most confident results), and only as a last resort present an actionable, multiple-choice prompt to the user. This ensures that the design system consistency checks remain automated without breaking the developer's flow, significantly reducing cognitive load.
