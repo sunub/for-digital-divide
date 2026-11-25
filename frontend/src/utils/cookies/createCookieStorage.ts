@@ -60,7 +60,7 @@ export async function createCookieStorage(
     secret,
     path = "/",
     domain,
-    secure = process.env.PRODUCTION === "true",
+    secure = process.env.NODE_ENV === "production",
     sameSite = "lax",
     maxAge = 60 * 10, // 10 분
   } = opts || {};
