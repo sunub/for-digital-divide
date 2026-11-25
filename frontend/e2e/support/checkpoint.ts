@@ -6,7 +6,10 @@ export const WCAG_TAGS: readonly string[] = [
   "wcag2aa",
   "wcag21a",
   "wcag21aa",
+  "wcag22aa",
 ];
+
+export const MIN_TARGET_SIZE_PX = 24;
 
 export interface ScreenSpec {
   /** 리포트에 기록할 화면 식별자 (URL step 값 또는 경로 기반) */
@@ -33,6 +36,20 @@ export interface AxeViolationSummary {
   targets: string[];
 }
 
+export interface TargetSizeViolation {
+  selector: string;
+  name: string;
+  width: number;
+  height: number;
+}
+
+export interface TargetSizeSummary {
+  minSizePx: number;
+  checkedCount: number;
+  undersizedCount: number;
+  violations: TargetSizeViolation[];
+}
+
 export interface ScreenEvidence {
   id: string;
   label: string;
@@ -50,6 +67,7 @@ export interface ScreenEvidence {
     violatedNodeCount: number;
     violations: AxeViolationSummary[];
   };
+  targetSize?: TargetSizeSummary;
 }
 
 /** 프레임(main) 바깥에 있는 안내 영역의 h1 */
@@ -109,8 +127,176 @@ async function scanAccessibility(page: Page): Promise<ScreenEvidence["axe"]> {
 }
 
 /**
+ * WCAG 2.2 SC 2.5.8 (Target Size Minimum, Level AA):
+ * 활성 인터랙티브 요소가 최소 24×24 CSS px 을 충족하거나,
+ * 중심 기준 지름 24px 원이 다른 인터랙티브 타깃(또는 그 24px 원)과 겹치지 않는지 검증한다.
+ */
+async function measureTargetSizes(page: Page): Promise<TargetSizeSummary> {
+  const result = await page.evaluate((minSize: number) => {
+    const INTERACTIVE_SELECTOR = [
+      "button",
+      "a[href]",
+      'input:not([type="hidden"])',
+      "select",
+      "textarea",
+      '[role="button"]',
+      '[role="link"]',
+      '[role="checkbox"]',
+      '[role="radio"]',
+      '[role="switch"]',
+    ].join(", ");
+
+    interface MeasuredTarget {
+      element: Element;
+      rect: DOMRect;
+      cx: number;
+      cy: number;
+      undersized: boolean;
+    }
+
+    const isInlineInText = (el: Element, style: CSSStyleDeclaration): boolean =>
+      el.tagName === "A" &&
+      style.display === "inline" &&
+      Boolean(el.closest("p, li, dd, blockquote"));
+
+    const describeSelector = (el: Element): string => {
+      const tag = el.tagName.toLowerCase();
+      const id = el.getAttribute("id");
+      if (id) return `${tag}#${id}`;
+      const role = el.getAttribute("role");
+      return role ? `${tag}[role="${role}"]` : tag;
+    };
+
+    const describeName = (el: Element): string => {
+      const aria = el.getAttribute("aria-label")?.trim();
+      if (aria) return aria;
+      const text = (el.textContent ?? "").replace(/\s+/g, " ").trim();
+      if (text) return text.slice(0, 40);
+      return el.getAttribute("name") ?? el.getAttribute("type") ?? "";
+    };
+
+    const candidates = Array.from(
+      document.querySelectorAll(INTERACTIVE_SELECTOR),
+    );
+    const measured: MeasuredTarget[] = [];
+
+    for (const el of candidates) {
+      if (
+        el.hasAttribute("disabled") ||
+        el.getAttribute("aria-disabled") === "true" ||
+        el.getAttribute("aria-hidden") === "true"
+      ) {
+        continue;
+      }
+      const style = window.getComputedStyle(el);
+      if (
+        style.display === "none" ||
+        style.visibility === "hidden" ||
+        style.pointerEvents === "none" ||
+        Number(style.opacity) === 0
+      ) {
+        continue;
+      }
+      if (isInlineInText(el, style)) {
+        continue;
+      }
+      const rect = el.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) {
+        continue;
+      }
+      // 뷰포트 바깥의 오프스크린 요소(예: 비활성 캐러셀 슬라이드)는 제외한다.
+      if (
+        rect.right < 0 ||
+        rect.bottom < 0 ||
+        rect.left > window.innerWidth ||
+        rect.top > window.innerHeight
+      ) {
+        continue;
+      }
+      measured.push({
+        element: el,
+        rect,
+        cx: rect.left + rect.width / 2,
+        cy: rect.top + rect.height / 2,
+        undersized: rect.width < minSize || rect.height < minSize,
+      });
+    }
+
+    const radius = minSize / 2;
+    const circleIntersectsRect = (
+      cx: number,
+      cy: number,
+      r: number,
+      rect: DOMRect,
+    ): boolean => {
+      const closestX = Math.max(rect.left, Math.min(cx, rect.right));
+      const closestY = Math.max(rect.top, Math.min(cy, rect.bottom));
+      const dx = cx - closestX;
+      const dy = cy - closestY;
+      return dx * dx + dy * dy < r * r;
+    };
+
+    const violations: Array<{
+      selector: string;
+      name: string;
+      width: number;
+      height: number;
+    }> = [];
+
+    for (let i = 0; i < measured.length; i += 1) {
+      const target = measured[i];
+      if (!target.undersized) continue;
+
+      let passesSpacingException = true;
+      for (let j = 0; j < measured.length; j += 1) {
+        if (i === j) continue;
+        const other = measured[j];
+        if (
+          target.element.contains(other.element) ||
+          other.element.contains(target.element)
+        ) {
+          continue;
+        }
+        // WCAG 2.2 SC 2.5.8 spacing exception:
+        // 지름 24px 원이 다른 타깃의 경계 상자 또는 다른 미달 타깃의 24px 원과 교차하면 실패한다.
+        if (circleIntersectsRect(target.cx, target.cy, radius, other.rect)) {
+          passesSpacingException = false;
+          break;
+        }
+        if (other.undersized) {
+          const dx = target.cx - other.cx;
+          const dy = target.cy - other.cy;
+          if (dx * dx + dy * dy < minSize * minSize) {
+            passesSpacingException = false;
+            break;
+          }
+        }
+      }
+
+      if (!passesSpacingException) {
+        violations.push({
+          selector: describeSelector(target.element),
+          name: describeName(target.element),
+          width: Math.round(target.rect.width * 10) / 10,
+          height: Math.round(target.rect.height * 10) / 10,
+        });
+      }
+    }
+
+    return {
+      minSizePx: minSize,
+      checkedCount: measured.length,
+      undersizedCount: violations.length,
+      violations,
+    };
+  }, MIN_TARGET_SIZE_PX);
+
+  return result;
+}
+
+/**
  * 한 화면에서 "조작은 프레임 안, 설명은 프레임 밖, 설명은 현재 단계용" 을 검증하고
- * 같은 화면의 WCAG 2.1 AA 자동 검사 결과를 함께 기록한다.
+ * 같은 화면의 WCAG 2.2 AA 자동 검사(axe) 및 24×24 CSS px 타깃 크기 결과를 함께 기록한다.
  */
 export async function verifyScreen(
   page: Page,
@@ -181,6 +367,9 @@ export async function verifyScreen(
 
   const guideSectionHeadings: string[] = await readGuideSectionHeadings(page);
 
+  const axe = await scanAccessibility(page);
+  const targetSize = await measureTargetSizes(page);
+
   return {
     id: spec.id,
     label: spec.label,
@@ -195,6 +384,7 @@ export async function verifyScreen(
     frameControlInsideFrame,
     guideInLandmark,
     guideChangedFromPrevious,
-    axe: await scanAccessibility(page),
+    axe,
+    targetSize,
   };
 }

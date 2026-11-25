@@ -10,6 +10,7 @@ export function ToastContainer() {
 
   return (
     // 항상 렌더링되는 live region 이어야 새 알림(예: 인증번호 문자)이 스크린리더에 자동으로 읽힌다.
+    // biome-ignore lint/a11y/useSemanticElements: live-region 토스트 컨테이너는 보조기기 호환을 위해 role="status"를 명시한다
     <div className={container} role="status" aria-live="polite">
       <AnimatePresence>
         {toasts.map((toast, i) => (

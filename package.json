@@ -9,6 +9,8 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "ci": "turbo ci",
+    "typecheck": "pnpm --filter frontend run typecheck",
+    "test": "pnpm --filter frontend run test",
     "format": "turbo format",
     "check": "turbo check"
   },

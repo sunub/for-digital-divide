@@ -20,6 +20,8 @@ interface GuideSyncEvidence {
     guideChangedOnStepChange: number;
     screensWithWhySection: number;
     screensWithAxeViolations: number;
+    /** 기준선(수정 전) 측정에는 없는 항목 */
+    screensWithUndersizedTargets?: number;
   };
   balanceObservation: {
     amountInputStep: string | null;
@@ -181,6 +183,14 @@ ${axeRuleTable(baselineGuide.screens)}
         })()
       : "";
 
+  const wcagVersionLabel: string = guide.axeTags.includes("wcag22aa")
+    ? "WCAG 2.2 AA"
+    : "WCAG 2.1 AA";
+  const targetSizeRow: string =
+    t.screensWithUndersizedTargets !== undefined
+      ? `\n| WCAG 2.2 타깃 크기(24×24 CSS px) | **미달 화면 ${t.screensWithUndersizedTargets}/${t.screens}** | \`SC 2.5.8\` |`
+      : "";
+
   const markdown: string = `# UX 설계 검증 근거 (for-digital-divide)
 
 > 자동 생성 파일입니다. \`pnpm e2e\` 실행 후 \`pnpm e2e:report\` 로 다시 만듭니다.
@@ -197,7 +207,7 @@ ${comparison}## 1. 요약
 | 단계가 바뀔 때 안내도 바뀜 | **${t.guideChangedOnStepChange}/${transitions}** 전환 (나머지는 가입→로그인 의도적 공유) | 안내 제목 비교 |
 | 안내에 "왜" 소제목 포함 | ${t.screensWithWhySection}/${t.screens} 화면 | 안내 소제목 수집 |
 | 민감 단계(OTP) 피드백 검사 | **${sensitive.totals.passed}/${sensitive.totals.checks}** 통과 | \`e2e/sensitive-feedback.spec.ts\` |
-| WCAG 2.1 AA 자동 검사(axe) | **위반 ${after.ruleCount}종 · ${after.nodeCount}개 요소 · ${t.screensWithAxeViolations}/${t.screens} 화면** | \`${guide.axeTags.join(", ")}\` |
+| ${wcagVersionLabel} 자동 검사(axe) | **위반 ${after.ruleCount}종 · ${after.nodeCount}개 요소 · ${t.screensWithAxeViolations}/${t.screens} 화면** | \`${guide.axeTags.join(", ")}\` |${targetSizeRow}
 
 ## 2. 화면별 결과
 
@@ -209,7 +219,7 @@ ${screenTable(guide.screens)}
 |---|---|---|
 ${sensitive.checks.map((c) => `| \`${c.name}\` | ${c.passed ? "✅" : "❌"} | ${c.detail} |`).join("\n")}
 
-## 4. 접근성 자동 검사 (axe, WCAG 2.1 AA)
+## 4. 접근성 자동 검사 (axe, ${wcagVersionLabel})
 
 ${axeRuleTable(guide.screens)}
 

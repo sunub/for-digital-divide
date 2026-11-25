@@ -320,6 +320,13 @@ test("단계별 안내가 현재 단계와 동기화되고, 조작/설명 영역
     consistent: amountStepBalance === summaryStepBalance,
   };
 
+  const screensWithAxeViolations = evidence.filter(
+    (e) => e.axe.violationCount > 0,
+  ).length;
+  const screensWithUndersizedTargets = evidence.filter(
+    (e) => (e.targetSize?.undersizedCount ?? 0) > 0,
+  ).length;
+
   await writeEvidence("guide-sync.json", {
     generatedAt: new Date().toISOString(),
     axeTags: WCAG_TAGS,
@@ -333,10 +340,19 @@ test("단계별 안내가 현재 단계와 동기화되고, 조작/설명 영역
         (e) => e.guideChangedFromPrevious === true,
       ).length,
       screensWithWhySection: evidence.filter((e) => e.hasWhySection).length,
-      screensWithAxeViolations: evidence.filter((e) => e.axe.violationCount > 0)
-        .length,
+      screensWithAxeViolations,
+      screensWithUndersizedTargets,
     },
     balanceObservation: balance,
     screens: evidence,
   });
+
+  expect(
+    screensWithAxeViolations,
+    "All screens in the journey must pass WCAG 2.2 AA axe checks without violations",
+  ).toBe(0);
+  expect(
+    screensWithUndersizedTargets,
+    "Interactive targets must satisfy WCAG 2.2 SC 2.5.8 (24x24 CSS px minimum or spacing clearance)",
+  ).toBe(0);
 });
