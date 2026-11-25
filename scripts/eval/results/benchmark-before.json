@@ -1,0 +1,105 @@
+{
+  "server": "../../../../private/tmp/claude-501/-Users-sunub--claude-spares-spare-foJhmI/a57a9e36-82ff-40a6-b808-fda50c18096a/scratchpad/baseline/mcp/build/index.js",
+  "tokenizer": "cl100k_base",
+  "accuracy": {
+    "claims": 315,
+    "valid": 315,
+    "wrong": [],
+    "brokenImports": []
+  },
+  "coverage": {
+    "screens": 124,
+    "component": {
+      "need": 275,
+      "got": 241
+    },
+    "prop": {
+      "need": 692,
+      "got": 583
+    },
+    "value": {
+      "need": 750,
+      "got": 506
+    },
+    "total": {
+      "need": 1717,
+      "got": 1330
+    },
+    "topMissed": [
+      [
+        "Text as",
+        44
+      ],
+      [
+        "Text as p",
+        27
+      ],
+      [
+        "Flex as",
+        24
+      ],
+      [
+        "Text variant body",
+        17
+      ],
+      [
+        "Text as span",
+        15
+      ],
+      [
+        "Flex as aside",
+        14
+      ],
+      [
+        "Text variant description",
+        14
+      ],
+      [
+        "Text as h2",
+        13
+      ],
+      [
+        "Text variant bodyStrong",
+        12
+      ],
+      [
+        "Text variant title",
+        12
+      ],
+      [
+        "Box as",
+        10
+      ],
+      [
+        "Text as h3",
+        6
+      ],
+      [
+        "Flex position relative",
+        5
+      ],
+      [
+        "Flex as form",
+        5
+      ],
+      [
+        "Flex gap 1rem",
+        5
+      ]
+    ]
+  },
+  "cost": {
+    "toolDefinitionsAndTokens": 3783,
+    "averagePerScreen": 5602
+  },
+  "suggest": {
+    "cases": 142,
+    "resolvable": 137,
+    "resolved": 41,
+    "invalid": 101
+  },
+  "errors": {
+    "cases": 4,
+    "handled": 2
+  }
+}

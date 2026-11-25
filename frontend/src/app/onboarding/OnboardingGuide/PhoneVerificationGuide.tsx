@@ -9,7 +9,12 @@ import * as styles from "./PhoneVerificationGuide.css";
 
 export function PhoneVerificationGuide() {
   return (
-    <div className={styles.panelContainer}>
+    <aside
+      aria-label="단계 안내"
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: 스크롤 가능한 랜드마크에 키보드 접근성을 보장한다 (axe scrollable-region-focusable)
+      tabIndex={0}
+      className={styles.panelContainer}
+    >
       <div className={styles.badge}>
         <MdBadge size={18} />
         <span>본인 확인</span>
@@ -95,6 +100,6 @@ export function PhoneVerificationGuide() {
           </li>
         </ul>
       </div>
-    </div>
+    </aside>
   );
 }

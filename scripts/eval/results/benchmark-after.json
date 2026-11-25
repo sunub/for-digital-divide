@@ -1,0 +1,105 @@
+{
+  "server": "packages/mcp/build/index.js",
+  "tokenizer": "cl100k_base",
+  "accuracy": {
+    "claims": 12470,
+    "valid": 12470,
+    "wrong": [],
+    "brokenImports": []
+  },
+  "coverage": {
+    "screens": 124,
+    "component": {
+      "need": 275,
+      "got": 274
+    },
+    "prop": {
+      "need": 692,
+      "got": 687
+    },
+    "value": {
+      "need": 750,
+      "got": 636
+    },
+    "total": {
+      "need": 1717,
+      "got": 1597
+    },
+    "topMissed": [
+      [
+        "Text as p",
+        27
+      ],
+      [
+        "Text as span",
+        15
+      ],
+      [
+        "Flex as aside",
+        14
+      ],
+      [
+        "Text as h2",
+        13
+      ],
+      [
+        "Text as h3",
+        6
+      ],
+      [
+        "Flex as form",
+        5
+      ],
+      [
+        "BaseForm noValidate",
+        5
+      ],
+      [
+        "Box as ul",
+        3
+      ],
+      [
+        "Box as span",
+        3
+      ],
+      [
+        "Text as h1",
+        3
+      ],
+      [
+        "Text as strong",
+        2
+      ],
+      [
+        "TextField labelContent 이름",
+        2
+      ],
+      [
+        "Box as fieldset",
+        2
+      ],
+      [
+        "Flex as section",
+        2
+      ],
+      [
+        "Text as code",
+        1
+      ]
+    ]
+  },
+  "cost": {
+    "toolDefinitionsAndTokens": 1553,
+    "averagePerScreen": 2563
+  },
+  "suggest": {
+    "cases": 142,
+    "resolvable": 137,
+    "resolved": 137,
+    "invalid": 0
+  },
+  "errors": {
+    "cases": 4,
+    "handled": 4
+  }
+}

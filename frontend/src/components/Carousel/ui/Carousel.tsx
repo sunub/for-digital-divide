@@ -47,9 +47,10 @@ export function Carousel({
         <button
           type="button"
           className={style.prevButton}
+          aria-label="이전 항목"
           onClick={() => emblaApi?.scrollPrev()}
         >
-          <ChevronLeftIcon size={32} />
+          <ChevronLeftIcon size={32} aria-hidden />
         </button>
         <p>
           {selectedSnap + 1} / {snapCount}
@@ -57,9 +58,10 @@ export function Carousel({
         <button
           type="button"
           className={style.nextButton}
+          aria-label="다음 항목"
           onClick={() => emblaApi?.scrollNext()}
         >
-          <ChevronRightIcon size={32} />
+          <ChevronRightIcon size={32} aria-hidden />
         </button>
       </div>
     </section>

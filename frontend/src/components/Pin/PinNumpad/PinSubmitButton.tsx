@@ -22,7 +22,7 @@ export function PinSubmitButton({ status }: { status: FormStatus }) {
         variant={"destructive"}
         size={"wide"}
         onClick={deleteNumpad}
-        aria-label="입력한 핀 번호 전체 삭제"
+        aria-label="전체삭제, 입력한 핀 번호 모두 지우기"
       >
         전체삭제
       </Button>

@@ -1,9 +1,12 @@
 import { Grid } from "@internal/design-system/primitives";
 import { gridLayout } from "@internal/design-system/style";
+import type { Metadata } from "next";
 import { Device } from "@/shared/layout";
 import { getKeypadData } from "@/shared/utils/getKeypadData";
 import { TransferContentContainer } from "./TransferContentContainer";
 import { TransferGuide } from "./TransferGuide";
+
+export const metadata: Metadata = { title: "이체" };
 
 export default async function TransferPage({
   searchParams,

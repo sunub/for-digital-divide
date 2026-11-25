@@ -2,6 +2,7 @@ import { Tooltip } from "@internal/design-system/components";
 import { Grid } from "@internal/design-system/primitives";
 import { gridLayout } from "@internal/design-system/style";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { TransactionProvider } from "@/components/TransactionChart/TransactionProvider";
@@ -18,6 +19,8 @@ import { getPinAvailable } from "./ui/Dashboard/utils/getPinAvailable";
 import { getTransactions } from "./ui/Dashboard/utils/getTransactions";
 import { DashboardPage } from "./ui/DashboardPage";
 import { MainTitle } from "./ui/MainTitle";
+
+export const metadata: Metadata = { title: "대시보드" };
 
 export default async function Dashboard() {
   const [isPinAvailable, accounts] = await Promise.all([

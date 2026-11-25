@@ -1,0 +1,390 @@
+import AxeBuilder from "@axe-core/playwright";
+import { expect, type Locator, type Page } from "@playwright/test";
+
+export const WCAG_TAGS: readonly string[] = [
+  "wcag2a",
+  "wcag2aa",
+  "wcag21a",
+  "wcag21aa",
+  "wcag22aa",
+];
+
+export const MIN_TARGET_SIZE_PX = 24;
+
+export interface ScreenSpec {
+  /** 리포트에 기록할 화면 식별자 (URL step 값 또는 경로 기반) */
+  id: string;
+  /** 사람이 읽는 화면 이름 */
+  label: string;
+  /** 사용자가 지나는 흐름 묶음 */
+  flow: "onboarding" | "login" | "pin-register" | "dashboard" | "transfer";
+  /** 현재 URL 이 이 화면임을 확인하는 패턴 */
+  url: RegExp;
+  /** 프레임 바깥 안내 영역의 제목이 이 단계용 문구인지 확인하는 패턴 */
+  guideHeading: RegExp;
+  /** 프레임(main) 안에서 이 단계의 조작 요소를 찾는 함수 */
+  frameControl: (main: Locator) => Locator;
+  /** 직전 화면과 같은 안내를 의도적으로 공유하는 경우 true */
+  sharesGuideWithPrevious?: boolean;
+}
+
+export interface AxeViolationSummary {
+  id: string;
+  impact: string | null;
+  help: string;
+  nodes: number;
+  targets: string[];
+}
+
+export interface TargetSizeViolation {
+  selector: string;
+  name: string;
+  width: number;
+  height: number;
+}
+
+export interface TargetSizeSummary {
+  minSizePx: number;
+  checkedCount: number;
+  undersizedCount: number;
+  violations: TargetSizeViolation[];
+}
+
+export interface ScreenEvidence {
+  id: string;
+  label: string;
+  flow: ScreenSpec["flow"];
+  url: string;
+  guideHeading: string;
+  guideSectionHeadings: string[];
+  hasWhySection: boolean;
+  guideOutsideFrame: boolean;
+  frameControlInsideFrame: boolean;
+  guideInLandmark: boolean;
+  guideChangedFromPrevious: boolean | null;
+  axe: {
+    violationCount: number;
+    violatedNodeCount: number;
+    violations: AxeViolationSummary[];
+  };
+  targetSize?: TargetSizeSummary;
+}
+
+/** 프레임(main) 바깥에 있는 안내 영역의 h1 */
+export function guideHeadingLocator(page: Page): Locator {
+  return page.locator("h1:not(main h1)").first();
+}
+
+function normalize(text: string): string {
+  return text.replace(/\s+/g, " ").trim();
+}
+
+async function readGuideSectionHeadings(page: Page): Promise<string[]> {
+  const texts: string[] = await page
+    .locator("h3:not(main h3), h4:not(main h4)")
+    .allInnerTexts();
+  return texts
+    .map(normalize)
+    .filter((text: string) => text.length > 0 && text !== "진행 안내");
+}
+
+async function scanAccessibility(page: Page): Promise<ScreenEvidence["axe"]> {
+  // 등장·퇴장 애니메이션 중간 프레임(반투명)은 사용자가 읽는 정지 상태가 아니므로, 애니메이션이 끝난 뒤 검사한다.
+  await page
+    .waitForFunction(
+      () =>
+        document
+          .getAnimations()
+          .every((animation: Animation) => animation.playState !== "running"),
+      undefined,
+      { timeout: 5_000 },
+    )
+    .catch(() => undefined);
+  // @axe-core/playwright 가 루트 워크스페이스의 다른 playwright-core 버전 타입을 참조하므로 맞춰 준다.
+  type AxePage = ConstructorParameters<typeof AxeBuilder>[0]["page"];
+  const result = await new AxeBuilder({ page: page as unknown as AxePage })
+    .withTags([...WCAG_TAGS])
+    .analyze();
+
+  const violations: AxeViolationSummary[] = result.violations.map(
+    (violation) => ({
+      id: violation.id,
+      impact: violation.impact ?? null,
+      help: violation.help,
+      nodes: violation.nodes.length,
+      targets: violation.nodes.slice(0, 3).map((node) => node.target.join(" ")),
+    }),
+  );
+
+  return {
+    violationCount: violations.length,
+    violatedNodeCount: violations.reduce(
+      (sum: number, violation: AxeViolationSummary) => sum + violation.nodes,
+      0,
+    ),
+    violations,
+  };
+}
+
+/**
+ * WCAG 2.2 SC 2.5.8 (Target Size Minimum, Level AA):
+ * 활성 인터랙티브 요소가 최소 24×24 CSS px 을 충족하거나,
+ * 중심 기준 지름 24px 원이 다른 인터랙티브 타깃(또는 그 24px 원)과 겹치지 않는지 검증한다.
+ */
+async function measureTargetSizes(page: Page): Promise<TargetSizeSummary> {
+  const result = await page.evaluate((minSize: number) => {
+    const INTERACTIVE_SELECTOR = [
+      "button",
+      "a[href]",
+      'input:not([type="hidden"])',
+      "select",
+      "textarea",
+      '[role="button"]',
+      '[role="link"]',
+      '[role="checkbox"]',
+      '[role="radio"]',
+      '[role="switch"]',
+    ].join(", ");
+
+    interface MeasuredTarget {
+      element: Element;
+      rect: DOMRect;
+      cx: number;
+      cy: number;
+      undersized: boolean;
+    }
+
+    const isInlineInText = (el: Element, style: CSSStyleDeclaration): boolean =>
+      el.tagName === "A" &&
+      style.display === "inline" &&
+      Boolean(el.closest("p, li, dd, blockquote"));
+
+    const describeSelector = (el: Element): string => {
+      const tag = el.tagName.toLowerCase();
+      const id = el.getAttribute("id");
+      if (id) return `${tag}#${id}`;
+      const role = el.getAttribute("role");
+      return role ? `${tag}[role="${role}"]` : tag;
+    };
+
+    const describeName = (el: Element): string => {
+      const aria = el.getAttribute("aria-label")?.trim();
+      if (aria) return aria;
+      const text = (el.textContent ?? "").replace(/\s+/g, " ").trim();
+      if (text) return text.slice(0, 40);
+      return el.getAttribute("name") ?? el.getAttribute("type") ?? "";
+    };
+
+    const candidates = Array.from(
+      document.querySelectorAll(INTERACTIVE_SELECTOR),
+    );
+    const measured: MeasuredTarget[] = [];
+
+    for (const el of candidates) {
+      if (
+        el.hasAttribute("disabled") ||
+        el.getAttribute("aria-disabled") === "true" ||
+        el.getAttribute("aria-hidden") === "true"
+      ) {
+        continue;
+      }
+      const style = window.getComputedStyle(el);
+      if (
+        style.display === "none" ||
+        style.visibility === "hidden" ||
+        style.pointerEvents === "none" ||
+        Number(style.opacity) === 0
+      ) {
+        continue;
+      }
+      if (isInlineInText(el, style)) {
+        continue;
+      }
+      const rect = el.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) {
+        continue;
+      }
+      // 뷰포트 바깥의 오프스크린 요소(예: 비활성 캐러셀 슬라이드)는 제외한다.
+      if (
+        rect.right < 0 ||
+        rect.bottom < 0 ||
+        rect.left > window.innerWidth ||
+        rect.top > window.innerHeight
+      ) {
+        continue;
+      }
+      measured.push({
+        element: el,
+        rect,
+        cx: rect.left + rect.width / 2,
+        cy: rect.top + rect.height / 2,
+        undersized: rect.width < minSize || rect.height < minSize,
+      });
+    }
+
+    const radius = minSize / 2;
+    const circleIntersectsRect = (
+      cx: number,
+      cy: number,
+      r: number,
+      rect: DOMRect,
+    ): boolean => {
+      const closestX = Math.max(rect.left, Math.min(cx, rect.right));
+      const closestY = Math.max(rect.top, Math.min(cy, rect.bottom));
+      const dx = cx - closestX;
+      const dy = cy - closestY;
+      return dx * dx + dy * dy < r * r;
+    };
+
+    const violations: Array<{
+      selector: string;
+      name: string;
+      width: number;
+      height: number;
+    }> = [];
+
+    for (let i = 0; i < measured.length; i += 1) {
+      const target = measured[i];
+      if (!target.undersized) continue;
+
+      let passesSpacingException = true;
+      for (let j = 0; j < measured.length; j += 1) {
+        if (i === j) continue;
+        const other = measured[j];
+        if (
+          target.element.contains(other.element) ||
+          other.element.contains(target.element)
+        ) {
+          continue;
+        }
+        // WCAG 2.2 SC 2.5.8 spacing exception:
+        // 지름 24px 원이 다른 타깃의 경계 상자 또는 다른 미달 타깃의 24px 원과 교차하면 실패한다.
+        if (circleIntersectsRect(target.cx, target.cy, radius, other.rect)) {
+          passesSpacingException = false;
+          break;
+        }
+        if (other.undersized) {
+          const dx = target.cx - other.cx;
+          const dy = target.cy - other.cy;
+          if (dx * dx + dy * dy < minSize * minSize) {
+            passesSpacingException = false;
+            break;
+          }
+        }
+      }
+
+      if (!passesSpacingException) {
+        violations.push({
+          selector: describeSelector(target.element),
+          name: describeName(target.element),
+          width: Math.round(target.rect.width * 10) / 10,
+          height: Math.round(target.rect.height * 10) / 10,
+        });
+      }
+    }
+
+    return {
+      minSizePx: minSize,
+      checkedCount: measured.length,
+      undersizedCount: violations.length,
+      violations,
+    };
+  }, MIN_TARGET_SIZE_PX);
+
+  return result;
+}
+
+/**
+ * 한 화면에서 "조작은 프레임 안, 설명은 프레임 밖, 설명은 현재 단계용" 을 검증하고
+ * 같은 화면의 WCAG 2.2 AA 자동 검사(axe) 및 24×24 CSS px 타깃 크기 결과를 함께 기록한다.
+ */
+export async function verifyScreen(
+  page: Page,
+  spec: ScreenSpec,
+  previousGuideHeading: string | null,
+): Promise<ScreenEvidence> {
+  await expect(page).toHaveURL(spec.url);
+
+  const main: Locator = page.locator("main").first();
+  const guideHeading: Locator = guideHeadingLocator(page);
+  const control: Locator = spec.frameControl(main);
+
+  // 1) 안내 영역이 현재 단계의 안내로 바뀌었는가
+  await expect(guideHeading).toHaveText(spec.guideHeading);
+  await expect(control).toBeVisible();
+  const headingText: string = normalize(await guideHeading.innerText());
+
+  // 2) 설명은 프레임 바깥(왼쪽), 조작은 프레임 안에 있는가
+  //    단계 전환 애니메이션이 끝나 레이아웃이 안정될 때까지 기다리며 측정한다.
+  const measureLayout = async (): Promise<{
+    guideOutsideFrame: boolean;
+    frameControlInsideFrame: boolean;
+  }> => {
+    const guideBox = await guideHeading.boundingBox();
+    const mainBox = await main.boundingBox();
+    const controlBox = await control.boundingBox();
+    if (!guideBox || !mainBox || !controlBox) {
+      return { guideOutsideFrame: false, frameControlInsideFrame: false };
+    }
+    return {
+      guideOutsideFrame: guideBox.x + guideBox.width <= mainBox.x,
+      frameControlInsideFrame:
+        controlBox.x >= mainBox.x - 1 &&
+        controlBox.x + controlBox.width <= mainBox.x + mainBox.width + 1,
+    };
+  };
+  await expect
+    .poll(measureLayout, {
+      message: `${spec.id}: guide outside frame, control inside frame`,
+      timeout: 10_000,
+    })
+    .toEqual({ guideOutsideFrame: true, frameControlInsideFrame: true });
+  const { guideOutsideFrame, frameControlInsideFrame } = await measureLayout();
+
+  // 3) 직전 화면과 다른 안내인가 (의도적으로 공유하는 화면은 제외)
+  let guideChangedFromPrevious: boolean | null = null;
+  if (previousGuideHeading !== null) {
+    guideChangedFromPrevious = headingText !== previousGuideHeading;
+    if (!spec.sharesGuideWithPrevious) {
+      expect(
+        guideChangedFromPrevious,
+        `${spec.id}: guide should change when the step changes`,
+      ).toBe(true);
+    }
+  }
+
+  // 4) 안내가 보조기기에서도 "단계 안내" 영역(complementary 랜드마크)으로 구분되는가
+  const guideInLandmark: boolean =
+    (await page
+      .getByRole("complementary", { name: "단계 안내" })
+      .locator("h1")
+      .filter({ hasText: spec.guideHeading })
+      .count()) > 0;
+  expect(
+    guideInLandmark,
+    `${spec.id}: guide must be in a labelled landmark`,
+  ).toBe(true);
+
+  const guideSectionHeadings: string[] = await readGuideSectionHeadings(page);
+
+  const axe = await scanAccessibility(page);
+  const targetSize = await measureTargetSizes(page);
+
+  return {
+    id: spec.id,
+    label: spec.label,
+    flow: spec.flow,
+    url: new URL(page.url()).pathname + new URL(page.url()).search,
+    guideHeading: headingText,
+    guideSectionHeadings,
+    hasWhySection: guideSectionHeadings.some((text: string) =>
+      text.startsWith("왜"),
+    ),
+    guideOutsideFrame,
+    frameControlInsideFrame,
+    guideInLandmark,
+    guideChangedFromPrevious,
+    axe,
+    targetSize,
+  };
+}

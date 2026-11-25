@@ -10,7 +10,13 @@ import * as styles from "./PhoneVerificationGuide.css";
 
 export function VerifySelectionGuide() {
   return (
-    <Flex direction="column" className={styles.panelContainer}>
+    <Flex
+      as="aside"
+      aria-label="단계 안내"
+      tabIndex={0}
+      direction="column"
+      className={styles.panelContainer}
+    >
       <div className={styles.badge}>
         <MdBadge size={18} />
         <span>본인 확인 선택</span>

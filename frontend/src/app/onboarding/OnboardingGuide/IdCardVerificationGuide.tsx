@@ -3,7 +3,12 @@ import * as styles from "./IdCardVerificationGuide.css";
 
 export function IdCardVerificationGuide() {
   return (
-    <div className={styles.panelContainer}>
+    <aside
+      aria-label="단계 안내"
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: 스크롤 가능한 랜드마크에 키보드 접근성을 보장한다 (axe scrollable-region-focusable)
+      tabIndex={0}
+      className={styles.panelContainer}
+    >
       <div className={styles.badge}>
         <MdBadge size={18} />
         <span>신분증 인증</span>
@@ -40,6 +45,6 @@ export function IdCardVerificationGuide() {
           </div>
         </div>
       </div>
-    </div>
+    </aside>
   );
 }

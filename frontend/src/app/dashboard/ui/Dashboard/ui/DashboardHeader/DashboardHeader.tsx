@@ -30,9 +30,10 @@ export function DashboardHeader() {
         <Tooltip.Trigger
           variant={"transparent"}
           className={style.logOutButton}
+          aria-label="로그아웃"
           onClick={logoutAction}
         >
-          <LogOutIcon size={18} strokeWidth={3} />
+          <LogOutIcon size={18} strokeWidth={3} aria-hidden />
         </Tooltip.Trigger>
         <Tooltip.Content>로그아웃</Tooltip.Content>
       </Flex>

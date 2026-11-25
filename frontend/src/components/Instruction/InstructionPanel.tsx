@@ -16,6 +16,8 @@ export function InstructionPanel({
   return (
     <Flex
       ref={ref}
+      as="aside"
+      aria-label="단계 안내"
       direction="column"
       width="full"
       height="full"

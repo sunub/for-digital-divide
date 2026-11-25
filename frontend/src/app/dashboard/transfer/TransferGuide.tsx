@@ -23,7 +23,13 @@ export function TransferGuide({ step }: TransferGuideProps) {
   }
 
   return (
-    <Flex direction="column" className={styles.panelContainer}>
+    <Flex
+      as="aside"
+      aria-label="단계 안내"
+      tabIndex={0}
+      direction="column"
+      className={styles.panelContainer}
+    >
       <TransferGuideContent content={content} />
     </Flex>
   );

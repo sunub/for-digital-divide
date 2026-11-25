@@ -10,7 +10,13 @@ import * as styles from "../../onboarding/OnboardingGuide/PhoneVerificationGuide
 
 export function RegisterPinPhaseGuide() {
   return (
-    <Flex direction="column" className={styles.panelContainer}>
+    <Flex
+      as="aside"
+      aria-label="단계 안내"
+      tabIndex={0}
+      direction="column"
+      className={styles.panelContainer}
+    >
       <div className={styles.badge}>
         <MdBadge size={18} />
         <span>PIN 등록 1/2</span>

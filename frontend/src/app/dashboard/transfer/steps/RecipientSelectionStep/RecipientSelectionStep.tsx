@@ -58,7 +58,7 @@ export function RecipientSelectionStep({
         size="wide"
         onClick={onDirectInput}
         className={styles.directInputButton}
-        aria-label="직접 계좌번호 입력하기"
+        aria-label="직접 입력, 계좌번호를 직접 입력해 이체하기"
       >
         <Text as="span" variant="body">
           직접 입력
@@ -80,7 +80,6 @@ export function RecipientSelectionStep({
                 size="wide"
                 onClick={() => handleSelectAccount(acc)}
                 className={styles.mockAccountItem}
-                aria-label={`최근 보낸 계좌, ${acc.user.name} 님의 ${acc.bank} ${acc.account_number} 계좌로 이체하기`}
               >
                 <Flex
                   as="span"

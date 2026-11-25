@@ -46,7 +46,13 @@ const StartButton = memo(function StartButton({
 
 const InitGuide = memo(function InitGuide({ handleHover }: StartButtonProps) {
   return (
-    <Flex direction="column" className={guideStyles.panelContainer}>
+    <Flex
+      as="aside"
+      aria-label="단계 안내"
+      tabIndex={0}
+      direction="column"
+      className={guideStyles.panelContainer}
+    >
       <div className={guideStyles.badge}>
         <MdWavingHand size={18} />
         <span>안녕하세요!</span>

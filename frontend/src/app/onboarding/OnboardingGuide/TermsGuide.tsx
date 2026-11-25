@@ -10,7 +10,13 @@ import * as styles from "./PhoneVerificationGuide.css";
 
 export function TermsGuide() {
   return (
-    <Flex direction="column" className={styles.panelContainer}>
+    <Flex
+      as="aside"
+      aria-label="단계 안내"
+      tabIndex={0}
+      direction="column"
+      className={styles.panelContainer}
+    >
       <div className={styles.badge}>
         <MdBadge size={18} />
         <span>약관 동의</span>

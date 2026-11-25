@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: ["sunub"]
+    branches: ["sunub", "main"]
   pull_request:
-    branches: ["sunub"]
+    branches: ["sunub", "main"]
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -15,12 +15,11 @@ permissions:
 
 env:
   CI: "true"
-  NODE_ENV: production
   NEXT_TELEMETRY_DISABLED: "1"
 
 jobs:
-  lint-and-build:
-    name: Lint and Build
+  quality-and-build:
+    name: Lint, Typecheck, Unit Tests, Build & Audit
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -42,8 +41,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Print toolchain versions
         run: |
@@ -51,10 +48,124 @@ jobs:
           pnpm --version
           pnpm exec tsc --version
 
-      - name: Run lint
+      - name: Run Biome lint & format check
         run: pnpm run ci
 
-      - name: Run build
+      - name: Run frontend typecheck
+        run: pnpm --filter frontend run typecheck
+
+      - name: Run frontend unit & chart-performance tests
+        run: pnpm --filter frontend run test
+
+      - name: Run production build
         run: pnpm run build
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NODE_ENV: production
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5432/for_digital_divide_ci' }}
+
+      - name: Audit production dependencies (high+)
+        run: pnpm audit --prod --audit-level=high
+
+  e2e-wcag22:
+    name: E2E & WCAG 2.2 AA (18-screen journey + target size)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: quality-and-build
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: for_digital_divide_e2e
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d for_digital_divide_e2e"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm --filter frontend exec playwright install --with-deps chromium
+
+      - name: Generate Prisma client & migrate E2E database
+        run: |
+          pnpm --filter frontend exec prisma generate --schema=prisma/schema.prisma
+          pnpm --filter frontend run e2e:db
+        env:
+          E2E_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/for_digital_divide_e2e
+
+      - name: Run Playwright E2E (WCAG 2.2 AA + 24x24 target size + OTP feedback)
+        run: pnpm --filter frontend run e2e
+        env:
+          E2E_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/for_digital_divide_e2e
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/for_digital_divide_e2e
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=' }}
+
+      - name: Upload UX & accessibility evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ux-evidence
+          path: frontend/reports/ux-evidence/
+          retention-days: 14
+
+  lighthouse-ci:
+    name: Lighthouse CI (LCP / CLS / A11y Budget)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: quality-and-build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build frontend for Lighthouse
+        run: pnpm --filter frontend run build
+        env:
+          NODE_ENV: production
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5432/for_digital_divide_ci' }}
+
+      - name: Run Lighthouse CI assertions
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=frontend/lighthouserc.json
+        env:
+          NODE_ENV: production
+          ALLOW_LOCAL_HTTP: "true"
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5432/for_digital_divide_ci' }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=' }}

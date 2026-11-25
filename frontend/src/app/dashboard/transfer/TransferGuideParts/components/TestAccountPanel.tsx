@@ -42,7 +42,7 @@ export function TestAccountPanel() {
               <Text as="span" variant="bodyStrong">
                 {account.bank} (예금주: {account.holder})
               </Text>
-              <Text as="code" variant="description" color="button">
+              <Text as="code" variant="description" color="accentText">
                 {account.formattedNumber} 또는 {account.plainNumber}
               </Text>
             </Flex>

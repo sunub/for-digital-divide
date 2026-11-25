@@ -9,7 +9,13 @@ import * as styles from "../onboarding/OnboardingGuide/PhoneVerificationGuide.cs
 
 export function DashboardGuide() {
   return (
-    <Flex direction="column" className={styles.panelContainer}>
+    <Flex
+      as="aside"
+      aria-label="단계 안내"
+      tabIndex={0}
+      direction="column"
+      className={styles.panelContainer}
+    >
       <div className={styles.badge}>
         <MdSwapHoriz size={18} />
         <span>이체 시작</span>

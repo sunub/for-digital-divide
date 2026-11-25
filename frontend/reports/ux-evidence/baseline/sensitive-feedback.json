@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-11-11T16:09:23.674Z",
+  "totals": {
+    "checks": 6,
+    "passed": 5
+  },
+  "checks": [
+    {
+      "name": "otp-expired-announced",
+      "passed": true,
+      "detail": "만료 시 role=alert 오류 노출, 입력창 aria-invalid=true · aria-describedby 연결, 인증하기 비활성화"
+    },
+    {
+      "name": "otp-expired-recoverable",
+      "passed": true,
+      "detail": "시간 연장 시 오류 해제, aria-invalid 해제"
+    },
+    {
+      "name": "otp-mismatch-announced",
+      "passed": true,
+      "detail": "불일치 시 role=alert 오류 노출, aria-invalid=true"
+    },
+    {
+      "name": "otp-mismatch-recoverable",
+      "passed": true,
+      "detail": "올바른 번호 재입력 시 다음 단계(약관 동의)로 진행"
+    },
+    {
+      "name": "otp-code-highlighted",
+      "passed": true,
+      "detail": "인증번호 알림에서 6자리 번호를 <strong>으로 강조"
+    },
+    {
+      "name": "otp-notification-live-region",
+      "passed": false,
+      "detail": "인증번호 알림이 live region 밖에 있어 스크린리더에 자동으로 읽히지 않음 (개선 필요)"
+    }
+  ]
+}

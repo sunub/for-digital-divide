@@ -32,6 +32,12 @@
       "formatter": {
         "enabled": false
       }
+    },
+    {
+      "includes": ["**/reports/ux-evidence/**"],
+      "formatter": {
+        "enabled": false
+      }
     }
   ],
   "assist": {
