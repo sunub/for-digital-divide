@@ -74,7 +74,7 @@ jobs:
 
   e2e-wcag22:
     name: E2E & WCAG 2.2 AA (18-screen journey + target size)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     needs: quality-and-build
 
