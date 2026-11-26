@@ -14,7 +14,7 @@
     "ci": "pnpm exec biome ci",
     "format": "pnpm exec biome format --write",
     "check": "pnpm exec biome check --write",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "prisma generate --schema=prisma/schema.prisma && next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:integration": "RUN_DB_TESTS=true vitest run src/entities/transactions/transfer.service.test.ts",
     "metrics:report": "node scripts/vault-metrics-report.mjs",

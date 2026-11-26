@@ -1,5 +1,7 @@
 # For-Digital-Divide
 
+- **Live Demo (Vercel):** https://for-digital-divide.vercel.app/
+
 모바일 금융 앱 조작에 어려움을 겪는 **디지털 취약 금융 사용자**가 큰 웹 화면에서 본인인증·로그인·PIN 등록·계좌 조회·송금까지 전 과정을 단계별 안내와 함께 연습할 수 있는 금융 교육 웹 서비스입니다.
 
 ---
